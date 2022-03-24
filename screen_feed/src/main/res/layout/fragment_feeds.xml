@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.screen_feed.FeedsViewModel" />
+
+        <variable
+            name="addReviewNavigation"
+            type="com.example.torang_core.navigation.AddReviewNavigation" />
+
+        <variable
+            name="loginNavigation"
+            type="com.example.torang_core.navigation.LoginNavigation" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <!-- root element -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fl_timeline_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorSecondaryLight"
+        tools:context=".timeline.TimeLineFragment">
+
+        <!-- actionbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:addReview="@{()->viewModel.clickAddReview()}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/menu_feed_main"
+            app:title="Torang" />
+
+        <!-- contents in list format -->
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/sl_timeline"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar2"
+            app:onRefreshListener="@{viewModel::refresh}"
+            app:refreshing="@{viewModel.dataLoading}">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_timelne"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:items="@{viewModel.feeds}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_time_line" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <!-- refresh button -->
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:onClick="@{()->viewModel.refresh()}"
+            android:text="갱신"
+            android:visibility="@{viewModel.empty ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
