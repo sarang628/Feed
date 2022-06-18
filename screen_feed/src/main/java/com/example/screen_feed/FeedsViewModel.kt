@@ -57,6 +57,6 @@ class FeedsViewModel @Inject constructor(private val feedRepository: FeedReposit
     }
 
     init {
-        refresh()
+        refreshFeed()
     }
 }

@@ -12,7 +12,7 @@ import com.example.torang_core.*
 import com.example.torang_core.navigation.*
 import com.example.torang_core.util.EventObserver
 import com.example.torang_core.util.Logger
-import com.example.torang_core.util.TorangShare
+import com.example.torang_core.navigation.TorangShare
 import com.sarang.base_feed.FeedVH
 import com.sarang.base_feed.ReportProcessor
 import dagger.hilt.android.AndroidEntryPoint

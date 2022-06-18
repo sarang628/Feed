@@ -15,6 +15,14 @@ class FeedsRvAdt(
     private val timeLineViewModel: FeedsViewModel,
 ) : RecyclerView.Adapter<FeedVH>() {
 
+    init {
+        setHasStableIds(true)
+    }
+
+    override fun getItemId(position: Int): Long {
+        return feeds[position].review_id.toLong()
+    }
+
     private var feeds = ArrayList<Feed>()
 
     fun setFeeds(feedData: List<Feed>) {
@@ -24,10 +32,12 @@ class FeedsRvAdt(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedVH {
+        Logger.d(viewType)
         return FeedVH.create(parent, timeLineViewModel, lifecycleOwner)
     }
 
     override fun onBindViewHolder(holder: FeedVH, position: Int) {
+        Logger.d("$position")
         holder.setFeed(feeds[position])
     }
 

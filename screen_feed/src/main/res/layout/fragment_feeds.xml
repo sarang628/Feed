@@ -50,7 +50,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar2"
-            app:onRefreshListener="@{viewModel::refresh}"
+            app:onRefreshListener="@{viewModel::refreshFeed}"
             app:refreshing="@{viewModel.dataLoading}">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -69,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:onClick="@{()->viewModel.refresh()}"
+            android:onClick="@{()->viewModel.refreshFeed()}"
             android:text="갱신"
             android:visibility="@{viewModel.empty ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
