@@ -89,7 +89,18 @@ class FeedsFragment : Fragment() {
         }
 
         binding.rvTimelne.adapter = FeedsRvAdt(
-            lifecycleOwner = viewLifecycleOwner, timeLineViewModel = viewModel
+            lifecycleOwner = viewLifecycleOwner,
+            clickMenu = { viewModel.showMenu(it) },
+            clickProfile = { viewModel.openProfile(it) },
+            clickRestaurant = { viewModel.openTorangDetail(it) },
+            clickLike = { v, i -> viewModel.clickLike(v, i) },
+            clickComment = { viewModel.openFeedDetail(it) },
+            clickShare = { viewModel.shareFeed(it) },
+            clickFavorite = { v, i -> viewModel.clickFavorite(v, i) },
+            clickPicture = { viewModel.openPicture(it) },
+            getReviewImage = { viewModel.getReviewImages(it) },
+            getLike = { viewModel.isLike(it) },
+            getFavorite = { viewModel.isFavorite(it) }
         )
 
         setupNavigation()
