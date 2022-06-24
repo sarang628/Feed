@@ -21,16 +21,6 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.torang_core.data.model.Feed
 
-/**
- * [BindingAdapter]s for the [Feed]s list.
- */
-@BindingAdapter("app:items")
-fun setItems(listView: RecyclerView, items: List<Feed>?) {
-    items?.let {
-        (listView.adapter as FeedsRvAdt).setFeeds(items)
-    }
-}
-
 @BindingAdapter(value = ["app:addReview"])
 fun addReview(
     toolbar: androidx.appcompat.widget.Toolbar,

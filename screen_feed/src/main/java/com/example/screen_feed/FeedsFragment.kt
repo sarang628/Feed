@@ -104,6 +104,10 @@ class FeedsFragment : Fragment() {
         )
 
         setupNavigation()
+
+        viewModel.feeds.observe(viewLifecycleOwner){
+            (binding.rvTimelne.adapter as FeedsRvAdt).setFeeds(it)
+        }
         return binding.root
     }
 
