@@ -88,7 +88,7 @@ class FeedsFragment : Fragment() {
             loginNavigation = this@FeedsFragment.loginNavigation
         }
 
-        binding.rvTimelne.adapter = FeedsRvAdt(
+        binding.rvTimelne.adapter = FeedsRvAdt1(
             lifecycleOwner = viewLifecycleOwner,
             clickMenu = { viewModel.showMenu(it) },
             clickProfile = { viewModel.openProfile(it) },
@@ -106,7 +106,7 @@ class FeedsFragment : Fragment() {
         setupNavigation()
 
         viewModel.feeds.observe(viewLifecycleOwner){
-            (binding.rvTimelne.adapter as FeedsRvAdt).setFeeds(it)
+            (binding.rvTimelne.adapter as FeedsRvAdt1).setFeeds(it)
         }
         return binding.root
     }
