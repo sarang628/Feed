@@ -6,12 +6,11 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.torang_core.data.model.Favorite
-import com.sarang.base_feed.FeedVH
 import com.example.torang_core.data.model.Feed
 import com.example.torang_core.data.model.Like
 import com.example.torang_core.data.model.ReviewImage
 import com.example.torang_core.util.Logger
-import com.sarang.base_feed.CustomClick
+import com.sarang.base_feed.FeedVH
 import com.sarang.base_feed.FeedVH1
 
 /**
@@ -20,17 +19,17 @@ import com.sarang.base_feed.FeedVH1
 class FeedsRvAdt1(
     private val lifecycleOwner: LifecycleOwner,
     private val timeLineViewModel: FeedsViewModel? = null,
-    private val clickMenu: ((Feed) -> Unit)? = null,
-    private val clickProfile: ((Int) -> Unit)? = null,
-    private val clickRestaurant: ((Int) -> Unit)? = null,
-    private val clickLike: ((View, Int) -> Unit)? = null,
-    private val clickComment: ((Int) -> Unit)? = null,
-    private val clickShare: ((Int) -> Unit)? = null,
-    private val clickFavorite: ((View, Int) -> Unit)? = null,
-    private val clickPicture: ((ReviewImage) -> Unit)? = null,
-    private val getReviewImage: ((Int) -> LiveData<List<ReviewImage>>)? = null,
-    private val getLike: ((Int) -> LiveData<Like>)? = null,
-    private val getFavorite: ((Int) -> LiveData<Favorite>)? = null
+    private val clickMenu: ((Feed) -> Unit),
+    private val clickProfile: ((Int) -> Unit),
+    private val clickRestaurant: ((Int) -> Unit),
+    private val clickLike: ((View, Int) -> Unit),
+    private val clickComment: ((Int) -> Unit),
+    private val clickShare: ((Int) -> Unit),
+    private val clickFavorite: ((View, Int) -> Unit),
+    private val clickPicture: ((ReviewImage) -> Unit),
+    private val getReviewImage: ((Int) -> LiveData<List<ReviewImage>>),
+    private val getLike: ((Int) -> LiveData<Like>),
+    private val getFavorite: ((Int) -> LiveData<Favorite>)
 ) : RecyclerView.Adapter<FeedVH1>() {
 
     init {
@@ -70,25 +69,8 @@ class FeedsRvAdt1(
 
     override fun onBindViewHolder(holder: FeedVH1, position: Int) {
         Logger.d("$position")
-        holder.setFeed(
-            feed = feeds[position],
-            reviewId = feeds[position].review_id,
-            userId = feeds[position].userId,
-            restaurantId = feeds[position].restaurantId,
-            profilePicUrl = feeds[position].profile_pic_url,
-            userName = feeds[position].userName,
-            restaurantName = feeds[position].restaurantName,
-            rating = feeds[position].rating,
-            menuClickListener = CustomClick {
-                clickMenu?.invoke(feeds[position])
-            },
-            profileClickListener = CustomClick {
-                clickProfile?.invoke(it)
-            },
-            clickRestaurantListener = CustomClick {
-                clickRestaurant?.invoke(it)
-            }
-        )
+        val feed = feeds[position]
+        holder.setFeed(feed)
     }
 
     override fun getItemCount(): Int {

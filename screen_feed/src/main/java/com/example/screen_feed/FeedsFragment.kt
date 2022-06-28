@@ -91,13 +91,13 @@ class FeedsFragment : Fragment() {
         binding.rvTimelne.adapter = FeedsRvAdt1(
             lifecycleOwner = viewLifecycleOwner,
             clickMenu = { viewModel.showMenu(it) },
-            clickProfile = { viewModel.openProfile(it) },
-            clickRestaurant = { viewModel.openTorangDetail(it) },
+            clickProfile = { profileNavigation.go(requireContext(), it) },
+            clickRestaurant = { restaurantDetailNavigation.go(requireContext(), it) },
+            clickComment = { timelineDetailNavigation.go(requireContext(), it) },
+            clickShare = { torangShare.shareLink(requireContext(), "http://sarang628.iptime.org:91:/$it") },
+            clickPicture = { picturePageNavigation.go(requireContext(), it.review_id, 0) },
             clickLike = { v, i -> viewModel.clickLike(v, i) },
-            clickComment = { viewModel.openFeedDetail(it) },
-            clickShare = { viewModel.shareFeed(it) },
             clickFavorite = { v, i -> viewModel.clickFavorite(v, i) },
-            clickPicture = { viewModel.openPicture(it) },
             getReviewImage = { viewModel.getReviewImages(it) },
             getLike = { viewModel.isLike(it) },
             getFavorite = { viewModel.isFavorite(it) }
@@ -105,35 +105,15 @@ class FeedsFragment : Fragment() {
 
         setupNavigation()
 
-        viewModel.feeds.observe(viewLifecycleOwner){
+        viewModel.feeds.observe(viewLifecycleOwner) {
             (binding.rvTimelne.adapter as FeedsRvAdt1).setFeeds(it)
         }
         return binding.root
     }
 
     private fun setupNavigation() {
-        viewModel.openFeedDetail.observe(viewLifecycleOwner,
-            EventObserver { timelineDetailNavigation.go(requireContext(), it) })
-
-        viewModel.openTorangDetail.observe(viewLifecycleOwner,
-            EventObserver { restaurantDetailNavigation.go(requireContext(), it) })
-
         viewModel.showDeleteFeed.observe(viewLifecycleOwner,
             EventObserver { deleteFeed(it) })
-
-        viewModel.shareFeed.observe(viewLifecycleOwner,
-            EventObserver {
-                torangShare.shareLink(
-                    requireContext(),
-                    "http://sarang628.iptime.org:91:/$it"
-                )
-            })
-
-        viewModel.openProfile.observe(viewLifecycleOwner,
-            EventObserver { profileNavigation.go(requireContext(), it) })
-
-        viewModel.openPicture.observe(viewLifecycleOwner,
-            EventObserver { picturePageNavigation.go(requireContext(), it.review_id, 0) })
 
         viewModel.openLogin.observe(viewLifecycleOwner,
             EventObserver {
