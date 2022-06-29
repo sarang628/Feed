@@ -90,11 +90,23 @@ class FeedsFragment : Fragment() {
 
         binding.rvTimelne.adapter = FeedsRvAdt1(
             lifecycleOwner = viewLifecycleOwner,
-            clickMenu = { viewModel.showMenu(it) },
+            clickMenu = {
+                viewModel.showMenu(
+                    it,
+                    menuBottomSheetNavigation = {menuBottomSheetNavigation.show(requireContext(), viewModel, it)},
+                    myMenuBottomSheetNavigation = {myMenuBottomSheetNavigation.show(requireContext(), viewModel, it)},
+                    notLoggedInMenuBottomSheetNavigation= {notLoggedInMenuBottomSheetNavigation.show(requireContext(), viewModel, it)}
+                )
+            },
             clickProfile = { profileNavigation.go(requireContext(), it) },
             clickRestaurant = { restaurantDetailNavigation.go(requireContext(), it) },
             clickComment = { timelineDetailNavigation.go(requireContext(), it) },
-            clickShare = { torangShare.shareLink(requireContext(), "http://sarang628.iptime.org:91:/$it") },
+            clickShare = {
+                torangShare.shareLink(
+                    requireContext(),
+                    "http://sarang628.iptime.org:91:/$it"
+                )
+            },
             clickPicture = { picturePageNavigation.go(requireContext(), it.review_id, 0) },
             clickLike = { v, i -> viewModel.clickLike(v, i) },
             clickFavorite = { v, i -> viewModel.clickFavorite(v, i) },
@@ -160,16 +172,13 @@ class FeedsFragment : Fragment() {
             deleteFeed(it)
         })
 
-        viewLifecycleOwner.lifecycle.addObserver(
-            ReportProcessor(
-                viewModel,
-                menuBottomSheetNavigation,
-                myMenuBottomSheetNavigation,
-                notLoggedInMenuBottomSheetNavigation,
-                reportNavigation,
-                requireContext()
-            )
-        )
+        viewModel.report.observe(viewLifecycleOwner, EventObserver {
+            Logger.d("observe report")
+            myMenuBottomSheetNavigation.dismiss()
+            menuBottomSheetNavigation.dismiss()
+            notLoggedInMenuBottomSheetNavigation.dismiss()
+            reportNavigation.goReport(requireContext(), it)
+        })
 
         viewModel.errorMessage.observe(viewLifecycleOwner) {
             AlertDialog.Builder(requireContext())
