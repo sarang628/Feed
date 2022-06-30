@@ -9,6 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.screen_feed.databinding.FragmentFeedsBinding
 import com.example.torang_core.*
+import com.example.torang_core.data.model.Feed
+import com.example.torang_core.dialog.FeedDialogEventAdapter
+import com.example.torang_core.dialog.FeedMyDialogEventAdapter
+import com.example.torang_core.dialog.NotLoggedInFeedDialogEventAdapter
 import com.example.torang_core.navigation.*
 import com.example.torang_core.util.EventObserver
 import com.example.torang_core.util.Logger
@@ -93,9 +97,64 @@ class FeedsFragment : Fragment() {
             clickMenu = {
                 viewModel.showMenu(
                     it,
-                    menuBottomSheetNavigation = {menuBottomSheetNavigation.show(requireContext(), viewModel, it)},
-                    myMenuBottomSheetNavigation = {myMenuBottomSheetNavigation.show(requireContext(), viewModel, it)},
-                    notLoggedInMenuBottomSheetNavigation= {notLoggedInMenuBottomSheetNavigation.show(requireContext(), viewModel, it)}
+                    menuBottomSheetNavigation = {menuBottomSheetNavigation.show(
+                        context=requireContext(),dialogEventAdapter = object : FeedDialogEventAdapter{
+                            override fun reasonContainThisPost(reviewId: Int) {menuBottomSheetNavigation.dismiss()}
+
+                            override fun hide(feed: Feed) {menuBottomSheetNavigation.dismiss()}
+
+                            override fun unfollow(feed: Feed) {menuBottomSheetNavigation.dismiss()}
+
+                            override fun report1(reviewId: Int) {
+                                Logger.d("observe report")
+                                myMenuBottomSheetNavigation.dismiss()
+                                menuBottomSheetNavigation.dismiss()
+                                notLoggedInMenuBottomSheetNavigation.dismiss()
+                                reportNavigation.goReport(requireContext(), it)
+                            }
+
+                        } , it)
+                                                },
+                    myMenuBottomSheetNavigation = {myMenuBottomSheetNavigation.show(requireContext(), object : FeedMyDialogEventAdapter{
+                        override fun postOtherApp(reviewId: Int) {myMenuBottomSheetNavigation.dismiss()}
+
+                        override fun store(reviewId: Int) {myMenuBottomSheetNavigation.dismiss()}
+
+                        override fun delete(reviewId: Int) {myMenuBottomSheetNavigation.dismiss()
+                            deleteFeed(reviewId)}
+
+                        override fun modify(feed: Feed) {addReviewNavigation.go(
+                            requireContext(),
+                            restaurantId = it.restaurantId,
+                            reviewId = it.review_id
+                        )
+                            myMenuBottomSheetNavigation.dismiss()}
+
+                        override fun hideLikeCount(reviewId: Int) {myMenuBottomSheetNavigation.dismiss()}
+
+                        override fun lockReply(reviewId: Int) {myMenuBottomSheetNavigation.dismiss()}
+
+                        override fun report(reviewId: Int) {
+                            Logger.d("observe report")
+                            myMenuBottomSheetNavigation.dismiss()
+                            menuBottomSheetNavigation.dismiss()
+                            notLoggedInMenuBottomSheetNavigation.dismiss()
+                            reportNavigation.goReport(requireContext(), it)
+                        }
+
+                    }, it)},
+                    notLoggedInMenuBottomSheetNavigation= {notLoggedInMenuBottomSheetNavigation.show(requireContext(),
+                        object : NotLoggedInFeedDialogEventAdapter{
+                            override fun report2(reviewId: Int) {
+                                Logger.d("observe report")
+                                myMenuBottomSheetNavigation.dismiss()
+                                menuBottomSheetNavigation.dismiss()
+                                notLoggedInMenuBottomSheetNavigation.dismiss()
+                                reportNavigation.goReport(requireContext(), it)
+                            }
+
+                        }
+                        , it)}
                 )
             },
             clickProfile = { profileNavigation.go(requireContext(), it) },
@@ -124,8 +183,6 @@ class FeedsFragment : Fragment() {
     }
 
     private fun setupNavigation() {
-        viewModel.showDeleteFeed.observe(viewLifecycleOwner,
-            EventObserver { deleteFeed(it) })
 
         viewModel.openLogin.observe(viewLifecycleOwner,
             EventObserver {
@@ -133,52 +190,8 @@ class FeedsFragment : Fragment() {
                 loginNavigation.goLogin(requireContext())
             })
 
-        viewModel.postOtherApp.observe(viewLifecycleOwner,
-            EventObserver { myMenuBottomSheetNavigation.dismiss() })
-
-        viewModel.store.observe(viewLifecycleOwner,
-            EventObserver { myMenuBottomSheetNavigation.dismiss() })
-
         viewModel.openAddReview.observe(viewLifecycleOwner,
             EventObserver { addReviewNavigation.go(requireContext(), 0) })
-
-        viewModel.modify.observe(viewLifecycleOwner,
-            EventObserver {
-                addReviewNavigation.go(
-                    requireContext(),
-                    restaurantId = it.restaurantId,
-                    reviewId = it.review_id
-                )
-                myMenuBottomSheetNavigation.dismiss()
-            })
-
-        viewModel.hideLikeCount.observe(viewLifecycleOwner,
-            EventObserver { myMenuBottomSheetNavigation.dismiss() })
-
-        viewModel.lockReply.observe(viewLifecycleOwner,
-            EventObserver { myMenuBottomSheetNavigation.dismiss() })
-
-        viewModel.reasonContainThisPost.observe(viewLifecycleOwner,
-            EventObserver { menuBottomSheetNavigation.dismiss() })
-
-        viewModel.unfollow.observe(viewLifecycleOwner,
-            EventObserver { menuBottomSheetNavigation.dismiss() })
-
-        viewModel.hide.observe(viewLifecycleOwner,
-            EventObserver { menuBottomSheetNavigation.dismiss() })
-
-        viewModel.delete.observe(viewLifecycleOwner, EventObserver {
-            myMenuBottomSheetNavigation.dismiss()
-            deleteFeed(it)
-        })
-
-        viewModel.report.observe(viewLifecycleOwner, EventObserver {
-            Logger.d("observe report")
-            myMenuBottomSheetNavigation.dismiss()
-            menuBottomSheetNavigation.dismiss()
-            notLoggedInMenuBottomSheetNavigation.dismiss()
-            reportNavigation.goReport(requireContext(), it)
-        })
 
         viewModel.errorMessage.observe(viewLifecycleOwner) {
             AlertDialog.Builder(requireContext())
