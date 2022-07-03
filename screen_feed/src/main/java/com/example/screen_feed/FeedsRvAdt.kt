@@ -64,37 +64,36 @@ class FeedsRvAdt(
     }
 
     override fun onBindViewHolder(holder: FeedVH, position: Int) {
-        val feed = feeds[position]
+        val feed = uistates[position]
 
-        getLike?.invoke(feed.review_id)?.observe(lifecycleOwner) {
+        getLike?.invoke(feed.reviewId)?.observe(lifecycleOwner) {
             holder.setLike(it != null)
         }
 
-        getFavorite?.invoke(feed.review_id)?.observe(lifecycleOwner) {
+        getFavorite?.invoke(feed.reviewId)?.observe(lifecycleOwner) {
             holder.setFavorite(it != null)
         }
 
-        getReviewImage?.invoke(feed.review_id)?.observe(lifecycleOwner) {
+        getReviewImage?.invoke(feed.reviewId)?.observe(lifecycleOwner) {
             holder.setReviewImages(it)
         }
 
         holder.setFeed(
-            reviewId = feed.review_id,
-            profilePicUrl = feed.profile_pic_url!!,
+            reviewId = feed.reviewId,
+            profilePicUrl = feed.profileImageUrl,
             userId = feed.userId,
-            userName = feed.userName(),
-            rating = feed.rating!!,
-            restaurantName = feed.restaurantName(),
-            restaurantId = feed.restaurantId!!,
-            likeAmount = feed.like_amount!!,
-            contents = feed.contents!!,
-            commentAnount = feed.comment_amount!!,
-            feed = feed
+            userName = feed.userName,
+            rating = feed.rating,
+            restaurantName = feed.restaurantName,
+            restaurantId = feed.restaurantId,
+            likeAmount = feed.likeAmount,
+            contents = feed.contents,
+            commentAnount = feed.commentAmount
         )
     }
 
     override fun getItemCount(): Int {
-        return feeds.size
+        return uistates.size
     }
 
     fun setUiState(it: List<FeedUiState>) {
