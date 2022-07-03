@@ -2,8 +2,6 @@ package com.example.screen_feed
 
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.torang_core.data.FeedUiState
 import com.example.torang_core.data.model.*
@@ -14,8 +12,6 @@ import com.example.torang_core.util.Logger
  * [FeedVH]
  */
 class FeedsRvAdt(
-    private val lifecycleOwner: LifecycleOwner,
-    private val timeLineViewModel: FeedsViewModel? = null,
     private val clickMenu: ((Feed) -> Unit)? = null,
     private val clickProfile: ((Int) -> Unit)? = null,
     private val clickRestaurant: ((Int) -> Unit)? = null,
@@ -23,10 +19,7 @@ class FeedsRvAdt(
     private val clickComment: ((Int) -> Unit)? = null,
     private val clickShare: ((Int) -> Unit)? = null,
     private val clickFavorite: ((View, Int) -> Unit)? = null,
-    private val clickPicture: ((ReviewImage) -> Unit)? = null,
-    private val getReviewImage: ((Int) -> LiveData<List<ReviewImage>>)? = null,
-    private val getLike: ((Int) -> LiveData<Like>)? = null,
-    private val getFavorite: ((Int) -> LiveData<Favorite>)? = null
+    private val clickPicture: ((ReviewImage) -> Unit)? = null
 ) : RecyclerView.Adapter<FeedVH>() {
 
     init {
@@ -34,24 +27,15 @@ class FeedsRvAdt(
     }
 
     override fun getItemId(position: Int): Long {
-        return feeds[position].review_id.toLong()
+        return uiStates[position].reviewId.toLong()
     }
 
-    private var feeds = ArrayList<Feed>()
-
-    private var uistates: ArrayList<FeedUiState> = ArrayList()
-
-    fun setFeeds(feedData: List<Feed>) {
-        Logger.d("feeds size are ${feedData.size}")
-        this.feeds = ArrayList(feedData)
-        notifyDataSetChanged()
-    }
+    private var uiStates: ArrayList<FeedUiState> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedVH {
         Logger.d(viewType)
         return FeedVH.create(
             parent,
-            lifecycleOwner,
             clickMenu,
             clickProfile,
             clickRestaurant,
@@ -64,19 +48,7 @@ class FeedsRvAdt(
     }
 
     override fun onBindViewHolder(holder: FeedVH, position: Int) {
-        val feed = uistates[position]
-
-        getLike?.invoke(feed.reviewId)?.observe(lifecycleOwner) {
-            holder.setLike(it != null)
-        }
-
-        getFavorite?.invoke(feed.reviewId)?.observe(lifecycleOwner) {
-            holder.setFavorite(it != null)
-        }
-
-        getReviewImage?.invoke(feed.reviewId)?.observe(lifecycleOwner) {
-            holder.setReviewImages(it)
-        }
+        val feed = uiStates[position]
 
         holder.setFeed(
             reviewId = feed.reviewId,
@@ -88,30 +60,34 @@ class FeedsRvAdt(
             restaurantId = feed.restaurantId,
             likeAmount = feed.likeAmount,
             contents = feed.contents,
-            commentAnount = feed.commentAmount
+            commentAnount = feed.commentAmount,
+            isLike = feed.isLike,
+            isFavorite = feed.isFavorite,
+            reviewImages = feed.reviewImages
         )
     }
 
     override fun getItemCount(): Int {
-        return uistates.size
+        return uiStates.size
     }
 
     fun setUiState(it: List<FeedUiState>) {
         for (i in it.indices) {
-            if (i < uistates.size && !uistates[i].equals(it[i])) {
+            if (i < uiStates.size && !uiStates[i].equals(it[i])) {
                 Logger.d("position changed! $i")
-                uistates[i] = it[i]
-            } else if (i > uistates.size) {
+                uiStates[i] = it[i]
+            } else if (i > uiStates.size) {
                 Logger.d("list add! $i")
-                uistates.add(it[i])
+                uiStates.add(it[i])
             }
         }
 
-        if (uistates.size > it.size) {
-            for (i in it.size - 1 until uistates.size - 1) {
+        if (uiStates.size > it.size) {
+            for (i in it.size - 1 until uiStates.size - 1) {
                 Logger.d("list remove! $i")
-                uistates.removeAt(it.size)
+                uiStates.removeAt(it.size)
             }
         }
+        notifyDataSetChanged()
     }
 }
