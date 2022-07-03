@@ -5,11 +5,8 @@ import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
-import com.example.torang_core.data.model.Favorite
+import com.example.torang_core.data.model.*
 import com.sarang.base_feed.FeedVH
-import com.example.torang_core.data.model.Feed
-import com.example.torang_core.data.model.Like
-import com.example.torang_core.data.model.ReviewImage
 import com.example.torang_core.util.Logger
 
 /**
@@ -59,16 +56,39 @@ class FeedsRvAdt(
             clickComment,
             clickShare,
             clickFavorite,
-            clickPicture,
-            getReviewImage,
-            getLike,
-            getFavorite
+            clickPicture
         )
     }
 
     override fun onBindViewHolder(holder: FeedVH, position: Int) {
         Logger.d("$position")
-        holder.setFeed(feeds[position])
+        val feed = feeds[position]
+
+        getLike?.invoke(feed.review_id)?.observe(lifecycleOwner){
+            holder.setLike(it != null)
+        }
+
+        getFavorite?.invoke(feed.review_id)?.observe(lifecycleOwner){
+            holder.setFavorite(it != null)
+        }
+
+        getReviewImage?.invoke(feed.review_id)?.observe(lifecycleOwner){
+            holder.setReviewImages(it)
+        }
+
+        holder.setFeed(
+            reviewId = feed.review_id,
+            profilePicUrl = feed.profile_pic_url!!,
+            userId =  feed.userId,
+            userName = feed.userName(),
+            rating = feed.rating!!,
+            restaurantName = feed.restaurantName(),
+            restaurantId = feed.restaurantId!!,
+            likeAmount = feed.like_amount!!,
+            contents = feed.contents!!,
+            commentAnount = feed.comment_amount!!,
+            feed = feed
+        )
     }
 
     override fun getItemCount(): Int {
