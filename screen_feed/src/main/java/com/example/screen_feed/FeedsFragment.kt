@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.screen_feed.databinding.FragmentFeedsBinding
 import com.example.torang_core.*
 import com.example.torang_core.navigation.*
@@ -16,6 +19,8 @@ import com.example.torang_core.navigation.TorangShare
 import com.sarang.base_feed.FeedVH
 import com.sarang.base_feed.ReportProcessor
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -108,6 +113,17 @@ class FeedsFragment : Fragment() {
         viewModel.feeds.observe(viewLifecycleOwner){
             (binding.rvTimelne.adapter as FeedsRvAdt).setFeeds(it)
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.feedUiStates.collect(FlowCollector {
+                    (binding.rvTimelne.adapter as FeedsRvAdt).setUiState(it)
+                })
+            }
+        }
+
+        viewModel.feedUiStates
+
         return binding.root
     }
 

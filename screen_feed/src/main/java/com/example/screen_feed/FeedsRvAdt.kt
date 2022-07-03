@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
+import com.example.torang_core.data.FeedUiState
 import com.example.torang_core.data.model.*
 import com.sarang.base_feed.FeedVH
 import com.example.torang_core.util.Logger
@@ -38,6 +39,8 @@ class FeedsRvAdt(
 
     private var feeds = ArrayList<Feed>()
 
+    private var uistates: ArrayList<FeedUiState> = ArrayList()
+
     fun setFeeds(feedData: List<Feed>) {
         Logger.d("feeds size are ${feedData.size}")
         this.feeds = ArrayList(feedData)
@@ -61,25 +64,24 @@ class FeedsRvAdt(
     }
 
     override fun onBindViewHolder(holder: FeedVH, position: Int) {
-        Logger.d("$position")
         val feed = feeds[position]
 
-        getLike?.invoke(feed.review_id)?.observe(lifecycleOwner){
+        getLike?.invoke(feed.review_id)?.observe(lifecycleOwner) {
             holder.setLike(it != null)
         }
 
-        getFavorite?.invoke(feed.review_id)?.observe(lifecycleOwner){
+        getFavorite?.invoke(feed.review_id)?.observe(lifecycleOwner) {
             holder.setFavorite(it != null)
         }
 
-        getReviewImage?.invoke(feed.review_id)?.observe(lifecycleOwner){
+        getReviewImage?.invoke(feed.review_id)?.observe(lifecycleOwner) {
             holder.setReviewImages(it)
         }
 
         holder.setFeed(
             reviewId = feed.review_id,
             profilePicUrl = feed.profile_pic_url!!,
-            userId =  feed.userId,
+            userId = feed.userId,
             userName = feed.userName(),
             rating = feed.rating!!,
             restaurantName = feed.restaurantName(),
@@ -93,5 +95,24 @@ class FeedsRvAdt(
 
     override fun getItemCount(): Int {
         return feeds.size
+    }
+
+    fun setUiState(it: List<FeedUiState>) {
+        for (i in it.indices) {
+            if (i < uistates.size && !uistates[i].equals(it[i])) {
+                Logger.d("position changed! $i")
+                uistates[i] = it[i]
+            } else if (i > uistates.size) {
+                Logger.d("list add! $i")
+                uistates.add(it[i])
+            }
+        }
+
+        if (uistates.size > it.size) {
+            for (i in it.size - 1 until uistates.size - 1) {
+                Logger.d("list remove! $i")
+                uistates.removeAt(it.size)
+            }
+        }
     }
 }
