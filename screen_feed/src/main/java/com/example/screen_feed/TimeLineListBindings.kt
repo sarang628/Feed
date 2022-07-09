@@ -16,10 +16,7 @@
 package com.example.screen_feed
 
 import android.view.View
-import android.widget.Toolbar
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.RecyclerView
-import com.example.torang_core.data.model.Feed
 
 @BindingAdapter(value = ["app:addReview"])
 fun addReview(

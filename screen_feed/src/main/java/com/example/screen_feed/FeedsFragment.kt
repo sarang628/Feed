@@ -7,16 +7,13 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.screen_feed.databinding.FragmentFeedsBinding
-import com.example.torang_core.*
-import com.example.torang_core.navigation.*
-import com.example.torang_core.util.EventObserver
-import com.example.torang_core.util.Logger
-import com.example.torang_core.navigation.TorangShare
-import com.sarang.base_feed.FeedVH
-import com.sarang.base_feed.ReportProcessor
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 /**
  * [FeedsRvAdt]
@@ -35,47 +32,35 @@ class FeedsFragment : Fragment() {
     private val viewModel: FeedsViewModel by viewModels()
 
     /** 레스토랑 상세화면 네비게이션 */
-    @Inject
-    lateinit var restaurantDetailNavigation: RestaurantDetailNavigation
+    //@Inject lateinit var restaurantDetailNavigation: RestaurantDetailNavigation
 
     /** 프로필 화면 네비게이션 */
-    @Inject
-    lateinit var profileNavigation: ProfileNavigation
+    //@Inject lateinit var profileNavigation: ProfileNavigation
 
     /** 피드 상세화면 네비게이션 */
-    @Inject
-    lateinit var timelineDetailNavigation: TimeLineDetailNavigation
+    //@Inject lateinit var timelineDetailNavigation: TimeLineDetailNavigation
 
     /** 공유 팝업 네비게이션 */
-    @Inject
-    lateinit var shareBottomSheetNavigation: ShareBottomSheetNavigation
+    //@Inject lateinit var shareBottomSheetNavigation: ShareBottomSheetNavigation
 
-    @Inject
-    lateinit var torangShare: TorangShare
+    //@Inject lateinit var torangShare: TorangShare
 
     /** 사진 페이지 네비게이션 */
-    @Inject
-    lateinit var picturePageNavigation: PicturePageNavigation
+    //@Inject lateinit var picturePageNavigation: PicturePageNavigation
 
     /** 리뷰 추가 화면 네비게에션 */
-    @Inject
-    lateinit var addReviewNavigation: AddReviewNavigation
+    //@Inject lateinit var addReviewNavigation: AddReviewNavigation
 
     /** 로그인 네비게이션 */
-    @Inject
-    lateinit var loginNavigation: LoginNavigation
+    //@Inject lateinit var loginNavigation: LoginNavigation
 
-    @Inject
-    lateinit var menuBottomSheetNavigation: MenuBottomSheetNavigation
+    //@Inject lateinit var menuBottomSheetNavigation: MenuBottomSheetNavigation
 
-    @Inject
-    lateinit var myMenuBottomSheetNavigation: MyMenuBottomSheetNavigation
+    //@Inject lateinit var myMenuBottomSheetNavigation: MyMenuBottomSheetNavigation
 
-    @Inject
-    lateinit var notLoggedInMenuBottomSheetNavigation: NotLoggedInMenuBottomSheetNavigation
+    //@Inject lateinit var notLoggedInMenuBottomSheetNavigation: NotLoggedInMenuBottomSheetNavigation
 
-    @Inject
-    lateinit var reportNavigation: ReportNavigation
+    //@Inject lateinit var reportNavigation: ReportNavigation
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -84,35 +69,49 @@ class FeedsFragment : Fragment() {
         binding = FragmentFeedsBinding.inflate(layoutInflater, container, false).apply {
             viewModel = this@FeedsFragment.viewModel
             lifecycleOwner = viewLifecycleOwner
-            addReviewNavigation = this@FeedsFragment.addReviewNavigation
-            loginNavigation = this@FeedsFragment.loginNavigation
+            //addReviewNavigation = this@FeedsFragment.addReviewNavigation
+            //loginNavigation = this@FeedsFragment.loginNavigation
         }
 
         binding.rvTimelne.adapter = FeedsRvAdt(
             lifecycleOwner = viewLifecycleOwner,
-            clickMenu = { viewModel.showMenu(it) },
-            clickProfile = { viewModel.openProfile(it) },
-            clickRestaurant = { viewModel.openTorangDetail(it) },
-            clickLike = { v, i -> viewModel.clickLike(v, i) },
-            clickComment = { viewModel.openFeedDetail(it) },
-            clickShare = { viewModel.shareFeed(it) },
-            clickFavorite = { v, i -> viewModel.clickFavorite(v, i) },
-            clickPicture = { viewModel.openPicture(it) },
-            getReviewImage = { viewModel.getReviewImages(it) },
-            getLike = { viewModel.isLike(it) },
-            getFavorite = { viewModel.isFavorite(it) }
+//            clickMenu = { viewModel.showMenu(it) },
+//            clickProfile = { viewModel.openProfile(it) },
+//            clickRestaurant = { viewModel.openTorangDetail(it) },
+//            clickLike = { v, i -> viewModel.clickLike(v, i) },
+//            clickComment = { viewModel.openFeedDetail(it) },
+//            clickShare = { viewModel.shareFeed(it) },
+//            clickFavorite = { v, i -> viewModel.clickFavorite(v, i) },
+//            clickPicture = { viewModel.openPicture(it) },
+//            getReviewImage = { viewModel.getReviewImages(it) },
+//            getLike = { viewModel.isLike(it) },
+//            getFavorite = { viewModel.isFavorite(it) }
         )
 
         setupNavigation()
 
-        viewModel.feeds.observe(viewLifecycleOwner){
-            (binding.rvTimelne.adapter as FeedsRvAdt).setFeeds(it)
+        binding.slTimeline.setOnRefreshListener {
+            viewModel.reload()
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.feedsUiState.collect {
+                    if (!it.isRefresh) {
+                        binding.slTimeline.isRefreshing = it.isRefresh
+                    }
+                }
+            }
+        }
+
+        /*viewModel.feeds.observe(viewLifecycleOwner){
+            (binding.rvTimelne.adapter as FeedsRvAdt).setFeeds(it)
+        }*/
         return binding.root
     }
 
     private fun setupNavigation() {
-        viewModel.openFeedDetail.observe(viewLifecycleOwner,
+        /*viewModel.openFeedDetail.observe(viewLifecycleOwner,
             EventObserver { timelineDetailNavigation.go(requireContext(), it) })
 
         viewModel.openTorangDetail.observe(viewLifecycleOwner,
@@ -196,7 +195,7 @@ class FeedsFragment : Fragment() {
                 .setMessage(it)
                 .setPositiveButton("확인") { _, _ -> }
                 .show()
-        }
+        }*/
 
     }
 

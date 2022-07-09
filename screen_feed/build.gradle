@@ -34,9 +34,6 @@ android {
 dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(path: ':TorangRepository')
-    implementation project(path: ':torang_core')
-    implementation project(path: ':base_feed')
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"

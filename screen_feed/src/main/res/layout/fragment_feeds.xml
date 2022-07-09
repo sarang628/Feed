@@ -9,13 +9,13 @@
             name="viewModel"
             type="com.example.screen_feed.FeedsViewModel" />
 
-        <variable
+        <!--<variable
             name="addReviewNavigation"
             type="com.example.torang_core.navigation.AddReviewNavigation" />
 
         <variable
             name="loginNavigation"
-            type="com.example.torang_core.navigation.LoginNavigation" />
+            type="com.example.torang_core.navigation.LoginNavigation" />-->
 
         <import type="android.view.View" />
     </data>
@@ -25,20 +25,20 @@
         android:id="@+id/fl_timeline_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorSecondaryLight"
         tools:context=".timeline.TimeLineFragment">
+        <!--android:background="@color/colorSecondaryLight"-->
 
         <!-- actionbar -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:addReview="@{()->viewModel.clickAddReview()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:menu="@menu/menu_feed_main"
             app:title="Torang" />
+        <!--app:addReview="@{()->viewModel.clickAddReview()}"-->
 
         <!-- contents in list format -->
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -50,8 +50,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar2"
-            app:onRefreshListener="@{viewModel::refreshFeed}"
-            app:refreshing="@{viewModel.dataLoading}">
+            >
+            <!--app:onRefreshListener="@{viewModel::refreshFeed}"
+            app:refreshing="@{viewModel.dataLoading}"-->
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_timelne"
@@ -59,7 +60,8 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/item_time_line" />
+                />
+            <!--tools:listitem="@layout/item_time_line"-->
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <!-- refresh button -->
@@ -68,14 +70,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:onClick="@{()->viewModel.refreshFeed()}"
             android:text="갱신"
-            android:visibility="@{viewModel.empty ? View.VISIBLE : View.GONE}"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="gone" />
+
+        <!--android:onClick="@{()->viewModel.refreshFeed()}"
+        android:visibility="@{viewModel.empty ? View.VISIBLE : View.GONE}"-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
