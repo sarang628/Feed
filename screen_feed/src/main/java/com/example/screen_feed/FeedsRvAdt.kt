@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
+import com.example.screen_feed.databinding.ItemTimeLineBinding
+import com.example.screen_feed.databinding.ItemTimeLineBindingImpl
 
 /**
  * [FeedVH]
@@ -34,7 +36,14 @@ class FeedsRvAdt(
         return 0
     }
 
-    //private var feeds = ArrayList<Feed>()
+    private var feeds = ArrayList<FeedItemUiState>().apply {
+//        add(FeedItemUiState("a"))
+//        add(FeedItemUiState("b"))
+//        add(FeedItemUiState("c"))
+//        add(FeedItemUiState("d"))
+//        add(FeedItemUiState("e"))
+//        add(FeedItemUiState("f"))
+    }
 
     fun setFeeds(/*feedData: List<Feed>*/) {
         //Logger.d("feeds size are ${feedData.size}")
@@ -61,7 +70,7 @@ class FeedsRvAdt(
         )*/
         return object : RecyclerView.ViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_time_line, parent, false)
-        ){
+        ) {
 
         }
     }
@@ -69,10 +78,12 @@ class FeedsRvAdt(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         //Logger.d("$position")
         //holder.setFeed(feeds[position])
+        val binding = ItemTimeLineBinding.bind(holder.itemView)
+        binding.itemFeedTop.textView22.text = feeds[position].name
     }
 
     override fun getItemCount(): Int {
         //return feeds.size
-        return 10
+        return feeds.size
     }
 }

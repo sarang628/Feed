@@ -4,18 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.example.screen_feed.FeedsViewModel" />
-
-        <!--<variable
-            name="addReviewNavigation"
-            type="com.example.torang_core.navigation.AddReviewNavigation" />
-
-        <variable
-            name="loginNavigation"
-            type="com.example.torang_core.navigation.LoginNavigation" />-->
 
         <import type="android.view.View" />
     </data>
@@ -26,7 +17,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".timeline.TimeLineFragment">
-        <!--android:background="@color/colorSecondaryLight"-->
 
         <!-- actionbar -->
         <androidx.appcompat.widget.Toolbar
@@ -38,7 +28,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:menu="@menu/menu_feed_main"
             app:title="Torang" />
-        <!--app:addReview="@{()->viewModel.clickAddReview()}"-->
 
         <!-- contents in list format -->
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -51,8 +40,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar2"
             >
-            <!--app:onRefreshListener="@{viewModel::refreshFeed}"
-            app:refreshing="@{viewModel.dataLoading}"-->
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_timelne"
@@ -61,7 +48,6 @@
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 />
-            <!--tools:listitem="@layout/item_time_line"-->
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <!-- refresh button -->
@@ -77,9 +63,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="gone" />
-
-        <!--android:onClick="@{()->viewModel.refreshFeed()}"
-        android:visibility="@{viewModel.empty ? View.VISIBLE : View.GONE}"-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

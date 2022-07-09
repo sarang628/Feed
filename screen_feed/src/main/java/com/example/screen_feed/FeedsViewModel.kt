@@ -16,7 +16,12 @@ class FeedsViewModel @Inject constructor(
     //private val feedRepository: FeedRepository
 ) : ViewModel() {
 
-    private val _feedsUiState = MutableStateFlow(FeedsUistate(false))
+    private val _feedsUiState = MutableStateFlow(
+        FeedsUistate(
+            isRefresh = false,
+            isEmptyFeed = true
+        )
+    )
 
     val feedsUiState: StateFlow<FeedsUistate> = _feedsUiState
 
@@ -68,7 +73,10 @@ class FeedsViewModel @Inject constructor(
         viewModelScope.launch {
             delay(1000)
             _feedsUiState.update {
-                it.copy(isRefresh = false)
+                it.copy(
+                    isRefresh = false,
+                    isEmptyFeed = !it.isEmptyFeed
+                )
             }
         }
     }
