@@ -17,13 +17,13 @@ class FeedsViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _feedsUiState = MutableStateFlow(
-        FeedsUistate(
+        FeedsUIstate(
             isRefresh = false,
             isEmptyFeed = true
         )
     )
 
-    val feedsUiState: StateFlow<FeedsUistate> = _feedsUiState
+    val feedsUiState: StateFlow<FeedsUIstate> = _feedsUiState
 
 
     /** 데이터가 비어있는지 여부 */
@@ -41,6 +41,12 @@ class FeedsViewModel @Inject constructor(
     //val isLogin = feedRepository.isLogin
 
     fun clickAddReview() {
+        viewModelScope.launch {
+            _feedsUiState.update { it.copy(toastMsg = "clickAddReview") }
+        }
+        viewModelScope.launch {
+            _feedsUiState.update { it.copy(toastMsg = null) }
+        }
         /*viewModelScope.launch {
             Logger.v("isLogin ${feedRepository.isLogin()}")
             if (feedRepository.isLogin()) {

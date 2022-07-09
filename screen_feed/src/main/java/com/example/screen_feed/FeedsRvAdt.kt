@@ -13,6 +13,7 @@ import com.example.screen_feed.databinding.ItemTimeLineBindingImpl
  */
 class FeedsRvAdt(
     private val lifecycleOwner: LifecycleOwner,
+    private val navigation : FeedRvAdtNavigation? = null
     /*private val timeLineViewModel: FeedsViewModel? = null,
     private val clickMenu: ((Feed) -> Unit)? = null,
     private val clickProfile: ((Int) -> Unit)? = null,
@@ -37,12 +38,12 @@ class FeedsRvAdt(
     }
 
     private var feeds = ArrayList<FeedItemUiState>().apply {
-//        add(FeedItemUiState("a"))
-//        add(FeedItemUiState("b"))
-//        add(FeedItemUiState("c"))
-//        add(FeedItemUiState("d"))
-//        add(FeedItemUiState("e"))
-//        add(FeedItemUiState("f"))
+        add(FeedItemUiState("a"))
+        add(FeedItemUiState("b"))
+        add(FeedItemUiState("c"))
+        add(FeedItemUiState("d"))
+        add(FeedItemUiState("e"))
+        add(FeedItemUiState("f"))
     }
 
     fun setFeeds(/*feedData: List<Feed>*/) {
@@ -80,6 +81,10 @@ class FeedsRvAdt(
         //holder.setFeed(feeds[position])
         val binding = ItemTimeLineBinding.bind(holder.itemView)
         binding.itemFeedTop.textView22.text = feeds[position].name
+
+        binding.itemFeedTop.textView22.setOnClickListener{
+            navigation?.goProfile(holder.itemView.context)
+        }
     }
 
     override fun getItemCount(): Int {
