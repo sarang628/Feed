@@ -15,8 +15,12 @@
  */
 package com.example.screen_feed
 
+import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 @BindingAdapter(value = ["app:addReview"])
 fun addReview(
@@ -43,5 +47,35 @@ fun isLogin(
 ) {
     isLogin?.let {
 
+    }
+}
+
+@BindingAdapter(value = ["torang:onRefreshListener"])
+fun setOnRefreshListener(
+    swipeRefreshLayout: SwipeRefreshLayout,
+    onRefreshListener: SwipeRefreshLayout.OnRefreshListener?
+) {
+    onRefreshListener?.let {
+        swipeRefreshLayout.setOnRefreshListener(it)
+    }
+}
+
+@BindingAdapter(value = ["torang:onMenuItemClickListener"])
+fun setOnMenuItemClickListener(
+    toolBar: Toolbar,
+    onMenuItemClickListener: Toolbar.OnMenuItemClickListener?
+) {
+    onMenuItemClickListener?.let {
+        toolBar.setOnMenuItemClickListener(it)
+    }
+}
+
+@BindingAdapter(value = ["torang:adapter"])
+fun setOnMenuItemClickListener(
+    recyclerView: RecyclerView,
+    adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>?
+) {
+    adapter?.let {
+        recyclerView.adapter = it
     }
 }

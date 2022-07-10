@@ -4,11 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.screen_feed.FeedsViewModel" />
 
+        <variable
+            name="onRefreshListener"
+            type="OnRefreshListener" />
+
+        <variable
+            name="onMenuItemClickListener"
+            type="OnMenuItemClickListener" />
+
+        <variable
+            name="adapter"
+            type="androidx.recyclerview.widget.RecyclerView.Adapter&lt;ViewHolder&gt;" />
+
+        <variable
+            name="reload"
+            type="OnClickListener" />
+
+        <import type="android.view.View.OnClickListener" />
+
         <import type="android.view.View" />
+
+        <import type="androidx.appcompat.widget.Toolbar.OnMenuItemClickListener" />
+
+        <import type="androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener" />
+
+        <import type="androidx.recyclerview.widget.RecyclerView.Adapter" />
+
+        <import type="androidx.recyclerview.widget.RecyclerView.ViewHolder" />
     </data>
 
     <!-- root element -->
@@ -21,6 +48,7 @@
         <!-- actionbar -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar2"
+            torang:onMenuItemClickListener="@{onMenuItemClickListener}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -32,22 +60,22 @@
         <!-- contents in list format -->
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/sl_timeline"
+            torang:onRefreshListener="@{onRefreshListener}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar2"
-            >
+            app:layout_constraintTop_toBottomOf="@+id/toolbar2">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_timelne"
+                torang:adapter="@{adapter}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <!-- refresh button -->
@@ -57,6 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="갱신"
+            android:onClick="@{reload}"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

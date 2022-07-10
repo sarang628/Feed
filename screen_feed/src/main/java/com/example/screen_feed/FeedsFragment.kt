@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
- * [FeedsRvAdt]
+ * [FeedsAdapter]
  * [ItemTimeLineBinding]
  * [FragmentFeedsBinding]
  * [FeedsViewModel]
@@ -40,23 +40,16 @@ class FeedsFragment : Fragment() {
         val binding: FragmentFeedsBinding =
             FragmentFeedsBinding.inflate(layoutInflater, container, false)
         // 리사이클러뷰 아답터 설정
-        binding.rvTimelne.adapter = FeedsRvAdt(
-            lifecycleOwner = viewLifecycleOwner,
-            navigation = navigation
-        )
+        binding.adapter = FeedsAdapter(navigation = navigation)
         // 스와이프 하여 리프레시
-        binding.slTimeline.setOnRefreshListener {
-            viewModel.reload()
-        }
+        binding.setOnRefreshListener { viewModel.reload() }
         // 리뷰 추가 클릭
-        binding.toolbar2.setOnMenuItemClickListener {
+        binding.setOnMenuItemClickListener {
             viewModel.clickAddReview()
             false
         }
         // 갱신 버튼 클릭
-        binding.button.setOnClickListener {
-            viewModel.reload()
-        }
+        binding.setReload { viewModel.reload() }
 
         subScribeUI(binding)
 
