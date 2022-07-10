@@ -81,10 +81,19 @@ class FeedsViewModel @Inject constructor(
             _feedsUiState.update {
                 it.copy(
                     isRefresh = false,
-                    isEmptyFeed = !it.isEmptyFeed
+                    isEmptyFeed = !it.isEmptyFeed,
+                    feedItemUiState = ArrayList<FeedItemUiState>().apply {
+                        add(FeedItemUiState("a"))
+                        add(FeedItemUiState("b"))
+                        add(FeedItemUiState("c"))
+                        add(FeedItemUiState("d"))
+                        add(FeedItemUiState("e"))
+                        add(FeedItemUiState("f"))
+                    }
                 )
             }
         }
+
     }
 
     init {

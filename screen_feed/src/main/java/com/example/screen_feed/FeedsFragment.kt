@@ -37,8 +37,7 @@ class FeedsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // 바인딩 초기화
-        val binding: FragmentFeedsBinding =
-            FragmentFeedsBinding.inflate(layoutInflater, container, false)
+        val binding: FragmentFeedsBinding = FragmentFeedsBinding.inflate(layoutInflater, container, false)
         // 리사이클러뷰 아답터 설정
         binding.adapter = FeedsAdapter(navigation = navigation)
         // 스와이프 하여 리프레시
@@ -65,6 +64,10 @@ class FeedsFragment : Fragment() {
 
                     it.toastMsg?.let {
                         Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                    }
+
+                    it.feedItemUiState?.let {
+                        (binding.adapter as FeedsAdapter).setFeeds(it)
                     }
                 }
             }

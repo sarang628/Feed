@@ -4,23 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-        <variable
-            name="viewModel"
-            type="com.example.screen_feed.FeedsViewModel" />
-
+        <!-- 스와이프 리프레시 레이아웃 리스너 -->
         <variable
             name="onRefreshListener"
             type="OnRefreshListener" />
 
+        <!-- 우측 상단 리뷰 작성 클릭 리스너 -->
         <variable
             name="onMenuItemClickListener"
             type="OnMenuItemClickListener" />
 
+        <!-- 피드 리스트 어뎁터 -->
         <variable
             name="adapter"
             type="androidx.recyclerview.widget.RecyclerView.Adapter&lt;ViewHolder&gt;" />
 
+        <!-- 갱신 버튼 클릭 리스너 -->
         <variable
             name="reload"
             type="OnClickListener" />
@@ -84,8 +83,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="갱신"
             android:onClick="@{reload}"
+            android:text="갱신"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
