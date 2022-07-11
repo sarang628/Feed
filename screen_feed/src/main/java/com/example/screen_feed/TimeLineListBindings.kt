@@ -60,6 +60,16 @@ fun setOnRefreshListener(
     }
 }
 
+@BindingAdapter(value = ["torang:isRefreshing"])
+fun setOnRefreshListener(
+    swipeRefreshLayout: SwipeRefreshLayout,
+    isRefreshing: Boolean?
+) {
+    isRefreshing?.let {
+        swipeRefreshLayout.isRefreshing = isRefreshing
+    }
+}
+
 @BindingAdapter(value = ["torang:onMenuItemClickListener"])
 fun setOnMenuItemClickListener(
     toolBar: Toolbar,
