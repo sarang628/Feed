@@ -37,19 +37,18 @@ class FeedsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // 바인딩 초기화
-        val binding: FragmentFeedsBinding = FragmentFeedsBinding.inflate(layoutInflater, container, false)
-        // 리사이클러뷰 아답터 설정
-        binding.adapter = FeedsAdapter(navigation = navigation)
-        // 스와이프 하여 리프레시
-        binding.setOnRefreshListener { viewModel.reload() }
-        // 리뷰 추가 클릭
-        binding.setOnMenuItemClickListener {
-            viewModel.clickAddReview()
-            false
-        }
-        // 갱신 버튼 클릭
-        binding.setReload { viewModel.reload() }
-
+        val binding: FragmentFeedsBinding =
+            FragmentFeedsBinding.inflate(layoutInflater, container, false)
+        binding.useCase = FeedsFragmentLayoutUseCase(
+            adapter = FeedsAdapter(navigation = navigation), // 리사이클러뷰 아답터 설정
+            onRefreshListener = { viewModel.reload() }, // 스와이프 하여 리프레시
+            onMenuItemClickListener = { // 리뷰 추가 클릭
+                viewModel.clickAddReview()
+                false
+            },
+            reLoad = { viewModel.reload() }, // 갱신 버튼 클릭
+            visibleButton = true
+        )
         subScribeUI(binding)
 
         return binding.root
@@ -67,7 +66,7 @@ class FeedsFragment : Fragment() {
                     }
 
                     it.feedItemUiState?.let {
-                        (binding.adapter as FeedsAdapter).setFeeds(it)
+                        (binding.useCase?.adapter as FeedsAdapter).setFeeds(it)
                     }
                 }
             }

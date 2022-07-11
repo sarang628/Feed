@@ -4,37 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <!-- 스와이프 리프레시 레이아웃 리스너 -->
-        <variable
-            name="onRefreshListener"
-            type="OnRefreshListener" />
 
-        <!-- 우측 상단 리뷰 작성 클릭 리스너 -->
         <variable
-            name="onMenuItemClickListener"
-            type="OnMenuItemClickListener" />
-
-        <!-- 피드 리스트 어뎁터 -->
-        <variable
-            name="adapter"
-            type="androidx.recyclerview.widget.RecyclerView.Adapter&lt;ViewHolder&gt;" />
-
-        <!-- 갱신 버튼 클릭 리스너 -->
-        <variable
-            name="reload"
-            type="OnClickListener" />
-
-        <import type="android.view.View.OnClickListener" />
+            name="useCase"
+            type="com.example.screen_feed.FeedsFragmentLayoutUseCase" />
 
         <import type="android.view.View" />
-
-        <import type="androidx.appcompat.widget.Toolbar.OnMenuItemClickListener" />
-
-        <import type="androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener" />
-
-        <import type="androidx.recyclerview.widget.RecyclerView.Adapter" />
-
-        <import type="androidx.recyclerview.widget.RecyclerView.ViewHolder" />
     </data>
 
     <!-- root element -->
@@ -47,7 +22,7 @@
         <!-- actionbar -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar2"
-            torang:onMenuItemClickListener="@{onMenuItemClickListener}"
+            torang:onMenuItemClickListener="@{useCase.onMenuItemClickListener}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -59,7 +34,7 @@
         <!-- contents in list format -->
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/sl_timeline"
-            torang:onRefreshListener="@{onRefreshListener}"
+            torang:onRefreshListener="@{useCase.onRefreshListener}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -70,7 +45,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_timelne"
-                torang:adapter="@{adapter}"
+                torang:adapter="@{useCase.adapter}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -83,8 +58,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:onClick="@{reload}"
+            android:onClick="@{useCase.reLoad}"
             android:text="갱신"
+            android:visibility="@{useCase.visibleButton ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

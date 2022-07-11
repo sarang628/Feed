@@ -1,14 +1,14 @@
 package com.example.screen_feed
 
-import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 data class FeedsFragmentLayoutUseCase(
-    val onRefreshListener: SwipeRefreshLayout.OnRefreshListener,
-    val onMenuItemClickListener: Toolbar.OnMenuItemClickListener
-    val adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>,
-    val reLoad: View.OnClickListener
+    val onRefreshListener: SwipeRefreshLayout.OnRefreshListener, //스와이프 레이아웃을 리프레시 할 때 호출되는 이벤트
+    val onMenuItemClickListener: Toolbar.OnMenuItemClickListener, // 리뷰를 추가 할 때 호출되는 이벤트
+    val adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>, // 리스트 아답터
+    val reLoad: View.OnClickListener, // 갱신 아답터
+    val visibleButton: Boolean // 갱신 버튼 보여지는 여부
 )
