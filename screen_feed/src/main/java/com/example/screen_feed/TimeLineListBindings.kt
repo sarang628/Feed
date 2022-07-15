@@ -15,11 +15,14 @@
  */
 package com.example.screen_feed
 
+import android.text.Html
+import android.view.MenuItem
 import android.view.View
-import android.widget.Toolbar
+import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.torang_core.data.model.Feed
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 @BindingAdapter(value = ["app:addReview"])
 fun addReview(
@@ -47,4 +50,59 @@ fun isLogin(
     isLogin?.let {
 
     }
+}
+
+@BindingAdapter(value = ["torang:onRefreshListener"])
+fun setOnRefreshListener(
+    swipeRefreshLayout: SwipeRefreshLayout,
+    onRefreshListener: SwipeRefreshLayout.OnRefreshListener?
+) {
+    onRefreshListener?.let {
+        swipeRefreshLayout.setOnRefreshListener(it)
+    }
+}
+
+@BindingAdapter(value = ["torang:isRefreshing"])
+fun setOnRefreshListener(
+    swipeRefreshLayout: SwipeRefreshLayout,
+    isRefreshing: Boolean?
+) {
+    isRefreshing?.let {
+        swipeRefreshLayout.isRefreshing = isRefreshing
+    }
+}
+
+@BindingAdapter(value = ["torang:onMenuItemClickListener"])
+fun setOnMenuItemClickListener(
+    toolBar: Toolbar,
+    onMenuItemClickListener: Toolbar.OnMenuItemClickListener?
+) {
+    onMenuItemClickListener?.let {
+        toolBar.setOnMenuItemClickListener(it)
+    }
+}
+
+@BindingAdapter(value = ["torang:adapter"])
+fun setOnMenuItemClickListener(
+    recyclerView: RecyclerView,
+    adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>?
+) {
+    adapter?.let {
+        recyclerView.adapter = it
+    }
+}
+
+@BindingAdapter(value = ["torang:select"])
+fun setSelect(
+    view: View,
+    select: Boolean?
+) {
+    select?.let {
+        view.isSelected = it
+    }
+}
+
+@BindingAdapter("torang:formatText")
+fun setText(textView: TextView?, str: String?) {
+    textView?.setText(Html.fromHtml(str, 0))
 }
