@@ -35,20 +35,7 @@ class FeedsFragment : Fragment() {
     /** 화면 이동 네비게이션 */
     @Inject
     lateinit var navigation: FeedsFragmentNavigation
-
-    private val layoutUseCase = MutableStateFlow(
-        FeedsFragmentLayoutUseCase(
-            adapter = FeedsAdapter(navigation = navigation), // 리사이클러뷰 아답터 설정
-            onRefreshListener = { viewModel.reload() }, // 스와이프 하여 리프레시
-            onMenuItemClickListener = { // 리뷰 추가 클릭
-                viewModel.clickAddReview()
-                false
-            },
-            reLoad = { viewModel.reload() }, // 갱신 버튼 클릭
-            visibleButton = true,
-            isRefreshing = false
-        )
-    )
+    lateinit var layoutUseCase : MutableStateFlow<FeedsFragmentLayoutUseCase>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,6 +50,21 @@ class FeedsFragment : Fragment() {
     }
 
     private fun initUIUseCase(binding: FragmentFeedsBinding) {
+
+        layoutUseCase = MutableStateFlow(
+            FeedsFragmentLayoutUseCase(
+                adapter = FeedsAdapter(navigation = navigation), // 리사이클러뷰 아답터 설정
+                onRefreshListener = { viewModel.reload() }, // 스와이프 하여 리프레시
+                onMenuItemClickListener = { // 리뷰 추가 클릭
+                    viewModel.clickAddReview()
+                    false
+                },
+                reLoad = { viewModel.reload() }, // 갱신 버튼 클릭
+                visibleButton = true,
+                isRefreshing = false
+            )
+        )
+
         viewLifecycleOwner.lifecycleScope.launch {
             layoutUseCase.collect(FlowCollector {
                 binding.useCase = it
