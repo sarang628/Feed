@@ -30,7 +30,7 @@ import javax.inject.Inject
 class FeedsFragment : Fragment() {
 
     /** 뷰모델 */
-    private val viewModel: FeedsViewModel by viewModels()
+    private val viewModel: TestFeedsViewModel by viewModels()
 
     /** 화면 이동 네비게이션 */
     @Inject
@@ -45,6 +45,7 @@ class FeedsFragment : Fragment() {
         val binding = FragmentFeedsBinding.inflate(layoutInflater, container, false)
         initUIUseCase(binding)
         subScribeUI(binding)
+        binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
     }

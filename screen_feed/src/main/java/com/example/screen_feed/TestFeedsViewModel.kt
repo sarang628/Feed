@@ -4,6 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.screen_feed.uistate.FeedsUIstate
+import com.example.screen_feed.usecase.ItemFeedBottomUsecase
+import com.example.screen_feed.usecase.ItemFeedTopUseCase
+import com.example.screen_feed.usecase.ItemTimeLineUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FeedsViewModel @Inject constructor(
+class TestFeedsViewModel @Inject constructor(
     //private val feedRepository: FeedRepository
 ) : ViewModel() {
 
@@ -25,6 +28,40 @@ class FeedsViewModel @Inject constructor(
     )
 
     val feedsUiState: StateFlow<FeedsUIstate> = _feedsUiState
+
+    val useCase = ItemTimeLineUseCase(
+        itemFeedTopUseCase = ItemFeedTopUseCase(
+            name = "sryang",
+            restaurantName = "mcdonalds",
+            rating = 4.5f,
+            profilePictureUrl = "https://thumb.mt.co.kr/06/2022/01/2022011414312292328_1.jpg/dims/optimize/",
+            onMenuClickListener = { },
+            onProfileImageClickListener = { },
+            onNameClickListener = { },
+            onRestaurantClickListener = { }
+        ),
+        itemFeedBottomUseCase = ItemFeedBottomUsecase(
+            clickLikeListener = { },
+            clickCommentListener = { },
+            clickShareListener = { },
+            clickFavoriteListener = { },
+            likeAmount = 10,
+            commentAmount = 20,
+            author = "sryang",
+            comment = "comment",
+            isLike = true,
+            isFavorite = true
+        ),
+        pageAdapter = FeedPagerAdapter().apply {
+            setList(
+                arrayListOf(
+                    "https://thumb.mt.co.kr/06/2022/01/2022011414312292328_1.jpg/dims/optimize/",
+                    "https://thumb.mt.co.kr/06/2022/01/2022011414312292328_1.jpg/dims/optimize/",
+                    "https://thumb.mt.co.kr/06/2022/01/2022011414312292328_1.jpg/dims/optimize/"
+                )
+            )
+        }
+    )
 
 
     /** 데이터가 비어있는지 여부 */
@@ -83,7 +120,7 @@ class FeedsViewModel @Inject constructor(
                 it.copy(
                     isRefresh = false,
                     isEmptyFeed = !it.isEmptyFeed,
-                    feedItemUiState = ArrayList()
+                    feedItemUiState = arrayListOf(useCase, useCase, useCase)
                 )
             }
         }
