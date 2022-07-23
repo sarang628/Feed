@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.screen_feed.databinding.ItemTimeLineBinding
 import com.example.screen_feed.uistate.FeedItemUiState
+import com.example.screen_feed.usecase.ItemTimeLineUseCase
 
 class FeedsAdapter(
     private val navigation: FeedRvAdtNavigation? = null
@@ -20,9 +21,9 @@ class FeedsAdapter(
         return 0
     }
 
-    private var feeds = ArrayList<FeedItemUiState>()
+    private var feeds = ArrayList<ItemTimeLineUseCase>()
 
-    fun setFeeds(feeds: ArrayList<FeedItemUiState>) {
+    fun setFeeds(feeds: ArrayList<ItemTimeLineUseCase>) {
         this.feeds = feeds
         notifyDataSetChanged()
     }
@@ -35,7 +36,7 @@ class FeedsAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         (holder as FeedsViewholder).fillHolder(
-            uiState = feeds[position],
+            useCase = feeds[position],
             clickName = { navigation?.goProfile(holder.itemView.context) }
         )
     }
@@ -50,13 +51,9 @@ private class FeedsViewholder(itemTimelineBinding: ItemTimeLineBinding) :
     private val binding = itemTimelineBinding
 
     fun fillHolder(
-        uiState: FeedItemUiState,
+        useCase: ItemTimeLineUseCase,
         clickName: (() -> Unit)?
     ) {
-        binding.itemFeedTop.textView22.text = uiState.name
-
-        binding.itemFeedTop.textView22.setOnClickListener {
-            clickName?.invoke()
-        }
+        binding.useCase = useCase
     }
 }
