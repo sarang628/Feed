@@ -1,6 +1,7 @@
 package com.example.screen_feed
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,7 +36,7 @@ class FeedsFragment : Fragment() {
     /** 화면 이동 네비게이션 */
     @Inject
     lateinit var navigation: FeedsFragmentNavigation
-    lateinit var layoutUseCase : MutableStateFlow<FeedsFragmentLayoutUseCase>
+    lateinit var layoutUseCase: MutableStateFlow<FeedsFragmentLayoutUseCase>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,15 +62,17 @@ class FeedsFragment : Fragment() {
                     false
                 },
                 reLoad = { viewModel.reload() }, // 갱신 버튼 클릭
-                visibleButton = true,
+                isEmptyFeed = true,
                 isRefreshing = false
             )
         )
 
         viewLifecycleOwner.lifecycleScope.launch {
-            layoutUseCase.collect(FlowCollector {
-                binding.useCase = it
-            })
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                layoutUseCase.collect(FlowCollector {
+                    binding.useCase = it
+                })
+            }
         }
     }
 
@@ -79,13 +82,14 @@ class FeedsFragment : Fragment() {
                 viewModel.feedsUiState.collect { feedUiState ->
                     layoutUseCase.update {
                         it.copy(
-                            visibleButton = feedUiState.isEmptyFeed,
+                            isEmptyFeed = feedUiState.isEmptyFeed,
                             isRefreshing = feedUiState.isRefresh
                         )
                     }
 
                     feedUiState.toastMsg?.let {
-                        Snackbar.make(binding.root, feedUiState.toastMsg, Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(binding.root, feedUiState.toastMsg, Snackbar.LENGTH_SHORT)
+                            .show()
                     }
 
                     feedUiState.feedItemUiState?.let {
