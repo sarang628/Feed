@@ -14,10 +14,10 @@ data class ItemTimeLineUseCase(
 fun RemoteFeed.toItemTimeLineUseCase(): ItemTimeLineUseCase {
     return ItemTimeLineUseCase(
         itemFeedTopUseCase = ItemFeedTopUseCase(
-            name = "sryang",
-            restaurantName = "mcdonalds",
-            rating = 4.5f,
-            profilePictureUrl = "https://thumb.mt.co.kr/06/2022/01/2022011414312292328_1.jpg/dims/optimize/",
+            name = name,
+            restaurantName = restaurantName,
+            rating = rating,
+            profilePictureUrl = profilePictureUrl,
             onMenuClickListener = { },
             onProfileImageClickListener = { },
             onNameClickListener = { },
@@ -28,20 +28,16 @@ fun RemoteFeed.toItemTimeLineUseCase(): ItemTimeLineUseCase {
             clickCommentListener = { },
             clickShareListener = { },
             clickFavoriteListener = { },
-            likeAmount = 10,
-            commentAmount = 20,
-            author = "sryang",
-            comment = "comment",
+            likeAmount = 0,
+            commentAmount = 0,
+            author = "",
+            comment = "",
             isLike = true,
             isFavorite = true
         ),
         pageAdapter = FeedPagerAdapter().apply {
             setList(
-                arrayListOf(
-                    "https://thumb.mt.co.kr/06/2022/01/2022011414312292328_1.jpg/dims/optimize/",
-                    "https://thumb.mt.co.kr/06/2022/01/2022011414312292328_1.jpg/dims/optimize/",
-                    "https://thumb.mt.co.kr/06/2022/01/2022011414312292328_1.jpg/dims/optimize/"
-                )
+                reviewImages
             )
         }
     )

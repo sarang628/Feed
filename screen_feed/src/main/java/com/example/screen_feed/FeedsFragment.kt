@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.screen_feed.databinding.FragmentFeedsBinding
 import com.example.screen_feed.databinding.ItemTimeLineBinding
+import com.example.screen_feed.uistate.FeedsUIstate
 import com.example.screen_feed.usecase.FeedsFragmentLayoutUseCase
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,6 +27,7 @@ import javax.inject.Inject
  * [ItemTimeLineBinding]
  * [FragmentFeedsBinding]
  * [FeedsViewModel]
+ * [FeedsUIstate]
  */
 @AndroidEntryPoint
 class FeedsFragment : Fragment() {
