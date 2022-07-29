@@ -4,211 +4,143 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.example.screen_feed.adapters.FeedsAdapter
 import com.example.screen_feed.databinding.FragmentFeedsBinding
-import com.example.torang_core.*
-import com.example.torang_core.navigation.*
-import com.example.torang_core.util.EventObserver
-import com.example.torang_core.util.Logger
-import com.example.torang_core.navigation.TorangShare
-import com.sarang.base_feed.FeedVH
-import com.sarang.base_feed.ReportProcessor
+import com.example.screen_feed.databinding.ItemTimeLineBinding
+import com.example.screen_feed.uistate.FeedsUIstate
+import com.example.screen_feed.usecase.FeedsFragmentLayoutUseCase
+import com.example.screen_feed.usecase.ItemFeedUIState
+import com.example.screen_feed.usecase.ItemFeedTopUseCase
+import com.example.screen_feed.usecase.ItemFeedBottomUsecase
+import com.example.screen_feed.usecase.ItemFeedUseCase
+import com.example.screen_feed.viewmodels.TestFeedsViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import java.util.stream.Collectors
 import javax.inject.Inject
 
 /**
- * [FeedsRvAdt]
- * [FeedVH]
+ * 피드화면에서 사용하는 레이아웃
+ * [FeedsFragmentLayoutUseCase] feeds_fragment.xml
+ * [ItemFeedUseCase] item_time_line.xml
+ *
+ *
+ * [FeedsAdapter]
  * [ItemTimeLineBinding]
- * [FragmentTimeLineBinding]
+ * [FragmentFeedsBinding]
  * [FeedsViewModel]
+ * [FeedsUIstate]
  */
 @AndroidEntryPoint
 class FeedsFragment : Fragment() {
 
-    /** 데이터 바인딩 */
-    private lateinit var binding: FragmentFeedsBinding
-
     /** 뷰모델 */
-    private val viewModel: FeedsViewModel by viewModels()
+    private val viewModel: TestFeedsViewModel by viewModels()
 
-    /** 레스토랑 상세화면 네비게이션 */
+    /** 화면 이동 네비게이션 */
     @Inject
-    lateinit var restaurantDetailNavigation: RestaurantDetailNavigation
-
-    /** 프로필 화면 네비게이션 */
-    @Inject
-    lateinit var profileNavigation: ProfileNavigation
-
-    /** 피드 상세화면 네비게이션 */
-    @Inject
-    lateinit var timelineDetailNavigation: TimeLineDetailNavigation
-
-    /** 공유 팝업 네비게이션 */
-    @Inject
-    lateinit var shareBottomSheetNavigation: ShareBottomSheetNavigation
-
-    @Inject
-    lateinit var torangShare: TorangShare
-
-    /** 사진 페이지 네비게이션 */
-    @Inject
-    lateinit var picturePageNavigation: PicturePageNavigation
-
-    /** 리뷰 추가 화면 네비게에션 */
-    @Inject
-    lateinit var addReviewNavigation: AddReviewNavigation
-
-    /** 로그인 네비게이션 */
-    @Inject
-    lateinit var loginNavigation: LoginNavigation
-
-    @Inject
-    lateinit var menuBottomSheetNavigation: MenuBottomSheetNavigation
-
-    @Inject
-    lateinit var myMenuBottomSheetNavigation: MyMenuBottomSheetNavigation
-
-    @Inject
-    lateinit var notLoggedInMenuBottomSheetNavigation: NotLoggedInMenuBottomSheetNavigation
-
-    @Inject
-    lateinit var reportNavigation: ReportNavigation
+    lateinit var navigation: FeedsFragmentNavigation
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentFeedsBinding.inflate(layoutInflater, container, false).apply {
-            viewModel = this@FeedsFragment.viewModel
+        return FragmentFeedsBinding.inflate(layoutInflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
-            addReviewNavigation = this@FeedsFragment.addReviewNavigation
-            loginNavigation = this@FeedsFragment.loginNavigation
-        }
-
-        binding.rvTimelne.adapter = FeedsRvAdt(
-            lifecycleOwner = viewLifecycleOwner,
-            clickMenu = { viewModel.showMenu(it) },
-            clickProfile = { viewModel.openProfile(it) },
-            clickRestaurant = { viewModel.openTorangDetail(it) },
-            clickLike = { v, i -> viewModel.clickLike(v, i) },
-            clickComment = { viewModel.openFeedDetail(it) },
-            clickShare = { viewModel.shareFeed(it) },
-            clickFavorite = { v, i -> viewModel.clickFavorite(v, i) },
-            clickPicture = { viewModel.openPicture(it) },
-            getReviewImage = { viewModel.getReviewImages(it) },
-            getLike = { viewModel.isLike(it) },
-            getFavorite = { viewModel.isFavorite(it) }
-        )
-
-        setupNavigation()
-
-        viewModel.feeds.observe(viewLifecycleOwner){
-            (binding.rvTimelne.adapter as FeedsRvAdt).setFeeds(it)
-        }
-        return binding.root
+            subScribeUI(this, initFeedsFragmentLayoutUseCase())
+        }.root
     }
 
-    private fun setupNavigation() {
-        viewModel.openFeedDetail.observe(viewLifecycleOwner,
-            EventObserver { timelineDetailNavigation.go(requireContext(), it) })
-
-        viewModel.openTorangDetail.observe(viewLifecycleOwner,
-            EventObserver { restaurantDetailNavigation.go(requireContext(), it) })
-
-        viewModel.showDeleteFeed.observe(viewLifecycleOwner,
-            EventObserver { deleteFeed(it) })
-
-        viewModel.shareFeed.observe(viewLifecycleOwner,
-            EventObserver {
-                torangShare.shareLink(
-                    requireContext(),
-                    "http://sarang628.iptime.org:91:/$it"
-                )
-            })
-
-        viewModel.openProfile.observe(viewLifecycleOwner,
-            EventObserver { profileNavigation.go(requireContext(), it) })
-
-        viewModel.openPicture.observe(viewLifecycleOwner,
-            EventObserver { picturePageNavigation.go(requireContext(), it.review_id, 0) })
-
-        viewModel.openLogin.observe(viewLifecycleOwner,
-            EventObserver {
-                Logger.i("open login")
-                loginNavigation.goLogin(requireContext())
-            })
-
-        viewModel.postOtherApp.observe(viewLifecycleOwner,
-            EventObserver { myMenuBottomSheetNavigation.dismiss() })
-
-        viewModel.store.observe(viewLifecycleOwner,
-            EventObserver { myMenuBottomSheetNavigation.dismiss() })
-
-        viewModel.openAddReview.observe(viewLifecycleOwner,
-            EventObserver { addReviewNavigation.go(requireContext(), 0) })
-
-        viewModel.modify.observe(viewLifecycleOwner,
-            EventObserver {
-                addReviewNavigation.go(
-                    requireContext(),
-                    restaurantId = it.restaurantId,
-                    reviewId = it.review_id
-                )
-                myMenuBottomSheetNavigation.dismiss()
-            })
-
-        viewModel.hideLikeCount.observe(viewLifecycleOwner,
-            EventObserver { myMenuBottomSheetNavigation.dismiss() })
-
-        viewModel.lockReply.observe(viewLifecycleOwner,
-            EventObserver { myMenuBottomSheetNavigation.dismiss() })
-
-        viewModel.reasonContainThisPost.observe(viewLifecycleOwner,
-            EventObserver { menuBottomSheetNavigation.dismiss() })
-
-        viewModel.unfollow.observe(viewLifecycleOwner,
-            EventObserver { menuBottomSheetNavigation.dismiss() })
-
-        viewModel.hide.observe(viewLifecycleOwner,
-            EventObserver { menuBottomSheetNavigation.dismiss() })
-
-        viewModel.delete.observe(viewLifecycleOwner, EventObserver {
-            myMenuBottomSheetNavigation.dismiss()
-            deleteFeed(it)
-        })
-
-        viewLifecycleOwner.lifecycle.addObserver(
-            ReportProcessor(
-                viewModel,
-                menuBottomSheetNavigation,
-                myMenuBottomSheetNavigation,
-                notLoggedInMenuBottomSheetNavigation,
-                reportNavigation,
-                requireContext()
+    private fun initFeedsFragmentLayoutUseCase(): MutableStateFlow<FeedsFragmentLayoutUseCase> {
+        val layoutUseCase = MutableStateFlow(
+            FeedsFragmentLayoutUseCase(
+                adapter = FeedsAdapter(), // 리사이클러뷰 아답터 설정
+                onRefreshListener = { viewModel.reload() }, // 스와이프 하여 리프레시
+                onMenuItemClickListener = { // 리뷰 추가 클릭
+                    viewModel.clickAddReview()
+                    false
+                },
+                reLoad = { viewModel.reload() }, // 갱신 버튼 클릭
+                isEmptyFeed = true,
+                isRefreshing = false
             )
         )
-
-        viewModel.errorMessage.observe(viewLifecycleOwner) {
-            AlertDialog.Builder(requireContext())
-                .setMessage(it)
-                .setPositiveButton("확인") { _, _ -> }
-                .show()
-        }
-
+        return layoutUseCase
     }
 
-    private fun deleteFeed(reviewId: Int) {
-        AlertDialog.Builder(requireContext())
-            .setMessage("피드를 삭제하시겠습니까?")
-            .setPositiveButton(
-                "예"
-            ) { _, _ -> viewModel.deleteFeed(reviewId) }
-            .setNegativeButton(
-                "아니오"
-            ) { _, _ -> }
-            .show()
+    private fun subScribeUI(
+        binding: FragmentFeedsBinding, layoutUseCase: MutableStateFlow<FeedsFragmentLayoutUseCase>
+    ) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.feedsUiState.collect { feedUiState ->
+                    layoutUseCase.update {
+                        it.copy(
+                            isEmptyFeed = feedUiState.isEmptyFeed,
+                            isRefreshing = feedUiState.isRefresh
+                        )
+                    }
+
+                    feedUiState.toastMsg?.let { snackBar(it) }
+
+                    feedUiState.feedItemUiState?.let {
+                        (binding.useCase?.adapter as FeedsAdapter).setFeeds(toItemTimelineUseCase(it))
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                layoutUseCase.collect(FlowCollector {
+                    binding.useCase = it
+                })
+            }
+        }
+    }
+
+    private fun toItemTimelineUseCase(it: java.util.ArrayList<ItemFeedUIState>): ArrayList<ItemFeedUseCase> {
+        val list = it.stream()
+            .map { generateItemFeedUseCase(it) }
+            .collect(Collectors.toList())
+        return list as ArrayList<ItemFeedUseCase>
+    }
+
+    private fun generateItemFeedUseCase(it: ItemFeedUIState): ItemFeedUseCase {
+        return ItemFeedUseCase(
+            itemId = it.itemId,
+            itemFeedTopUseCase = ItemFeedTopUseCase(
+                data = it.itemFeedTopUiState,
+                onMenuClickListener = { navigation.showMenu(requireContext()) },
+                onProfileImageClickListener = { navigation.showProfile(requireContext()) },
+                onNameClickListener = { navigation.showProfile(requireContext()) },
+                onRestaurantClickListener = { navigation.moveRestaurant(requireContext()) }
+            ),
+            itemFeedBottomUseCase = ItemFeedBottomUsecase(
+                data = it.itemFeedBottomUiState,
+                onLikeClickListener = { viewModel.clickLike(it) },
+                onCommentClickListener = { navigation.moveComment(requireContext()) },
+                onShareClickListener = { navigation.showShare(requireContext()) },
+                onClickFavoriteListener = { viewModel.clickFavorite(it) }
+            ),
+            pageAdapter = FeedPagerAdapter().apply {
+                setList(it.reviewImages)
+            }
+        )
+    }
+
+    private fun snackBar(message: String) {
+        view?.let {
+            Snackbar.make(it, message, Snackbar.LENGTH_SHORT).show()
+        }
     }
 }
