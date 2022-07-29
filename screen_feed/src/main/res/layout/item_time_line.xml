@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="useCase"
+            type="com.example.screen_feed.usecase.ItemFeedUseCase" />
+    </data>
+
+    <!-- root element  -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- profile area -->
+        <include
+            android:id="@+id/item_feed_top"
+            layout="@layout/item_feed_top"
+            useCase="@{useCase.itemFeedTopUseCase}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- review image area  -->
+        <FrameLayout
+            android:id="@+id/flMediaContents"
+            android:layout_width="match_parent"
+            android:layout_height="450dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/item_feed_top">
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:adapter="@{useCase.pageAdapter}"
+                tools:background="@tools:sample/avatars" />
+
+            <WebView
+                android:id="@+id/webview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+
+        </FrameLayout>
+
+        <!-- bottom area -->
+        <include
+            android:id="@+id/include"
+            layout="@layout/item_feed_bottom"
+            useCase="@{useCase.itemFeedBottomUseCase}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/flMediaContents" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
