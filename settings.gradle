@@ -1,0 +1,3 @@
+rootProject.name = "FeedScreenTestApp"
+//include ':app'
+include ':library'
