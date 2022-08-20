@@ -39,8 +39,9 @@ android {
 }
 
 dependencies {
-    implementation 'com.github.sarang628:TorangCore:5dd8950a5a'
-    implementation 'com.github.sarang628:TorangRepository:ed69126daf'
+    implementation "com.github.sarang628:TorangCore:$coreVersion"
+    implementation "com.github.sarang628:TorangRepository:$TorangRepositoryVersion"
+    implementation "com.github.sarang628:Login:$loginVersion"
     implementation project(path: ':library')
 
     /** common */

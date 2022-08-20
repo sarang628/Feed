@@ -1,12 +1,24 @@
 package com.sarang.torang.di
 
-/*
+import android.content.Context
+import com.example.torang_core.data.AppDatabase
+import com.example.torang_core.repository.*
+import com.example.torangrepository.repository.impl.*
+import dagger.Binds
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+
+
 @InstallIn(SingletonComponent::class)
 @Module
 class DatabaseModule {
 
-    */
-/** 로컬 데이터베이스 제공 *//*
+
+/** 로컬 데이터베이스 제공 */
 
     @Singleton
     @Provides
@@ -36,4 +48,5 @@ abstract class AppRepositoryModule {
 
     @Binds
     abstract fun provideFilterRepository(filterRepository: FilterRepositoryImpl): FilterRepository
-}*/
+
+}

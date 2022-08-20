@@ -37,11 +37,16 @@ class TestFeedsViewModel @Inject constructor(
     //val openAddReview: LiveData<Event<Int>> = _openAddReview
 
     /** 로그인 여부 */
-    //val isLogin = feedRepository.isLogin
+    val isLogin = false /*feedRepository.isLogin*/
 
     fun clickAddReview() {
         viewModelScope.launch {
-            _feedsUiState.update { it.copy(toastMsg = "clickAddReview") }
+            if(!isLogin) {
+                _feedsUiState.update { it.copy(goLogin = true) }
+            }
+            else {
+                _feedsUiState.update { it.copy(toastMsg = "clickAddReview") }
+            }
         }
         viewModelScope.launch {
             _feedsUiState.update { it.copy(toastMsg = null) }
@@ -95,5 +100,13 @@ class TestFeedsViewModel @Inject constructor(
 
     fun clickFavorite(reviewId : Int) {
         TODO("Not yet implemented")
+    }
+
+    fun consumeGoLogin() {
+        viewModelScope.launch {
+            _feedsUiState.update {
+                it.copy(goLogin = false)
+            }
+        }
     }
 }

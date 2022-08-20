@@ -38,6 +38,9 @@ ext {
     hiltViewModelVersion = '1.0.0-alpha03'
     recyclerViewVersion = '1.2.1'
     facebookLibraryVersion = '8.1.0'
+    TorangRepositoryVersion = '623ea55be6'
+    coreVersion = '5dd8950a5a'
+    loginVersion = '17662d2b3e'
 }
 
 buildscript {

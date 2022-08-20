@@ -19,6 +19,7 @@ import com.example.screen_feed.usecase.ItemFeedTopUseCase
 import com.example.screen_feed.usecase.ItemFeedBottomUsecase
 import com.example.screen_feed.usecase.ItemFeedUseCase
 import com.example.screen_feed.viewmodels.TestFeedsViewModel
+import com.example.torang_core.navigation.LoginNavigation
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.FlowCollector
@@ -50,13 +51,16 @@ class FeedsFragment : Fragment() {
     @Inject
     lateinit var navigation: FeedsFragmentNavigation
 
+    @Inject
+    lateinit var loginNavigation : LoginNavigation
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         return FragmentFeedsBinding.inflate(layoutInflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
-            subScribeUI(this, initFeedsFragmentLayoutUseCase())
+            subScribeUI(initFeedsFragmentLayoutUseCase())
         }.root
     }
 
@@ -77,9 +81,7 @@ class FeedsFragment : Fragment() {
         return layoutUseCase
     }
 
-    private fun subScribeUI(
-        binding: FragmentFeedsBinding, layoutUseCase: MutableStateFlow<FeedsFragmentLayoutUseCase>
-    ) {
+    private fun FragmentFeedsBinding.subScribeUI(layoutUseCase: MutableStateFlow<FeedsFragmentLayoutUseCase>) {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.feedsUiState.collect { feedUiState ->
@@ -92,9 +94,15 @@ class FeedsFragment : Fragment() {
 
                     feedUiState.toastMsg?.let { snackBar(it) }
 
-                    feedUiState.feedItemUiState?.let {
-                        (binding.useCase?.adapter as FeedsAdapter).setFeeds(toItemTimelineUseCase(it))
+                    feedUiState.feedItemUiState?.let { itemFeedUIStates ->
+                        (this@subScribeUI.useCase?.adapter as FeedsAdapter).setFeeds(itemFeedUIStates.toItemTimelineUseCase())
                     }
+
+                    if(feedUiState.goLogin != null && feedUiState.goLogin){
+                        viewModel.consumeGoLogin()
+                        loginNavigation.goLogin(requireContext())
+                    }
+
                 }
             }
         }
@@ -102,14 +110,14 @@ class FeedsFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 layoutUseCase.collect(FlowCollector {
-                    binding.useCase = it
+                    this@subScribeUI.useCase = it
                 })
             }
         }
     }
 
-    private fun toItemTimelineUseCase(it: java.util.ArrayList<ItemFeedUIState>): ArrayList<ItemFeedUseCase> {
-        val list = it.stream()
+    private fun ArrayList<ItemFeedUIState>.toItemTimelineUseCase(): ArrayList<ItemFeedUseCase> {
+        val list = this.stream()
             .map { generateItemFeedUseCase(it) }
             .collect(Collectors.toList())
         return list as ArrayList<ItemFeedUseCase>
