@@ -1,14 +1,9 @@
 package com.posco.feedscreentestapp.di
 
 import android.content.Context
-import android.content.Intent
+import android.widget.Toast
 import androidx.fragment.app.FragmentManager
-import com.example.torang_core.login.FacebookLoginProvider
 import com.example.torang_core.navigation.LoginNavigation
-import com.sarang.toringlogin.FacebookLoginProviderImpl
-import com.sarang.toringlogin.LoginManager
-import com.sarang.toringlogin.TorangLoginManager
-import com.sarang.toringlogin.login.LoginActivity
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -21,12 +16,12 @@ import kotlinx.coroutines.SupervisorJob
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Module
+/*@Module
 @InstallIn(SingletonComponent::class)
 abstract class LoginModule {
     @Binds
-    abstract fun provideLoginMudule(torangLoginManager: TorangLoginManager): LoginManager
-}
+    abstract fun provideLoginMudule(torangLoginManager: TestTorangLoginManager): LoginManager
+}*/
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -40,18 +35,12 @@ object CoroutinesScopesModule {
     }
 }
 
-@Module
+/*@Module
 @InstallIn(SingletonComponent::class)
 abstract class FacebookLoginProviderModule {
 @Binds
 abstract fun provideFacebookLoginProvider(facebookLoginProviderImpl: FacebookLoginProviderImpl): FacebookLoginProvider
-/*
-@Binds
-abstract fun provideFacebookLoginProviderForView(faceBookLoginProviderForViewImpl: FacebookLoginProviderImpl) : FaceBookLoginProviderForView
-
-@Binds
-abstract fun provideFacebookLoginProviderForRepository(FacebookLoginProviderImpl: FacebookLoginProviderImpl) : FaceBookLoginProviderForRepository*/
-}
+}*/
 
 @Module
 @InstallIn(ActivityComponent::class)
@@ -66,6 +55,7 @@ class LoginNavigationImpl @Inject constructor() : LoginNavigation {
     }
 
     override fun goLogin(context: Context) {
-        context.startActivity(Intent(context, LoginActivity::class.java))
+        //context.startActivity(Intent(context, LoginActivity::class.java))
+        Toast.makeText(context, "goLogin", Toast.LENGTH_SHORT).show()
     }
 }
