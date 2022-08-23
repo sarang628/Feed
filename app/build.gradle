@@ -9,7 +9,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.posco.feedscreentestapp"
+        applicationId "com.sryang.feedscreentestapp"
         minSdk 23
         targetSdk 32
         versionCode 1
