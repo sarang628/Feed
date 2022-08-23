@@ -14,42 +14,56 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.apply {
-            btnFeedLayoutTest.setOnClickListener {
-                startActivity(
-                    Intent(this@MainActivity, FeedLayoutTestActivity::class.java)
-                )
-            }
-
-            btnItemFeedBottomTest.setOnClickListener {
-                startActivity(
-                    Intent(this@MainActivity, ItemFeedBottomTestActivity::class.java)
-                )
-            }
-
-            btnItemFeedTopTest.setOnClickListener {
-                startActivity(
-                    Intent(this@MainActivity, ItemFeedTopTestActivity::class.java)
-                )
-            }
-
-            btnItemTimeLineTest.setOnClickListener {
-                startActivity(
-                    Intent(this@MainActivity, ItemTimeLineTestActivity::class.java)
-                )
-            }
-
-            btnFeedsFragmentTest.setOnClickListener {
-                startActivity(
-                    Intent(this@MainActivity, FeedsFragmentTestActivity::class.java)
-                )
-            }
-
-            btnTimeLineListTest.setOnClickListener {
-                startActivity(
-                    Intent(this@MainActivity, ItemTimeLineListTestActivity::class.java)
-                )
-            }
+            btnFeedLayoutTest.setOnClickListener { goFeedLayoutTest() }
+            btnItemFeedBottomTest.setOnClickListener { goItemFeedBottomTest() }
+            btnItemFeedTopTest.setOnClickListener { goItemFeedTopTest() }
+            btnItemTimeLineTest.setOnClickListener { goItemTimeLineTest() }
+            btnFeedsFragmentTest.setOnClickListener { goFeedsFragmentTest() }
+            btnTimeLineListTest.setOnClickListener { goItemTimeLineListTest() }
+            btnBottomNavigationTest.setOnClickListener { goFeedNavigationTest() }
         }
 
+    }
+
+    private fun goFeedLayoutTest() {
+        startActivity(
+            Intent(this@MainActivity, FeedLayoutTestActivity::class.java)
+        )
+    }
+
+    private fun goItemFeedBottomTest() {
+        startActivity(
+            Intent(this@MainActivity, ItemFeedBottomTestActivity::class.java)
+        )
+    }
+
+    private fun goItemFeedTopTest() {
+        startActivity(
+            Intent(this@MainActivity, ItemFeedTopTestActivity::class.java)
+        )
+    }
+
+    private fun goItemTimeLineTest() {
+        startActivity(
+            Intent(this@MainActivity, ItemTimeLineTestActivity::class.java)
+        )
+    }
+
+    private fun goFeedsFragmentTest() {
+        startActivity(
+            Intent(this@MainActivity, FeedsFragmentTestActivity::class.java)
+        )
+    }
+
+    private fun goItemTimeLineListTest() {
+        startActivity(
+            Intent(this@MainActivity, ItemTimeLineListTestActivity::class.java)
+        )
+    }
+
+    private fun goFeedNavigationTest() {
+        startActivity(
+            Intent(this@MainActivity, FeedNavigationActivity::class.java)
+        )
     }
 }

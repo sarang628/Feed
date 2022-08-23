@@ -11,37 +11,43 @@
         android:id="@+id/btn_feed_layout_test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="FeedLayoutTest" />
+        android:text="FeedLayout Test" />
 
     <Button
         android:id="@+id/btn_item_feed_bottom_test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ItemFeedBottomTestActivity" />
+        android:text="ItemFeedBottom Test" />
 
     <Button
         android:id="@+id/btn_item_feed_top_test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ItemFeedTopTestActivity" />
+        android:text="ItemFeedTop Test" />
 
     <Button
         android:id="@+id/btn_item_time_line_test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ItemTimeLineTestActivity" />
+        android:text="ItemTimeLine Test" />
 
     <Button
         android:id="@+id/btn_time_line_list_test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ItemTimeLineListTestActivity" />
+        android:text="ItemTimeLineList Test" />
 
     <Button
         android:id="@+id/btn_feeds_fragment_test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="FeedsFragmentTestActivity" />
+        android:text="FeedsFragment Test" />
+
+    <Button
+        android:id="@+id/btn_bottom_navigation_test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="FeedNavigation Test" />
 
 
 </LinearLayout>
