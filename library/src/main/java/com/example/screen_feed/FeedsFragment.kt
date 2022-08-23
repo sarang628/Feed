@@ -1,6 +1,7 @@
 package com.example.screen_feed
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,6 +45,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class FeedsFragment : Fragment() {
 
+    private val TAG = "FeedsFragment"
+
     /** 뷰모델 */
     private val viewModel: TestFeedsViewModel by viewModels()
 
@@ -52,12 +55,20 @@ class FeedsFragment : Fragment() {
     lateinit var navigation: FeedsFragmentNavigation
 
     @Inject
-    lateinit var loginNavigation : LoginNavigation
+    lateinit var loginNavigation: LoginNavigation
+
+    var layoutUseCase : MutableStateFlow<FeedsFragmentLayoutUseCase>? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d(TAG, "onCreate")
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.d(TAG, "onCreateView")
         return FragmentFeedsBinding.inflate(layoutInflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
             subScribeUI(initFeedsFragmentLayoutUseCase())
@@ -65,26 +76,30 @@ class FeedsFragment : Fragment() {
     }
 
     private fun initFeedsFragmentLayoutUseCase(): MutableStateFlow<FeedsFragmentLayoutUseCase> {
-        val layoutUseCase = MutableStateFlow(
-            FeedsFragmentLayoutUseCase(
-                adapter = FeedsAdapter(), // 리사이클러뷰 아답터 설정
-                onRefreshListener = { viewModel.reload() }, // 스와이프 하여 리프레시
-                onMenuItemClickListener = { // 리뷰 추가 클릭
-                    viewModel.clickAddReview()
-                    false
-                },
-                reLoad = { viewModel.reload() }, // 갱신 버튼 클릭
-                isEmptyFeed = true,
-                isRefreshing = false
+        Log.d(TAG, "initFeedsFragmentLayoutUseCase")
+        if (layoutUseCase == null)
+            layoutUseCase = MutableStateFlow(
+                FeedsFragmentLayoutUseCase(
+                    adapter = FeedsAdapter(), // 리사이클러뷰 아답터 설정
+                    onRefreshListener = { viewModel.reload() }, // 스와이프 하여 리프레시
+                    onMenuItemClickListener = { // 리뷰 추가 클릭
+                        viewModel.clickAddReview()
+                        false
+                    },
+                    reLoad = { viewModel.reload() }, // 갱신 버튼 클릭
+                    isEmptyFeed = true,
+                    isRefreshing = false
+                )
             )
-        )
-        return layoutUseCase
+        return layoutUseCase!!
     }
 
     private fun FragmentFeedsBinding.subScribeUI(layoutUseCase: MutableStateFlow<FeedsFragmentLayoutUseCase>) {
+        Log.d(TAG, "subScribeUI")
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.feedsUiState.collect { feedUiState ->
+                    Log.d(TAG, "feedsUiState collected!")
                     layoutUseCase.update {
                         it.copy(
                             isEmptyFeed = feedUiState.isEmptyFeed,
@@ -95,10 +110,11 @@ class FeedsFragment : Fragment() {
                     feedUiState.toastMsg?.let { snackBar(it) }
 
                     feedUiState.feedItemUiState?.let { itemFeedUIStates ->
-                        (this@subScribeUI.useCase?.adapter as FeedsAdapter).setFeeds(itemFeedUIStates.toItemTimelineUseCase())
+                        (this@subScribeUI.useCase?.adapter as FeedsAdapter?)
+                            ?.setFeeds(itemFeedUIStates.toItemTimelineUseCase())
                     }
 
-                    if(feedUiState.goLogin != null && feedUiState.goLogin){
+                    if (feedUiState.goLogin != null && feedUiState.goLogin) {
                         viewModel.consumeGoLogin()
                         loginNavigation.goLogin(requireContext())
                     }
@@ -114,13 +130,6 @@ class FeedsFragment : Fragment() {
                 })
             }
         }
-    }
-
-    private fun ArrayList<ItemFeedUIState>.toItemTimelineUseCase(): ArrayList<ItemFeedUseCase> {
-        val list = this.stream()
-            .map { generateItemFeedUseCase(it) }
-            .collect(Collectors.toList())
-        return list as ArrayList<ItemFeedUseCase>
     }
 
     private fun generateItemFeedUseCase(it: ItemFeedUIState): ItemFeedUseCase {
@@ -150,5 +159,22 @@ class FeedsFragment : Fragment() {
         view?.let {
             Snackbar.make(it, message, Snackbar.LENGTH_SHORT).show()
         }
+    }
+
+    private fun ArrayList<ItemFeedUIState>.toItemTimelineUseCase(): ArrayList<ItemFeedUseCase> {
+        val list = this.stream()
+            .map { generateItemFeedUseCase(it) }
+            .collect(Collectors.toList())
+        return list as ArrayList<ItemFeedUseCase>
+    }
+
+    override fun onDestroyView() {
+        Log.d(TAG, "onDestroyView")
+        super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        Log.d(TAG, "onDestroy")
+        super.onDestroy()
     }
 }

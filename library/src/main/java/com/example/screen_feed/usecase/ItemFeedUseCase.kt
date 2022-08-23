@@ -2,6 +2,7 @@ package com.example.screen_feed.usecase
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.torang_core.data.remote.RemoteFeed
+import java.util.stream.Collectors
 
 
 data class ItemFeedUIState(
