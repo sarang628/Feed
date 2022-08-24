@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -144,10 +145,16 @@ class FeedsFragment : Fragment() {
             ),
             itemFeedBottomUseCase = ItemFeedBottomUsecase(
                 data = it.itemFeedBottomUiState,
-                onLikeClickListener = { viewModel.clickLike(it) },
+                onLikeClickListener = {
+                      Toast.makeText(context, "click like", Toast.LENGTH_SHORT).show()
+                    //viewModel.clickLike(it)
+                },
                 onCommentClickListener = { navigation.moveComment(requireContext()) },
                 onShareClickListener = { navigation.showShare(requireContext()) },
-                onClickFavoriteListener = { viewModel.clickFavorite(it) }
+                onClickFavoriteListener = {
+                    Toast.makeText(context, "click favorite", Toast.LENGTH_SHORT).show()
+                    //viewModel.clickFavorite(it)
+                }
             ),
             pageAdapter = FeedPagerAdapter().apply {
                 setList(it.reviewImages)
