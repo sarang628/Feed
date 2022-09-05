@@ -3,7 +3,12 @@ package com.example.screen_feed.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.screen_feed.uistate.FeedItemUiState
 import com.example.screen_feed.uistate.FeedsUIstate
+import com.example.screen_feed.usecase.ItemFeedBottomUIState
+import com.example.screen_feed.usecase.ItemFeedTopUIState
+import com.example.screen_feed.usecase.ItemFeedUIState
+import com.sryang.torang_core.data.entity.Feed
 import com.sryang.torang_repository.repository.FeedRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -12,6 +17,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.streams.toList
 
 @HiltViewModel
 class FeedsViewModel @Inject constructor(
@@ -80,15 +86,66 @@ class FeedsViewModel @Inject constructor(
 
         viewModelScope.launch {
             delay(1000)
+            val response = feedRepository.loadFeed()
+            var list = ArrayList<ItemFeedUIState>()
+
+            if (response.status == 200) {
+                response.data?.let {
+                    list = ArrayList(it.toFeedItemUiStateList())
+                }
+            }
+
+
             _feedsUiState.update {
                 it.copy(
                     isRefresh = false,
                     isEmptyFeed = !it.isEmptyFeed,
-                    feedItemUiState = ArrayList()
+                    feedItemUiState = list
                 )
             }
         }
 
+    }
+
+    fun List<Feed>.toFeedItemUiStateList(): List<ItemFeedUIState> {
+        return stream().map {
+            it.toFeedItemUiState()
+        }.toList()
+    }
+
+    fun Feed.toFeedItemUiState(): ItemFeedUIState {
+        return ItemFeedUIState(
+            itemId = review.reviewId.toLong(),
+            itemFeedTopUiState = toItemFeedTopUiState(),
+            itemFeedBottomUiState = toItemFeedBottonUiState(),
+            reviewImages = ArrayList()
+        )
+    }
+
+    fun Feed.toItemFeedTopUiState(): ItemFeedTopUIState {
+        return ItemFeedTopUIState(
+            reviewId = review.reviewId,
+            name = author.userName,
+            restaurantName = review.restaurant.restaurantName,
+            rating = review.ratings,
+            profilePictureUrl = author.profilePicUrl
+        )
+    }
+
+    fun Feed.toItemFeedBottonUiState(): ItemFeedBottomUIState {
+        return ItemFeedBottomUIState(
+            reviewId = review.reviewId,
+            likeAmount = likeAmount,
+            commentAmount = commentAmount,
+            author = author.userName,
+            comment = comment.comment,
+            isLike = like.isLike,
+            isFavorite = favorite.isFavority
+        )
+    }
+
+    fun consumeGoLogin() {
+        TODO("Not yet implemented")
     }
 
     init {

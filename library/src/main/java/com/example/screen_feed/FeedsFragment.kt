@@ -16,7 +16,7 @@ import com.example.screen_feed.databinding.FragmentFeedsBinding
 import com.example.screen_feed.databinding.ItemTimeLineBinding
 import com.example.screen_feed.uistate.FeedsUIstate
 import com.example.screen_feed.usecase.*
-import com.example.screen_feed.viewmodels.TestFeedsViewModel
+import com.example.screen_feed.viewmodels.FeedsViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.sryang.torang_core.navigation.LoginNavigation
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,7 +45,7 @@ class FeedsFragment : Fragment() {
     private val TAG = "FeedsFragment"
 
     /** 뷰모델 */
-    private val viewModel: TestFeedsViewModel by viewModels()
+    private val viewModel: FeedsViewModel by viewModels()
 
     /** 화면 이동 네비게이션 */
     @Inject
