@@ -1,9 +1,9 @@
-package com.sarang.torang.di
+package com.posco.feedscreentestapp.di
 
 import android.content.Context
-import com.example.torang_core.data.AppDatabase
-import com.example.torang_core.repository.*
-import com.example.torangrepository.repository.impl.*
+import com.sryang.torang_repository.data.AppDatabase
+import com.sryang.torang_repository.repository.*
+import com.sryang.torang_repository.repository.impl.*
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

@@ -3,15 +3,12 @@ package com.example.screen_feed.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.screen_feed.uistate.FeedsUIstate
-import com.example.screen_feed.usecase.toItemTimeLineUIState
-import com.example.torang_core.repository.FeedRepository
+import com.sryang.torang_repository.repository.FeedRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.stream.Collectors
 import javax.inject.Inject
 
 @HiltViewModel
@@ -79,7 +76,7 @@ class TestFeedsViewModel @Inject constructor(
                 it.copy(isRefresh = true)
             }
 
-            val list = feedRepository.loadFeed()
+            /*val list = feedRepository.loadFeed().data
                 .stream().map { it.toItemTimeLineUIState() }
                 .collect(Collectors.toList())
 
@@ -90,7 +87,7 @@ class TestFeedsViewModel @Inject constructor(
                     isEmptyFeed = !it.isEmptyFeed,
                     feedItemUiState = ArrayList(list)
                 )
-            }
+            }*/
         }
     }
 

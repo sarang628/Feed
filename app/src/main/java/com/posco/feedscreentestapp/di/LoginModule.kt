@@ -3,7 +3,7 @@ package com.posco.feedscreentestapp.di
 import android.content.Context
 import android.widget.Toast
 import androidx.fragment.app.FragmentManager
-import com.example.torang_core.navigation.LoginNavigation
+import com.sryang.torang_core.navigation.LoginNavigation
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

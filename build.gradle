@@ -39,8 +39,11 @@ ext {
     recyclerViewVersion = '1.2.1'
     facebookLibraryVersion = '8.1.0'
 
-    TorangRepositoryVersion = '37e74cb9f4'
-    coreVersion = '1a0e406fa3'
+    TorangRepositoryVersion = '1652732949'
+    coreVersion = '080136d125'
+    torangImageLoaderVersion = 'f4a2359698'
+
+    feedService = "\"test\"" // real, local, test
 }
 
 buildscript {
@@ -53,7 +56,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.1'
+        classpath 'com.android.tools.build:gradle:7.2.2'
         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10'
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
