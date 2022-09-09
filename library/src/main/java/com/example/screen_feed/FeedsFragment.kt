@@ -49,9 +49,6 @@ class FeedsFragment : Fragment() {
     @Inject
     lateinit var loginNavigation: LoginNavigation
 
-    private var layoutUseCaseFlow: MutableStateFlow<FeedsFragmentLayoutUseCase> =
-        MutableStateFlow(createLayoutUseCase(viewModel))
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,7 +56,7 @@ class FeedsFragment : Fragment() {
         val binding = FragmentFeedsBinding.inflate(layoutInflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
-                layoutUseCaseFlow.apply {
+                MutableStateFlow(viewModel.createLayoutUseCase()).apply {
                     subScribeUseCase(this)
                     viewModel.subScribeUiState(this)
                 }
@@ -149,15 +146,15 @@ class FeedsFragment : Fragment() {
         return list as ArrayList<ItemFeedUseCase>
     }
 
-    private fun createLayoutUseCase(viewModel: FeedsViewModel): FeedsFragmentLayoutUseCase {
+    private fun FeedsViewModel.createLayoutUseCase(): FeedsFragmentLayoutUseCase {
         return FeedsFragmentLayoutUseCase(
             adapter = FeedsAdapter(), // 리사이클러뷰 아답터 설정
-            onRefreshListener = { viewModel.reload() }, // 스와이프 하여 리프레시
+            onRefreshListener = { reload() }, // 스와이프 하여 리프레시
             onMenuItemClickListener = { // 리뷰 추가 클릭
-                viewModel.clickAddReview()
+                /*viewModel.clickAddReview()*/
                 false
             },
-            reLoad = { viewModel.reload() }, // 갱신 버튼 클릭
+            reLoad = { reload() }, // 갱신 버튼 클릭
             isEmptyFeed = true,
             isRefreshing = false
         )
