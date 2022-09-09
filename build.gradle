@@ -43,7 +43,7 @@ ext {
     coreVersion = '080136d125'
     torangImageLoaderVersion = 'f4a2359698'
 
-    feedService = "\"test\"" // real, local, test
+    feedService = "\"real\"" // real, local, test
 }
 
 buildscript {
