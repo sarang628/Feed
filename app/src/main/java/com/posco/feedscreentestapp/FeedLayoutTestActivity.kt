@@ -14,10 +14,8 @@ import com.google.android.material.snackbar.Snackbar
 class FeedLayoutTestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = DataBindingUtil.setContentView<FragmentFeedsBinding>(
-            this,
-            com.example.screen_feed.R.layout.fragment_feeds
-        )
+        val binding = FragmentFeedsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         binding.useCase = FeedsFragmentLayoutUseCase(
             onRefreshListener = {
@@ -35,7 +33,6 @@ class FeedLayoutTestActivity : AppCompatActivity() {
             isEmptyFeed = true,
             isRefreshing = false
         )
-
     }
 
     class TestAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
