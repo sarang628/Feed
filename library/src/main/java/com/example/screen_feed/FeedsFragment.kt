@@ -41,45 +41,35 @@ class FeedsFragment : Fragment() {
 
     private val TAG = "FeedsFragment"
 
-    /** 뷰모델 */
     private val viewModel: FeedsViewModel by viewModels()
 
-    /** 화면 이동 네비게이션 */
     @Inject
     lateinit var navigation: FeedsFragmentNavigation
 
     @Inject
     lateinit var loginNavigation: LoginNavigation
 
-    private var layoutUseCaseFlow: MutableStateFlow<FeedsFragmentLayoutUseCase> = MutableStateFlow(
-        FeedsFragmentLayoutUseCase(
-            adapter = FeedsAdapter(), // 리사이클러뷰 아답터 설정
-            onRefreshListener = { viewModel.reload() }, // 스와이프 하여 리프레시
-            onMenuItemClickListener = { // 리뷰 추가 클릭
-                viewModel.clickAddReview()
-                false
-            },
-            reLoad = { viewModel.reload() }, // 갱신 버튼 클릭
-            isEmptyFeed = true,
-            isRefreshing = false
-        )
-    )
+    private var layoutUseCaseFlow: MutableStateFlow<FeedsFragmentLayoutUseCase> =
+        MutableStateFlow(createLayoutUseCase(viewModel))
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentFeedsBinding.inflate(layoutInflater, container, false).apply {
-            lifecycleOwner = viewLifecycleOwner
-            layoutUseCaseFlow.apply {
-                subScribeUseCase(this)
-                viewModel.subScribeUiState(this)
+        val binding = FragmentFeedsBinding.inflate(layoutInflater, container, false)
+            .apply {
+                lifecycleOwner = viewLifecycleOwner
+                layoutUseCaseFlow.apply {
+                    subScribeUseCase(this)
+                    viewModel.subScribeUiState(this)
+                }
             }
-        }
         return binding.root
     }
 
-    private fun FeedsViewModel.subScribeUiState(layoutUsecaseFlow: MutableStateFlow<FeedsFragmentLayoutUseCase>) {
+    private fun FeedsViewModel.subScribeUiState(
+        layoutUsecaseFlow: MutableStateFlow<FeedsFragmentLayoutUseCase>
+    ) {
         viewLifecycleOwner.lifecycleScope.launch {
             feedsUiState.collect { feedUiState ->
                 layoutUsecaseFlow.update {
@@ -105,7 +95,9 @@ class FeedsFragment : Fragment() {
         }
     }
 
-    private fun FragmentFeedsBinding.subScribeUseCase(layoutUseCase: MutableStateFlow<FeedsFragmentLayoutUseCase>) {
+    private fun FragmentFeedsBinding.subScribeUseCase(
+        layoutUseCase: MutableStateFlow<FeedsFragmentLayoutUseCase>
+    ) {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 layoutUseCase.collect(FlowCollector {
@@ -155,5 +147,19 @@ class FeedsFragment : Fragment() {
             .map { generateItemFeedUseCase(it) }
             .collect(Collectors.toList())
         return list as ArrayList<ItemFeedUseCase>
+    }
+
+    private fun createLayoutUseCase(viewModel: FeedsViewModel): FeedsFragmentLayoutUseCase {
+        return FeedsFragmentLayoutUseCase(
+            adapter = FeedsAdapter(), // 리사이클러뷰 아답터 설정
+            onRefreshListener = { viewModel.reload() }, // 스와이프 하여 리프레시
+            onMenuItemClickListener = { // 리뷰 추가 클릭
+                viewModel.clickAddReview()
+                false
+            },
+            reLoad = { viewModel.reload() }, // 갱신 버튼 클릭
+            isEmptyFeed = true,
+            isRefreshing = false
+        )
     }
 }
