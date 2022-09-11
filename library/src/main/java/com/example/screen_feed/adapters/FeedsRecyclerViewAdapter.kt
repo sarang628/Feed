@@ -2,12 +2,14 @@ package com.example.screen_feed.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.screen_feed.databinding.ItemTimeLineBinding
 import com.example.screen_feed.usecase.ItemFeedUseCase
 
-class FeedsAdapter() : RecyclerView.Adapter<ViewHolder>() {
+class FeedsRecyclerViewAdapter(val lifecycleOwner: LifecycleOwner) :
+    RecyclerView.Adapter<ViewHolder>() {
 
     private var feeds = ArrayList<ItemFeedUseCase>()
 
@@ -26,7 +28,10 @@ class FeedsAdapter() : RecyclerView.Adapter<ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return FeedsViewholder(
-            ItemTimeLineBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            lifecycleOwner = lifecycleOwner,
+            binding = ItemTimeLineBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
         )
     }
 

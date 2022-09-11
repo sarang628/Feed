@@ -36,8 +36,8 @@
                 android:id="@+id/viewpager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clickable="true"
                 android:adapter="@{useCase.pageAdapter}"
+                android:clickable="true"
                 tools:background="@tools:sample/avatars" />
 
             <WebView
@@ -58,6 +58,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/flMediaContents" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tl_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="10dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/colorSecondaryLight"
+            app:layout_constraintEnd_toEndOf="@+id/flMediaContents"
+            app:layout_constraintStart_toStartOf="@+id/flMediaContents"
+            app:layout_constraintTop_toBottomOf="@+id/flMediaContents"
+            app:tabBackground="@drawable/tab_selector"
+            app:tabGravity="center"
+            app:tabIndicatorHeight="0dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

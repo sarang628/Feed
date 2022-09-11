@@ -118,7 +118,13 @@ class FeedsViewModel @Inject constructor(
             itemId = review.reviewId.toLong(),
             itemFeedTopUiState = toItemFeedTopUiState(),
             itemFeedBottomUiState = toItemFeedBottonUiState(),
-            reviewImages = ArrayList()
+            reviewImages = ArrayList<String>().apply {
+                add("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Jennie_Kim_from_BLACKPINK_PUBG_210321_%28cropped%29.jpg/500px-Jennie_Kim_from_BLACKPINK_PUBG_210321_%28cropped%29.jpg")
+                add("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Jennie_Kim_from_BLACKPINK_PUBG_210321_%28cropped%29.jpg/500px-Jennie_Kim_from_BLACKPINK_PUBG_210321_%28cropped%29.jpg")
+                add("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Jennie_Kim_from_BLACKPINK_PUBG_210321_%28cropped%29.jpg/500px-Jennie_Kim_from_BLACKPINK_PUBG_210321_%28cropped%29.jpg")
+                add("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Jennie_Kim_from_BLACKPINK_PUBG_210321_%28cropped%29.jpg/500px-Jennie_Kim_from_BLACKPINK_PUBG_210321_%28cropped%29.jpg")
+                add("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Jennie_Kim_from_BLACKPINK_PUBG_210321_%28cropped%29.jpg/500px-Jennie_Kim_from_BLACKPINK_PUBG_210321_%28cropped%29.jpg")
+            }
         )
     }
 

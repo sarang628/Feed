@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.screen_feed.adapters.FeedsAdapter
+import com.example.screen_feed.adapters.FeedsRecyclerViewAdapter
 import com.example.screen_feed.databinding.FragmentFeedsBinding
 import com.example.screen_feed.databinding.ItemTimeLineBinding
 import com.example.screen_feed.uistate.FeedsUIstate
@@ -32,7 +32,7 @@ import javax.inject.Inject
  * 리스트 아이템 레이아웃            [ItemTimeLineBinding]
  * 레아아웃 유즈케이스              [FeedsFragmentLayoutUseCase] feeds_fragment.xml
  * 리스트아이템 레이아웃 유즈케이스    [ItemFeedUseCase] item_time_line.xml
- * [FeedsAdapter]
+ * [FeedsRecyclerViewAdapter]
  * [FeedsViewModel]
  * [FeedsUIstate]
  */
@@ -64,6 +64,19 @@ class FeedsFragment : Fragment() {
         return binding.root
     }
 
+    //LayoutUsecase 구독
+    private fun FragmentFeedsBinding.subScribeUseCase(
+        layoutUseCase: MutableStateFlow<FeedsFragmentLayoutUseCase>
+    ) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                layoutUseCase.collect(FlowCollector {
+                    this@subScribeUseCase.useCase = it
+                })
+            }
+        }
+    }
+
     private fun FeedsViewModel.subScribeUiState(
         layoutUsecaseFlow: MutableStateFlow<FeedsFragmentLayoutUseCase>
     ) {
@@ -79,7 +92,7 @@ class FeedsFragment : Fragment() {
                 feedUiState.toastMsg?.let { snackBar(it) }
 
                 feedUiState.feedItemUiState?.let { itemFeedUIStates ->
-                    (layoutUsecaseFlow.value.adapter as FeedsAdapter?)
+                    (layoutUsecaseFlow.value.adapter as FeedsRecyclerViewAdapter?)
                         ?.setFeeds(itemFeedUIStates.toItemTimelineUseCase())
                 }
 
@@ -92,18 +105,7 @@ class FeedsFragment : Fragment() {
         }
     }
 
-    private fun FragmentFeedsBinding.subScribeUseCase(
-        layoutUseCase: MutableStateFlow<FeedsFragmentLayoutUseCase>
-    ) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                layoutUseCase.collect(FlowCollector {
-                    this@subScribeUseCase.useCase = it
-                })
-            }
-        }
-    }
-
+    //UIState 구독
     private fun generateItemFeedUseCase(it: ItemFeedUIState): ItemFeedUseCase {
         return ItemFeedUseCase(
             itemId = it.itemId,
@@ -148,7 +150,7 @@ class FeedsFragment : Fragment() {
 
     private fun FeedsViewModel.createLayoutUseCase(): FeedsFragmentLayoutUseCase {
         return FeedsFragmentLayoutUseCase(
-            adapter = FeedsAdapter(), // 리사이클러뷰 아답터 설정
+            adapter = FeedsRecyclerViewAdapter(lifecycleOwner = viewLifecycleOwner), // 리사이클러뷰 아답터 설정
             onRefreshListener = { reload() }, // 스와이프 하여 리프레시
             onMenuItemClickListener = { // 리뷰 추가 클릭
                 /*viewModel.clickAddReview()*/
