@@ -110,7 +110,7 @@ class FeedsFragment : Fragment() {
         return ItemFeedUseCase(
             itemId = it.itemId,
             itemFeedTopUseCase = ItemFeedTopUseCase(
-                data = it.itemFeedTopUiState,
+                itemFeedTopUIState = it.itemFeedTopUiState,
                 onMenuClickListener = { navigation.showMenu(requireContext()) },
                 onProfileImageClickListener = { navigation.showProfile(requireContext()) },
                 onNameClickListener = { navigation.showProfile(requireContext()) },

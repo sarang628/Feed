@@ -39,7 +39,7 @@ ext {
     recyclerViewVersion = '1.2.1'
     facebookLibraryVersion = '8.1.0'
 
-    TorangRepositoryVersion = 'bf4ac0b71f'
+    TorangRepositoryVersion = 'ba1fe246aa'
     coreVersion = '00558d1524'
     torangImageLoaderVersion = 'f4a2359698'
 

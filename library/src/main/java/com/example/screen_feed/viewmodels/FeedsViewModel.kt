@@ -1,14 +1,17 @@
 package com.example.screen_feed.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.screen_feed.uistate.FeedItemUiState
 import com.example.screen_feed.uistate.FeedsUIstate
 import com.example.screen_feed.usecase.ItemFeedBottomUIState
 import com.example.screen_feed.usecase.ItemFeedTopUIState
 import com.example.screen_feed.usecase.ItemFeedUIState
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.sryang.torang_core.data.entity.Feed
+import com.sryang.torang_core.util.Logger
 import com.sryang.torang_repository.repository.FeedRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -23,6 +26,8 @@ import kotlin.streams.toList
 class FeedsViewModel @Inject constructor(
     private val feedRepository: FeedRepository
 ) : ViewModel() {
+
+    val TAG = "FeedsViewModel"
 
     private val _feedsUiState = MutableStateFlow(
         FeedsUIstate(
@@ -91,6 +96,12 @@ class FeedsViewModel @Inject constructor(
 
             if (response.status == 200) {
                 response.data?.let {
+
+                    Log.d(
+                        TAG, GsonBuilder()
+                            .setPrettyPrinting()
+                            .create().toJson(it)
+                    )
                     list = ArrayList(it.toFeedItemUiStateList())
                 }
             }
@@ -140,7 +151,7 @@ class FeedsViewModel @Inject constructor(
             likeAmount = likeAmount,
             commentAmount = commentAmount,
             author = author.userName,
-            comment = comment.comment,
+            comment = review.contents,
             isLike = like.isLike,
             isFavorite = favorite.isFavority
         )

@@ -1,7 +1,7 @@
 package com.example.screen_feed.usecase
 
 data class ItemFeedTopUseCase(
-    val data: ItemFeedTopUIState,
+    val itemFeedTopUIState: ItemFeedTopUIState,
     val onMenuClickListener: (Int) -> Unit,
     val onProfileImageClickListener: (Int) -> Unit,
     val onNameClickListener: (Int) -> Unit,
