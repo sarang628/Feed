@@ -39,8 +39,8 @@ ext {
     recyclerViewVersion = '1.2.1'
     facebookLibraryVersion = '8.1.0'
 
-    TorangRepositoryVersion = '1652732949'
-    coreVersion = '080136d125'
+    TorangRepositoryVersion = 'bf4ac0b71f'
+    coreVersion = '00558d1524'
     torangImageLoaderVersion = 'f4a2359698'
 
     feedService = "\"real\"" // real, local, test

@@ -20,12 +20,12 @@ class FeedPagerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         ImageLoadBindingAdapter.loadImage(
             holder.itemView.findViewById(R.id.iv_page),
-            list[position]
+            "http://vrscoo.com:91/review_images/${list[position]}"
         )
 
     }
 
-    fun setList(list : ArrayList<String>){
+    fun setList(list: ArrayList<String>) {
         this.list = list
         notifyDataSetChanged()
     }
