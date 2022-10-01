@@ -8,15 +8,18 @@ data class ItemFeedUIState(
     val itemId: Long,
     val itemFeedTopUiState: ItemFeedTopUIState,
     val itemFeedBottomUiState: ItemFeedBottomUIState,
-    val reviewImages : ArrayList<String>
+    val reviewImages: ArrayList<String>
 )
 
-data class ItemFeedUseCase(
+data class ItemFeedUseCase constructor(
     val itemId: Long,
     val itemFeedTopUseCase: ItemFeedTopUseCase,
     val itemFeedBottomUseCase: ItemFeedBottomUsecase,
-    val pageAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>
+    val pageAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>,
+    val visibleReviewImage: Boolean = false
 )
+
+val ItemFeedUIState.pictureVisible: Boolean get() = reviewImages.isEmpty()
 
 
 fun RemoteFeed.toItemTimeLineUIState(): ItemFeedUIState {
@@ -41,3 +44,4 @@ fun RemoteFeed.toItemTimeLineUIState(): ItemFeedUIState {
         reviewImages = arrayListOf("https://thumb.mt.co.kr/06/2022/01/2022011414312292328_1.jpg/dims/optimize/")
     )
 }
+

@@ -1,8 +1,6 @@
 package com.example.screen_feed
 
 import android.app.AlertDialog
-import android.content.DialogInterface
-import android.content.DialogInterface.OnClickListener
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -136,19 +134,20 @@ class FeedsFragment : Fragment() {
             itemFeedBottomUseCase = ItemFeedBottomUsecase(
                 data = it.itemFeedBottomUiState,
                 onLikeClickListener = {
-                    Toast.makeText(context, "click like", Toast.LENGTH_SHORT).show()
-                    //viewModel.clickLike(it)
+                    viewModel.clickLike(it)
                 },
                 onCommentClickListener = { navigation.moveComment(requireContext()) },
                 onShareClickListener = { navigation.showShare(requireContext()) },
                 onClickFavoriteListener = {
-                    Toast.makeText(context, "click favorite", Toast.LENGTH_SHORT).show()
-                    //viewModel.clickFavorite(it)
-                }
+                    viewModel.clickFavorite(it)
+                },
+                visibleLike = it.itemFeedBottomUiState.likeAmount > 0,
+                visibleComment = it.itemFeedBottomUiState.commentAmount > 0
             ),
             pageAdapter = FeedPagerAdapter().apply {
                 setList(it.reviewImages)
-            }
+            },
+            visibleReviewImage = !it.reviewImages.isEmpty()
         )
     }
 

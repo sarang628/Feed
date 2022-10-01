@@ -137,4 +137,12 @@ class FeedsViewModel @Inject constructor(
             isFavorite = favorite.isFavority
         )
     }
+
+    fun clickLike(it: Int) {
+        Log.e(TAG, "Not yet implemented")
+    }
+
+    fun clickFavorite(it: Int) {
+        Log.e(TAG, "Not yet implemented")
+    }
 }
