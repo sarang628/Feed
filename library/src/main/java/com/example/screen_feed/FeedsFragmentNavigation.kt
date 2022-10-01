@@ -32,6 +32,10 @@ class FeedsFragmentNavigation @Inject constructor() : FeedRvAdtNavigation {
     fun toast(context: Context, message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
+
+    fun goWriteReview(context : Context){
+        Toast.makeText(context, "준비중..", Toast.LENGTH_SHORT).show()
+    }
 }
 
 interface FeedRvAdtNavigation {

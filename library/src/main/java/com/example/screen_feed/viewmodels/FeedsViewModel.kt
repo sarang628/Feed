@@ -38,48 +38,32 @@ class FeedsViewModel @Inject constructor(
 
     val feedsUiState: StateFlow<FeedsUIstate> = _feedsUiState
 
-
-    /** 데이터가 비어있는지 여부 */
-    val empty = MutableLiveData<Boolean>()
-
-    /** 로그인 화면 열기 */
-    //private val _openLogin = MutableLiveData<Event<Int>>()
-    //val openLogin: LiveData<Event<Int>> = _openLogin
-
-    /** 리뷰 화면 이동 */
-    //private val _openAddReview = MutableLiveData<Event<Int>>()
-    //val openAddReview: LiveData<Event<Int>> = _openAddReview
-
-    /** 로그인 여부 */
-    //val isLogin = feedRepository.isLogin
-
-    fun clickAddReview() {
-        viewModelScope.launch {
-            _feedsUiState.update { it.copy(toastMsg = "clickAddReview") }
-        }
-        viewModelScope.launch {
-            _feedsUiState.update { it.copy(toastMsg = null) }
-        }
-        /*viewModelScope.launch {
-            Logger.v("isLogin ${feedRepository.isLogin()}")
-            if (feedRepository.isLogin()) {
-                _openAddReview.value = Event(0)
-            } else {
-                _openLogin.value = Event(0)
-            }
-        }*/
-    }
-
     // 피드
     fun deleteFeed(reviewId: Int) {
-        /*viewModelScope.launch {
+        viewModelScope.launch {
+            _feedsUiState.update {
+                it.copy(
+                    isProgess = true
+                )
+            }
+            delay(1000)
             try {
                 feedRepository.deleteFeed(reviewId)
+
+                _feedsUiState.update {
+                    it.copy(
+                        isProgess = false
+                    )
+                }
             } catch (e: Exception) {
-                _errorMessage.postValue("오류가 발생했습니다:\n$e")
-                Logger.e(e.toString())
+                _feedsUiState.update {
+                    it.copy(
+                        isProgess = false,
+                        errorMsg = e.toString()
+                    )
+                }
             }
-        }*/
+        }
     }
 
     fun reload() {
@@ -91,29 +75,26 @@ class FeedsViewModel @Inject constructor(
 
         viewModelScope.launch {
             delay(1000)
-            val response = feedRepository.loadFeed()
-            var list = ArrayList<ItemFeedUIState>()
-
-            if (response.status == 200) {
-                response.data?.let {
-
-                    Log.d(
-                        TAG, GsonBuilder()
-                            .setPrettyPrinting()
-                            .create().toJson(it)
+            try {
+                feedRepository.loadFeed().data!!.apply {
+                    Log.d(TAG, GsonBuilder().setPrettyPrinting().create().toJson(this))
+                    _feedsUiState.update {
+                        it.copy(
+                            isRefresh = false,
+                            isEmptyFeed = !it.isEmptyFeed,
+                            feedItemUiState = ArrayList(this.toFeedItemUiStateList())
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                _feedsUiState.update {
+                    it.copy(
+                        isRefresh = false,
+                        errorMsg = e.toString()
                     )
-                    list = ArrayList(it.toFeedItemUiStateList())
                 }
             }
 
-
-            _feedsUiState.update {
-                it.copy(
-                    isRefresh = false,
-                    isEmptyFeed = !it.isEmptyFeed,
-                    feedItemUiState = list
-                )
-            }
         }
 
     }
@@ -155,13 +136,5 @@ class FeedsViewModel @Inject constructor(
             isLike = like.isLike,
             isFavorite = favorite.isFavority
         )
-    }
-
-    fun consumeGoLogin() {
-        TODO("Not yet implemented")
-    }
-
-    init {
-        //refreshFeed()
     }
 }

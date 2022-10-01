@@ -22,7 +22,7 @@
         <!-- actionbar -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar2"
-            torang:onMenuItemClickListener="@{useCase.onMenuItemClickListener}"
+            torang:onMenuItemClickListener="@{useCase.onAddReviewClickListener}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -34,8 +34,8 @@
         <!-- contents in list format -->
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/sl_timeline"
-            torang:onRefreshListener="@{useCase.onRefreshListener}"
             torang:isRefreshing="@{useCase.refreshing}"
+            torang:onRefreshListener="@{useCase.onRefreshListener}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -47,10 +47,10 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_timelne"
                 torang:adapter="@{useCase.adapter}"
-                android:visibility="@{useCase.isEmptyFeed ? View.GONE : View.VISIBLE}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
+                android:visibility="@{useCase.isEmptyFeed ? View.GONE : View.VISIBLE}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -68,6 +68,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/pb_feed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{useCase.progress ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

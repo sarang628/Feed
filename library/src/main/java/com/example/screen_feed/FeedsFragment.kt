@@ -1,5 +1,8 @@
 package com.example.screen_feed
 
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.content.DialogInterface.OnClickListener
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -56,7 +59,24 @@ class FeedsFragment : Fragment() {
         val binding = FragmentFeedsBinding.inflate(layoutInflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
-                MutableStateFlow(viewModel.createLayoutUseCase()).apply {
+                MutableStateFlow(
+                    FeedsFragmentLayoutUseCase(
+                        adapter = FeedsRecyclerViewAdapter(lifecycleOwner = viewLifecycleOwner), // 리사이클러뷰 아답터 설정
+                        onRefreshListener = { viewModel.reload() }, // 스와이프 하여 리프레시
+                        onAddReviewClickListener = { // 리뷰 추가 클릭
+                            if (viewModel.feedsUiState.value.isLogin) {
+                                navigation.goWriteReview(requireContext())
+                                false
+                            } else {
+                                loginNavigation.goLogin(requireContext())
+                                false
+                            }
+                        },
+                        reLoad = { viewModel.reload() }, // 갱신 버튼 클릭
+                        isEmptyFeed = true,
+                        isRefreshing = false
+                    )
+                ).apply {
                     subScribeUseCase(this)
                     viewModel.subScribeUiState(this)
                 }
@@ -85,7 +105,8 @@ class FeedsFragment : Fragment() {
                 layoutUsecaseFlow.update {
                     it.copy(
                         isEmptyFeed = feedUiState.isEmptyFeed,
-                        isRefreshing = feedUiState.isRefresh
+                        isRefreshing = feedUiState.isRefresh,
+                        isProgress = feedUiState.isProgess
                     )
                 }
 
@@ -95,12 +116,6 @@ class FeedsFragment : Fragment() {
                     (layoutUsecaseFlow.value.adapter as FeedsRecyclerViewAdapter?)
                         ?.setFeeds(itemFeedUIStates.toItemTimelineUseCase())
                 }
-
-                if (feedUiState.goLogin != null && feedUiState.goLogin) {
-                    consumeGoLogin()
-                    loginNavigation.goLogin(requireContext())
-                }
-
             }
         }
     }
@@ -111,7 +126,9 @@ class FeedsFragment : Fragment() {
             itemId = it.itemId,
             itemFeedTopUseCase = ItemFeedTopUseCase(
                 itemFeedTopUIState = it.itemFeedTopUiState,
-                onMenuClickListener = { navigation.showMenu(requireContext()) },
+                onMenuClickListener = {
+                    deleteFeed(it)
+                },
                 onProfileImageClickListener = { navigation.showProfile(requireContext()) },
                 onNameClickListener = { navigation.showProfile(requireContext()) },
                 onRestaurantClickListener = { navigation.moveRestaurant(requireContext()) }
@@ -148,17 +165,12 @@ class FeedsFragment : Fragment() {
         return list as ArrayList<ItemFeedUseCase>
     }
 
-    private fun FeedsViewModel.createLayoutUseCase(): FeedsFragmentLayoutUseCase {
-        return FeedsFragmentLayoutUseCase(
-            adapter = FeedsRecyclerViewAdapter(lifecycleOwner = viewLifecycleOwner), // 리사이클러뷰 아답터 설정
-            onRefreshListener = { reload() }, // 스와이프 하여 리프레시
-            onMenuItemClickListener = { // 리뷰 추가 클릭
-                /*viewModel.clickAddReview()*/
-                false
-            },
-            reLoad = { reload() }, // 갱신 버튼 클릭
-            isEmptyFeed = true,
-            isRefreshing = false
-        )
+    private fun deleteFeed(reviewId: Int) {
+        AlertDialog.Builder(requireContext())
+            .setMessage("피드를 삭제하시겠습니까?")
+            .setCancelable(false)
+            .setPositiveButton("예") { _, _ -> viewModel.deleteFeed(reviewId) }
+            .setNegativeButton("아니오") { _, _ -> }
+            .show()
     }
 }

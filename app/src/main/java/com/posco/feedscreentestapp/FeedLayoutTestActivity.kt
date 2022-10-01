@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.screen_feed.usecase.FeedsFragmentLayoutUseCase
 import com.example.screen_feed.databinding.FragmentFeedsBinding
@@ -21,7 +20,7 @@ class FeedLayoutTestActivity : AppCompatActivity() {
             onRefreshListener = {
                 Snackbar.make(binding.root, "갱신 클릭!", Toast.LENGTH_SHORT).show()
             },
-            onMenuItemClickListener = {
+            onAddReviewClickListener = {
                 Snackbar.make(binding.root, "리뷰작성 클릭!", Toast.LENGTH_SHORT).show()
                 false
             },
