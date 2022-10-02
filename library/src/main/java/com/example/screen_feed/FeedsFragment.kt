@@ -22,6 +22,7 @@ import com.sryang.torang_core.navigation.LoginNavigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.stream.Collectors
@@ -47,59 +48,49 @@ class FeedsFragment : Fragment() {
     @Inject
     lateinit var navigation: FeedsFragmentNavigation
 
-    @Inject
-    lateinit var loginNavigation: LoginNavigation
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentFeedsBinding.inflate(layoutInflater, container, false)
-            .apply {
-                lifecycleOwner = viewLifecycleOwner
-                MutableStateFlow(
-                    FeedsFragmentLayoutUseCase(
-                        adapter = FeedsRecyclerViewAdapter(lifecycleOwner = viewLifecycleOwner), // 리사이클러뷰 아답터 설정
-                        onRefreshListener = { viewModel.reload() }, // 스와이프 하여 리프레시
-                        onAddReviewClickListener = { // 리뷰 추가 클릭
-                            if (viewModel.feedsUiState.value.isLogin) {
-                                navigation.goWriteReview(requireContext())
-                                false
-                            } else {
-                                loginNavigation.goLogin(requireContext())
-                                false
-                            }
-                        },
-                        reLoad = { viewModel.reload() }, // 갱신 버튼 클릭
-                        isEmptyFeed = true,
-                        isRefreshing = false
-                    )
-                ).apply {
-                    subScribeUseCase(this)
-                    viewModel.subScribeUiState(this)
-                }
-            }
-        return binding.root
-    }
+        binding.lifecycleOwner = viewLifecycleOwner
+        val layoutUsecaseFlow = MutableStateFlow(
+            FeedsFragmentLayoutUseCase(
+                adapter = FeedsRecyclerViewAdapter(lifecycleOwner = viewLifecycleOwner), // 리사이클러뷰 아답터 설정
+                onRefreshListener = { viewModel.reload() },                              // 스와이프 하여 리프레시
+                onAddReviewClickListener = {                                             // 리뷰 추가 클릭
+                    if (viewModel.feedsUiState.value.isLogin) {                          // 로그인 상태 시 리뷰작성 화면 이동
+                        navigation.goWriteReview(requireContext())
+                        false
+                    } else {                                                             // 비 로그인 상태 시 로그인 화며으로 이동
+                        navigation.goLogin(requireContext())
+                        false
+                    }
+                },
+                reLoad = { viewModel.reload() }                                          // 갱신 버튼 클릭
+            )
+        )
 
-    //LayoutUsecase 구독
-    private fun FragmentFeedsBinding.subScribeUseCase(
-        layoutUseCase: MutableStateFlow<FeedsFragmentLayoutUseCase>
-    ) {
+        //LayoutUsecase 구독
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                layoutUseCase.collect(FlowCollector {
-                    this@subScribeUseCase.useCase = it
+                layoutUsecaseFlow.collect(FlowCollector {
+                    binding.useCase = it
                 })
             }
         }
+
+        subScribeUiState(viewModel.feedsUiState, layoutUsecaseFlow)
+
+        return binding.root
     }
 
-    private fun FeedsViewModel.subScribeUiState(
+    private fun subScribeUiState(
+        uiState: StateFlow<FeedsUIstate>,
         layoutUsecaseFlow: MutableStateFlow<FeedsFragmentLayoutUseCase>
     ) {
         viewLifecycleOwner.lifecycleScope.launch {
-            feedsUiState.collect { feedUiState ->
+            uiState.collect { feedUiState ->
                 layoutUsecaseFlow.update {
                     it.copy(
                         isEmptyFeed = feedUiState.isEmptyFeed,

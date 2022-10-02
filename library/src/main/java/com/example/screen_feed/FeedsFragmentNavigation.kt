@@ -2,9 +2,12 @@ package com.example.screen_feed
 
 import android.content.Context
 import android.widget.Toast
+import com.sryang.torang_core.navigation.LoginNavigation
 import javax.inject.Inject
 
-class FeedsFragmentNavigation @Inject constructor() : FeedRvAdtNavigation {
+class FeedsFragmentNavigation @Inject constructor(
+    val loginNavigation: LoginNavigation
+) : FeedRvAdtNavigation {
     override fun goProfile(context: Context) {
         toast(context, "goProfile")
     }
@@ -35,6 +38,10 @@ class FeedsFragmentNavigation @Inject constructor() : FeedRvAdtNavigation {
 
     fun goWriteReview(context : Context){
         Toast.makeText(context, "준비중..", Toast.LENGTH_SHORT).show()
+    }
+
+    fun goLogin(context: Context){
+        loginNavigation.goLogin(context)
     }
 }
 
