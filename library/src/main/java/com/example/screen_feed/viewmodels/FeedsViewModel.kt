@@ -46,7 +46,6 @@ class FeedsViewModel @Inject constructor(
                     isProgess = true
                 )
             }
-            delay(1000)
             try {
                 feedRepository.deleteFeed(reviewId)
 
@@ -74,14 +73,13 @@ class FeedsViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            delay(1000)
             try {
-                feedRepository.loadFeed().data!!.apply {
+                feedRepository.loadFeed().apply {
                     Log.d(TAG, GsonBuilder().setPrettyPrinting().create().toJson(this))
                     _feedsUiState.update {
                         it.copy(
                             isRefresh = false,
-                            isEmptyFeed = !it.isEmptyFeed,
+                            isEmptyFeed = this.isEmpty(),
                             feedItemUiState = ArrayList(this.toFeedItemUiStateList())
                         )
                     }
