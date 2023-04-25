@@ -3,17 +3,15 @@ package com.posco.feedscreentestapp
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import com.example.screen_feed.databinding.ItemTimeLineBinding
 import com.google.android.material.snackbar.Snackbar
 
 class ItemTimeLineTestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = DataBindingUtil.setContentView<ItemTimeLineBinding>(
-            this,
-            com.example.screen_feed.R.layout.item_time_line
-        )
+//        val binding = DataBindingUtil.setContentView<ItemTimeLineBinding>(
+//            this,
+//            com.example.screen_feed.R.layout.item_time_line
+//        )
 
 /*        val useCase = ItemTimeLineUseCase(
             itemFeedTopUseCase = ItemFeedTopUseCase(

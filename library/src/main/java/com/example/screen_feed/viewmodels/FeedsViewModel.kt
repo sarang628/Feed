@@ -1,30 +1,21 @@
 package com.example.screen_feed.viewmodels
 
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.screen_feed.uistate.FeedsUIstate
-import com.example.screen_feed.usecase.ItemFeedBottomUIState
-import com.example.screen_feed.usecase.ItemFeedTopUIState
-import com.example.screen_feed.usecase.ItemFeedUIState
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.sryang.torang_core.data.entity.Feed
-import com.sryang.torang_core.util.Logger
-import com.sryang.torang_repository.repository.FeedRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.streams.toList
 
 @HiltViewModel
-class FeedsViewModel @Inject constructor(
-    private val feedRepository: FeedRepository
+class FeedsViewModel
+@Inject
+constructor(
+//    private val feedRepository: FeedRepository
 ) : ViewModel() {
 
     val TAG = "FeedsViewModel"
@@ -47,7 +38,7 @@ class FeedsViewModel @Inject constructor(
                 )
             }
             try {
-                feedRepository.deleteFeed(reviewId)
+//                feedRepository.deleteFeed(reviewId)
 
                 _feedsUiState.update {
                     it.copy(
@@ -74,7 +65,7 @@ class FeedsViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                feedRepository.loadFeed().apply {
+                /*feedRepository.loadFeed().apply {
                     Log.d(TAG, GsonBuilder().setPrettyPrinting().create().toJson(this))
                     _feedsUiState.update {
                         it.copy(
@@ -83,7 +74,7 @@ class FeedsViewModel @Inject constructor(
                             feedItemUiState = ArrayList(this.toFeedItemUiStateList())
                         )
                     }
-                }
+                }*/
             } catch (e: Exception) {
                 _feedsUiState.update {
                     it.copy(
@@ -97,13 +88,13 @@ class FeedsViewModel @Inject constructor(
 
     }
 
-    fun List<Feed>.toFeedItemUiStateList(): List<ItemFeedUIState> {
+    /*fun List<Feed>.toFeedItemUiStateList(): List<ItemFeedUIState> {
         return stream().map {
             it.toFeedItemUiState()
         }.toList()
-    }
+    }*/
 
-    fun Feed.toFeedItemUiState(): ItemFeedUIState {
+    /*fun Feed.toFeedItemUiState(): ItemFeedUIState {
         return ItemFeedUIState(
             itemId = review.reviewId.toLong(),
             itemFeedTopUiState = toItemFeedTopUiState(),
@@ -112,9 +103,9 @@ class FeedsViewModel @Inject constructor(
                 it.pictureUrl
             }.toList())
         )
-    }
+    }*/
 
-    fun Feed.toItemFeedTopUiState(): ItemFeedTopUIState {
+    /*fun Feed.toItemFeedTopUiState(): ItemFeedTopUIState {
         return ItemFeedTopUIState(
             reviewId = review.reviewId,
             name = author.userName,
@@ -122,9 +113,9 @@ class FeedsViewModel @Inject constructor(
             rating = review.ratings,
             profilePictureUrl = author.profilePicUrl
         )
-    }
+    }*/
 
-    fun Feed.toItemFeedBottonUiState(): ItemFeedBottomUIState {
+    /*fun Feed.toItemFeedBottonUiState(): ItemFeedBottomUIState {
         return ItemFeedBottomUIState(
             reviewId = review.reviewId,
             likeAmount = likeAmount,
@@ -134,7 +125,7 @@ class FeedsViewModel @Inject constructor(
             isLike = like.isLike,
             isFavorite = favorite.isFavority
         )
-    }
+    }*/
 
     fun clickLike(it: Int) {
         Log.e(TAG, "Not yet implemented")

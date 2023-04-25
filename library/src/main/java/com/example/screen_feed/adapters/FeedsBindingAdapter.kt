@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.screen_feed
+package com.example.screen_feed.adapters
 
 import android.text.Html
-import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.screen_feed.R
 
 @BindingAdapter(value = ["app:addReview"])
 fun addReview(

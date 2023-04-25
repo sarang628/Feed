@@ -1,22 +1,18 @@
 package com.posco.feedscreentestapp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.example.screen_feed.usecase.FeedsFragmentLayoutUseCase
-import com.example.screen_feed.databinding.FragmentFeedsBinding
-import com.google.android.material.snackbar.Snackbar
 
 class FeedLayoutTestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = FragmentFeedsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+//        val binding = FragmentFeedsBinding.inflate(layoutInflater)
+//        setContentView(binding.root)
 
-        binding.useCase = FeedsFragmentLayoutUseCase(
+        /*binding.useCase = FeedsFragmentLayoutUseCase(
             onRefreshListener = {
                 Snackbar.make(binding.root, "갱신 클릭!", Toast.LENGTH_SHORT).show()
             },
@@ -32,6 +28,7 @@ class FeedLayoutTestActivity : AppCompatActivity() {
             isEmptyFeed = true,
             isRefreshing = false
         )
+        */
     }
 
     class TestAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

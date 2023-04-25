@@ -1,16 +1,18 @@
 package com.example.screen_feed
 
 import android.app.AlertDialog
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.screen_feed.adapters.FeedPagerAdapter
 import com.example.screen_feed.adapters.FeedsRecyclerViewAdapter
 import com.example.screen_feed.databinding.FragmentFeedsBinding
 import com.example.screen_feed.databinding.ItemTimeLineBinding
@@ -18,15 +20,12 @@ import com.example.screen_feed.uistate.FeedsUIstate
 import com.example.screen_feed.usecase.*
 import com.example.screen_feed.viewmodels.FeedsViewModel
 import com.google.android.material.snackbar.Snackbar
-import com.sryang.torang_core.navigation.LoginNavigation
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.stream.Collectors
-import javax.inject.Inject
 
 /**
  * 피드화면에서 사용하는 레이아웃
@@ -38,14 +37,14 @@ import javax.inject.Inject
  * [FeedsViewModel]
  * [FeedsUIstate]
  */
-@AndroidEntryPoint
+//@AndroidEntryPoint
 class FeedsFragment : Fragment() {
 
     private val TAG = "FeedsFragment"
 
     private val viewModel: FeedsViewModel by viewModels()
 
-    @Inject
+//    @Inject
     lateinit var navigation: FeedsFragmentNavigation
 
     override fun onCreateView(
@@ -148,6 +147,7 @@ class FeedsFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun ArrayList<ItemFeedUIState>.toItemTimelineUseCase(): ArrayList<ItemFeedUseCase> {
         val list = this.stream()
             .map { generateItemFeedUseCase(it) }

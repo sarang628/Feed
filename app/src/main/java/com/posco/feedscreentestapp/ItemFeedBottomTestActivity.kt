@@ -1,15 +1,12 @@
 package com.posco.feedscreentestapp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.databinding.DataBindingUtil
-import com.example.screen_feed.databinding.ItemFeedBottomBinding
-import com.example.screen_feed.usecase.ItemFeedBottomUsecase
+import androidx.appcompat.app.AppCompatActivity
 
 class ItemFeedBottomTestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = DataBindingUtil.setContentView<ItemFeedBottomBinding>(this, com.example.screen_feed.R.layout.item_feed_bottom)
+//        val binding = DataBindingUtil.setContentView<ItemFeedBottomBinding>(this, com.example.screen_feed.R.layout.item_feed_bottom)
         /*binding.useCase = ItemFeedBottomUsecase(
             clickLikeListener = {},
             clickCommentListener = {},

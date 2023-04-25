@@ -1,11 +1,9 @@
 package com.sryang.feedscreentestapp
 
-import dagger.hilt.android.scopes.ActivityScoped
-import org.junit.Assert.assertEquals
 import org.junit.Test
 import javax.inject.Inject
 
-@ActivityScoped
+//@ActivityScoped
 class AnalyticsAdapter @Inject constructor(
     //private val service: AnalyticsService
 ) {

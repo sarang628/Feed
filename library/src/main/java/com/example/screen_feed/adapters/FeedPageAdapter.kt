@@ -1,4 +1,4 @@
-package com.example.screen_feed
+package com.example.screen_feed.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -3,7 +3,6 @@ package com.example.screen_feed.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.screen_feed.uistate.FeedsUIstate
-import com.sryang.torang_repository.repository.FeedRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,8 +11,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TestFeedsViewModel @Inject constructor(
-    private val feedRepository: FeedRepository
+class TestFeedsViewModel
+@Inject
+constructor(
+//    private val feedRepository: FeedRepository
 ) : ViewModel() {
 
     private val _feedsUiState = MutableStateFlow(

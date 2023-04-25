@@ -1,4 +1,4 @@
-package com.sarang.torang.di
+package com.posco.feedscreentestapp.di
 
 /*
 @Module
