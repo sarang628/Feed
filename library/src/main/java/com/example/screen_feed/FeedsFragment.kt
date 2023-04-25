@@ -55,7 +55,9 @@ class FeedsFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         val layoutUsecaseFlow = MutableStateFlow(
             FeedsFragmentLayoutUseCase(
-                adapter = FeedsRecyclerViewAdapter(lifecycleOwner = viewLifecycleOwner), // 리사이클러뷰 아답터 설정
+                adapter = FeedsRecyclerViewAdapter(
+                    //lifecycleOwner = viewLifecycleOwner
+                ), // 리사이클러뷰 아답터 설정
                 onRefreshListener = { viewModel.reload() },                              // 스와이프 하여 리프레시
                 onAddReviewClickListener = {                                             // 리뷰 추가 클릭
                     if (viewModel.feedsUiState.value.isLogin) {                          // 로그인 상태 시 리뷰작성 화면 이동
@@ -113,7 +115,7 @@ class FeedsFragment : Fragment() {
         return ItemFeedUseCase(
             itemId = it.itemId,
             itemFeedTopUseCase = ItemFeedTopUseCase(
-                itemFeedTopUIState = it.itemFeedTopUiState,
+                data = it.itemFeedTopUiState,
                 onMenuClickListener = {
                     deleteFeed(it)
                 },

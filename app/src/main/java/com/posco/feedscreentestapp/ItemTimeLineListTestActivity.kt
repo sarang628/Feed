@@ -1,8 +1,11 @@
 package com.posco.feedscreentestapp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import com.example.screen_feed.adapters.FeedPagerAdapter
+import com.example.screen_feed.adapters.FeedsRecyclerViewAdapter
+import com.example.screen_feed.usecase.*
 import com.google.android.material.snackbar.Snackbar
 import com.posco.feedscreentestapp.databinding.ActivityItemTimeLineListTestBinding
 
@@ -12,47 +15,57 @@ class ItemTimeLineListTestActivity : AppCompatActivity() {
         val binding = ActivityItemTimeLineListTestBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        /*val useCase = ItemTimeLineUseCase(
+        val useCase = ItemFeedUseCase(
+            itemId = 0,
             itemFeedTopUseCase = ItemFeedTopUseCase(
-                name = "sryang",
-                restaurantName = "mcdonalds",
-                rating = 4.5f,
-                profilePictureUrl = "https://thumb.mt.co.kr/06/2022/01/2022011414312292328_1.jpg/dims/optimize/",
-                onMenuClickListener = { snackBar(binding.root, "clickMenu") },
-                onProfileImageClickListener = { snackBar(binding.root, "profileClick") },
-                onNameClickListener = { snackBar(binding.root, "nameClick") },
-                onRestaurantClickListener = { snackBar(binding.root, "restaurantClick") }
+                data = ItemFeedTopUIState(
+                    reviewId = 0,
+                    name = "1",
+                    restaurantName = "2",
+                    rating = 3.0f,
+                    profilePictureUrl = "http://sarang628.iptime.org:88/1.png"
+                ),
+                onMenuClickListener = { Snackbar.make(this, binding.root, "clickMenu", Snackbar.LENGTH_SHORT).show() },
+                onProfileImageClickListener = { Snackbar.make(this, binding.root, "profileClick", Snackbar.LENGTH_SHORT).show() },
+                onNameClickListener = { Snackbar.make(this, binding.root, "nameClick", Snackbar.LENGTH_SHORT).show() },
+                onRestaurantClickListener = { Snackbar.make(this, binding.root, "restaurantClick", Snackbar.LENGTH_SHORT).show() }
             ),
             itemFeedBottomUseCase = ItemFeedBottomUsecase(
-                clickLikeListener = { snackBar(binding.root, "clickLike") },
-                clickCommentListener = { snackBar(binding.root, "clickComment") },
-                clickShareListener = { snackBar(binding.root, "clickshare") },
-                clickFavoriteListener = { snackBar(binding.root, "clickFavorite") },
-                likeAmount = 10,
-                commentAmount = 20,
-                author = "sryang",
-                comment = "comment",
-                isLike = true,
-                isFavorite = true
+                data = ItemFeedBottomUIState(
+                    reviewId = 0,
+                    likeAmount = 1,
+                    commentAmount =2,
+                    author = "3",
+                    comment = "4",
+                    isLike = false,
+                    isFavorite = true
+                ),
+                onLikeClickListener = {},
+                onCommentClickListener = {},
+                onShareClickListener = {},
+                onClickFavoriteListener = {},
+                visibleLike = true,
+                visibleComment = true
             ),
             pageAdapter = FeedPagerAdapter().apply {
                 setList(
                     arrayListOf(
-                        "https://thumb.mt.co.kr/06/2022/01/2022011414312292328_1.jpg/dims/optimize/",
-                        "https://thumb.mt.co.kr/06/2022/01/2022011414312292328_1.jpg/dims/optimize/",
-                        "https://thumb.mt.co.kr/06/2022/01/2022011414312292328_1.jpg/dims/optimize/"
+                        "http://sarang628.iptime.org:88/1.png",
+                        "http://sarang628.iptime.org:88/1.png",
+                        "http://sarang628.iptime.org:88/1.png"
                     )
                 )
-            }
+            },
+            visibleReviewImage = true
         )
 
         binding.rv.apply {
-            adapter = FeedsAdapter().apply {
+            adapter = FeedsRecyclerViewAdapter().apply {
                 setFeeds(
                     arrayListOf(useCase,useCase,useCase)
                 )
             }
-        }*/
+        }
 
     }
 

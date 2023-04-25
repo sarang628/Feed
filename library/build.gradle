@@ -73,4 +73,5 @@ dependencies {
 //    implementation "com.github.sarang628:TorangCore:$coreVersion"
 //    implementation "com.github.sarang628:TorangRepository:$TorangRepositoryVersion"
     implementation "com.github.sarang628:TorangImageLoader:$torangImageLoaderVersion"
+    implementation "com.github.sarang628:Theme:$themeVersion"
 }

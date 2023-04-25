@@ -3,9 +3,7 @@ package com.example.screen_feed.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.screen_feed.adapters.FeedPageHolder
 import com.example.screen_feed.databinding.ItemFeedPageBinding
-import com.sarang.torangimageloader.ImageLoadBindingAdapter
 
 class FeedPagerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -18,9 +16,7 @@ class FeedPagerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as FeedPageHolder).binding.imgUrl =
-            "http://vrscoo.com:91/review_images/${list[position]}"
-
+        (holder as FeedPageHolder).binding.imgUrl = list[position]
     }
 
     fun setList(list: ArrayList<String>) {
