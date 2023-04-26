@@ -6,12 +6,12 @@ plugins {
 }
 
 android {
-    compileSdk 33
+    compileSdk rootProject.compileSdkVersion
 
     defaultConfig {
         applicationId "com.sryang.feedscreentestapp"
         minSdk rootProject.minSdkVersion
-        targetSdk 33
+        targetSdk rootProject.targetSdkVersion
         versionCode 1
         versionName "1.0"
 
@@ -77,8 +77,6 @@ dependencies {
     kapt "androidx.hilt:hilt-compiler:$hiltViewModelVersion"
     annotationProcessor "androidx.hilt:hilt-compiler:$hiltViewModelVersion"
 
-    //    implementation "com.github.sarang628:TorangCore:$coreVersion"
-//    implementation "com.github.sarang628:TorangRepository:$TorangRepositoryVersion"
     implementation project(path: ':library')
     implementation "com.github.sarang628:Theme:$themeVersion"
 }
