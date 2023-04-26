@@ -2,18 +2,17 @@ package com.example.screen_feed.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.screen_feed.databinding.ItemTimeLineBinding
-import com.example.screen_feed.usecase.ItemFeedUseCase
+import com.example.screen_feed.uistate.ItemFeedUIState
 
 class FeedsRecyclerViewAdapter(
 //    val lifecycleOwner: LifecycleOwner
     ) :
     RecyclerView.Adapter<ViewHolder>() {
 
-    private var feeds = ArrayList<ItemFeedUseCase>()
+    private var feeds = ArrayList<ItemFeedUIState>()
 
     init {
         setHasStableIds(true)
@@ -23,7 +22,7 @@ class FeedsRecyclerViewAdapter(
         return feeds[position].itemId
     }
 
-    fun setFeeds(feeds: ArrayList<ItemFeedUseCase>) {
+    fun setFeeds(feeds: ArrayList<ItemFeedUIState>) {
         this.feeds = feeds
         notifyDataSetChanged()
     }

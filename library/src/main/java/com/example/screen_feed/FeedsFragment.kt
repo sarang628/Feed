@@ -1,18 +1,15 @@
 package com.example.screen_feed
 
 import android.app.AlertDialog
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.screen_feed.adapters.FeedPagerAdapter
 import com.example.screen_feed.adapters.FeedsRecyclerViewAdapter
 import com.example.screen_feed.databinding.FragmentFeedsBinding
 import com.example.screen_feed.databinding.ItemTimeLineBinding
@@ -25,7 +22,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.stream.Collectors
 
 /**
  * 피드화면에서 사용하는 레이아웃
@@ -104,57 +100,16 @@ class FeedsFragment : Fragment() {
 
                 feedUiState.feedItemUiState?.let { itemFeedUIStates ->
                     (layoutUsecaseFlow.value.adapter as FeedsRecyclerViewAdapter?)
-                        ?.setFeeds(itemFeedUIStates.toItemTimelineUseCase())
+                        ?.setFeeds(itemFeedUIStates)
                 }
             }
         }
-    }
-
-    //UIState 구독
-    private fun generateItemFeedUseCase(it: ItemFeedUIState): ItemFeedUseCase {
-        return ItemFeedUseCase(
-            itemId = it.itemId,
-            itemFeedTopUseCase = ItemFeedTopUseCase(
-                data = it.itemFeedTopUiState,
-                onMenuClickListener = {
-                    deleteFeed(it)
-                },
-                onProfileImageClickListener = { navigation.showProfile(requireContext()) },
-                onNameClickListener = { navigation.showProfile(requireContext()) },
-                onRestaurantClickListener = { navigation.moveRestaurant(requireContext()) }
-            ),
-            itemFeedBottomUseCase = ItemFeedBottomUsecase(
-                data = it.itemFeedBottomUiState,
-                onLikeClickListener = {
-                    viewModel.clickLike(it)
-                },
-                onCommentClickListener = { navigation.moveComment(requireContext()) },
-                onShareClickListener = { navigation.showShare(requireContext()) },
-                onClickFavoriteListener = {
-                    viewModel.clickFavorite(it)
-                },
-                visibleLike = it.itemFeedBottomUiState.likeAmount > 0,
-                visibleComment = it.itemFeedBottomUiState.commentAmount > 0
-            ),
-            pageAdapter = FeedPagerAdapter().apply {
-                setList(it.reviewImages)
-            },
-            visibleReviewImage = !it.reviewImages.isEmpty()
-        )
     }
 
     private fun snackBar(message: String) {
         view?.let {
             Snackbar.make(it, message, Snackbar.LENGTH_SHORT).show()
         }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun ArrayList<ItemFeedUIState>.toItemTimelineUseCase(): ArrayList<ItemFeedUseCase> {
-        val list = this.stream()
-            .map { generateItemFeedUseCase(it) }
-            .collect(Collectors.toList())
-        return list as ArrayList<ItemFeedUseCase>
     }
 
     private fun deleteFeed(reviewId: Int) {

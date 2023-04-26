@@ -7,7 +7,7 @@
 
         <variable
             name="useCase"
-            type="com.example.screen_feed.usecase.ItemFeedUseCase" />
+            type="com.example.screen_feed.uistate.ItemFeedUIState" />
 
         <import type="android.view.View" />
     </data>
@@ -21,7 +21,7 @@
         <include
             android:id="@+id/item_feed_top"
             layout="@layout/item_feed_top"
-            useCase="@{useCase.itemFeedTopUseCase}"
+            state="@{useCase.itemFeedTopUiState}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -55,7 +55,7 @@
         <include
             android:id="@+id/include"
             layout="@layout/item_feed_bottom"
-            useCase="@{useCase.itemFeedBottomUseCase}"
+            state="@{useCase.itemFeedBottomUiState}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"

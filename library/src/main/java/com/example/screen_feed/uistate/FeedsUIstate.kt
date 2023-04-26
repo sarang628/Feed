@@ -1,7 +1,5 @@
 package com.example.screen_feed.uistate
 
-import com.example.screen_feed.usecase.ItemFeedUIState
-
 data class FeedsUIstate(
     val isRefresh: Boolean = false,
     val isProgess: Boolean = false,

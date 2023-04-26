@@ -8,8 +8,8 @@
         <import type="android.view.View" />
 
         <variable
-            name="useCase"
-            type="com.example.screen_feed.usecase.ItemFeedBottomUsecase" />
+            name="state"
+            type="com.example.screen_feed.uistate.ItemFeedBottomUIState" />
 
     </data>
 
@@ -28,10 +28,10 @@
 
             <ImageView
                 android:id="@+id/btn_like"
-                torang:select="@{useCase.data.isLike}"
+                select="@{state.isLike}"
                 android:layout_width="38dp"
                 android:layout_height="45dp"
-                android:onClick="@{()->useCase.onLikeClickListener.invoke(useCase.data.reviewId)}"
+                android:onClick="@{()->state.onLikeClickListener.invoke(state.reviewId)}"
                 android:paddingStart="8dp"
                 android:paddingRight="5dp"
                 android:src="@drawable/selector_like"
@@ -42,7 +42,7 @@
                 android:id="@+id/button6"
                 android:layout_width="38dp"
                 android:layout_height="45dp"
-                android:onClick="@{()->useCase.onCommentClickListener.invoke(useCase.data.reviewId)}"
+                android:onClick="@{()->state.onCommentClickListener.invoke(state.reviewId)}"
                 android:paddingStart="8dp"
                 android:paddingRight="5dp"
                 android:src="@drawable/chat"
@@ -53,7 +53,7 @@
                 android:id="@+id/button7"
                 android:layout_width="38dp"
                 android:layout_height="45dp"
-                android:onClick="@{()->useCase.onShareClickListener.invoke(useCase.data.reviewId)}"
+                android:onClick="@{()->state.onShareClickListener.invoke(state.reviewId)}"
                 android:paddingStart="8dp"
                 android:paddingRight="5dp"
                 android:src="@drawable/message"
@@ -62,10 +62,10 @@
 
             <ImageView
                 android:id="@+id/button8"
-                torang:select="@{useCase.data.isFavorite}"
+                select="@{state.isFavorite}"
                 android:layout_width="35dp"
                 android:layout_height="45dp"
-                android:onClick="@{()->useCase.onClickFavoriteListener.invoke(useCase.data.reviewId)}"
+                android:onClick="@{()->state.onClickFavoriteListener.invoke(state.reviewId)}"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:src="@drawable/selector_favorite"
@@ -90,11 +90,11 @@
 
         <TextView
             android:id="@+id/textView31"
-            torang:formatText='@{String.format(@string/feed_like, useCase.data.likeAmount)}'
+            app:formatText='@{String.format(@string/feed_like, state.likeAmount)}'
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:visibility="@{useCase.visibleLike ? View.VISIBLE : View.GONE}"
+            android:visibility="@{state.visibleLike ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -104,7 +104,7 @@
 
         <TextView
             android:id="@+id/textView30"
-            formatText='@{String.format(@string/feed_contents, useCase.data.author,useCase.data.comment)}'
+            formatText='@{String.format(@string/feed_contents, state.author,state.comment)}'
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -141,10 +141,10 @@
 
         <TextView
             android:id="@+id/textView"
-            torang:formatText='@{String.format(@string/feed_comment, useCase.data.commentAmount)}'
+            app:formatText='@{String.format(@string/feed_comment, state.commentAmount)}'
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:visibility="@{useCase.visibleComment ? View.VISIBLE : View.GONE}"
+            android:visibility="@{state.visibleComment ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView30"

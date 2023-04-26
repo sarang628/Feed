@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.screen_feed.R
 
-@BindingAdapter(value = ["app:addReview"])
+@BindingAdapter(value = ["addReview"])
 fun addReview(
     toolbar: androidx.appcompat.widget.Toolbar,
     listener: View.OnClickListener?
@@ -42,7 +42,7 @@ fun addReview(
 }
 
 
-@BindingAdapter(value = ["app:isLogin"])
+@BindingAdapter(value = ["isLogin"])
 fun isLogin(
     toolbar: androidx.appcompat.widget.Toolbar,
     isLogin: Boolean?,
@@ -52,7 +52,7 @@ fun isLogin(
     }
 }
 
-@BindingAdapter(value = ["torang:onRefreshListener"])
+@BindingAdapter(value = ["onRefreshListener"])
 fun setOnRefreshListener(
     swipeRefreshLayout: SwipeRefreshLayout,
     onRefreshListener: SwipeRefreshLayout.OnRefreshListener?
@@ -62,7 +62,7 @@ fun setOnRefreshListener(
     }
 }
 
-@BindingAdapter(value = ["torang:isRefreshing"])
+@BindingAdapter(value = ["isRefreshing"])
 fun setOnRefreshListener(
     swipeRefreshLayout: SwipeRefreshLayout,
     isRefreshing: Boolean?
@@ -72,7 +72,7 @@ fun setOnRefreshListener(
     }
 }
 
-@BindingAdapter(value = ["torang:onMenuItemClickListener"])
+@BindingAdapter(value = ["onMenuItemClickListener"])
 fun setOnMenuItemClickListener(
     toolBar: Toolbar,
     onMenuItemClickListener: Toolbar.OnMenuItemClickListener?
@@ -82,7 +82,7 @@ fun setOnMenuItemClickListener(
     }
 }
 
-@BindingAdapter(value = ["torang:adapter"])
+@BindingAdapter(value = ["adapter"])
 fun setOnMenuItemClickListener(
     recyclerView: RecyclerView,
     adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>?
@@ -92,7 +92,7 @@ fun setOnMenuItemClickListener(
     }
 }
 
-@BindingAdapter(value = ["torang:select"])
+@BindingAdapter(value = ["select"])
 fun setSelect(
     view: View,
     select: Boolean?
@@ -102,7 +102,7 @@ fun setSelect(
     }
 }
 
-@BindingAdapter("torang:formatText")
+@BindingAdapter("formatText")
 fun setText(textView: TextView?, str: String?) {
     textView?.setText(Html.fromHtml(str, 0))
 }

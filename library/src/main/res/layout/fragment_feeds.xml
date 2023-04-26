@@ -22,7 +22,7 @@
         <!-- actionbar -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar2"
-            torang:onMenuItemClickListener="@{useCase.onAddReviewClickListener}"
+            onMenuItemClickListener="@{useCase.onAddReviewClickListener}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -34,8 +34,8 @@
         <!-- contents in list format -->
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/sl_timeline"
-            torang:isRefreshing="@{useCase.refreshing}"
-            torang:onRefreshListener="@{useCase.onRefreshListener}"
+            isRefreshing="@{useCase.refreshing}"
+            onRefreshListener="@{useCase.onRefreshListener}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -46,7 +46,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_timelne"
-                torang:adapter="@{useCase.adapter}"
+                adapter="@{useCase.adapter}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
