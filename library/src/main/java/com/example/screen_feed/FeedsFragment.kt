@@ -40,7 +40,7 @@ class FeedsFragment : Fragment() {
 
     private val viewModel: FeedsViewModel by viewModels()
 
-//    @Inject
+    //    @Inject
     lateinit var navigation: FeedsFragmentNavigation
 
     override fun onCreateView(
@@ -49,59 +49,28 @@ class FeedsFragment : Fragment() {
     ): View {
         val binding = FragmentFeedsBinding.inflate(layoutInflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
-        val layoutUsecaseFlow = MutableStateFlow(
-            FeedsFragmentLayoutUseCase(
-                adapter = FeedsRecyclerViewAdapter(
-                    //lifecycleOwner = viewLifecycleOwner
-                ), // 리사이클러뷰 아답터 설정
-                onRefreshListener = { viewModel.reload() },                              // 스와이프 하여 리프레시
-                onAddReviewClickListener = {                                             // 리뷰 추가 클릭
-                    if (viewModel.feedsUiState.value.isLogin) {                          // 로그인 상태 시 리뷰작성 화면 이동
-                        navigation.goWriteReview(requireContext())
-                        false
-                    } else {                                                             // 비 로그인 상태 시 로그인 화며으로 이동
-                        navigation.goLogin(requireContext())
-                        false
-                    }
-                },
-                reLoad = { viewModel.reload() }                                          // 갱신 버튼 클릭
-            )
-        )
-
-        //LayoutUsecase 구독
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                layoutUsecaseFlow.collect(FlowCollector {
-                    binding.useCase = it
-                })
+        binding.rvTimelne.adapter = FeedsRecyclerViewAdapter()
+        binding.slTimeline.setOnRefreshListener { viewModel.reload() }
+        binding.button.setOnClickListener {
+            if (viewModel.feedsUiState.value.isLogin) {                          // 로그인 상태 시 리뷰작성 화면 이동
+                navigation.goWriteReview(requireContext())
+            } else {                                                             // 비 로그인 상태 시 로그인 화며으로 이동
+                navigation.goLogin(requireContext())
             }
         }
 
-        subScribeUiState(viewModel.feedsUiState, layoutUsecaseFlow)
+        subScribeUiState(viewModel.feedsUiState)
 
         return binding.root
     }
 
     private fun subScribeUiState(
-        uiState: StateFlow<FeedsUIstate>,
-        layoutUsecaseFlow: MutableStateFlow<FeedsFragmentLayoutUseCase>
+        uiState: StateFlow<FeedsUIstate>
     ) {
         viewLifecycleOwner.lifecycleScope.launch {
             uiState.collect { feedUiState ->
-                layoutUsecaseFlow.update {
-                    it.copy(
-                        isEmptyFeed = feedUiState.isEmptyFeed,
-                        isRefreshing = feedUiState.isRefresh,
-                        isProgress = feedUiState.isProgess
-                    )
-                }
-
                 feedUiState.toastMsg?.let { snackBar(it) }
-
-                feedUiState.feedItemUiState?.let { itemFeedUIStates ->
-                    (layoutUsecaseFlow.value.adapter as FeedsRecyclerViewAdapter?)
-                        ?.setFeeds(itemFeedUIStates)
-                }
+                feedUiState.feedItemUiState?.let { itemFeedUIStates -> }
             }
         }
     }
