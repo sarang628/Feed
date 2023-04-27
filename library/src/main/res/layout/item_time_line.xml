@@ -38,7 +38,6 @@
                 android:id="@+id/viewpager"
                 android:layout_width="match_parent"
                 android:layout_height="450dp"
-                android:adapter="@{useCase.pageAdapter}"
                 android:clickable="true"
                 android:visibility="@{useCase.visibleReviewImage ? View.VISIBLE : View.GONE}"
                 tools:background="@tools:sample/avatars" />
