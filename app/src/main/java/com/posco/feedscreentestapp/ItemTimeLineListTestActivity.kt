@@ -10,6 +10,7 @@ import com.example.screen_feed.uistate.ItemFeedTopUIState
 import com.example.screen_feed.uistate.ItemFeedUIState
 import com.google.android.material.snackbar.Snackbar
 import com.posco.feedscreentestapp.databinding.ActivityItemTimeLineListTestBinding
+import testItemTimeLineUiState
 
 class ItemTimeLineListTestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

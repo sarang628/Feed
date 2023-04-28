@@ -7,9 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.example.screen_feed.adapters.FeedsRecyclerViewAdapter
 import com.example.screen_feed.databinding.FragmentFeedsBinding
 import com.example.screen_feed.databinding.ItemTimeLineBinding
@@ -17,10 +15,8 @@ import com.example.screen_feed.uistate.FeedsUIstate
 import com.example.screen_feed.usecase.*
 import com.example.screen_feed.viewmodels.FeedsViewModel
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.MutableStateFlow
+import getTestFeedUiState
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 /**
@@ -43,34 +39,43 @@ class FeedsFragment : Fragment() {
     //    @Inject
     lateinit var navigation: FeedsFragmentNavigation
 
+    val adapter = FeedsRecyclerViewAdapter()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentFeedsBinding.inflate(layoutInflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.rvTimelne.adapter = FeedsRecyclerViewAdapter()
+        binding.rvTimelne.adapter = adapter
         binding.slTimeline.setOnRefreshListener { viewModel.reload() }
         binding.button.setOnClickListener {
-            if (viewModel.feedsUiState.value.isLogin) {                          // 로그인 상태 시 리뷰작성 화면 이동
+            // 로그인 상태 시 리뷰작성 화면 이동
+            if (viewModel.feedsUiState.value.isLogin) {
                 navigation.goWriteReview(requireContext())
-            } else {                                                             // 비 로그인 상태 시 로그인 화며으로 이동
+            } else {
+                // 비 로그인 상태 시 로그인 화며으로 이동
                 navigation.goLogin(requireContext())
             }
         }
 
-        subScribeUiState(viewModel.feedsUiState)
+//        subScribeUiState(viewModel.feedsUiState)
+        subScribeUiState(
+            getTestFeedUiState(viewLifecycleOwner, requireContext(), binding.root),
+            binding
+        )
 
         return binding.root
     }
 
     private fun subScribeUiState(
-        uiState: StateFlow<FeedsUIstate>
+        uiState: StateFlow<FeedsUIstate>, binding: FragmentFeedsBinding
     ) {
         viewLifecycleOwner.lifecycleScope.launch {
             uiState.collect { feedUiState ->
-                feedUiState.toastMsg?.let { snackBar(it) }
-                feedUiState.feedItemUiState?.let { itemFeedUIStates -> }
+//                feedUiState.toastMsg?.let { snackBar(it) }
+                feedUiState.feedItemUiState?.let { adapter.setFeeds(it) }
+                binding.slTimeline.isRefreshing = feedUiState.isRefresh
             }
         }
     }

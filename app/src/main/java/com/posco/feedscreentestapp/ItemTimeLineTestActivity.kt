@@ -11,6 +11,7 @@ import com.example.screen_feed.uistate.ItemFeedTopUIState
 import com.example.screen_feed.uistate.ItemFeedUIState
 import com.example.screen_feed.usecase.*
 import com.google.android.material.snackbar.Snackbar
+import testItemTimeLineUiState
 
 class ItemTimeLineTestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

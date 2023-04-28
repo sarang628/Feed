@@ -1,13 +1,65 @@
-package com.posco.feedscreentestapp
-
 import android.content.Context
-import android.util.Log
 import android.view.View
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.example.screen_feed.adapters.FeedPagerAdapter
+import com.example.screen_feed.uistate.FeedsUIstate
 import com.example.screen_feed.uistate.ItemFeedBottomUIState
 import com.example.screen_feed.uistate.ItemFeedTopUIState
 import com.example.screen_feed.uistate.ItemFeedUIState
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+
+fun getTestFeedUiState(lifecycleOwner: LifecycleOwner, context: Context, view: View): StateFlow<FeedsUIstate> {
+    val data = MutableStateFlow<FeedsUIstate>(
+        FeedsUIstate(
+            isRefresh = false,
+            isProgess = false,
+            isEmptyFeed = false,
+            toastMsg = "",
+            feedItemUiState = ArrayList(),
+            isLogin = true,
+            errorMsg = "aa"
+        )
+    );
+
+    lifecycleOwner.lifecycleScope.launch {
+        while (true) {
+            data.emit(
+                data.value.copy(
+                    isRefresh = true,
+                    feedItemUiState = ArrayList()
+                )
+            )
+            delay(2000)
+            data.emit(
+                data.value.copy(
+                    isRefresh = false,
+                    feedItemUiState = arrayListOf(
+                        testItemTimeLineUiState(context, view),
+                        testItemTimeLineUiState(context, view),
+                        testItemTimeLineUiState(context, view),
+                        testItemTimeLineUiState(context, view),
+                        testItemTimeLineUiState(context, view),
+                        testItemTimeLineUiState(context, view),
+                        testItemTimeLineUiState(context, view),
+                        testItemTimeLineUiState(context, view),
+                        testItemTimeLineUiState(context, view),
+                        testItemTimeLineUiState(context, view),
+                        testItemTimeLineUiState(context, view)
+                    )
+                )
+            )
+            delay(5000)
+
+        }
+    }
+
+    return data
+}
 
 fun testItemFeedBottomUiState(context: Context, view: View) = ItemFeedBottomUIState(
     reviewId = 0,

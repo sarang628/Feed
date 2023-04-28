@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.screen_feed.databinding.ItemFeedBottomBinding
+import testItemFeedBottomUiState
 
 class ItemFeedBottomTestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
