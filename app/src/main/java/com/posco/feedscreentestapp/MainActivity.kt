@@ -15,8 +15,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.apply {
             btnFeedLayoutTest.setOnClickListener { goFeedLayoutTest() }
-            btnItemFeedBottomTest.setOnClickListener { goItemFeedBottomTest() }
-            btnItemFeedTopTest.setOnClickListener { goItemFeedTopTest() }
             btnItemTimeLineTest.setOnClickListener { goItemTimeLineTest() }
             btnFeedsFragmentTest.setOnClickListener { goFeedsFragmentTest() }
             btnTimeLineListTest.setOnClickListener { goItemTimeLineListTest() }
@@ -28,18 +26,6 @@ class MainActivity : AppCompatActivity() {
     private fun goFeedLayoutTest() {
         startActivity(
             Intent(this@MainActivity, FeedLayoutTestActivity::class.java)
-        )
-    }
-
-    private fun goItemFeedBottomTest() {
-        startActivity(
-            Intent(this@MainActivity, ItemFeedBottomTestActivity::class.java)
-        )
-    }
-
-    private fun goItemFeedTopTest() {
-        startActivity(
-            Intent(this@MainActivity, ItemFeedTopTestActivity::class.java)
         )
     }
 

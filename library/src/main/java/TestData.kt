@@ -83,8 +83,8 @@ fun testItemFeedBottomUiState(context: Context, view: View) = ItemFeedBottomUISt
 
 fun testItemFeedTopUIState(context: Context, view: View) = ItemFeedTopUIState(
     reviewId = 0,
-    name = "1",
-    restaurantName = "2",
+    name = "루피",
+    restaurantName = "맥도날드",
     rating = 3.0f,
     profilePictureUrl = "4",
     onMenuClickListener = {

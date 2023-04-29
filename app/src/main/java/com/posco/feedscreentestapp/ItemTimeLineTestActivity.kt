@@ -16,14 +16,13 @@ import testItemTimeLineUiState
 class ItemTimeLineTestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = DataBindingUtil.setContentView<ItemTimeLineBinding>(
-            this,
-            com.example.screen_feed.R.layout.item_time_line
-        )
+        val binding = ItemTimeLineBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val useCase = testItemTimeLineUiState(this, binding.root)
 
         binding.useCase = useCase
+        binding.viewpager.adapter = useCase.pageAdapter
     }
 
     fun snackBar(view: View, text: String) {

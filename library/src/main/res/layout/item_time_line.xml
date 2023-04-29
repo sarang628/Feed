@@ -39,7 +39,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="450dp"
                 android:clickable="true"
-                android:visibility="@{useCase.visibleReviewImage ? View.VISIBLE : View.GONE}"
                 tools:background="@tools:sample/avatars" />
 
             <WebView
@@ -67,7 +66,6 @@
             android:layout_height="10dp"
             android:layout_marginTop="15dp"
             android:background="@color/colorSecondaryLight"
-            android:visibility="@{useCase.visibleReviewImage ? View.VISIBLE : View.VISIBLE}"
             app:layout_constraintEnd_toEndOf="@+id/flMediaContents"
             app:layout_constraintStart_toStartOf="@+id/flMediaContents"
             app:layout_constraintTop_toBottomOf="@+id/flMediaContents"
