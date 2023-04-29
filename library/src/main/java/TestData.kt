@@ -27,7 +27,6 @@ fun getTestFeedUiState(lifecycleOwner: LifecycleOwner, context: Context, view: V
     );
 
     lifecycleOwner.lifecycleScope.launch {
-        while (true) {
             data.emit(
                 data.value.copy(
                     isRefresh = true,
@@ -53,9 +52,6 @@ fun getTestFeedUiState(lifecycleOwner: LifecycleOwner, context: Context, view: V
                     )
                 )
             )
-            delay(5000)
-
-        }
     }
 
     return data
