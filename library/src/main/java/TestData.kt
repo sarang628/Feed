@@ -3,6 +3,7 @@ import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.example.screen_feed.adapters.FeedPagerAdapter
+import com.example.screen_feed.adapters.FeedsRecyclerViewAdapter
 import com.example.screen_feed.uistate.FeedsUIstate
 import com.example.screen_feed.uistate.FeedBottomUIState
 import com.example.screen_feed.uistate.FeedTopUIState
@@ -92,7 +93,11 @@ fun getTestFeedUiState(
             toastMsg = "",
             feedItemUiState = ArrayList(),
             isLogin = true,
-            errorMsg = "aa"
+            errorMsg = "aa",
+            reLoad = {},
+            adapter = FeedsRecyclerViewAdapter(),
+            onAddReviewClickListener = { false },
+            onRefreshListener = {}
         )
     );
 

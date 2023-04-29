@@ -14,19 +14,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.apply {
-            btnFeedLayoutTest.setOnClickListener { goFeedLayoutTest() }
             btnItemTimeLineTest.setOnClickListener { goItemTimeLineTest() }
             btnFeedsFragmentTest.setOnClickListener { goFeedsFragmentTest() }
             btnTimeLineListTest.setOnClickListener { goItemTimeLineListTest() }
             btnBottomNavigationTest.setOnClickListener { goFeedNavigationTest() }
         }
 
-    }
-
-    private fun goFeedLayoutTest() {
-        startActivity(
-            Intent(this@MainActivity, FeedLayoutTestActivity::class.java)
-        )
     }
 
     private fun goItemTimeLineTest() {
