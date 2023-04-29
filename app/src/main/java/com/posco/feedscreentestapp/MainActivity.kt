@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun goItemTimeLineTest() {
         startActivity(
-            Intent(this@MainActivity, ItemTimeLineTestActivity::class.java)
+            Intent(this@MainActivity, FeedTestActivity::class.java)
         )
     }
 
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun goItemTimeLineListTest() {
         startActivity(
-            Intent(this@MainActivity, ItemTimeLineListTestActivity::class.java)
+            Intent(this@MainActivity, FeedListTestActivity::class.java)
         )
     }
 

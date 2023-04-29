@@ -7,7 +7,7 @@
 
         <variable
             name="useCase"
-            type="com.example.screen_feed.usecase.FeedsFragmentLayoutUseCase" />
+            type="com.example.screen_feed.uistate.FeedsFragmentUiState" />
 
         <import type="android.view.View" />
     </data>

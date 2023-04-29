@@ -7,7 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.screen_feed.databinding.FragmentFeedsBinding
-import com.example.screen_feed.usecase.FeedsFragmentLayoutUseCase
+import com.example.screen_feed.uistate.FeedsFragmentUiState
 import com.google.android.material.snackbar.Snackbar
 
 class FeedLayoutTestActivity : AppCompatActivity() {
@@ -16,7 +16,7 @@ class FeedLayoutTestActivity : AppCompatActivity() {
         val binding = FragmentFeedsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.useCase = FeedsFragmentLayoutUseCase(
+        binding.useCase = FeedsFragmentUiState(
             onRefreshListener = {
                 Snackbar.make(binding.root, "갱신 클릭!", Toast.LENGTH_SHORT).show()
             },

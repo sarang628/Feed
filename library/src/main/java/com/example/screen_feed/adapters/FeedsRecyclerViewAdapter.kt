@@ -5,14 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.screen_feed.databinding.ItemTimeLineBinding
-import com.example.screen_feed.uistate.ItemFeedUIState
+import com.example.screen_feed.uistate.FeedUiState
 
 class FeedsRecyclerViewAdapter(
 //    val lifecycleOwner: LifecycleOwner
     ) :
     RecyclerView.Adapter<ViewHolder>() {
 
-    private var feeds = ArrayList<ItemFeedUIState>()
+    private var feeds = ArrayList<FeedUiState>()
 
     init {
         setHasStableIds(true)
@@ -22,7 +22,7 @@ class FeedsRecyclerViewAdapter(
         return feeds[position].itemId
     }
 
-    fun setFeeds(feeds: ArrayList<ItemFeedUIState>) {
+    fun setFeeds(feeds: ArrayList<FeedUiState>) {
         this.feeds = feeds
         notifyDataSetChanged()
     }

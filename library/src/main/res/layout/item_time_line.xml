@@ -7,7 +7,7 @@
 
         <variable
             name="useCase"
-            type="com.example.screen_feed.uistate.ItemFeedUIState" />
+            type="com.example.screen_feed.uistate.FeedUiState" />
 
         <import type="android.view.View" />
     </data>
