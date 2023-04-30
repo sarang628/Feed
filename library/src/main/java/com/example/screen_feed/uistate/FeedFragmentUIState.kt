@@ -1,10 +1,17 @@
 package com.example.screen_feed.uistate
 
+import android.content.Context
 import android.view.View
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.screen_feed.adapters.FeedPagerAdapter
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 
 /*피드 프레그먼트 UIState*/
@@ -38,4 +45,60 @@ fun FeedUiState.getAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>? {
     }
     return pageAdapter
 
+}
+
+//-------------------------------------------------------------------------------------------
+fun getTestSenarioFeedFragmentUIstate(
+    lifecycleOwner: LifecycleOwner,
+    context: Context,
+    view: View
+): StateFlow<FeedFragmentUIstate> {
+    val data = MutableStateFlow(getTestEmptyFeedFragmentUIstate())
+
+    lifecycleOwner.lifecycleScope.launch {
+        data.emit(
+            data.value.copy(
+                isRefresh = true,
+                feedItemUiState = null
+            )
+        )
+        delay(2000)
+        data.emit(getTestFeedList(data.value, context, view))
+    }
+    return data
+}
+
+fun getTestEmptyFeedFragmentUIstate(): FeedFragmentUIstate {
+    return FeedFragmentUIstate(
+        isRefresh = false,
+        isProgess = false,
+        feedItemUiState = null,
+        isLogin = false,
+        reLoad = {},
+        onAddReviewClickListener = { false },
+        onRefreshListener = {}
+    )
+}
+
+fun getTestFeedList(
+    uiState: FeedFragmentUIstate,
+    context: Context,
+    view: View
+): FeedFragmentUIstate {
+    return uiState.copy(
+        isRefresh = false,
+        feedItemUiState = arrayListOf(
+            testItemFeedUiState(context, view),
+            testItemFeedUiState(context, view),
+            testItemFeedUiState(context, view),
+            testItemFeedUiState(context, view),
+            testItemFeedUiState(context, view),
+            testItemFeedUiState(context, view),
+            testItemFeedUiState(context, view),
+            testItemFeedUiState(context, view),
+            testItemFeedUiState(context, view),
+            testItemFeedUiState(context, view),
+            testItemFeedUiState(context, view)
+        )
+    )
 }
