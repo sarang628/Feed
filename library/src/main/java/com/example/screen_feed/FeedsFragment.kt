@@ -10,7 +10,7 @@ import com.example.screen_feed.adapters.FeedsRecyclerViewAdapter
 import com.example.screen_feed.databinding.FragmentFeedsBinding
 import com.example.screen_feed.uistate.FeedFragmentUIstate
 import com.example.screen_feed.uistate.isVisibleRefreshButton
-import getTestFeedUiState
+import getTestFeedFragmentUIstate
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
@@ -28,7 +28,7 @@ class FeedsFragment : Fragment() {
         binding.rvTimelne.adapter = adapter
 
         subScribeUiState(
-            getTestFeedUiState(viewLifecycleOwner, requireContext(), binding.root),
+            getTestFeedFragmentUIstate(viewLifecycleOwner, requireContext(), binding.root),
             binding
         )
 

@@ -30,17 +30,6 @@ fun FeedFragmentUIstate.isVisibleRefreshButton(): Int {
     return if (this.isEmptyFeed()) View.VISIBLE else View.GONE
 }
 
-/*피드 UIState*/
-data class FeedUiState(
-    val itemId: Long,
-    val itemFeedTopUiState: FeedTopUIState? = null,
-    val itemFeedBottomUiState: FeedBottomUIState? = null,
-    val reviewImages: ArrayList<String> = ArrayList(),
-    val visibleReviewImage: Boolean = false,
-    val pageAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>? = null,
-    val imageClickListener: ((Int) -> Unit)? = null
-)
-
 val FeedUiState.pictureVisible: Boolean get() = reviewImages.isEmpty()
 
 fun FeedUiState.getAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>? {
@@ -50,33 +39,3 @@ fun FeedUiState.getAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>? {
     return pageAdapter
 
 }
-
-/*피드 상단 UIState*/
-data class FeedTopUIState(
-    val reviewId: Int,
-    val name: String = "",
-    val restaurantName: String = "",
-    val rating: Float = 0.0f,
-    val profilePictureUrl: String? = null,
-    val onMenuClickListener: ((Int) -> Unit)? = null,
-    val onProfileImageClickListener: ((Int) -> Unit)? = null,
-    val onNameClickListener: ((Int) -> Unit)? = null,
-    val onRestaurantClickListener: ((Int) -> Unit)? = null
-)
-
-/*피드 하단 UIState*/
-data class FeedBottomUIState(
-    val reviewId: Int,
-    val likeAmount: Int = 0,
-    val commentAmount: Int = 0,
-    val author: String = "",
-    val comment: String = "",
-    val isLike: Boolean = false,
-    val isFavorite: Boolean = false,
-    val onLikeClickListener: ((Int) -> Unit)? = null,
-    val onCommentClickListener: ((Int) -> Unit)? = null,
-    val onShareClickListener: ((Int) -> Unit)? = null,
-    val onClickFavoriteListener: ((Int) -> Unit)? = null,
-    val visibleLike: Boolean = false,
-    val visibleComment: Boolean = false
-)
