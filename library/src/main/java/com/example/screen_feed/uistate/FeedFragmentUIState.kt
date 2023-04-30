@@ -7,6 +7,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.screen_feed.adapters.FeedPagerAdapter
 
 
+/*피드 프레그먼트 UIState*/
 data class FeedFragmentUIstate(
     val isRefresh: Boolean = false,
     val isProgess: Boolean = false,
@@ -29,6 +30,7 @@ fun FeedFragmentUIstate.isVisibleRefreshButton(): Int {
     return if (this.isEmptyFeed()) View.VISIBLE else View.GONE
 }
 
+/*피드 UIState*/
 data class FeedUiState(
     val itemId: Long,
     val itemFeedTopUiState: FeedTopUIState? = null,
@@ -49,6 +51,7 @@ fun FeedUiState.getAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>? {
 
 }
 
+/*피드 상단 UIState*/
 data class FeedTopUIState(
     val reviewId: Int,
     val name: String = "",
@@ -61,6 +64,7 @@ data class FeedTopUIState(
     val onRestaurantClickListener: ((Int) -> Unit)? = null
 )
 
+/*피드 하단 UIState*/
 data class FeedBottomUIState(
     val reviewId: Int,
     val likeAmount: Int = 0,
