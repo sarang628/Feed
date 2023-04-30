@@ -46,7 +46,7 @@
 
         <!-- refresh button -->
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btn_refresh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

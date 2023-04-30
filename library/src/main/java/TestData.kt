@@ -85,17 +85,13 @@ fun getTestFeedUiState(
     context: Context,
     view: View
 ): StateFlow<FeedsUIstate> {
-    val data = MutableStateFlow<FeedsUIstate>(
+    val data = MutableStateFlow(
         FeedsUIstate(
             isRefresh = false,
             isProgess = false,
-            isEmptyFeed = false,
-            toastMsg = "",
-            feedItemUiState = ArrayList(),
-            isLogin = true,
-            errorMsg = "aa",
+            feedItemUiState = null,
+            isLogin = false,
             reLoad = {},
-            adapter = FeedsRecyclerViewAdapter(),
             onAddReviewClickListener = { false },
             onRefreshListener = {}
         )

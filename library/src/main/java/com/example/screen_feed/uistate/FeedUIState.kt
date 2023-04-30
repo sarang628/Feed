@@ -10,18 +10,24 @@ import com.example.screen_feed.adapters.FeedPagerAdapter
 data class FeedsUIstate(
     val isRefresh: Boolean = false,
     val isProgess: Boolean = false,
-    val isEmptyFeed: Boolean = false, // 갱신 버튼 보여지는 여부
-    val isRefreshing: Boolean = false,
-    val isProgress: Boolean = false,
-    val toastMsg: String? = null,
     val feedItemUiState: ArrayList<FeedUiState>? = null,
     val isLogin: Boolean = false,
-    val errorMsg: String = "",
     val onRefreshListener: SwipeRefreshLayout.OnRefreshListener, //스와이프 레이아웃을 리프레시 할 때 호출되는 이벤트
     val onAddReviewClickListener: Toolbar.OnMenuItemClickListener, // 리뷰를 추가 할 때 호출되는 이벤트
-    val adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>, // 리스트 아답터
     val reLoad: View.OnClickListener // 갱신 아답터
 )
+
+fun FeedsUIstate.isEmptyFeed(): Boolean {
+    if (feedItemUiState == null) return true
+
+    return feedItemUiState.isEmpty()
+}
+
+fun FeedsUIstate.isVisibleRefreshButton(): Int {
+    if (isRefresh) return View.GONE
+
+    return if (this.isEmptyFeed()) View.VISIBLE else View.GONE
+}
 
 data class FeedUiState(
     val itemId: Long,

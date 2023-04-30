@@ -9,6 +9,8 @@ import androidx.lifecycle.lifecycleScope
 import com.example.screen_feed.adapters.FeedsRecyclerViewAdapter
 import com.example.screen_feed.databinding.FragmentFeedsBinding
 import com.example.screen_feed.uistate.FeedsUIstate
+import com.example.screen_feed.uistate.isEmptyFeed
+import com.example.screen_feed.uistate.isVisibleRefreshButton
 import getTestFeedUiState
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -41,6 +43,8 @@ class FeedsFragment : Fragment() {
             uiState.collect { feedUiState ->
                 feedUiState.feedItemUiState?.let { adapter.setFeeds(it) }
                 binding.slTimeline.isRefreshing = feedUiState.isRefresh
+                binding.btnRefresh.visibility = feedUiState.isVisibleRefreshButton()
+                binding.pbFeed.visibility = if (feedUiState.isProgess) View.VISIBLE else View.GONE
             }
         }
     }
