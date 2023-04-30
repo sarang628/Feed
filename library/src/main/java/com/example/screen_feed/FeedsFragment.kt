@@ -8,8 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.screen_feed.adapters.FeedsRecyclerViewAdapter
 import com.example.screen_feed.databinding.FragmentFeedsBinding
-import com.example.screen_feed.uistate.FeedsUIstate
-import com.example.screen_feed.uistate.isEmptyFeed
+import com.example.screen_feed.uistate.FeedFragmentUIstate
 import com.example.screen_feed.uistate.isVisibleRefreshButton
 import getTestFeedUiState
 import kotlinx.coroutines.flow.StateFlow
@@ -37,7 +36,7 @@ class FeedsFragment : Fragment() {
     }
 
     private fun subScribeUiState(
-        uiState: StateFlow<FeedsUIstate>, binding: FragmentFeedsBinding
+        uiState: StateFlow<FeedFragmentUIstate>, binding: FragmentFeedsBinding
     ) {
         viewLifecycleOwner.lifecycleScope.launch {
             uiState.collect { feedUiState ->

@@ -3,8 +3,7 @@ import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.example.screen_feed.adapters.FeedPagerAdapter
-import com.example.screen_feed.adapters.FeedsRecyclerViewAdapter
-import com.example.screen_feed.uistate.FeedsUIstate
+import com.example.screen_feed.uistate.FeedFragmentUIstate
 import com.example.screen_feed.uistate.FeedBottomUIState
 import com.example.screen_feed.uistate.FeedTopUIState
 import com.example.screen_feed.uistate.FeedUiState
@@ -84,9 +83,9 @@ fun getTestFeedUiState(
     lifecycleOwner: LifecycleOwner,
     context: Context,
     view: View
-): StateFlow<FeedsUIstate> {
+): StateFlow<FeedFragmentUIstate> {
     val data = MutableStateFlow(
-        FeedsUIstate(
+        FeedFragmentUIstate(
             isRefresh = false,
             isProgess = false,
             feedItemUiState = null,
@@ -101,7 +100,7 @@ fun getTestFeedUiState(
         data.emit(
             data.value.copy(
                 isRefresh = true,
-                feedItemUiState = ArrayList()
+                feedItemUiState = null
             )
         )
         delay(2000)
