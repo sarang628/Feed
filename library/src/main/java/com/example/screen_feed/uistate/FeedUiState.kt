@@ -8,7 +8,7 @@ import com.google.android.material.snackbar.Snackbar
 
 /*피드 UIState*/
 data class FeedUiState(
-    val itemId: Long,
+    val itemId: Long = 0,
     val itemFeedTopUiState: FeedTopUIState? = null,
     val itemFeedBottomUiState: FeedBottomUIState? = null,
     val reviewImages: ArrayList<String> = ArrayList(),

@@ -6,7 +6,7 @@ import com.google.android.material.snackbar.Snackbar
 
 /*피드 상단 UIState*/
 data class FeedTopUIState(
-    val reviewId: Int,
+    val reviewId: Int = 0,
     val name: String = "",
     val restaurantName: String = "",
     val rating: Float = 0.0f,

@@ -6,7 +6,7 @@ import com.google.android.material.snackbar.Snackbar
 
 /*피드 하단 UIState*/
 data class FeedBottomUIState(
-    val reviewId: Int,
+    val reviewId: Int = 0,
     val likeAmount: Int = 0,
     val commentAmount: Int = 0,
     val author: String = "",

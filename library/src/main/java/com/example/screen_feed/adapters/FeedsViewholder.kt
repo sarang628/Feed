@@ -21,8 +21,9 @@ class FeedsViewholder(
         useCase: FeedUiState
     ) {
         binding.useCase = useCase
-        binding.viewpager.adapter = useCase.getAdapter()//FIXME::왜 바인딩이 안되는가?
-        TabLayoutMediator(binding.tlIndicator, binding.viewpager) { tab, position ->
-        }.attach()
+        useCase.getAdapter()?.let {
+            binding.viewpager.adapter = it//FIXME::왜 바인딩이 안되는가?
+            TabLayoutMediator(binding.tlIndicator, binding.viewpager) { tab, position -> }.attach()
+        }
     }
 }
