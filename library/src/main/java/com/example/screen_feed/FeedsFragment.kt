@@ -4,8 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDeepLinkRequest
+import androidx.navigation.fragment.findNavController
 import com.example.screen_feed.adapters.FeedsRecyclerViewAdapter
 import com.example.screen_feed.data.Feed
 import com.example.screen_feed.databinding.FragmentFeedsBinding
@@ -31,6 +35,14 @@ class FeedsFragment : Fragment() {
             getTestSenarioFeedFragmentUIstate(viewLifecycleOwner, requireContext(), binding.root),
             binding
         )
+
+        binding.toolbar2.setOnMenuItemClickListener {
+            val request = NavDeepLinkRequest.Builder
+                .fromUri("android-app://example.google.app/settings_fragment_two".toUri())
+                .build()
+            findNavController().navigate(request)
+            true
+        }
 
         return binding.root
     }
