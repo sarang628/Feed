@@ -56,7 +56,8 @@ class FeedsFragment : Fragment() {
                 binding.slFeed.isRefreshing = feedUiState.isRefreshing
                 binding.btnRefresh.visibility = feedUiState.isVisibleRefreshButton()
                 binding.pbFeed.visibility = if (feedUiState.isProgess) View.VISIBLE else View.GONE
-                binding.tvEmpty.visibility = if (feedUiState.isEmptyFeed) View.VISIBLE else View.GONE
+                binding.tvEmpty.visibility =
+                    if (feedUiState.isEmptyFeed) View.VISIBLE else View.GONE
                 setFeed(feedUiState.feeds, binding)
             }
         }
@@ -70,8 +71,9 @@ class FeedsFragment : Fragment() {
             return
         }
 
+
         adapter.setFeeds(feeds.stream().map {
-            testItemFeedUiState(requireContext(), binding.root)
+            it.testItemFeedUiState(requireContext(), binding.root)
         }.toList() as ArrayList<FeedUiState>)
     }
 }

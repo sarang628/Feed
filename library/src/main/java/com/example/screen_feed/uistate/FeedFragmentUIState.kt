@@ -7,6 +7,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.library.JsonToObjectGenerator
 import com.example.screen_feed.adapters.FeedPagerAdapter
 import com.example.screen_feed.data.Feed
 import kotlinx.coroutines.delay
@@ -30,7 +31,7 @@ data class FeedFragmentUIstate(
     val onRefreshListener: SwipeRefreshLayout.OnRefreshListener? = null, //스와이프 레이아웃을 리프레시 할 때 호출되는 이벤트
     val onAddReviewClickListener: Toolbar.OnMenuItemClickListener? = null, // 리뷰를 추가 할 때 호출되는 이벤트
     val reLoad: View.OnClickListener? = null, // 갱신 아답터
-    val feeds : ArrayList<Feed>? = null,
+    val feeds: ArrayList<Feed>? = null,
 )
 
 fun FeedFragmentUIstate.isVisibleRefreshButton(): Int {
@@ -68,7 +69,7 @@ fun getTestSenarioFeedFragmentUIstate(
             // 네트워크 연결 실패 테스트
 //            data.emit(testFailedConnectionOn()); delay(delayCount); data.emit(testFailedConnectionOff()); delay(delayCount)
             // 피드 테스트
-            data.emit(getTestFeedList()); delay(delayCount); //data.emit(FeedFragmentUIstate()); delay(delayCount);
+            data.emit(getTestFeedList(context)); delay(delayCount); //data.emit(FeedFragmentUIstate()); delay(delayCount);
         }
     }
     return data
@@ -118,13 +119,27 @@ fun getTestEmptyFeedFragmentUIstate(): FeedFragmentUIstate {
 }
 
 fun getTestFeedList(
+    context: Context
 ): FeedFragmentUIstate {
-    val list = ArrayList<Feed>().apply {
+    /*val list = ArrayList<Feed>().apply {
         add(Feed(reviewId = 0, name = "", restaurantName = "a", rating = 5.0f, profilePictureUrl = ""))
         add(Feed(reviewId = 0, name = "", restaurantName = "a", rating = 5.0f, profilePictureUrl = ""))
         add(Feed(reviewId = 0, name = "", restaurantName = "a", rating = 5.0f, profilePictureUrl = ""))
         add(Feed(reviewId = 0, name = "", restaurantName = "a", rating = 5.0f, profilePictureUrl = ""))
         add(Feed(reviewId = 0, name = "", restaurantName = "a", rating = 5.0f, profilePictureUrl = ""))
-    }
+    }*/
+
+    val list = getFeedsByFile(context = context)
     return FeedFragmentUIstate(feeds = list)
+}
+
+fun getFeedsByFile(context: Context): ArrayList<Feed> {
+    var list = JsonToObjectGenerator<Feed>().getListByFile(
+        context = context,
+        fileName = "feeds.json",
+        rawType = Feed::class.java
+    )
+    return ArrayList<Feed>().apply {
+        addAll(list)
+    }
 }
