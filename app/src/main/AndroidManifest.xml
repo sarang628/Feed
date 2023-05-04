@@ -14,29 +14,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity
-            android:name=".FeedNavigationActivity"
-            android:exported="true" />
-        <activity
-            android:name=".ItemTimeLineListTestActivity"
-            android:exported="false" />
+
         <activity
             android:name=".FeedsFragmentTestActivity"
-            android:exported="true">
-        </activity>
-        <activity
-            android:name=".ItemTimeLineTestActivity"
-            android:exported="true" />
-        <activity
-            android:name=".ItemFeedBottomTestActivity"
-            android:exported="true" />
-        <activity
-            android:name=".FeedLayoutTestActivity"
-            android:exported="true">
-
-        </activity>
-        <activity
-            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,9 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ItemFeedTopTestActivity"
-            android:exported="true" />
+
     </application>
 
 </manifest>

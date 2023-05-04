@@ -15,28 +15,16 @@
         android:text="FeedLayout Test" />
 
     <Button
-        android:id="@+id/btn_item_feed_bottom_test"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="ItemFeedBottom Test" />
-
-    <Button
-        android:id="@+id/btn_item_feed_top_test"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="ItemFeedTop Test" />
-
-    <Button
         android:id="@+id/btn_item_time_line_test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ItemTimeLine Test" />
+        android:text="Feed Test" />
 
     <Button
         android:id="@+id/btn_time_line_list_test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ItemTimeLineList Test" />
+        android:text="Feedlist Test" />
 
     <Button
         android:id="@+id/btn_feeds_fragment_test"

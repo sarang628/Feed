@@ -5,24 +5,19 @@
 
     <data>
 
-        <variable
-            name="useCase"
-            type="com.example.screen_feed.usecase.FeedsFragmentLayoutUseCase" />
-
         <import type="android.view.View" />
     </data>
 
-    <!-- root element -->
+    <!-- parent element -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/fl_timeline_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".timeline.TimeLineFragment">
 
-        <!-- actionbar -->
+        <!-- 상단 액션 바 토랑 타이틀 및 + 버튼 -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar2"
-            onMenuItemClickListener="@{useCase.onAddReviewClickListener}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -31,11 +26,9 @@
             app:menu="@menu/menu_feed_main"
             app:title="Torang" />
 
-        <!-- contents in list format -->
+        <!-- 스와이프 리프레시 레이아웃 + 리사이클러뷰 -->
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/sl_timeline"
-            isRefreshing="@{useCase.refreshing}"
-            onRefreshListener="@{useCase.onRefreshListener}"
+            android:id="@+id/sl_feed"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -46,38 +39,47 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_timelne"
-                adapter="@{useCase.adapter}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:visibility="@{useCase.isEmptyFeed ? View.GONE : View.VISIBLE}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <!-- refresh button -->
+        <!-- 통신 실패 시 갱신 버튼 -->
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btn_refresh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:onClick="@{useCase.reLoad}"
             android:text="갱신"
-            android:visibility="@{useCase.emptyFeed ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="gone" />
+            tools:visibility="visible" />
 
+        <!-- 로딩 바   -->
         <ProgressBar
             android:id="@+id/pb_feed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{useCase.progress ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- 로드 시 피드가 없을경우  -->
+        <TextView
+            android:id="@+id/tv_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="피드가 없습니다."
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/sl_feed"
+            app:layout_constraintEnd_toEndOf="@+id/toolbar2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/toolbar2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -2,7 +2,8 @@ package com.example.screen_feed.adapters
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.screen_feed.databinding.ItemTimeLineBinding
-import com.example.screen_feed.uistate.ItemFeedUIState
+import com.example.screen_feed.uistate.FeedUiState
+import com.example.screen_feed.uistate.getAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 
 class FeedsViewholder(
@@ -17,11 +18,12 @@ class FeedsViewholder(
     }
 
     fun fillHolder(
-        useCase: ItemFeedUIState
+        useCase: FeedUiState
     ) {
         binding.useCase = useCase
-        binding.viewpager.adapter = useCase.pageAdapter//FIXME::왜 바인딩이 안되는가?
-        TabLayoutMediator(binding.tlIndicator, binding.viewpager) { tab, position ->
-        }.attach()
+        useCase.getAdapter()?.let {
+            binding.viewpager.adapter = it//FIXME::왜 바인딩이 안되는가?
+            TabLayoutMediator(binding.tlIndicator, binding.viewpager) { tab, position -> }.attach()
+        }
     }
 }

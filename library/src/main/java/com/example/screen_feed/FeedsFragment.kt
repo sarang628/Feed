@@ -1,47 +1,27 @@
 package com.example.screen_feed
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavDeepLinkRequest
+import androidx.navigation.fragment.findNavController
 import com.example.screen_feed.adapters.FeedsRecyclerViewAdapter
+import com.example.screen_feed.data.Feed
 import com.example.screen_feed.databinding.FragmentFeedsBinding
-import com.example.screen_feed.databinding.ItemTimeLineBinding
-import com.example.screen_feed.uistate.FeedsUIstate
-import com.example.screen_feed.usecase.*
-import com.example.screen_feed.viewmodels.FeedsViewModel
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.example.screen_feed.uistate.*
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.streams.toList
 
-/**
- * 피드화면에서 사용하는 레이아웃
- * 레이아웃                      [FragmentFeedsBinding]
- * 리스트 아이템 레이아웃            [ItemTimeLineBinding]
- * 레아아웃 유즈케이스              [FeedsFragmentLayoutUseCase] feeds_fragment.xml
- * 리스트아이템 레이아웃 유즈케이스    [ItemFeedUseCase] item_time_line.xml
- * [FeedsRecyclerViewAdapter]
- * [FeedsViewModel]
- * [FeedsUIstate]
- */
-//@AndroidEntryPoint
 class FeedsFragment : Fragment() {
 
     private val TAG = "FeedsFragment"
-
-    private val viewModel: FeedsViewModel by viewModels()
-
-//    @Inject
-    lateinit var navigation: FeedsFragmentNavigation
+    val adapter = FeedsRecyclerViewAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,75 +29,49 @@ class FeedsFragment : Fragment() {
     ): View {
         val binding = FragmentFeedsBinding.inflate(layoutInflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
-        val layoutUsecaseFlow = MutableStateFlow(
-            FeedsFragmentLayoutUseCase(
-                adapter = FeedsRecyclerViewAdapter(
-                    //lifecycleOwner = viewLifecycleOwner
-                ), // 리사이클러뷰 아답터 설정
-                onRefreshListener = { viewModel.reload() },                              // 스와이프 하여 리프레시
-                onAddReviewClickListener = {                                             // 리뷰 추가 클릭
-                    if (viewModel.feedsUiState.value.isLogin) {                          // 로그인 상태 시 리뷰작성 화면 이동
-                        navigation.goWriteReview(requireContext())
-                        false
-                    } else {                                                             // 비 로그인 상태 시 로그인 화며으로 이동
-                        navigation.goLogin(requireContext())
-                        false
-                    }
-                },
-                reLoad = { viewModel.reload() }                                          // 갱신 버튼 클릭
-            )
+        binding.rvTimelne.adapter = adapter
+
+        subScribeUiState(
+            getTestSenarioFeedFragmentUIstate(viewLifecycleOwner, requireContext(), binding.root),
+            binding
         )
 
-        //LayoutUsecase 구독
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                layoutUsecaseFlow.collect(FlowCollector {
-                    binding.useCase = it
-                })
-            }
+        binding.toolbar2.setOnMenuItemClickListener {
+            val request = NavDeepLinkRequest.Builder
+                .fromUri("android-app://example.google.app/settings_fragment_two".toUri())
+                .build()
+            findNavController().navigate(request)
+            true
         }
-
-        subScribeUiState(viewModel.feedsUiState, layoutUsecaseFlow)
 
         return binding.root
     }
 
+    // UIState 처리
     private fun subScribeUiState(
-        uiState: StateFlow<FeedsUIstate>,
-        layoutUsecaseFlow: MutableStateFlow<FeedsFragmentLayoutUseCase>
+        uiState: StateFlow<FeedFragmentUIstate>, binding: FragmentFeedsBinding
     ) {
         viewLifecycleOwner.lifecycleScope.launch {
             uiState.collect { feedUiState ->
-                layoutUsecaseFlow.update {
-                    it.copy(
-                        isEmptyFeed = feedUiState.isEmptyFeed,
-                        isRefreshing = feedUiState.isRefresh,
-                        isProgress = feedUiState.isProgess
-                    )
-                }
-
-                feedUiState.toastMsg?.let { snackBar(it) }
-
-                feedUiState.feedItemUiState?.let { itemFeedUIStates ->
-                    (layoutUsecaseFlow.value.adapter as FeedsRecyclerViewAdapter?)
-                        ?.setFeeds(itemFeedUIStates)
-                }
+                binding.slFeed.isRefreshing = feedUiState.isRefreshing
+                binding.btnRefresh.visibility = feedUiState.isVisibleRefreshButton()
+                binding.pbFeed.visibility = if (feedUiState.isProgess) View.VISIBLE else View.GONE
+                binding.tvEmpty.visibility = if (feedUiState.isEmptyFeed) View.VISIBLE else View.GONE
+                setFeed(feedUiState.feeds, binding)
             }
         }
     }
 
-    private fun snackBar(message: String) {
-        view?.let {
-            Snackbar.make(it, message, Snackbar.LENGTH_SHORT).show()
+    private fun setFeed(
+        feeds: ArrayList<Feed>?, binding: FragmentFeedsBinding
+    ) {
+        if (feeds == null) {
+            adapter.setFeeds(ArrayList())
+            return
         }
-    }
 
-    private fun deleteFeed(reviewId: Int) {
-        AlertDialog.Builder(requireContext())
-            .setMessage("피드를 삭제하시겠습니까?")
-            .setCancelable(false)
-            .setPositiveButton("예") { _, _ -> viewModel.deleteFeed(reviewId) }
-            .setNegativeButton("아니오") { _, _ -> }
-            .show()
+        adapter.setFeeds(feeds.stream().map {
+            testItemFeedUiState(requireContext(), binding.root)
+        }.toList() as ArrayList<FeedUiState>)
     }
 }
