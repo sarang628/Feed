@@ -10,14 +10,13 @@
     "isFavorite" : true,
     "profilePictureUrl" : "http://sarang628.iptime.org:88/1.png",
     "reviewImages": [
-      "http://sarang628.iptime.org:88/mcdonalds.png",
-      "http://sarang628.iptime.org:88/mcdonalds.png",
-      "http://sarang628.iptime.org:88/mcdonalds.png"
+      "http://sarang628.iptime.org:88/mac/mac1.jpeg",
+      "http://sarang628.iptime.org:88/mac/mac.jpeg"
     ]
   },
   {
     "name": "루피",
-    "restaurantName" : "맥도날드",
+    "restaurantName" : "브럭시",
     "rating" : "3.5",
     "likeAmount" : "20",
     "commentAmount" : "30",

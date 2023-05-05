@@ -1,14 +1,14 @@
 package com.example.screen_feed.adapters
 
 import androidx.recyclerview.widget.RecyclerView
-import com.example.screen_feed.databinding.ItemTimeLineBinding
+import com.example.screen_feed.databinding.ItemFeedBinding
 import com.example.screen_feed.uistate.FeedUiState
 import com.example.screen_feed.uistate.getAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 
 class FeedsViewholder(
 //    lifecycleOwner: LifecycleOwner,
-    binding: ItemTimeLineBinding
+    binding: ItemFeedBinding
 ) :
     RecyclerView.ViewHolder(binding.root) {
     private val binding = binding

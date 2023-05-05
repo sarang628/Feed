@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.example.screen_feed.databinding.ItemTimeLineBinding
+import com.example.screen_feed.databinding.ItemFeedBinding
 import com.example.screen_feed.uistate.FeedUiState
 
 class FeedsRecyclerViewAdapter(
@@ -30,7 +30,7 @@ class FeedsRecyclerViewAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return FeedsViewholder(
 //            lifecycleOwner = lifecycleOwner,
-            binding = ItemTimeLineBinding.inflate(
+            binding = ItemFeedBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
         )
