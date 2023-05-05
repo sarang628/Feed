@@ -43,13 +43,9 @@ fun Feed.testItemFeedUiState(context: Context, view: View) = FeedUiState(
     itemFeedTopUiState = testItemFeedTopUIState(context, view),
     itemFeedBottomUiState = testItemFeedBottomUiState(context, view),
     pageAdapter = FeedPagerAdapter().apply {
-        setList(
-            arrayListOf(
-                "http://sarang628.iptime.org:88/1.png",
-                "http://sarang628.iptime.org:88/1.png",
-                "http://sarang628.iptime.org:88/1.png"
-            )
-        )
+        reviewImages?.let { setList(ArrayList<String>().apply {
+            addAll(it)
+        }) }
     },
     visibleReviewImage = true,
     reviewImages = ArrayList(),

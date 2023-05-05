@@ -43,9 +43,9 @@ fun testItemFeedTopUIState(context: Context, view: View) = FeedTopUIState(
 fun Feed.testItemFeedTopUIState(context: Context, view: View) = FeedTopUIState(
     reviewId = 0,
     name = name ?: "",
-    restaurantName = "맥도날드",
-    rating = 3.0f,
-    profilePictureUrl = "4",
+    restaurantName = restaurantName ?: "",
+    rating = rating ?: 0f,
+    profilePictureUrl = profilePictureUrl ?: "",
     onMenuClickListener = {
         Snackbar.make(context, view, "clickMenu", Snackbar.LENGTH_SHORT).show()
     },
