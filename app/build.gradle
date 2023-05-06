@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.google.dagger.hilt.android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
 }
@@ -12,40 +13,22 @@ android {
         applicationId "com.sryang.feedscreentestapp"
         minSdk rootProject.minSdk
         targetSdk rootProject.targetSdk
-        versionCode 1
-        versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
-    buildTypes {
-        release {
-            buildConfigField "String", "feedService", "${feedService}"
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-        debug {
-            buildConfigField "String", "feedService", "${feedService}"
-        }
+    buildFeatures {
+        viewBinding true
+        dataBinding true
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-
-    buildFeatures {
-        dataBinding true
-        viewBinding true
+        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_17
     }
     namespace 'com.posco.feedscreentestapp'
 }
 
 dependencies {
     /** common */
-    implementation "com.google.android.material:material:$materialVersion"
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
     /** NAVIGATION COMPONENT */
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion" // Kotlin
@@ -53,14 +36,14 @@ dependencies {
     implementation "androidx.navigation:navigation-dynamic-features-fragment:$navigationVersion" // Feature module Support
     androidTestImplementation "androidx.navigation:navigation-testing:$navigationVersion" // Testing Navigation
     implementation "androidx.navigation:navigation-compose:$navigationVersion" // Jetpack Compose Integration
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
     /** HILT */
-    implementation "com.google.dagger:hilt-android:$hiltAndroidVersion"
-    kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
-    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hiltViewModelVersion"
-    kapt "androidx.hilt:hilt-compiler:$hiltViewModelVersion"
-    annotationProcessor "androidx.hilt:hilt-compiler:$hiltViewModelVersion"
+    implementation "com.google.dagger:hilt-android:$hiltVersion"
+    kapt "com.google.dagger:hilt-compiler:$hiltVersion"
 
     implementation project(path: ':library')
     implementation "com.github.sarang628:Theme:$themeVersion"
