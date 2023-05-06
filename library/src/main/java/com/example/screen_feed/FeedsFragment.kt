@@ -10,18 +10,25 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.fragment.findNavController
+import com.example.navigation.AddReviewNavigation
 import com.example.screen_feed.adapters.FeedsRecyclerViewAdapter
 import com.example.screen_feed.data.Feed
 import com.example.screen_feed.databinding.FragmentFeedsBinding
 import com.example.screen_feed.uistate.*
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.streams.toList
 
+@AndroidEntryPoint
 class FeedsFragment : Fragment() {
 
     private val TAG = "FeedsFragment"
     val adapter = FeedsRecyclerViewAdapter()
+
+    @Inject
+    lateinit var addReviewNavigation: AddReviewNavigation
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,10 +44,7 @@ class FeedsFragment : Fragment() {
         )
 
         binding.toolbar2.setOnMenuItemClickListener {
-            val request = NavDeepLinkRequest.Builder
-                .fromUri("android-app://example.google.app/settings_fragment_two".toUri())
-                .build()
-            findNavController().navigate(request)
+            addReviewNavigation.navigate(this)
             true
         }
 

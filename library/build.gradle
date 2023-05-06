@@ -75,5 +75,6 @@ dependencies {
     implementation "com.github.sarang628:TorangImageLoader:$torangImageLoaderVersion"
     implementation "com.github.sarang628:Theme:$themeVersion"
     implementation 'com.github.sarang628:JsonToObjectGenerator:960fe9fece'
+    implementation "com.github.sarang628:Navigation:$navigationModuleVersion"
 
 }
