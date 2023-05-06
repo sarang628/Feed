@@ -1,6 +1,7 @@
 package com.example.screen_feed
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -75,6 +76,9 @@ class FeedsFragment : Fragment() {
             return
         }
 
+        val feedTopUIState : FeedTopUIState = FeedTopUIState(
+
+        )
 
         adapter.setFeeds(feeds.stream().map {
             it.testItemFeedUiState(requireContext(), binding.root)

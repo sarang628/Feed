@@ -121,14 +121,6 @@ fun getTestEmptyFeedFragmentUIstate(): FeedFragmentUIstate {
 fun getTestFeedList(
     context: Context
 ): FeedFragmentUIstate {
-    /*val list = ArrayList<Feed>().apply {
-        add(Feed(reviewId = 0, name = "", restaurantName = "a", rating = 5.0f, profilePictureUrl = ""))
-        add(Feed(reviewId = 0, name = "", restaurantName = "a", rating = 5.0f, profilePictureUrl = ""))
-        add(Feed(reviewId = 0, name = "", restaurantName = "a", rating = 5.0f, profilePictureUrl = ""))
-        add(Feed(reviewId = 0, name = "", restaurantName = "a", rating = 5.0f, profilePictureUrl = ""))
-        add(Feed(reviewId = 0, name = "", restaurantName = "a", rating = 5.0f, profilePictureUrl = ""))
-    }*/
-
     val list = getFeedsByFile(context = context)
     return FeedFragmentUIstate(feeds = list)
 }

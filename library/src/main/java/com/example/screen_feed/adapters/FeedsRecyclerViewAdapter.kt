@@ -1,11 +1,13 @@
 package com.example.screen_feed.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.screen_feed.databinding.ItemFeedBinding
 import com.example.screen_feed.uistate.FeedUiState
+import com.google.gson.GsonBuilder
 
 class FeedsRecyclerViewAdapter(
 //    val lifecycleOwner: LifecycleOwner
@@ -24,6 +26,7 @@ class FeedsRecyclerViewAdapter(
 
     fun setFeeds(feeds: ArrayList<FeedUiState>) {
         this.feeds = feeds
+        Log.d("sryang123", GsonBuilder().setPrettyPrinting().create().toJson(feeds))
         notifyDataSetChanged()
     }
 
