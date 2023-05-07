@@ -68,14 +68,12 @@ class FeedsFragment : Fragment() {
                 binding.pbFeed.visibility = if (feedUiState.isProgess) View.VISIBLE else View.GONE
                 binding.tvEmpty.visibility =
                     if (feedUiState.isEmptyFeed) View.VISIBLE else View.GONE
-                setFeed(feedUiState.feeds, binding)
+                setFeed(feedUiState.feeds)
             }
         }
     }
 
-    private fun setFeed(
-        feeds: ArrayList<Feed>?, binding: FragmentFeedsBinding
-    ) {
+    private fun setFeed(feeds: ArrayList<Feed>?) {
         if (feeds == null) {
             adapter.setFeeds(ArrayList())
             return

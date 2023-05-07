@@ -31,6 +31,7 @@ android {
         dataBinding true
         viewBinding true
     }
+
     namespace 'com.example.screen_feed'
 }
 
