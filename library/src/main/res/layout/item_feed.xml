@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="useCase"
+            name="uiState"
             type="com.example.screen_feed.uistate.FeedUiState" />
 
         <import type="android.view.View" />
@@ -21,7 +21,7 @@
         <include
             android:id="@+id/item_feed_top"
             layout="@layout/item_feed_top"
-            state="@{useCase.itemFeedTopUiState}"
+            uiState="@{uiState.itemFeedTopUiState}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -39,7 +39,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="450dp"
                 android:clickable="true"
-                tools:background="@tools:sample/avatars" />
+                tools:background="@tools:sample/avatars"
+                android:focusable="true" />
 
             <WebView
                 android:id="@+id/webview"
@@ -53,7 +54,7 @@
         <include
             android:id="@+id/include"
             layout="@layout/item_feed_bottom"
-            state="@{useCase.itemFeedBottomUiState}"
+            state="@{uiState.itemFeedBottomUiState}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"

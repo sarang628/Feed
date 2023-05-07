@@ -1,6 +1,5 @@
 package com.example.screen_feed.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,33 +8,28 @@ import com.example.screen_feed.databinding.ItemFeedBinding
 import com.example.screen_feed.uistate.FeedUiState
 import com.example.screen_feed.uistate.getAdapter
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.gson.GsonBuilder
 
-class FeedsRecyclerViewAdapter(
-//    val lifecycleOwner: LifecycleOwner
-    ) :
-    RecyclerView.Adapter<ViewHolder>() {
+class FeedsRecyclerViewAdapter : RecyclerView.Adapter<ViewHolder>() {
 
-    private var feeds = ArrayList<FeedUiState>()
+    private var feedsUiState = ArrayList<FeedUiState>()
 
     init {
         setHasStableIds(true)
     }
 
     override fun getItemId(position: Int): Long {
-        if(feeds[position].reviewId == null)
+        if (feedsUiState[position].reviewId == null)
             return 0L
 
-        return feeds[position].reviewId!!.toLong()
+        return feedsUiState[position].reviewId!!.toLong()
     }
 
     fun setFeeds(feeds: ArrayList<FeedUiState>) {
-        this.feeds = feeds
-        notifyDataSetChanged()
+        this.feedsUiState = feeds
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return FeedsViewholder(
+        return FeedsViewHolder(
             binding = ItemFeedBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
@@ -43,34 +37,20 @@ class FeedsRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Log.d("sryang123", GsonBuilder().setPrettyPrinting().create().toJson(feeds[position]))
-        (holder as FeedsViewholder).fillHolder(
-            useCase = feeds[position]
-        )
+        (holder as FeedsViewHolder).fillHolder(uiState = feedsUiState[position])
     }
 
     override fun getItemCount(): Int {
-        return feeds.size
+        return feedsUiState.size
     }
 }
 
 
-class FeedsViewholder(
-//    lifecycleOwner: LifecycleOwner,
-    binding: ItemFeedBinding
-) :
-    RecyclerView.ViewHolder(binding.root) {
-    private val binding = binding
-
-    init {
-//        binding.lifecycleOwner = lifecycleOwner
-    }
-
-    fun fillHolder(
-        useCase: FeedUiState
-    ) {
-        binding.useCase = useCase
-        useCase.getAdapter()?.let {
+class FeedsViewHolder(private val binding: ItemFeedBinding) :
+    ViewHolder(binding.root) {
+    fun fillHolder(uiState: FeedUiState) {
+        binding.uiState = uiState
+        uiState.getAdapter()?.let {
             binding.viewpager.adapter = it//FIXME::왜 바인딩이 안되는가?
             TabLayoutMediator(binding.tlIndicator, binding.viewpager) { tab, position -> }.attach()
         }

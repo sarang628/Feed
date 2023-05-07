@@ -1,6 +1,5 @@
 package com.example.screen_feed.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,7 +9,7 @@ class FeedPagerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var list : List<String> = ArrayList()
 
-    var imageClickListener: ((Int) -> Unit)? = null
+    private var imageClickListener: ((Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemFeedPageBinding =
@@ -21,16 +20,12 @@ class FeedPagerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         (holder as FeedPageHolder).binding.imgUrl = list[position]
         holder.binding.ivPage.setOnClickListener {
-            this.imageClickListener?.let {
-                Log.d("TEST", "click" + position)
-                it.invoke(position)
-            }
+            this.imageClickListener?.invoke(position)
         }
     }
 
     fun setList(list: List<String>) {
         this.list = list
-        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {
@@ -43,6 +38,4 @@ class FeedPagerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 }
 
-class FeedPageHolder(binding: ItemFeedPageBinding) : RecyclerView.ViewHolder(binding.root) {
-    val binding = binding
-}
+class FeedPageHolder(val binding: ItemFeedPageBinding) : RecyclerView.ViewHolder(binding.root)
