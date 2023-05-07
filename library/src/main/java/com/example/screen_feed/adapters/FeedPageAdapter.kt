@@ -42,3 +42,7 @@ class FeedPagerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
 }
+
+class FeedPageHolder(binding: ItemFeedPageBinding) : RecyclerView.ViewHolder(binding.root) {
+    val binding = binding
+}

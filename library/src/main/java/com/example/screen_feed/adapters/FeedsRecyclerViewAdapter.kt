@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.screen_feed.databinding.ItemFeedBinding
 import com.example.screen_feed.uistate.FeedUiState
+import com.example.screen_feed.uistate.getAdapter
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.GsonBuilder
 
 class FeedsRecyclerViewAdapter(
@@ -49,5 +51,28 @@ class FeedsRecyclerViewAdapter(
 
     override fun getItemCount(): Int {
         return feeds.size
+    }
+}
+
+
+class FeedsViewholder(
+//    lifecycleOwner: LifecycleOwner,
+    binding: ItemFeedBinding
+) :
+    RecyclerView.ViewHolder(binding.root) {
+    private val binding = binding
+
+    init {
+//        binding.lifecycleOwner = lifecycleOwner
+    }
+
+    fun fillHolder(
+        useCase: FeedUiState
+    ) {
+        binding.useCase = useCase
+        useCase.getAdapter()?.let {
+            binding.viewpager.adapter = it//FIXME::왜 바인딩이 안되는가?
+            TabLayoutMediator(binding.tlIndicator, binding.viewpager) { tab, position -> }.attach()
+        }
     }
 }
