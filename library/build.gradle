@@ -37,40 +37,22 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     /** common */
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "androidx.core:core-ktx:$ktxVersion"
     implementation "androidx.appcompat:appcompat:$appCompatVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
     implementation 'com.google.android.material:material:1.9.0'
-    testImplementation "junit:junit:$junitVersion"
-    androidTestImplementation "androidx.test.ext:junit:$junitTestVersion"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoCoreVersion"
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$archLifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$archLifecycleVersion"
-    implementation "androidx.fragment:fragment-ktx:$rootProject.fragmentVersion"
-    implementation 'androidx.activity:activity-ktx:1.7.0'
-
+    
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swipeRefreshLayoutVersion"
 
     /** NAVIGATION COMPONENT */
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion" // Kotlin
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion" // Kotlin
-    implementation "androidx.navigation:navigation-dynamic-features-fragment:$navigationVersion"
-    androidTestImplementation "androidx.navigation:navigation-testing:$navigationVersion"
-    implementation "androidx.navigation:navigation-compose:$navigationVersion"
-
-    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-
-    implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
-    kapt "com.github.bumptech.glide:compiler:$rootProject.glideVersion"
-
-    implementation 'com.google.code.gson:gson:2.10.1'
 
     /** HILT */
     implementation "com.google.dagger:hilt-android:$hiltVersion"
     kapt "com.google.dagger:hilt-compiler:$hiltVersion"
+
+    implementation 'com.google.code.gson:gson:2.10.1'
 
     implementation "com.github.sarang628:TorangImageLoader:$torangImageLoaderVersion"
     implementation "com.github.sarang628:Theme:$themeVersion"
