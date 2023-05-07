@@ -9,17 +9,17 @@ import com.google.android.material.snackbar.Snackbar
 
 /*피드 UIState*/
 data class FeedUiState(
-    val itemId: Long = 0,
+    val reviewId: Int? = 0,
     val itemFeedTopUiState: FeedTopUIState? = null,
     val itemFeedBottomUiState: FeedBottomUIState? = null,
-    val reviewImages: ArrayList<String> = ArrayList(),
+    val reviewImages: List<String>? = ArrayList(),
     val visibleReviewImage: Boolean = false,
     val pageAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>? = null,
     val imageClickListener: ((Int) -> Unit)? = null
 )
 
 fun testItemFeedUiState(context: Context, view: View) = FeedUiState(
-    itemId = 0,
+    reviewId = 0,
     itemFeedTopUiState = testItemFeedTopUIState(context, view),
     itemFeedBottomUiState = testItemFeedBottomUiState(context, view),
     pageAdapter = FeedPagerAdapter().apply {
@@ -39,7 +39,7 @@ fun testItemFeedUiState(context: Context, view: View) = FeedUiState(
 )
 
 fun Feed.testItemFeedUiState(context: Context, view: View) = FeedUiState(
-    itemId = 0,
+    reviewId = 0,
     itemFeedTopUiState = testItemFeedTopUIState(context, view),
     itemFeedBottomUiState = testItemFeedBottomUiState(context, view),
     pageAdapter = FeedPagerAdapter().apply {

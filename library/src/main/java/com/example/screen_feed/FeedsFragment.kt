@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.fragment.findNavController
 import com.example.navigation.AddReviewNavigation
+import com.example.screen_feed.adapters.FeedPagerAdapter
 import com.example.screen_feed.adapters.FeedsRecyclerViewAdapter
 import com.example.screen_feed.data.Feed
 import com.example.screen_feed.databinding.FragmentFeedsBinding
@@ -49,6 +50,10 @@ class FeedsFragment : Fragment() {
             true
         }
 
+        binding.slFeed.setOnRefreshListener {
+            binding.slFeed.isRefreshing = false
+        }
+
         return binding.root
     }
 
@@ -76,12 +81,41 @@ class FeedsFragment : Fragment() {
             return
         }
 
-        val feedTopUIState : FeedTopUIState = FeedTopUIState(
-
-        )
-
         adapter.setFeeds(feeds.stream().map {
-            it.testItemFeedUiState(requireContext(), binding.root)
+            FeedUiState(
+                reviewId = it.reviewId
+                ,itemFeedTopUiState = FeedTopUIState(
+                    reviewId = it.reviewId,
+                    name = it.name,
+                    restaurantName = it.restaurantName,
+                    rating = it.rating,
+                    profilePictureUrl = it.profilePictureUrl,
+                    onMenuClickListener = {},
+                    onProfileImageClickListener = {},
+                    onNameClickListener = {},
+                    onRestaurantClickListener = {}
+                )
+            , itemFeedBottomUiState = FeedBottomUIState(
+                    reviewId = it.reviewId,
+                    likeAmount = it.likeAmount,
+                    commentAmount = it.commentAmount,
+                    author = it.author,
+                    author1 = it.author1,
+                    author2 = it.author2,
+                    comment = it.comment,
+                    comment1 = it.comment1,
+                    comment2 = it.comment2,
+                    isLike = it.isLike,
+                    isFavorite = it.isFavorite,
+                    contents = it.contents
+            )
+            , reviewImages = it.reviewImages
+            , visibleReviewImage = true
+            , pageAdapter = FeedPagerAdapter().apply {
+                 it.reviewImages?.let { setList(it) }
+                }
+            , imageClickListener = {}
+            )
         }.toList() as ArrayList<FeedUiState>)
     }
 }

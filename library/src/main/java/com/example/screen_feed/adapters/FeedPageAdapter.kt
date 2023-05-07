@@ -8,7 +8,7 @@ import com.example.screen_feed.databinding.ItemFeedPageBinding
 
 class FeedPagerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var list = ArrayList<String>()
+    private var list : List<String> = ArrayList()
 
     var imageClickListener: ((Int) -> Unit)? = null
 
@@ -28,7 +28,7 @@ class FeedPagerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    fun setList(list: ArrayList<String>) {
+    fun setList(list: List<String>) {
         this.list = list
         notifyDataSetChanged()
     }

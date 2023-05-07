@@ -89,16 +89,26 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
+            android:id="@+id/tv_contents"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{state.contents}"
+            android:textColor="#000000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textView31"
+            app:layout_constraintTop_toBottomOf="@+id/cl_icons"
+            tools:text="맛있군" />
+
+        <TextView
             android:id="@+id/textView31"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:visibility="@{state.visibleLike ? View.VISIBLE : View.GONE}"
             app:formatText='@{String.format(@string/feed_like, state.likeAmount)}'
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/cl_icons"
+            app:layout_constraintTop_toBottomOf="@+id/tv_contents"
             tools:text="Like 20"
             tools:visibility="visible" />
 
@@ -117,10 +127,10 @@
 
         <TextView
             android:id="@+id/textView2"
+            formatText='@{String.format(@string/feed_contents, state.author1,state.comment1)}'
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="#000000"
-            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/textView"
@@ -129,10 +139,10 @@
 
         <TextView
             android:id="@+id/textView3"
+            formatText='@{String.format(@string/feed_contents, state.author2,state.comment2)}'
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="#000000"
-            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/textView2"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/textView2"
@@ -143,7 +153,6 @@
             android:id="@+id/textView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:visibility="@{state.visibleComment ? View.VISIBLE : View.GONE}"
             app:formatText='@{String.format(@string/feed_comment, state.commentAmount)}'
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline"

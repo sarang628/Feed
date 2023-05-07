@@ -21,18 +21,19 @@ class FeedsRecyclerViewAdapter(
     }
 
     override fun getItemId(position: Int): Long {
-        return feeds[position].itemId
+        if(feeds[position].reviewId == null)
+            return 0L
+
+        return feeds[position].reviewId!!.toLong()
     }
 
     fun setFeeds(feeds: ArrayList<FeedUiState>) {
         this.feeds = feeds
-        Log.d("sryang123", GsonBuilder().setPrettyPrinting().create().toJson(feeds))
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return FeedsViewholder(
-//            lifecycleOwner = lifecycleOwner,
             binding = ItemFeedBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
@@ -40,6 +41,7 @@ class FeedsRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        Log.d("sryang123", GsonBuilder().setPrettyPrinting().create().toJson(feeds[position]))
         (holder as FeedsViewholder).fillHolder(
             useCase = feeds[position]
         )

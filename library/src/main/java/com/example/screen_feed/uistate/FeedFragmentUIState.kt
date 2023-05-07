@@ -40,7 +40,6 @@ fun FeedFragmentUIstate.isVisibleRefreshButton(): Int {
     return if (this.isFailedConnection) View.VISIBLE else View.GONE
 }
 
-val FeedUiState.pictureVisible: Boolean get() = reviewImages.isEmpty()
 
 fun FeedUiState.getAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>? {
     imageClickListener?.let {
