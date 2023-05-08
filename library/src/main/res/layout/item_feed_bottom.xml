@@ -13,80 +13,11 @@
 
     </data>
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="5dp">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_icons"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/btn_like"
-                select="@{state.isLike}"
-                android:layout_width="38dp"
-                android:layout_height="45dp"
-                android:onClick="@{()->state.onLikeClickListener.invoke(state.reviewId)}"
-                android:paddingStart="8dp"
-                android:paddingRight="5dp"
-                android:src="@drawable/selector_like"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/button6"
-                android:layout_width="38dp"
-                android:layout_height="45dp"
-                android:onClick="@{()->state.onCommentClickListener.invoke(state.reviewId)}"
-                android:paddingStart="8dp"
-                android:paddingRight="5dp"
-                android:src="@drawable/chat"
-                app:layout_constraintStart_toEndOf="@+id/btn_like"
-                app:layout_constraintTop_toTopOf="@+id/btn_like" />
-
-            <ImageView
-                android:id="@+id/button7"
-                android:layout_width="38dp"
-                android:layout_height="45dp"
-                android:onClick="@{()->state.onShareClickListener.invoke(state.reviewId)}"
-                android:paddingStart="8dp"
-                android:paddingRight="5dp"
-                android:src="@drawable/message"
-                app:layout_constraintStart_toEndOf="@+id/button6"
-                app:layout_constraintTop_toTopOf="@+id/button6" />
-
-            <ImageView
-                android:id="@+id/button8"
-                select="@{state.isFavorite}"
-                android:layout_width="35dp"
-                android:layout_height="45dp"
-                android:onClick="@{()->state.onClickFavoriteListener.invoke(state.reviewId)}"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:src="@drawable/selector_favorite"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/btn_like" />
-
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/cl_icons"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/cl_icons"
-                app:tabIndicatorGravity="center"
-                app:tabIndicatorHeight="2.5dp"
-                app:tabMaxWidth="10dp"
-                app:tabRippleColor="@null" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/tv_contents"
@@ -96,7 +27,7 @@
             android:textColor="#000000"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/textView31"
-            app:layout_constraintTop_toBottomOf="@+id/cl_icons"
+            app:layout_constraintTop_toBottomOf="@+id/cv"
             tools:text="맛있군" />
 
         <TextView

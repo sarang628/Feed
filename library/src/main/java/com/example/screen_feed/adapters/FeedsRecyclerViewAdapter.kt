@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.example.screen_feed.ItemFeedBottom
 import com.example.screen_feed.ItemFeedMid
 import com.example.screen_feed.ItemFeedTop
 import com.example.screen_feed.databinding.ItemFeedBinding
@@ -63,6 +64,10 @@ class FeedsViewHolder(private val binding: ItemFeedBinding) :
         
         binding.cvPage.setContent { 
             ItemFeedMid(uiState.reviewImages)
+        }
+
+        binding.cvBottom.setContent {
+            ItemFeedBottom(uiState.itemFeedBottomUiState)
         }
 
     }

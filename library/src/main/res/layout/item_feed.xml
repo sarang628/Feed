@@ -35,12 +35,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cv_feed_top" />
 
-        <!-- bottom area -->
-        <include
-            android:id="@+id/include"
-            layout="@layout/item_feed_bottom"
-            state="@{uiState.itemFeedBottomUiState}"
-            android:layout_width="0dp"
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/cvBottom"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
