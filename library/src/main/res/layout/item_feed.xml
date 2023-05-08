@@ -17,38 +17,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- profile area -->
-        <include
-            android:id="@+id/item_feed_top"
-            layout="@layout/item_feed_top"
-            uiState="@{uiState.itemFeedTopUiState}"
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/cv_feed_top"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <!-- review image area  -->
-        <FrameLayout
-            android:id="@+id/flMediaContents"
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/cv_page"
             android:layout_width="match_parent"
             android:layout_height="450dp"
+            android:clickable="true"
+            android:focusable="true"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/item_feed_top">
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/viewpager"
-                android:layout_width="match_parent"
-                android:layout_height="450dp"
-                android:clickable="true"
-                tools:background="@tools:sample/avatars"
-                android:focusable="true" />
-
-            <WebView
-                android:id="@+id/webview"
-                android:layout_width="match_parent"
-                android:layout_height="450dp"
-                android:visibility="gone" />
-
-        </FrameLayout>
+            app:layout_constraintTop_toBottomOf="@+id/cv_feed_top" />
 
         <!-- bottom area -->
         <include
@@ -59,7 +44,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/flMediaContents" />
+            app:layout_constraintTop_toBottomOf="@+id/cv_page" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tl_indicator"
@@ -67,9 +52,9 @@
             android:layout_height="10dp"
             android:layout_marginTop="15dp"
             android:background="@color/colorSecondaryLight"
-            app:layout_constraintEnd_toEndOf="@+id/flMediaContents"
-            app:layout_constraintStart_toStartOf="@+id/flMediaContents"
-            app:layout_constraintTop_toBottomOf="@+id/flMediaContents"
+            app:layout_constraintEnd_toEndOf="@+id/cv_page"
+            app:layout_constraintStart_toStartOf="@+id/cv_page"
+            app:layout_constraintTop_toBottomOf="@+id/cv_page"
             app:tabBackground="@drawable/tab_selector"
             app:tabGravity="center"
             app:tabIndicatorHeight="0dp" />

@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.example.screen_feed.ItemFeedMid
+import com.example.screen_feed.ItemFeedTop
 import com.example.screen_feed.databinding.ItemFeedBinding
 import com.example.screen_feed.uistate.FeedUiState
 import com.example.screen_feed.uistate.getAdapter
@@ -50,9 +52,18 @@ class FeedsViewHolder(private val binding: ItemFeedBinding) :
     ViewHolder(binding.root) {
     fun fillHolder(uiState: FeedUiState) {
         binding.uiState = uiState
-        uiState.getAdapter()?.let {
-            binding.viewpager.adapter = it//FIXME::왜 바인딩이 안되는가?
-            TabLayoutMediator(binding.tlIndicator, binding.viewpager) { tab, position -> }.attach()
+        //uiState.getAdapter()?.let {
+            //binding.viewpager.adapter = it//FIXME::왜 바인딩이 안되는가?
+            //TabLayoutMediator(binding.tlIndicator, binding.viewpager) { tab, position -> }.attach()
+        //}
+
+        binding.cvFeedTop.setContent {
+            ItemFeedTop(uiState.itemFeedTopUiState)
         }
+        
+        binding.cvPage.setContent { 
+            ItemFeedMid(uiState.reviewImages)
+        }
+
     }
 }
