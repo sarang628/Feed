@@ -61,6 +61,7 @@ class FeedsViewHolder(private val binding: ItemFeedBinding) :
         binding.cvFeedTop.setContent {
             Column() {
                 ItemFeedTop(uiState.itemFeedTopUiState)
+                Spacer(modifier = Modifier.height(4.dp))
                 ItemFeedMid(uiState.reviewImages)
                 ItemFeedBottom(uiState.itemFeedBottomUiState)
             }

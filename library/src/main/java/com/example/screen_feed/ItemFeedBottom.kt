@@ -23,15 +23,15 @@ fun ItemFeedBottom(uiState: FeedBottomUIState?) {
         ReactionBar()
         Spacer(modifier = Modifier.height(8.dp))
         ItemFeedComment(
-            contents = uiState?.contents
-        , likeAmount = uiState?.likeAmount
-        , author = uiState?.author
-        , comment = uiState?.comment
-        , commentAmount = uiState?.commentAmount
-        , author1 = uiState?.author1
-        , author2 = uiState?.author2
-        , comment1 = uiState?.comment1
-        , comment2 = uiState?.comment2
+            contents = uiState?.contents,
+            likeAmount = uiState?.likeAmount,
+            author = uiState?.author,
+            comment = uiState?.comment,
+            commentAmount = uiState?.commentAmount,
+            author1 = uiState?.author1,
+            author2 = uiState?.author2,
+            comment1 = uiState?.comment1,
+            comment2 = uiState?.comment2
         )
         Spacer(modifier = Modifier.height(12.dp))
     }
@@ -83,24 +83,39 @@ fun ItemFeedComment(
     comment2: String? = ""
 ) {
     Column(Modifier.padding(start = 8.dp)) {
-        Text(text = contents ?: "")
-        Text(text = "좋아요 $likeAmount 개", color = Color.DarkGray)
-        Row() {
-            Text(text = author ?: "", fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.padding(start = 3.dp))
-            Text(text = comment ?: "")
+        if (contents != null)
+            Text(text = contents)
+
+        if (likeAmount != null) {
+            if (likeAmount > 0)
+                Text(text = "좋아요 $likeAmount 개", color = Color.DarkGray)
         }
-        Text(text = "댓글 $commentAmount 개 모두보기", color = Color.DarkGray)
-        Row() {
-            Text(text = author1 ?: "", fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.padding(start = 3.dp))
-            Text(text = comment1 ?: "")
+
+        if (author != null)
+            Row() {
+                Text(text = author, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.padding(start = 3.dp))
+                Text(text = comment ?: "")
+            }
+
+        if (commentAmount != null) {
+            if (commentAmount > 0)
+                Text(text = "댓글 $commentAmount 개 모두보기", color = Color.DarkGray)
         }
-        Row() {
-            Text(text = author2 ?: "", fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.padding(start = 3.dp))
-            Text(text = comment2 ?: "")
-        }
+
+        if (author1 != null)
+            Row() {
+                Text(text = author1, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.padding(start = 3.dp))
+                Text(text = comment1 ?: "")
+            }
+
+        if (author2 != null)
+            Row() {
+                Text(text = author2, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.padding(start = 3.dp))
+                Text(text = comment2 ?: "")
+            }
     }
 
 }
