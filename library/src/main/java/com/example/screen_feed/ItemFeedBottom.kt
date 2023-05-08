@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
@@ -18,8 +19,9 @@ import com.example.screen_feed.uistate.FeedBottomUIState
 
 @Composable
 fun ItemFeedBottom(uiState: FeedBottomUIState?) {
-    Column() {
+    Column(Modifier.padding()) {
         ReactionBar()
+        Spacer(modifier = Modifier.height(8.dp))
         ItemFeedComment(
             contents = uiState?.contents
         , likeAmount = uiState?.likeAmount
@@ -31,6 +33,7 @@ fun ItemFeedBottom(uiState: FeedBottomUIState?) {
         , comment1 = uiState?.comment1
         , comment2 = uiState?.comment2
         )
+        Spacer(modifier = Modifier.height(12.dp))
     }
 }
 

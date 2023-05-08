@@ -2,6 +2,12 @@ package com.example.screen_feed.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.screen_feed.ItemFeedBottom
@@ -52,23 +58,12 @@ class FeedsRecyclerViewAdapter : RecyclerView.Adapter<ViewHolder>() {
 class FeedsViewHolder(private val binding: ItemFeedBinding) :
     ViewHolder(binding.root) {
     fun fillHolder(uiState: FeedUiState) {
-        binding.uiState = uiState
-        //uiState.getAdapter()?.let {
-            //binding.viewpager.adapter = it//FIXME::왜 바인딩이 안되는가?
-            //TabLayoutMediator(binding.tlIndicator, binding.viewpager) { tab, position -> }.attach()
-        //}
-
         binding.cvFeedTop.setContent {
-            ItemFeedTop(uiState.itemFeedTopUiState)
+            Column() {
+                ItemFeedTop(uiState.itemFeedTopUiState)
+                ItemFeedMid(uiState.reviewImages)
+                ItemFeedBottom(uiState.itemFeedBottomUiState)
+            }
         }
-        
-        binding.cvPage.setContent { 
-            ItemFeedMid(uiState.reviewImages)
-        }
-
-        binding.cvBottom.setContent {
-            ItemFeedBottom(uiState.itemFeedBottomUiState)
-        }
-
     }
 }

@@ -31,9 +31,9 @@ fun ItemFeedMid(img: List<String>?) {
     val pagerState = rememberPagerState(0)
     if (img == null)
         return
-    Column {
-        PagerIndicator(pagerState = pagerState, img = img)
+    Column(modifier = Modifier.height(460.dp)) {
         FeedPager(pagerState = pagerState, img = img)
+        PagerIndicator(pagerState = pagerState, img = img)
     }
 }
 
@@ -56,7 +56,7 @@ fun FeedPager(
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight()
+                .height(450.dp)
                 .padding(bottom = 10.dp)
         )
     }
