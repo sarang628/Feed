@@ -10,18 +10,22 @@ data class FeedUiState(
     val itemFeedBottomUiState: FeedBottomUIState? = null,
     val reviewImages: List<String>? = ArrayList(),
     val visibleReviewImage: Boolean = false,
-    val imageClickListener: ((Int) -> Unit)? = null
-)
+    val imageClickListener: ((Int) -> Unit)? = null,
+
+    )
 
 fun Feed.FeedUiState(
-    imageClickListener: ((Int) -> Unit)? = null
+    clickImage: ((Int) -> Unit)? = null,
+    clickProfile: ((Int) -> Unit)? = null,
 ): FeedUiState {
     return FeedUiState(
         reviewId = this.reviewId,
-        itemFeedTopUiState = this.FeedTopUiState(),
+        itemFeedTopUiState = this.FeedTopUiState(
+            clickProfile = clickProfile
+        ),
         itemFeedBottomUiState = this.FeedBottomUIState(),
         reviewImages = this.reviewImages,
         visibleReviewImage = true,
-        imageClickListener = imageClickListener
+        imageClickListener = clickImage
     )
 }

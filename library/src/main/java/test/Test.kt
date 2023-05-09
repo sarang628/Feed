@@ -67,7 +67,7 @@ fun Feed.testItemFeedTopUIState(context: Context, view: View) = FeedTopUIState(
     onMenuClickListener = {
         Snackbar.make(context, view, "clickMenu", Snackbar.LENGTH_SHORT).show()
     },
-    onProfileImageClickListener = {
+    clickProfile = {
         Snackbar.make(context, view, "profileClick", Snackbar.LENGTH_SHORT).show()
     },
     onNameClickListener = {
@@ -88,7 +88,7 @@ fun testItemFeedTopUIState(context: Context, view: View) = FeedTopUIState(
     onMenuClickListener = {
         Snackbar.make(context, view, "clickMenu", Snackbar.LENGTH_SHORT).show()
     },
-    onProfileImageClickListener = {
+    clickProfile = {
         Snackbar.make(context, view, "profileClick", Snackbar.LENGTH_SHORT).show()
     },
     onNameClickListener = {

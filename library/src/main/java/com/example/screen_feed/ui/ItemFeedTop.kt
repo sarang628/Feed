@@ -1,6 +1,7 @@
 package com.example.screen_feed.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,7 +22,7 @@ import com.example.screen_feed.uistate.FeedTopUIState
 
 @Composable
 fun ItemFeedTop(uiState: FeedTopUIState? = null) {
-    if(uiState == null){
+    if (uiState == null) {
         return
     }
 
@@ -34,7 +35,11 @@ fun ItemFeedTop(uiState: FeedTopUIState? = null) {
         AsyncImage(
             model = uiState.profilePictureUrl,
             contentDescription = "",
-            modifier = Modifier.size(Dp(30f))
+            modifier = Modifier
+                .size(Dp(30f))
+                .clickable {
+                    uiState.clickProfile?.invoke(0)
+                }
         )
         Column(
             Modifier
@@ -42,14 +47,17 @@ fun ItemFeedTop(uiState: FeedTopUIState? = null) {
                 .weight(1f)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = uiState.name?:"")
+                Text(text = uiState.name ?: "", modifier = Modifier.clickable {
+                    uiState.onNameClickListener?.invoke(0)
+                })
                 Row(Modifier.padding(start = Dp(5f))) {
-                    RatingBar(uiState.rating?:0f)
+                    RatingBar(uiState.rating ?: 0f)
                 }
             }
             Text(
-                text = uiState.restaurantName?:""
-            , color = Color.DarkGray
+                text = uiState.restaurantName ?: "", color = Color.DarkGray, modifier = Modifier.clickable {
+                    uiState.onRestaurantClickListener?.invoke(0)
+                }
             )
         }
         menu()
@@ -57,9 +65,9 @@ fun ItemFeedTop(uiState: FeedTopUIState? = null) {
 }
 
 @Composable
-fun RatingBar(rating : Float) {
+fun RatingBar(rating: Float) {
     Row() {
-        for(f in 0..rating.toInt()){
+        for (f in 0..rating.toInt()) {
             Image(
                 painter = painterResource(id = R.drawable.selected_heart),
                 contentDescription = "",

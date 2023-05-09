@@ -8,11 +8,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.navigation.AddReviewNavigation
+import com.example.navigation.FeedNavigations
 import com.example.screen_feed.databinding.FragmentFeedsBinding
 import com.example.screen_feed.ui.EmptyFeed
 import com.example.screen_feed.ui.Loading
 import com.example.screen_feed.ui.RefreshFeed
-import com.example.screen_feed.ui.SwipeRefreshTest
+import com.example.screen_feed.ui.FeedList
 import com.example.screen_feed.ui.TorangToolbar
 import com.example.screen_feed.uistate.FeedFragmentUIstate
 import com.example.screen_feed.uistate.getTestSenarioFeedFragmentUIstate
@@ -29,6 +30,10 @@ class FeedsFragment : Fragment() {
 
     @Inject
     lateinit var addReviewNavigation: AddReviewNavigation
+
+    @Inject
+    lateinit var feedNavigation: FeedNavigations
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,10 +57,13 @@ class FeedsFragment : Fragment() {
                 binding.cvToolbar.setContent {
                     Column {
                         TorangToolbar(clickAddReview = {
-                            addReviewNavigation.navigate(this@FeedsFragment)
+                            feedNavigation.goAddReview(requireContext(), binding.root)
                         })
                         if (feedUiState.feeds != null)
-                            SwipeRefreshTest()
+                            FeedList(clickProfile = {
+                                feedNavigation.goProfile(requireContext(), binding.root)
+                            }, list = feedUiState.feeds
+                            )
 
                         if (feedUiState.isEmptyFeed)
                             EmptyFeed()

@@ -10,14 +10,14 @@ data class FeedTopUIState(
     val rating: Float? = 0.0f,
     val profilePictureUrl: String? = null,
     val onMenuClickListener: ((Int) -> Unit)? = null,
-    val onProfileImageClickListener: ((Int) -> Unit)? = null,
+    val clickProfile: ((Int) -> Unit)? = null,
     val onNameClickListener: ((Int) -> Unit)? = null,
     val onRestaurantClickListener: ((Int) -> Unit)? = null
 )
 
 fun Feed.FeedTopUiState(
     onMenuClickListener: ((Int) -> Unit)? = null,
-    onProfileImageClickListener: ((Int) -> Unit)? = null,
+    clickProfile: ((Int) -> Unit)? = null,
     onNameClickListener: ((Int) -> Unit)? = null,
     onRestaurantClickListener: ((Int) -> Unit)? = null
 ) : FeedTopUIState{
@@ -28,7 +28,7 @@ fun Feed.FeedTopUiState(
         rating = this.rating,
         profilePictureUrl = this.profilePictureUrl,
         onMenuClickListener = onMenuClickListener,
-        onProfileImageClickListener = onProfileImageClickListener,
+        clickProfile = clickProfile,
         onNameClickListener = onNameClickListener,
         onRestaurantClickListener = onRestaurantClickListener
     )

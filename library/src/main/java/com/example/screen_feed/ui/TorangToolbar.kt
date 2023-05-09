@@ -1,7 +1,6 @@
 package com.example.screen_feed.ui
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
@@ -23,8 +21,6 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.screen_feed.R
+import com.example.screen_feed.data.Feed
 import com.example.screen_feed.uistate.FeedUiState
 import com.example.screen_feed.uistate.getFeedsByFile
 
@@ -63,17 +60,21 @@ fun TorangToolbar(
 @OptIn(ExperimentalMaterialApi::class)
 @Preview
 @Composable
-fun SwipeRefreshTest() {
-
-    var list = getFeedsByFile(LocalContext.current)
-
+fun FeedList(
+    clickProfile : ((Int)->Unit)? = null,
+    list : List<Feed>?
+) {
     val isRefreshing = false
     val pullRefreshState = rememberPullRefreshState(isRefreshing, { })
     Box(Modifier.pullRefresh(pullRefreshState)) {
 
         LazyColumn(Modifier.fillMaxSize()) {
-            items(list.size) {
-                ItemFeed(list[it].FeedUiState())
+            list?.let {
+                items(list.size) {
+                    ItemFeed(list[it].FeedUiState(
+                        clickProfile = clickProfile
+                    ))
+                }
             }
         }
 
