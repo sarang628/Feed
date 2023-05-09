@@ -1,4 +1,4 @@
-package com.example.screen_feed.ui
+package com.example.screen_feed
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.navigation.AddReviewNavigation
 import com.example.screen_feed.databinding.FragmentFeedsBinding
+import com.example.screen_feed.ui.EmptyFeed
+import com.example.screen_feed.ui.Loading
+import com.example.screen_feed.ui.RefreshFeed
+import com.example.screen_feed.ui.SwipeRefreshTest
+import com.example.screen_feed.ui.TorangToolbar
 import com.example.screen_feed.uistate.FeedFragmentUIstate
 import com.example.screen_feed.uistate.getTestSenarioFeedFragmentUIstate
 import com.example.screen_feed.uistate.isVisibleRefreshButton
@@ -46,7 +51,9 @@ class FeedsFragment : Fragment() {
             uiState.collect { feedUiState ->
                 binding.cvToolbar.setContent {
                     Column {
-                        TorangToolbar()
+                        TorangToolbar(clickAddReview = {
+                            addReviewNavigation.navigate(this@FeedsFragment)
+                        })
                         if (feedUiState.feeds != null)
                             SwipeRefreshTest()
 

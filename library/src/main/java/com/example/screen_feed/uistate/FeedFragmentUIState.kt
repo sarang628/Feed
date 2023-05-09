@@ -5,7 +5,6 @@ import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.library.JsonToObjectGenerator
 import com.example.screen_feed.data.Feed
@@ -51,15 +50,16 @@ fun getTestSenarioFeedFragmentUIstate(
     lifecycleOwner.lifecycleScope.launch {
         while (true) {
             // 스와이프 리프레시 테스트
-            data.emit(testRefreshingOn()); delay(delayCount); data.emit(testRefreshingOff()); delay(delayCount)
+//            data.emit(testRefreshingOn()); delay(delayCount); data.emit(testRefreshingOff()); delay(delayCount)
             // 프로그레스 테스트
-            data.emit(testProgressOn()); delay(delayCount); data.emit(testProgressOff()); delay(delayCount)
+//            data.emit(testProgressOn()); delay(delayCount); data.emit(testProgressOff()); delay(delayCount)
             // 비어있는 피드 테스트
-            data.emit(testEmptyFeedOn()); delay(delayCount); data.emit(testEmptyFeedOff()); delay(delayCount)
+//            data.emit(testEmptyFeedOn()); delay(delayCount); data.emit(testEmptyFeedOff()); delay(delayCount)
             // 네트워크 연결 실패 테스트
-            data.emit(testFailedConnectionOn()); delay(delayCount); data.emit(testFailedConnectionOff()); delay(delayCount)
+//            data.emit(testFailedConnectionOn()); delay(delayCount); data.emit(testFailedConnectionOff()); delay(delayCount)
             // 피드 테스트
-            data.emit(getTestFeedList(context)); delay(delayCount); data.emit(FeedFragmentUIstate()); delay(delayCount);
+            data.emit(getTestFeedList(context)); delay(delayCount);
+//            data.emit(FeedFragmentUIstate()); delay(delayCount);
         }
     }
     return data
