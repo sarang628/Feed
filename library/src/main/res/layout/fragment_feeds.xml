@@ -3,83 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <import type="android.view.View" />
-    </data>
-
     <!-- parent element -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/fl_timeline_container"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/cv_toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".timeline.TimeLineFragment">
-
-        <!-- 상단 액션 바 토랑 타이틀 및 + 버튼 -->
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:menu="@menu/menu_feed_main"
-            app:title="Torang" />
-
-        <!-- 스와이프 리프레시 레이아웃 + 리사이클러뷰 -->
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/sl_feed"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar2">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_timelne"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-        <!-- 통신 실패 시 갱신 버튼 -->
-        <Button
-            android:id="@+id/btn_refresh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="갱신"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
-
-        <!-- 로딩 바   -->
-        <ProgressBar
-            android:id="@+id/pb_feed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <!-- 로드 시 피드가 없을경우  -->
-        <TextView
-            android:id="@+id/tv_empty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="피드가 없습니다."
-            android:visibility="gone"
-            tools:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="@+id/sl_feed"
-            app:layout_constraintEnd_toEndOf="@+id/toolbar2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/toolbar2" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        tools:context=".timeline.TimeLineFragment" />
 </layout>

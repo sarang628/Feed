@@ -2,7 +2,6 @@ package test
 
 import android.content.Context
 import android.view.View
-import com.example.screen_feed.adapters.FeedPagerAdapter
 import com.example.screen_feed.data.Feed
 import com.example.screen_feed.uistate.FeedBottomUIState
 import com.example.screen_feed.uistate.FeedTopUIState
@@ -104,15 +103,6 @@ fun testItemFeedUiState(context: Context, view: View) = FeedUiState(
     reviewId = 0,
     itemFeedTopUiState = testItemFeedTopUIState(context, view),
     itemFeedBottomUiState = testItemFeedBottomUiState(context, view),
-    pageAdapter = FeedPagerAdapter().apply {
-        setList(
-            arrayListOf(
-                "http://sarang628.iptime.org:88/1.png",
-                "http://sarang628.iptime.org:88/1.png",
-                "http://sarang628.iptime.org:88/1.png"
-            )
-        )
-    },
     visibleReviewImage = true,
     reviewImages = ArrayList(),
     imageClickListener = {
@@ -124,11 +114,6 @@ fun Feed.testItemFeedUiState(context: Context, view: View) = FeedUiState(
     reviewId = 0,
     itemFeedTopUiState = testItemFeedTopUIState(context, view),
     itemFeedBottomUiState = testItemFeedBottomUiState(context, view),
-    pageAdapter = FeedPagerAdapter().apply {
-        reviewImages?.let { setList(ArrayList<String>().apply {
-            addAll(it)
-        }) }
-    },
     visibleReviewImage = true,
     reviewImages = ArrayList(),
     imageClickListener = {

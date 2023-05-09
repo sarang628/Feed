@@ -1,5 +1,7 @@
 package com.example.screen_feed.uistate
 
+import com.example.screen_feed.data.Feed
+
 /*피드 상단 UIState*/
 data class FeedTopUIState(
     val reviewId: Int? = 0,
@@ -12,3 +14,22 @@ data class FeedTopUIState(
     val onNameClickListener: ((Int) -> Unit)? = null,
     val onRestaurantClickListener: ((Int) -> Unit)? = null
 )
+
+fun Feed.FeedTopUiState(
+    onMenuClickListener: ((Int) -> Unit)? = null,
+    onProfileImageClickListener: ((Int) -> Unit)? = null,
+    onNameClickListener: ((Int) -> Unit)? = null,
+    onRestaurantClickListener: ((Int) -> Unit)? = null
+) : FeedTopUIState{
+    return FeedTopUIState(
+        reviewId = this.reviewId,
+        name = this.name,
+        restaurantName = this.restaurantName,
+        rating = this.rating,
+        profilePictureUrl = this.profilePictureUrl,
+        onMenuClickListener = onMenuClickListener,
+        onProfileImageClickListener = onProfileImageClickListener,
+        onNameClickListener = onNameClickListener,
+        onRestaurantClickListener = onRestaurantClickListener
+    )
+}

@@ -8,7 +8,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.library.JsonToObjectGenerator
-import com.example.screen_feed.adapters.FeedPagerAdapter
 import com.example.screen_feed.data.Feed
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,20 +33,12 @@ data class FeedFragmentUIstate(
     val feeds: ArrayList<Feed>? = null,
 )
 
-fun FeedFragmentUIstate.isVisibleRefreshButton(): Int {
-    if (isRefreshing) return View.GONE
+fun FeedFragmentUIstate.isVisibleRefreshButton(): Boolean {
+    if (isRefreshing) return false
 
-    return if (this.isFailedConnection) View.VISIBLE else View.GONE
+    return this.isFailedConnection
 }
 
-
-fun FeedUiState.getAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>? {
-    imageClickListener?.let {
-        (pageAdapter as FeedPagerAdapter).setOnImageClickListener(it)
-    }
-    return pageAdapter
-
-}
 
 //-------------------------------------------------------------------------------------------
 fun getTestSenarioFeedFragmentUIstate(
@@ -60,15 +51,15 @@ fun getTestSenarioFeedFragmentUIstate(
     lifecycleOwner.lifecycleScope.launch {
         while (true) {
             // 스와이프 리프레시 테스트
-//            data.emit(testRefreshingOn()); delay(delayCount); data.emit(testRefreshingOff()); delay(delayCount)
+            data.emit(testRefreshingOn()); delay(delayCount); data.emit(testRefreshingOff()); delay(delayCount)
             // 프로그레스 테스트
-//            data.emit(testProgressOn()); delay(delayCount); data.emit(testProgressOff()); delay(delayCount)
+            data.emit(testProgressOn()); delay(delayCount); data.emit(testProgressOff()); delay(delayCount)
             // 비어있는 피드 테스트
-//            data.emit(testEmptyFeedOn()); delay(delayCount); data.emit(testEmptyFeedOff()); delay(delayCount)
+            data.emit(testEmptyFeedOn()); delay(delayCount); data.emit(testEmptyFeedOff()); delay(delayCount)
             // 네트워크 연결 실패 테스트
-//            data.emit(testFailedConnectionOn()); delay(delayCount); data.emit(testFailedConnectionOff()); delay(delayCount)
+            data.emit(testFailedConnectionOn()); delay(delayCount); data.emit(testFailedConnectionOff()); delay(delayCount)
             // 피드 테스트
-            data.emit(getTestFeedList(context)); delay(delayCount); //data.emit(FeedFragmentUIstate()); delay(delayCount);
+            data.emit(getTestFeedList(context)); delay(delayCount); data.emit(FeedFragmentUIstate()); delay(delayCount);
         }
     }
     return data

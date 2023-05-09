@@ -1,6 +1,7 @@
 package com.example.screen_feed.uistate
 
 import androidx.recyclerview.widget.RecyclerView
+import com.example.screen_feed.data.Feed
 
 /*피드 UIState*/
 data class FeedUiState(
@@ -9,6 +10,18 @@ data class FeedUiState(
     val itemFeedBottomUiState: FeedBottomUIState? = null,
     val reviewImages: List<String>? = ArrayList(),
     val visibleReviewImage: Boolean = false,
-    val pageAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>? = null,
     val imageClickListener: ((Int) -> Unit)? = null
 )
+
+fun Feed.FeedUiState(
+    imageClickListener: ((Int) -> Unit)? = null
+): FeedUiState {
+    return FeedUiState(
+        reviewId = this.reviewId,
+        itemFeedTopUiState = this.FeedTopUiState(),
+        itemFeedBottomUiState = this.FeedBottomUIState(),
+        reviewImages = this.reviewImages,
+        visibleReviewImage = true,
+        imageClickListener = imageClickListener
+    )
+}
