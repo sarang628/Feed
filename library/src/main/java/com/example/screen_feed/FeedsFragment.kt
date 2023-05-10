@@ -53,30 +53,30 @@ class FeedsFragment : Fragment() {
             }
         }
     }
+}
 
-    // UIState 처리
-    @Composable
-    private fun FeedsScreen(uiState: FeedsScreenUiState) {
-        Column {
-            TorangToolbar(clickAddReview = {
-                //feedNavigation.goAddReview(requireContext(), null)
-            })
-            if (uiState.feeds != null)
-                FeedList(
-                    clickProfile = {
-                        //feedNavigation.goProfile(requireContext(), null)
-                    }, list = uiState.feeds
-                )
+// UIState 처리
+@Composable
+fun FeedsScreen(uiState: FeedsScreenUiState) {
+    Column {
+        TorangToolbar(clickAddReview = {
+            //feedNavigation.goAddReview(requireContext(), null)
+        })
+        if (uiState.feeds != null)
+            FeedList(
+                clickProfile = {
+                    //feedNavigation.goProfile(requireContext(), null)
+                }, list = uiState.feeds
+            )
 
-            if (uiState.isEmptyFeed)
-                EmptyFeed()
+        if (uiState.isEmptyFeed)
+            EmptyFeed()
 
-            if (uiState.isVisibleRefreshButton()) {
-                RefreshFeed()
-            }
-            if (uiState.isProgess) {
-                Loading()
-            }
+        if (uiState.isVisibleRefreshButton()) {
+            RefreshFeed()
+        }
+        if (uiState.isProgess) {
+            Loading()
         }
     }
 }
