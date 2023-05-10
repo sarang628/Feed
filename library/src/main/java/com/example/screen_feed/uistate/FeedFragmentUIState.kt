@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 
 
 /*피드 프레그먼트 UIState*/
-data class FeedFragmentUIstate(
+data class FeedsScreenUiState(
     // 스와이프 리프레시 레이아웃 갱신
     val isRefreshing: Boolean = false,
     // 로딩 시 프로그레스 바
@@ -32,7 +32,7 @@ data class FeedFragmentUIstate(
     val feeds: ArrayList<Feed>? = null,
 )
 
-fun FeedFragmentUIstate.isVisibleRefreshButton(): Boolean {
+fun FeedsScreenUiState.isVisibleRefreshButton(): Boolean {
     if (isRefreshing) return false
 
     return this.isFailedConnection
@@ -43,7 +43,7 @@ fun FeedFragmentUIstate.isVisibleRefreshButton(): Boolean {
 fun getTestSenarioFeedFragmentUIstate(
     lifecycleOwner: LifecycleOwner,
     context: Context
-): StateFlow<FeedFragmentUIstate> {
+): StateFlow<FeedsScreenUiState> {
     val data = MutableStateFlow(getTestEmptyFeedFragmentUIstate())
     val delayCount = 1000L
     lifecycleOwner.lifecycleScope.launch {
@@ -64,40 +64,40 @@ fun getTestSenarioFeedFragmentUIstate(
     return data
 }
 
-fun testRefreshingOn(): FeedFragmentUIstate {
-    return FeedFragmentUIstate(isRefreshing = true)
+fun testRefreshingOn(): FeedsScreenUiState {
+    return FeedsScreenUiState(isRefreshing = true)
 }
 
-fun testRefreshingOff(): FeedFragmentUIstate {
-    return FeedFragmentUIstate(isRefreshing = false)
+fun testRefreshingOff(): FeedsScreenUiState {
+    return FeedsScreenUiState(isRefreshing = false)
 }
 
-fun testProgressOn(): FeedFragmentUIstate {
-    return FeedFragmentUIstate(isProgess = true)
+fun testProgressOn(): FeedsScreenUiState {
+    return FeedsScreenUiState(isProgess = true)
 }
 
-fun testProgressOff(): FeedFragmentUIstate {
-    return FeedFragmentUIstate(isProgess = false)
+fun testProgressOff(): FeedsScreenUiState {
+    return FeedsScreenUiState(isProgess = false)
 }
 
-fun testEmptyFeedOn(): FeedFragmentUIstate {
-    return FeedFragmentUIstate(isEmptyFeed = true)
+fun testEmptyFeedOn(): FeedsScreenUiState {
+    return FeedsScreenUiState(isEmptyFeed = true)
 }
 
-fun testEmptyFeedOff(): FeedFragmentUIstate {
-    return FeedFragmentUIstate(isEmptyFeed = false)
+fun testEmptyFeedOff(): FeedsScreenUiState {
+    return FeedsScreenUiState(isEmptyFeed = false)
 }
 
-fun testFailedConnectionOn(): FeedFragmentUIstate {
-    return FeedFragmentUIstate(isFailedConnection = true)
+fun testFailedConnectionOn(): FeedsScreenUiState {
+    return FeedsScreenUiState(isFailedConnection = true)
 }
 
-fun testFailedConnectionOff(): FeedFragmentUIstate {
-    return FeedFragmentUIstate(isFailedConnection = false)
+fun testFailedConnectionOff(): FeedsScreenUiState {
+    return FeedsScreenUiState(isFailedConnection = false)
 }
 
-fun getTestEmptyFeedFragmentUIstate(): FeedFragmentUIstate {
-    return FeedFragmentUIstate(
+fun getTestEmptyFeedFragmentUIstate(): FeedsScreenUiState {
+    return FeedsScreenUiState(
         isRefreshing = false,
         isProgess = false,
         isLogin = false,
@@ -109,9 +109,9 @@ fun getTestEmptyFeedFragmentUIstate(): FeedFragmentUIstate {
 
 fun getTestFeedList(
     context: Context
-): FeedFragmentUIstate {
+): FeedsScreenUiState {
     val list = getFeedsByFile(context = context)
-    return FeedFragmentUIstate(feeds = list)
+    return FeedsScreenUiState(feeds = list)
 }
 
 fun getFeedsByFile(context: Context): ArrayList<Feed> {

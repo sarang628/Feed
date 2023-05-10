@@ -5,24 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.navigation.AddReviewNavigation
 import com.example.navigation.FeedNavigations
-import com.example.screen_feed.databinding.FragmentFeedsBinding
 import com.example.screen_feed.ui.EmptyFeed
 import com.example.screen_feed.ui.Loading
 import com.example.screen_feed.ui.RefreshFeed
 import com.example.screen_feed.ui.FeedList
 import com.example.screen_feed.ui.TorangToolbar
-import com.example.screen_feed.uistate.FeedFragmentUIstate
+import com.example.screen_feed.uistate.FeedsScreenUiState
 import com.example.screen_feed.uistate.getTestSenarioFeedFragmentUIstate
 import com.example.screen_feed.uistate.isVisibleRefreshButton
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -49,7 +46,7 @@ class FeedsFragment : Fragment() {
                         getTestSenarioFeedFragmentUIstate(viewLifecycleOwner, requireContext())
                     uiState.collect {
                         setContent {
-                            subScribeUiState(uiState = it)
+                            FeedsScreen(uiState = it)
                         }
                     }
                 }
@@ -59,7 +56,7 @@ class FeedsFragment : Fragment() {
 
     // UIState 처리
     @Composable
-    private fun subScribeUiState(uiState: FeedFragmentUIstate) {
+    private fun FeedsScreen(uiState: FeedsScreenUiState) {
         Column {
             TorangToolbar(clickAddReview = {
                 //feedNavigation.goAddReview(requireContext(), null)
