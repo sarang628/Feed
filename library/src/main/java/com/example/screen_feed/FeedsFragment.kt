@@ -5,6 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.navigation.AddReviewNavigation
@@ -39,43 +42,43 @@ class FeedsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentFeedsBinding.inflate(layoutInflater, container, false)
-
-        subScribeUiState(
-            getTestSenarioFeedFragmentUIstate(viewLifecycleOwner, requireContext(), binding.root),
-            binding
-        )
-        return binding.root
-    }
-
-    // UIState 처리
-    private fun subScribeUiState(
-        uiState: StateFlow<FeedFragmentUIstate>, binding: FragmentFeedsBinding
-    ) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            uiState.collect { feedUiState ->
-                binding.cvToolbar.setContent {
-                    Column {
-                        TorangToolbar(clickAddReview = {
-                            feedNavigation.goAddReview(requireContext(), binding.root)
-                        })
-                        if (feedUiState.feeds != null)
-                            FeedList(clickProfile = {
-                                feedNavigation.goProfile(requireContext(), binding.root)
-                            }, list = feedUiState.feeds
-                            )
-
-                        if (feedUiState.isEmptyFeed)
-                            EmptyFeed()
-
-                        if (feedUiState.isVisibleRefreshButton()) {
-                            RefreshFeed()
-                        }
-                        if (feedUiState.isProgess) {
-                            Loading()
+        return ComposeView(context = requireContext()).apply {
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val uiState =
+                        getTestSenarioFeedFragmentUIstate(viewLifecycleOwner, requireContext())
+                    uiState.collect {
+                        setContent {
+                            subScribeUiState(uiState = it)
                         }
                     }
                 }
+            }
+        }
+    }
+
+    // UIState 처리
+    @Composable
+    private fun subScribeUiState(uiState: FeedFragmentUIstate) {
+        Column {
+            TorangToolbar(clickAddReview = {
+                //feedNavigation.goAddReview(requireContext(), null)
+            })
+            if (uiState.feeds != null)
+                FeedList(
+                    clickProfile = {
+                        //feedNavigation.goProfile(requireContext(), null)
+                    }, list = uiState.feeds
+                )
+
+            if (uiState.isEmptyFeed)
+                EmptyFeed()
+
+            if (uiState.isVisibleRefreshButton()) {
+                RefreshFeed()
+            }
+            if (uiState.isProgess) {
+                Loading()
             }
         }
     }

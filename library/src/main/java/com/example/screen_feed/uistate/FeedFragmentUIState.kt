@@ -42,8 +42,7 @@ fun FeedFragmentUIstate.isVisibleRefreshButton(): Boolean {
 //-------------------------------------------------------------------------------------------
 fun getTestSenarioFeedFragmentUIstate(
     lifecycleOwner: LifecycleOwner,
-    context: Context,
-    view: View
+    context: Context
 ): StateFlow<FeedFragmentUIstate> {
     val data = MutableStateFlow(getTestEmptyFeedFragmentUIstate())
     val delayCount = 1000L
