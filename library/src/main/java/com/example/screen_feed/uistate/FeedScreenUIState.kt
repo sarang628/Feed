@@ -5,7 +5,6 @@ import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.library.JsonToObjectGenerator
 import com.example.screen_feed.data.Feed
 import kotlinx.coroutines.delay
@@ -26,7 +25,6 @@ data class FeedsScreenUiState(
     val isFailedConnection: Boolean = false,
     // 로그인 여부
     val isLogin: Boolean = false,
-    val onRefreshListener: SwipeRefreshLayout.OnRefreshListener? = null, //스와이프 레이아웃을 리프레시 할 때 호출되는 이벤트
     val onAddReviewClickListener: Toolbar.OnMenuItemClickListener? = null, // 리뷰를 추가 할 때 호출되는 이벤트
     val reLoad: View.OnClickListener? = null, // 갱신 아답터
     val feeds: ArrayList<Feed>? = null,
@@ -102,8 +100,7 @@ fun getTestEmptyFeedFragmentUIstate(): FeedsScreenUiState {
         isProgess = false,
         isLogin = false,
         reLoad = {},
-        onAddReviewClickListener = { false },
-        onRefreshListener = {}
+        onAddReviewClickListener = { false }
     )
 }
 

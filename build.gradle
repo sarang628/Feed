@@ -13,11 +13,6 @@ ext {
     targetSdk = 30
     buildToolsVersion = '30.0.3'
 
-    ktxVersion = '1.10.0'
-    appCompatVersion = '1.6.1'
-    constraintLayoutVersion = '2.1.4'
-    swipeRefreshLayoutVersion = '1.1.0'
-
     //hilt
     hiltVersion = '2.46'
 
