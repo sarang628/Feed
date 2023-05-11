@@ -1,5 +1,6 @@
 package com.example.screen_feed
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +15,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import com.example.screen_feed.ui.EmptyFeed
 import com.example.screen_feed.ui.FeedList
 import com.example.screen_feed.ui.Loading
@@ -29,7 +32,9 @@ private fun FeedsScreen(
     uiState: FeedsScreenUiState,
     onRefresh: (() -> Unit)? = null,
 ) {
-    Column() {
+    Column(
+        Modifier.background(colorResource(id = R.color.colorSecondaryLight))
+    ) {
         TorangToolbar(clickAddReview = {
             //feedNavigation.goAddReview(requireContext(), null)
         })
