@@ -21,7 +21,6 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,7 +29,6 @@ import androidx.compose.ui.unit.sp
 import com.example.screen_feed.R
 import com.example.screen_feed.data.Feed
 import com.example.screen_feed.uistate.FeedUiState
-import com.example.screen_feed.uistate.getFeedsByFile
 
 @Preview
 @Composable
@@ -61,28 +59,21 @@ fun TorangToolbar(
 @Preview
 @Composable
 fun FeedList(
-    clickProfile : ((Int)->Unit)? = null,
-    list : List<Feed>?
+    clickProfile: ((Int) -> Unit)? = null,
+    list: List<Feed>?,
+    isRefreshing: Boolean = false,
+    onRefresh: (() -> Unit)? = null,
 ) {
-    val isRefreshing = false
-    val pullRefreshState = rememberPullRefreshState(isRefreshing, { })
-    Box(Modifier.pullRefresh(pullRefreshState)) {
-
-        LazyColumn(Modifier.fillMaxSize()) {
-            list?.let {
-                items(list.size) {
-                    ItemFeed(list[it].FeedUiState(
+    LazyColumn() {
+        list?.let {
+            items(list.size) {
+                ItemFeed(
+                    list[it].FeedUiState(
                         clickProfile = clickProfile
-                    ))
-                }
+                    )
+                )
             }
         }
-
-        PullRefreshIndicator(
-            refreshing = isRefreshing,
-            state = pullRefreshState,
-            modifier = Modifier.align(Alignment.TopCenter)
-        )
     }
 }
 
@@ -101,7 +92,7 @@ fun EmptyFeed() {
 
 @Preview
 @Composable
-fun RefreshFeed() {
+fun RefreshButton() {
     Column(
         Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,

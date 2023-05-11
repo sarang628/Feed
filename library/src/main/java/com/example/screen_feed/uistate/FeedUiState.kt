@@ -1,6 +1,5 @@
 package com.example.screen_feed.uistate
 
-import androidx.recyclerview.widget.RecyclerView
 import com.example.screen_feed.data.Feed
 
 /*피드 UIState*/

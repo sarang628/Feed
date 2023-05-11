@@ -2,7 +2,6 @@ package com.example.screen_feed.uistate
 
 import android.content.Context
 import android.view.View
-import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.example.library.JsonToObjectGenerator
@@ -25,7 +24,6 @@ data class FeedsScreenUiState(
     val isFailedConnection: Boolean = false,
     // 로그인 여부
     val isLogin: Boolean = false,
-    val onAddReviewClickListener: Toolbar.OnMenuItemClickListener? = null, // 리뷰를 추가 할 때 호출되는 이벤트
     val reLoad: View.OnClickListener? = null, // 갱신 아답터
     val feeds: ArrayList<Feed>? = null,
 )
@@ -45,19 +43,23 @@ fun getTestSenarioFeedFragmentUIstate(
     val data = MutableStateFlow(getTestEmptyFeedFragmentUIstate())
     val delayCount = 1000L
     lifecycleOwner.lifecycleScope.launch {
-        while (true) {
+//        while (true) {
             // 스와이프 리프레시 테스트
-//            data.emit(testRefreshingOn()); delay(delayCount); data.emit(testRefreshingOff()); delay(delayCount)
+//            data.emit(testRefreshingOn()); delay(delayCount);
+//            data.emit(testRefreshingOff()); delay(delayCount)
             // 프로그레스 테스트
-//            data.emit(testProgressOn()); delay(delayCount); data.emit(testProgressOff()); delay(delayCount)
+//            data.emit(testProgressOn()); delay(delayCount);
+//            data.emit(testProgressOff()); delay(delayCount)
             // 비어있는 피드 테스트
-//            data.emit(testEmptyFeedOn()); delay(delayCount); data.emit(testEmptyFeedOff()); delay(delayCount)
+//            data.emit(testEmptyFeedOn()); delay(delayCount);
+//            data.emit(testEmptyFeedOff()); delay(delayCount)
             // 네트워크 연결 실패 테스트
-//            data.emit(testFailedConnectionOn()); delay(delayCount); data.emit(testFailedConnectionOff()); delay(delayCount)
+//            data.emit(testFailedConnectionOn()); delay(delayCount);
+//            data.emit(testFailedConnectionOff()); delay(delayCount)
             // 피드 테스트
-            data.emit(getTestFeedList(context)); delay(delayCount);
-//            data.emit(FeedFragmentUIstate()); delay(delayCount);
-        }
+//            data.emit(getTestFeedList(context)); delay(delayCount);
+//        }
+        data.emit(getTestFeedList(context));
     }
     return data
 }
@@ -99,8 +101,7 @@ fun getTestEmptyFeedFragmentUIstate(): FeedsScreenUiState {
         isRefreshing = false,
         isProgess = false,
         isLogin = false,
-        reLoad = {},
-        onAddReviewClickListener = { false }
+        reLoad = {}
     )
 }
 
