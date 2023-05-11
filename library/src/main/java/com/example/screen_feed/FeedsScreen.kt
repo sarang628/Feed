@@ -10,6 +10,8 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.screen_feed.ui.EmptyFeed
@@ -23,7 +25,7 @@ import com.example.screen_feed.uistate.isVisibleRefreshButton
 // UIState 처리
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun FeedsScreen(
+private fun FeedsScreen(
     uiState: FeedsScreenUiState,
     onRefresh: (() -> Unit)? = null,
 ) {
@@ -77,4 +79,12 @@ fun FeedsScreen(
             }
         }
     }
+}
+
+@Composable
+fun FeedsScreen(feedsViewModel: FeedsViewModel) {
+    val ss by feedsViewModel.uiState.collectAsState()
+    FeedsScreen(uiState = ss, onRefresh = {
+        feedsViewModel.refresh()
+    })
 }
