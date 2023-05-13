@@ -95,7 +95,57 @@ private fun FeedsScreen(
 }
 
 @Composable
-fun FeedsScreen(feedsViewModel: FeedsViewModel) {
+fun FeedsScreen(
+    feedsViewModel: FeedsViewModel,
+    onRefresh: (() -> Unit)? = null,
+    clickProfile: ((Int) -> Unit)? = null,
+    clickRestaurant: ((Int) -> Unit)? = null,
+    clickImage: ((Int) -> Unit)? = null,
+    onMenuClickListener: ((Int) -> Unit)? = null,
+    onNameClickListener: ((Int) -> Unit)? = null,
+    onRestaurantClickListener: ((Int) -> Unit)? = null,
+    clickAddReview: ((Int) -> Unit)? = null,
+    onLikeClickListener: ((Int) -> Unit)? = null,
+    onCommentClickListener: ((Int) -> Unit)? = null,
+    onShareClickListener: ((Int) -> Unit)? = null,
+    onClickFavoriteListener: ((Int) -> Unit)? = null
+) {
+    val ss by feedsViewModel.uiState.collectAsState()
+
+    FeedsScreen(
+        uiState = ss,
+        onRefresh = onRefresh,
+        onNameClickListener = onNameClickListener,
+        onRestaurantClickListener = onRestaurantClickListener,
+        onMenuClickListener = onMenuClickListener,
+        clickRestaurant = clickRestaurant,
+        clickImage = clickImage,
+        clickProfile = clickProfile,
+        clickAddReview = clickAddReview,
+        onShareClickListener = onShareClickListener,
+        onCommentClickListener = onCommentClickListener,
+        onLikeClickListener = onLikeClickListener,
+        onClickFavoriteListener = onClickFavoriteListener
+    )
+}
+
+
+@Composable
+fun TestFeedsScreen(
+    feedsViewModel: FeedsViewModel,
+    onRefresh: (() -> Unit)? = null,
+    clickProfile: ((Int) -> Unit)? = null,
+    clickRestaurant: ((Int) -> Unit)? = null,
+    clickImage: ((Int) -> Unit)? = null,
+    onMenuClickListener: ((Int) -> Unit)? = null,
+    onNameClickListener: ((Int) -> Unit)? = null,
+    onRestaurantClickListener: ((Int) -> Unit)? = null,
+    clickAddReview: ((Int) -> Unit)? = null,
+    onLikeClickListener: ((Int) -> Unit)? = null,
+    onCommentClickListener: ((Int) -> Unit)? = null,
+    onShareClickListener: ((Int) -> Unit)? = null,
+    onClickFavoriteListener: ((Int) -> Unit)? = null
+) {
     val ss by feedsViewModel.uiState.collectAsState()
 
     FeedsScreen(uiState = ss,
