@@ -1,6 +1,7 @@
 package com.example.screen_feed.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,7 +22,12 @@ import com.example.screen_feed.uistate.FeedBottomUIState
 @Composable
 fun ItemFeedBottom(uiState: FeedBottomUIState?) {
     Column(Modifier.padding()) {
-        ReactionBar()
+        ReactionBar(
+            onClickFavoriteListener = uiState?.onClickFavoriteListener,
+            onCommentClickListener = uiState?.onCommentClickListener,
+            onLikeClickListener = uiState?.onLikeClickListener,
+            onShareClickListener = uiState?.onShareClickListener
+        )
         Spacer(modifier = Modifier.height(8.dp))
         ItemFeedComment(
             contents = uiState?.contents,
@@ -39,25 +45,37 @@ fun ItemFeedBottom(uiState: FeedBottomUIState?) {
 }
 
 @Composable
-fun ReactionBar() {
+fun ReactionBar(
+    onLikeClickListener: ((Int) -> Unit)? = null,
+    onCommentClickListener: ((Int) -> Unit)? = null,
+    onShareClickListener: ((Int) -> Unit)? = null,
+    onClickFavoriteListener: ((Int) -> Unit)? = null,
+) {
     Row() {
         Spacer(modifier = Modifier.padding(start = 8.dp))
         Image(
             painter = painterResource(id = R.drawable.b3s),
             contentDescription = "",
-            modifier = Modifier.size(25.dp)
+            modifier = Modifier.size(25.dp).clickable {
+                onLikeClickListener?.invoke(0)
+            }
         )
         Spacer(modifier = Modifier.padding(start = 12.dp))
         Image(
             painter = painterResource(id = R.drawable.chat),
             contentDescription = "",
             modifier = Modifier.size(25.dp)
+                .clickable {
+                    onCommentClickListener?.invoke(0)
+                }
         )
         Spacer(modifier = Modifier.padding(start = 12.dp))
         Image(
             painter = painterResource(id = R.drawable.message),
             contentDescription = "",
-            modifier = Modifier.size(25.dp)
+            modifier = Modifier.size(25.dp).clickable {
+                onShareClickListener?.invoke(0)
+            }
         )
 
         Text(text = "", modifier = Modifier.weight(1f))
@@ -65,7 +83,9 @@ fun ReactionBar() {
         Image(
             painter = painterResource(id = R.drawable.star),
             contentDescription = "",
-            modifier = Modifier.size(25.dp)
+            modifier = Modifier.size(25.dp).clickable {
+                onClickFavoriteListener?.invoke(0)
+            }
         )
         Spacer(modifier = Modifier.padding(start = 4.dp))
     }

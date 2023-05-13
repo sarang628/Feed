@@ -55,21 +55,36 @@ fun TorangToolbar(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
-@Preview
 @Composable
 fun FeedList(
     clickProfile: ((Int) -> Unit)? = null,
     list: List<Feed>?,
     isRefreshing: Boolean = false,
     onRefresh: (() -> Unit)? = null,
+    clickRestaurant: ((Int) -> Unit)? = null,
+    clickImage: ((Int) -> Unit)? = null,
+    onMenuClickListener: ((Int) -> Unit)? = null,
+    onNameClickListener: ((Int) -> Unit)? = null,
+    onRestaurantClickListener: ((Int) -> Unit)? = null,
+    onLikeClickListener: ((Int) -> Unit)? = null,
+    onCommentClickListener: ((Int) -> Unit)? = null,
+    onShareClickListener: ((Int) -> Unit)? = null,
+    onClickFavoriteListener: ((Int) -> Unit)? = null
 ) {
     LazyColumn() {
         list?.let {
             items(list.size) {
                 ItemFeed(
                     list[it].FeedUiState(
-                        clickProfile = clickProfile
+                        clickProfile = clickProfile,
+                        clickImage = clickImage,
+                        onMenuClickListener = onMenuClickListener,
+                        onNameClickListener = onNameClickListener,
+                        onRestaurantClickListener = onRestaurantClickListener,
+                        onShareClickListener = onShareClickListener,
+                        onLikeClickListener = onLikeClickListener,
+                        onCommentClickListener = onCommentClickListener,
+                        onClickFavoriteListener = onClickFavoriteListener
                     )
                 )
             }

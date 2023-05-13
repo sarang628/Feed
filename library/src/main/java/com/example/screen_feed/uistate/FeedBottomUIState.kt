@@ -24,7 +24,12 @@ data class FeedBottomUIState(
     val contents: String? = ""
 )
 
-fun Feed.FeedBottomUIState(): FeedBottomUIState {
+fun Feed.FeedBottomUIState(
+    onLikeClickListener: ((Int) -> Unit)? = null,
+    onCommentClickListener: ((Int) -> Unit)? = null,
+    onShareClickListener: ((Int) -> Unit)? = null,
+    onClickFavoriteListener: ((Int) -> Unit)? = null
+): FeedBottomUIState {
     return FeedBottomUIState(
         reviewId = this.reviewId,
         likeAmount = this.likeAmount,
@@ -37,6 +42,10 @@ fun Feed.FeedBottomUIState(): FeedBottomUIState {
         comment2 = this.comment2,
         isLike = this.isLike,
         isFavorite = this.isFavorite,
-        contents = this.contents
+        contents = this.contents,
+        onLikeClickListener = onLikeClickListener,
+        onCommentClickListener = onCommentClickListener,
+        onShareClickListener = onShareClickListener,
+        onClickFavoriteListener = onClickFavoriteListener
     )
 }

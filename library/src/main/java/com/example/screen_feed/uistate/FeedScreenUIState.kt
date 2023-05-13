@@ -26,6 +26,7 @@ data class FeedsScreenUiState(
     val isLogin: Boolean = false,
     val reLoad: View.OnClickListener? = null, // 갱신 아답터
     val feeds: ArrayList<Feed>? = null,
+    val snackBar: String? = null
 )
 
 fun FeedsScreenUiState.isVisibleRefreshButton(): Boolean {
@@ -44,19 +45,19 @@ fun getTestSenarioFeedFragmentUIstate(
     val delayCount = 1000L
     lifecycleOwner.lifecycleScope.launch {
 //        while (true) {
-            // 스와이프 리프레시 테스트
+        // 스와이프 리프레시 테스트
 //            data.emit(testRefreshingOn()); delay(delayCount);
 //            data.emit(testRefreshingOff()); delay(delayCount)
-            // 프로그레스 테스트
+        // 프로그레스 테스트
 //            data.emit(testProgressOn()); delay(delayCount);
 //            data.emit(testProgressOff()); delay(delayCount)
-            // 비어있는 피드 테스트
+        // 비어있는 피드 테스트
 //            data.emit(testEmptyFeedOn()); delay(delayCount);
 //            data.emit(testEmptyFeedOff()); delay(delayCount)
-            // 네트워크 연결 실패 테스트
+        // 네트워크 연결 실패 테스트
 //            data.emit(testFailedConnectionOn()); delay(delayCount);
 //            data.emit(testFailedConnectionOff()); delay(delayCount)
-            // 피드 테스트
+        // 피드 테스트
 //            data.emit(getTestFeedList(context)); delay(delayCount);
 //        }
         data.emit(getTestFeedList(context));

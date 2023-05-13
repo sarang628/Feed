@@ -59,7 +59,7 @@ class FeedsViewModel(val context: Context) : ViewModel() {
         }
     }
 
-    fun testShowEmpty(){
+    fun testShowEmpty() {
         viewModelScope.launch {
             _uiState.emit(testEmptyFeedOn());
         }
@@ -69,7 +69,7 @@ class FeedsViewModel(val context: Context) : ViewModel() {
         viewModelScope.launch {
             _uiState.emit(
                 _uiState.value.copy(
-                    isRefreshing = true
+                    isRefreshing = true,
                 )
             )
             delay(2000)
@@ -79,7 +79,89 @@ class FeedsViewModel(val context: Context) : ViewModel() {
                 )
             )
         }
+    }
 
+    fun clickName() {
+        viewModelScope.launch {
+            _uiState.emit(_uiState.value.copy(snackBar = "clickName"))
+            delay(1000)
+            _uiState.emit(_uiState.value.copy(snackBar = null))
+        }
+    }
+
+    fun clickRestaurant() {
+        viewModelScope.launch {
+            _uiState.emit(_uiState.value.copy(snackBar = "clickRestaurant"))
+            delay(1000)
+            _uiState.emit(_uiState.value.copy(snackBar = null))
+        }
+
+    }
+
+    fun clickMenu() {
+        viewModelScope.launch {
+            _uiState.emit(_uiState.value.copy(snackBar = "clickMenu"))
+            delay(1000)
+            _uiState.emit(_uiState.value.copy(snackBar = null))
+        }
+
+    }
+
+    fun clickImage() {
+        viewModelScope.launch {
+            _uiState.emit(_uiState.value.copy(snackBar = "clickImage"))
+            delay(1000)
+            _uiState.emit(_uiState.value.copy(snackBar = null))
+        }
+
+    }
+
+    fun clickProfile() {
+        viewModelScope.launch {
+            _uiState.emit(_uiState.value.copy(snackBar = "clickProfile"))
+            delay(1000)
+            _uiState.emit(_uiState.value.copy(snackBar = null))
+        }
+    }
+
+    fun clickAddReview() {
+        viewModelScope.launch {
+            _uiState.emit(_uiState.value.copy(snackBar = "clickAddReview"))
+            delay(1000)
+            _uiState.emit(_uiState.value.copy(snackBar = null))
+        }
+    }
+
+    fun clickShare() {
+        viewModelScope.launch {
+            _uiState.emit(_uiState.value.copy(snackBar = "clickShare"))
+            delay(1000)
+            _uiState.emit(_uiState.value.copy(snackBar = null))
+        }
+    }
+
+    fun clickComment() {
+        viewModelScope.launch {
+            _uiState.emit(_uiState.value.copy(snackBar = "clickComment"))
+            delay(1000)
+            _uiState.emit(_uiState.value.copy(snackBar = null))
+        }
+    }
+
+    fun clickLike() {
+        viewModelScope.launch {
+            _uiState.emit(_uiState.value.copy(snackBar = "clickLike"))
+            delay(1000)
+            _uiState.emit(_uiState.value.copy(snackBar = null))
+        }
+    }
+
+    fun clickFavorite() {
+        viewModelScope.launch {
+            _uiState.emit(_uiState.value.copy(snackBar = "clickFavorite"))
+            delay(1000)
+            _uiState.emit(_uiState.value.copy(snackBar = null))
+        }
     }
 
 }

@@ -55,12 +55,14 @@ fun ItemFeedTop(uiState: FeedTopUIState? = null) {
                 }
             }
             Text(
-                text = uiState.restaurantName ?: "", color = Color.DarkGray, modifier = Modifier.clickable {
+                text = uiState.restaurantName ?: "",
+                color = Color.DarkGray,
+                modifier = Modifier.clickable {
                     uiState.onRestaurantClickListener?.invoke(0)
                 }
             )
         }
-        menu()
+        menu(uiState.onMenuClickListener)
     }
 }
 
@@ -80,8 +82,13 @@ fun RatingBar(rating: Float) {
 }
 
 @Composable
-fun menu() {
-    Column(Modifier.padding(end = Dp(10f))) {
+fun menu(clickMenu: ((Int) -> Unit)? = null) {
+    Column(
+        Modifier
+            .padding(end = Dp(10f))
+            .clickable {
+                clickMenu?.invoke(0)
+            }) {
         Image(
             painter = painterResource(id = R.drawable.dot),
             contentDescription = "",
@@ -93,5 +100,11 @@ fun menu() {
 @Preview
 @Composable
 fun test() {
-    ItemFeedTop()
+    val feedTopUiState = FeedTopUIState(
+        name = "강아지",
+        profilePictureUrl = "http://sarang628.iptime.org:88/1.png",
+        restaurantName = "치킨카레"
+    )
+
+    ItemFeedTop(feedTopUiState)
 }
