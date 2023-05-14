@@ -91,7 +91,7 @@ fun PagerIndicator(
 
 @Preview
 @Composable
-fun testItemFeedMid() {
+fun PreViewItemFeedMid() {
     Column() {
         ItemFeedMid(arrayListOf("", "", ""))
     }

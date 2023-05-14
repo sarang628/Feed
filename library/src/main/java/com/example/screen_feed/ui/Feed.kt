@@ -24,7 +24,7 @@ fun ItemFeed(uiState: FeedUiState) {
 
 @Preview
 @Composable
-fun preViewItemFeed() {
-    var list = getFeedsByFile(LocalContext.current)
+fun PreViewItemFeed() {
+    val list = getFeedsByFile(LocalContext.current)
     ItemFeed(uiState = list[0].FeedUiState())
 }
