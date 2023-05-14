@@ -100,6 +100,7 @@ fun ItemFeedComment(
 }
 ```
 <img src="screenshots/feed_bottom.png"/>
+
 ### UIState 활용
 
 ### MVVM 아키텍처 적용

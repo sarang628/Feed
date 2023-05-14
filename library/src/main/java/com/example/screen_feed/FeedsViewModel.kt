@@ -49,7 +49,7 @@ class FeedsViewModel(private val context: Context) : ViewModel() {
                 _uiState.emit(testFailedConnectionOn()); delay(delayCount);
                 _uiState.emit(testFailedConnectionOff()); delay(delayCount)
 //             피드 테스트
-                _uiState.emit(getTestFeedList(context)); delay(10000);
+                _uiState.emit(getTestFeedList(context)); delay(30000);
             }
         }
     }
