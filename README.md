@@ -47,6 +47,59 @@ FeedsScreen(feedsViewModel = FeedsViewModel(this))
 
 ### Jetpack Compose 사용
 
+```
+@Composable
+@Composable
+fun ItemFeedComment(
+    contents: String? = "",
+    likeAmount: Int? = 0,
+    author: String? = "",
+    comment: String? = "",
+    commentAmount: Int? = 0,
+    author1: String? = "",
+    comment1: String? = "",
+    author2: String? = "",
+    comment2: String? = ""
+) {
+    Column(Modifier.padding(start = 8.dp)) {
+        if (contents != null)
+            Text(text = contents)
+
+        if (likeAmount != null) {
+            if (likeAmount > 0)
+                Text(text = "좋아요 $likeAmount 개", color = Color.DarkGray)
+        }
+
+        if (author != null)
+            Row() {
+                Text(text = author, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.padding(start = 3.dp))
+                Text(text = comment ?: "")
+            }
+
+        if (commentAmount != null) {
+            if (commentAmount > 0)
+                Text(text = "댓글 $commentAmount 개 모두보기", color = Color.DarkGray)
+        }
+
+        if (author1 != null)
+            Row() {
+                Text(text = author1, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.padding(start = 3.dp))
+                Text(text = comment1 ?: "")
+            }
+
+        if (author2 != null)
+            Row() {
+                Text(text = author2, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.padding(start = 3.dp))
+                Text(text = comment2 ?: "")
+            }
+    }
+
+}
+```
+<img src="screenshots/feed_bottom.png"/>
 ### UIState 활용
 
 ### MVVM 아키텍처 적용

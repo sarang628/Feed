@@ -24,53 +24,55 @@ import com.example.screen_feed.uistate.isVisibleRefreshButton
 @Composable
 private fun FeedsScreen(
     uiState: FeedsScreenUiState,
-    onRefresh: (() -> Unit)? = null,
-    clickProfile: ((Int) -> Unit)? = null,
-    clickRestaurant: ((Int) -> Unit)? = null,
-    clickImage: ((Int) -> Unit)? = null,
-    onMenuClickListener: ((Int) -> Unit)? = null,
-    onNameClickListener: ((Int) -> Unit)? = null,
-    onRestaurantClickListener: ((Int) -> Unit)? = null,
-    clickAddReview: ((Int) -> Unit)? = null,
-    onLikeClickListener: ((Int) -> Unit)? = null,
-    onCommentClickListener: ((Int) -> Unit)? = null,
-    onShareClickListener: ((Int) -> Unit)? = null,
-    onClickFavoriteListener: ((Int) -> Unit)? = null
+    onRefresh: (() -> Unit)? = null, // 스와이프 리프레시 이벤트
+    clickProfile: ((Int) -> Unit)? = null, // 프로필 이미지 클릭
+    clickRestaurant: ((Int) -> Unit)? = null, // 식당명 클릭
+    clickImage: ((Int) -> Unit)? = null, // 이미지 클릭
+    clickMenu: ((Int) -> Unit)? = null, // 피드 메뉴 클릭
+    clickName: ((Int) -> Unit)? = null, // 이름 클릭
+    clickAddReview: ((Int) -> Unit)? = null, // 리뷰 추가 클릭
+    clickLike: ((Int) -> Unit)? = null, // 좋아요 클릭
+    clickComment: ((Int) -> Unit)? = null, // 코멘트 클릭
+    clickShare: ((Int) -> Unit)? = null, // 공유 클릭
+    clickFavority: ((Int) -> Unit)? = null // 즐겨찾기 클릭
 ) {
     Box() {
         Column(
             Modifier.background(colorResource(id = R.color.colorSecondaryLight))
         ) {
+            // 타이틀과 추가버튼이 있는 툴바
             TorangToolbar(clickAddReview = {
                 clickAddReview?.invoke(0)
             })
             Box {
-
+                // 피드와 스와이프 리프레시
                 FeedWithRefresh(
                     feeds = uiState.feeds,
                     isRefreshing = uiState.isRefreshing,
                     onRefresh = onRefresh,
                     clickProfile = clickProfile,
                     clickRestaurant = clickRestaurant,
-                    onMenuClickListener = onMenuClickListener,
-                    onRestaurantClickListener = onRestaurantClickListener,
+                    onMenuClickListener = clickMenu,
                     clickImage = clickImage,
-                    onNameClickListener = onNameClickListener,
-                    onLikeClickListener = onLikeClickListener,
-                    onCommentClickListener = onCommentClickListener,
-                    onShareClickListener = onShareClickListener,
-                    onClickFavoriteListener = onClickFavoriteListener
+                    onNameClickListener = clickName,
+                    onLikeClickListener = clickLike,
+                    onCommentClickListener = clickComment,
+                    onShareClickListener = clickShare,
+                    onClickFavoriteListener = clickFavority
                 )
 
                 Column {
                     if (uiState.isEmptyFeed) {
+                        // 피드가 비어있을 때
                         EmptyFeed()
                     }
 
                     if (uiState.isVisibleRefreshButton()) {
+                        // 네트워크 에러
                         NetworkError()
                     }
                     if (uiState.isProgess) {
+                        // 로딩
                         Loading()
                     }
                 }
@@ -92,30 +94,28 @@ fun FeedsScreen(
     clickProfile: ((Int) -> Unit)? = null,
     clickRestaurant: ((Int) -> Unit)? = null,
     clickImage: ((Int) -> Unit)? = null,
-    onMenuClickListener: ((Int) -> Unit)? = null,
-    onNameClickListener: ((Int) -> Unit)? = null,
-    onRestaurantClickListener: ((Int) -> Unit)? = null,
+    clickMenu: ((Int) -> Unit)? = null,
+    clickName: ((Int) -> Unit)? = null,
     clickAddReview: ((Int) -> Unit)? = null,
-    onLikeClickListener: ((Int) -> Unit)? = null,
-    onCommentClickListener: ((Int) -> Unit)? = null,
-    onShareClickListener: ((Int) -> Unit)? = null,
-    onClickFavoriteListener: ((Int) -> Unit)? = null
+    clickLike: ((Int) -> Unit)? = null,
+    clickComment: ((Int) -> Unit)? = null,
+    clickShare: ((Int) -> Unit)? = null,
+    clickFavority: ((Int) -> Unit)? = null
 ) {
     val ss by feedsViewModel.uiState.collectAsState()
 
     FeedsScreen(
         uiState = ss,
         onRefresh = onRefresh,
-        onNameClickListener = onNameClickListener,
-        onRestaurantClickListener = onRestaurantClickListener,
-        onMenuClickListener = onMenuClickListener,
+        clickName = clickName,
+        clickMenu = clickMenu,
         clickRestaurant = clickRestaurant,
         clickImage = clickImage,
         clickProfile = clickProfile,
         clickAddReview = clickAddReview,
-        onShareClickListener = onShareClickListener,
-        onCommentClickListener = onCommentClickListener,
-        onLikeClickListener = onLikeClickListener,
-        onClickFavoriteListener = onClickFavoriteListener
+        clickShare = clickShare,
+        clickComment = clickComment,
+        clickLike = clickLike,
+        clickFavority = clickFavority
     )
 }
