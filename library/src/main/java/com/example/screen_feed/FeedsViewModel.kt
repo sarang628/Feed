@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class FeedsViewModel(val context: Context) : ViewModel() {
+class FeedsViewModel(private val context: Context) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
         FeedsScreenUiState()
@@ -28,7 +28,8 @@ class FeedsViewModel(val context: Context) : ViewModel() {
     val uiState: StateFlow<FeedsScreenUiState> = _uiState
 
     init {
-        testShowList()
+//        testShowList()
+        test()
     }
 
     fun test() {
@@ -48,7 +49,7 @@ class FeedsViewModel(val context: Context) : ViewModel() {
                 _uiState.emit(testFailedConnectionOn()); delay(delayCount);
                 _uiState.emit(testFailedConnectionOff()); delay(delayCount)
 //             피드 테스트
-                _uiState.emit(getTestFeedList(context)); delay(delayCount);
+                _uiState.emit(getTestFeedList(context)); delay(10000);
             }
         }
     }
