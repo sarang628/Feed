@@ -15,13 +15,17 @@ import androidx.compose.ui.unit.dp
 import com.example.screen_feed.uistate.FeedBottomUIState
 
 @Composable
-fun ItemFeedBottom(uiState: FeedBottomUIState?) {
+fun ItemFeedBottom(uiState: FeedBottomUIState?,
+                   onLike: ((Int) -> Unit)? = null,
+                   onComment: ((Int) -> Unit)? = null,
+                   onShare: ((Int) -> Unit)? = null,
+                   onFavorite: ((Int) -> Unit)? = null,) {
     Column(Modifier.padding()) {
         ReactionBar(
-            onClickFavoriteListener = uiState?.onClickFavoriteListener,
-            onCommentClickListener = uiState?.onCommentClickListener,
-            onLikeClickListener = uiState?.onLikeClickListener,
-            onShareClickListener = uiState?.onShareClickListener
+            onClick = onFavorite,
+            onComment = onComment,
+            onLike = onLike,
+            onShare = onShare
         )
         Spacer(modifier = Modifier.height(8.dp))
         ItemFeedComment(
@@ -61,7 +65,7 @@ fun ItemFeedComment(
         }
 
         if (author != null)
-            Row() {
+            Row {
                 Text(text = author, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.padding(start = 3.dp))
                 Text(text = comment ?: "")
@@ -73,14 +77,14 @@ fun ItemFeedComment(
         }
 
         if (author1 != null)
-            Row() {
+            Row {
                 Text(text = author1, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.padding(start = 3.dp))
                 Text(text = comment1 ?: "")
             }
 
         if (author2 != null)
-            Row() {
+            Row {
                 Text(text = author2, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.padding(start = 3.dp))
                 Text(text = comment2 ?: "")
@@ -92,7 +96,7 @@ fun ItemFeedComment(
 @Preview
 @Composable
 fun PreViewItemFeedBottom() {
-    Column() {
+    Column {
         ReactionBar()
         ItemFeedComment()
     }

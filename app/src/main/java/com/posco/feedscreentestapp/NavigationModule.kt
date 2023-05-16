@@ -10,44 +10,34 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 
-@Module
-@InstallIn(ActivityComponent::class)
-class NavigationModule {
-    @Provides
-    fun navigate(): AddReviewNavigation {
-        return object : AddReviewNavigation {
-            override fun navigate(fragment: Fragment) {
-                /*Snackbar.make(
-                    fragment.requireView(),
-                    "click AddReviewNavigation",
-                    Snackbar.LENGTH_SHORT
-                ).show()*/
-            }
-        }
-    }
-
-    @Provides
-    fun feedNavigation(): FeedNavigations {
-        return object : FeedNavigations {
-            override fun goAddReview(context: Context, view: View) {
-//                Snackbar.make(view, "goAddReview", Snackbar.LENGTH_SHORT).show()
-            }
-
-            override fun goComment(context: Context, view: View) {
-//                Snackbar.make(view, "goComment", Snackbar.LENGTH_SHORT).show()
-            }
-
-            override fun goFullImage(context: Context, view: View) {
-//                Snackbar.make(view, "goFullImage", Snackbar.LENGTH_SHORT).show()
-            }
-
-            override fun goProfile(context: Context, view: View) {
-//                Snackbar.make(view, "goProfile", Snackbar.LENGTH_SHORT).show()
-            }
-
-            override fun goRestaurant(context: Context, view: View) {
-//                Snackbar.make(view, "goRestaurant", Snackbar.LENGTH_SHORT).show()
-            }
-        }
-    }
-}
+//@Module
+//@InstallIn(ActivityComponent::class)
+//class NavigationModule {
+//    @Provides
+//    fun navigate(): AddReviewNavigation {
+//        return object : AddReviewNavigation {
+//            override fun navigate(fragment: Fragment) {
+//            }
+//        }
+//    }
+//
+//    @Provides
+//    fun feedNavigation(): FeedNavigations {
+//        return object : FeedNavigations {
+//            override fun goAddReview(context: Context, view: View) {
+//            }
+//
+//            override fun goComment(context: Context, view: View) {
+//            }
+//
+//            override fun goFullImage(context: Context, view: View) {
+//            }
+//
+//            override fun goProfile(context: Context, view: View) {
+//            }
+//
+//            override fun goRestaurant(context: Context, view: View) {
+//            }
+//        }
+//    }
+//}

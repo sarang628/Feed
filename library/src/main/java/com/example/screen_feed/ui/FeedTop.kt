@@ -21,7 +21,13 @@ import com.example.screen_feed.R
 import com.example.screen_feed.uistate.FeedTopUIState
 
 @Composable
-fun ItemFeedTop(uiState: FeedTopUIState? = null) {
+fun ItemFeedTop(
+    uiState: FeedTopUIState? = null,
+    onProfile: ((Int) -> Unit)? = null,
+    onMenu: ((Int) -> Unit)? = null,
+    onName: ((Int) -> Unit)? = null,
+    onRestaurant: ((Int) -> Unit)? = null
+) {
     if (uiState == null) {
         return
     }
@@ -38,7 +44,7 @@ fun ItemFeedTop(uiState: FeedTopUIState? = null) {
             modifier = Modifier
                 .size(Dp(30f))
                 .clickable {
-                    uiState.clickProfile?.invoke(0)
+                    onName?.invoke(0)
                 }
         )
         Column(
@@ -48,7 +54,7 @@ fun ItemFeedTop(uiState: FeedTopUIState? = null) {
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(text = uiState.name ?: "", modifier = Modifier.clickable {
-                    uiState.onNameClickListener?.invoke(0)
+                    onProfile?.invoke(0)
                 })
                 Row(Modifier.padding(start = Dp(5f))) {
                     RatingBar(uiState.rating ?: 0f)
@@ -58,31 +64,16 @@ fun ItemFeedTop(uiState: FeedTopUIState? = null) {
                 text = uiState.restaurantName ?: "",
                 color = Color.DarkGray,
                 modifier = Modifier.clickable {
-                    uiState.onRestaurantClickListener?.invoke(0)
+                    onRestaurant?.invoke(0)
                 }
             )
         }
-        menu(uiState.onMenuClickListener)
+        Menu(onMenu)
     }
 }
 
 @Composable
-fun RatingBar(rating: Float) {
-    Row() {
-        for (f in 0..rating.toInt()) {
-            Image(
-                painter = painterResource(id = R.drawable.selected_heart),
-                contentDescription = "",
-                Modifier
-                    .size(Dp(15f))
-                    .padding(start = Dp(2f))
-            )
-        }
-    }
-}
-
-@Composable
-fun menu(clickMenu: ((Int) -> Unit)? = null) {
+fun Menu(clickMenu: ((Int) -> Unit)? = null) {
     Column(
         Modifier
             .padding(end = Dp(10f))
@@ -99,7 +90,7 @@ fun menu(clickMenu: ((Int) -> Unit)? = null) {
 
 @Preview
 @Composable
-fun test() {
+fun Test() {
     val feedTopUiState = FeedTopUIState(
         name = "강아지",
         profilePictureUrl = "http://sarang628.iptime.org:88/1.png",

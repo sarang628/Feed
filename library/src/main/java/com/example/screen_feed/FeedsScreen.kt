@@ -1,5 +1,6 @@
 package com.example.screen_feed
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,54 +12,57 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import com.example.screen_feed.ui.EmptyFeed
-import com.example.screen_feed.ui.FeedWithRefresh
+import com.example.screen_feed.ui.Feeds
 import com.example.screen_feed.ui.Loading
 import com.example.screen_feed.ui.NetworkError
 import com.example.screen_feed.ui.TorangToolbar
 import com.example.screen_feed.uistate.FeedsScreenUiState
 import com.example.screen_feed.uistate.isVisibleRefreshButton
+import kotlinx.coroutines.flow.StateFlow
 
 // UIState 처리
 @Composable
-private fun FeedsScreen(
-    uiState: FeedsScreenUiState,
+fun FeedsScreen(
+    uiStateFlow: StateFlow<FeedsScreenUiState>,
     onRefresh: (() -> Unit)? = null, // 스와이프 리프레시 이벤트
-    clickProfile: ((Int) -> Unit)? = null, // 프로필 이미지 클릭
-    clickRestaurant: ((Int) -> Unit)? = null, // 식당명 클릭
-    clickImage: ((Int) -> Unit)? = null, // 이미지 클릭
-    clickMenu: ((Int) -> Unit)? = null, // 피드 메뉴 클릭
-    clickName: ((Int) -> Unit)? = null, // 이름 클릭
-    clickAddReview: ((Int) -> Unit)? = null, // 리뷰 추가 클릭
-    clickLike: ((Int) -> Unit)? = null, // 좋아요 클릭
-    clickComment: ((Int) -> Unit)? = null, // 코멘트 클릭
-    clickShare: ((Int) -> Unit)? = null, // 공유 클릭
-    clickFavority: ((Int) -> Unit)? = null // 즐겨찾기 클릭
+    onProfile: ((Int) -> Unit)? = null, // 프로필 이미지 클릭
+    onRestaurant: ((Int) -> Unit)? = null, // 식당명 클릭
+    onImage: ((Int) -> Unit)? = null, // 이미지 클릭
+    onMenu: ((Int) -> Unit)? = null, // 피드 메뉴 클릭
+    onName: ((Int) -> Unit)? = null, // 이름 클릭
+    onAddReview: ((Int) -> Unit)? = null, // 리뷰 추가 클릭
+    onLike: ((Int) -> Unit)? = null, // 좋아요 클릭
+    onComment: ((Int) -> Unit)? = null, // 코멘트 클릭
+    onShare: ((Int) -> Unit)? = null, // 공유 클릭
+    onFavorite: ((Int) -> Unit)? = null // 즐겨찾기 클릭
 ) {
-    Box() {
+    val uiState by uiStateFlow.collectAsState()
+    Box {
         Column(
             Modifier.background(colorResource(id = R.color.colorSecondaryLight))
         ) {
             // 타이틀과 추가버튼이 있는 툴바
             TorangToolbar(clickAddReview = {
-                clickAddReview?.invoke(0)
+                onAddReview?.invoke(0)
             })
             Box {
                 // 피드와 스와이프 리프레시
-                FeedWithRefresh(
+                Feeds(
                     feeds = uiState.feeds,
                     isRefreshing = uiState.isRefreshing,
                     onRefresh = onRefresh,
-                    clickProfile = clickProfile,
-                    clickRestaurant = clickRestaurant,
-                    onMenuClickListener = clickMenu,
-                    clickImage = clickImage,
-                    onNameClickListener = clickName,
-                    onLikeClickListener = clickLike,
-                    onCommentClickListener = clickComment,
-                    onShareClickListener = clickShare,
-                    onClickFavoriteListener = clickFavority
+                    onProfile = onProfile,
+                    onMenu = onMenu,
+                    onImage = onImage,
+                    onName = onName,
+                    onLike = onLike,
+                    onComment = onComment,
+                    onShare = onShare,
+                    onFavorite = onFavorite,
+                    onRestaurant = onRestaurant
                 )
 
                 Column {
@@ -71,6 +75,7 @@ private fun FeedsScreen(
                         // 네트워크 에러
                         NetworkError()
                     }
+                    Log.d("sryang123", uiState.isProgess.toString())
                     if (uiState.isProgess) {
                         // 로딩
                         Loading()
@@ -81,15 +86,14 @@ private fun FeedsScreen(
         Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom) {
             if (uiState.snackBar != null)
                 Snackbar {
-                    Text(text = uiState.snackBar)
+                    Text(text = uiState.snackBar.toString())
                 }
         }
     }
 }
 
 @Composable
-fun FeedsScreen(
-    feedsViewModel: FeedsViewModel,
+fun TestFeedsScreen(
     onRefresh: (() -> Unit)? = null,
     clickProfile: ((Int) -> Unit)? = null,
     clickRestaurant: ((Int) -> Unit)? = null,
@@ -102,20 +106,19 @@ fun FeedsScreen(
     clickShare: ((Int) -> Unit)? = null,
     clickFavority: ((Int) -> Unit)? = null
 ) {
-    val ss by feedsViewModel.uiState.collectAsState()
-
+    val feedsViewModel = FeedsViewModel(LocalContext.current)
     FeedsScreen(
-        uiState = ss,
+        uiStateFlow = feedsViewModel.uiState,
         onRefresh = onRefresh,
-        clickName = clickName,
-        clickMenu = clickMenu,
-        clickRestaurant = clickRestaurant,
-        clickImage = clickImage,
-        clickProfile = clickProfile,
-        clickAddReview = clickAddReview,
-        clickShare = clickShare,
-        clickComment = clickComment,
-        clickLike = clickLike,
-        clickFavority = clickFavority
+        onName = clickName,
+        onMenu = clickMenu,
+        onRestaurant = clickRestaurant,
+        onImage = clickImage,
+        onProfile = clickProfile,
+        onAddReview = clickAddReview,
+        onShare = clickShare,
+        onComment = clickComment,
+        onLike = clickLike,
+        onFavorite = clickFavority
     )
 }

@@ -25,7 +25,7 @@ import coil.compose.AsyncImage
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ItemFeedMid(img: List<String>?) {
+fun ItemFeedMid(img: List<String>?, onImage: ((Int) -> Unit)? = null) {
     val pagerState = rememberPagerState(0)
     if (img == null)
         return
@@ -92,7 +92,7 @@ fun PagerIndicator(
 @Preview
 @Composable
 fun PreViewItemFeedMid() {
-    Column() {
+    Column {
         ItemFeedMid(arrayListOf("", "", ""))
     }
 

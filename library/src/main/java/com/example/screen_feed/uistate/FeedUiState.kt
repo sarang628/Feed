@@ -13,33 +13,12 @@ data class FeedUiState(
 
     )
 
-fun Feed.FeedUiState(
-    clickImage: ((Int) -> Unit)? = null,
-    clickProfile: ((Int) -> Unit)? = null,
-    onMenuClickListener: ((Int) -> Unit)? = null,
-    onNameClickListener: ((Int) -> Unit)? = null,
-    onRestaurantClickListener: ((Int) -> Unit)? = null,
-    onLikeClickListener: ((Int) -> Unit)? = null,
-    onCommentClickListener: ((Int) -> Unit)? = null,
-    onShareClickListener: ((Int) -> Unit)? = null,
-    onClickFavoriteListener: ((Int) -> Unit)? = null
-): FeedUiState {
+fun Feed.FeedUiState(): FeedUiState {
     return FeedUiState(
         reviewId = this.reviewId,
-        itemFeedTopUiState = this.FeedTopUiState(
-            clickProfile = clickProfile,
-            onMenuClickListener = onMenuClickListener,
-            onNameClickListener = onNameClickListener,
-            onRestaurantClickListener = onRestaurantClickListener
-        ),
-        itemFeedBottomUiState = this.FeedBottomUIState(
-            onLikeClickListener = onLikeClickListener,
-            onCommentClickListener = onCommentClickListener,
-            onShareClickListener = onShareClickListener,
-            onClickFavoriteListener = onClickFavoriteListener
-        ),
+        itemFeedTopUiState = this.FeedTopUiState(),
+        itemFeedBottomUiState = this.FeedBottomUIState(),
         reviewImages = this.reviewImages,
-        visibleReviewImage = true,
-        imageClickListener = clickImage
+        visibleReviewImage = true
     )
 }
