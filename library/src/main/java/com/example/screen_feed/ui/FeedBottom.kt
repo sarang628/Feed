@@ -15,20 +15,25 @@ import androidx.compose.ui.unit.dp
 import com.example.screen_feed.uistate.FeedBottomUIState
 
 @Composable
-fun ItemFeedBottom(uiState: FeedBottomUIState?,
-                   onLike: ((Int) -> Unit)? = null,
-                   onComment: ((Int) -> Unit)? = null,
-                   onShare: ((Int) -> Unit)? = null,
-                   onFavorite: ((Int) -> Unit)? = null,) {
+fun FeedBottom(
+    uiState: FeedBottomUIState?,
+    onLike: ((Int) -> Unit)? = null,
+    onComment: ((Int) -> Unit)? = null,
+    onShare: ((Int) -> Unit)? = null,
+    onFavorite: ((Int) -> Unit)? = null,
+) {
     Column(Modifier.padding()) {
-        ReactionBar(
-            onClick = onFavorite,
+        FeedReaction(
+            id = uiState?.reviewId,
+            onFavorite = onFavorite,
             onComment = onComment,
             onLike = onLike,
-            onShare = onShare
+            onShare = onShare,
+            isLike = uiState?.isLike,
+            isFavorite = uiState?.isFavorite
         )
         Spacer(modifier = Modifier.height(8.dp))
-        ItemFeedComment(
+        FeedComments(
             contents = uiState?.contents,
             likeAmount = uiState?.likeAmount,
             author = uiState?.author,
@@ -44,7 +49,7 @@ fun ItemFeedBottom(uiState: FeedBottomUIState?,
 }
 
 @Composable
-fun ItemFeedComment(
+fun FeedComments(
     contents: String? = "",
     likeAmount: Int? = 0,
     author: String? = "",
@@ -97,7 +102,7 @@ fun ItemFeedComment(
 @Composable
 fun PreViewItemFeedBottom() {
     Column {
-        ReactionBar()
-        ItemFeedComment()
+        FeedReaction()
+        FeedComments()
     }
 }

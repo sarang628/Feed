@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.screen_feed.data.Feed
+import com.example.screen_feed.ui.Feeds
 import com.example.screen_feed.uistate.FeedsScreenUiState
 import com.example.screen_feed.uistate.getTestFeedList
 import com.example.screen_feed.uistate.testEmptyFeedOff
@@ -18,6 +20,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlin.streams.toList
 
 class FeedsViewModel(private val context: Context) : ViewModel() {
 
@@ -27,8 +30,8 @@ class FeedsViewModel(private val context: Context) : ViewModel() {
     val uiState: StateFlow<FeedsScreenUiState> = _uiState
 
     init {
-//        testShowList()
-        test()
+        testShowList()
+//        test()
     }
 
     fun test() {
@@ -148,19 +151,42 @@ class FeedsViewModel(private val context: Context) : ViewModel() {
         }
     }
 
-    fun clickLike() {
+    fun clickLike(id: Int) {
+        Log.d("FeedsViewModel", id.toString())
         viewModelScope.launch {
-            _uiState.emit(_uiState.value.copy(snackBar = "clickLike"))
-            delay(1000)
-            _uiState.emit(_uiState.value.copy(snackBar = null))
+            _uiState.value.feeds?.let {
+                val list = it.stream().map { feed ->
+                    if (feed.reviewId == id)
+                        feed.copy(isLike = !feed.isLike!!)
+                    else
+                        feed
+                }.toList()
+
+                _uiState.emit(
+                    _uiState.value.copy(
+                        feeds = ArrayList(list)
+                    )
+                )
+            }
         }
     }
 
-    fun clickFavorite() {
+    fun clickFavorite(id: Int) {
         viewModelScope.launch {
-            _uiState.emit(_uiState.value.copy(snackBar = "clickFavorite"))
-            delay(1000)
-            _uiState.emit(_uiState.value.copy(snackBar = null))
+            _uiState.value.feeds?.let {
+                val list = it.stream().map { feed ->
+                    if (feed.reviewId == id)
+                        feed.copy(isFavorite = !feed.isFavorite!!)
+                    else
+                        feed
+                }.toList()
+
+                _uiState.emit(
+                    _uiState.value.copy(
+                        feeds = ArrayList(list)
+                    )
+                )
+            }
         }
     }
 

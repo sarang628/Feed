@@ -17,5 +17,5 @@ data class Feed(
     val comment1: String? = null,
     val comment2: String? = null,
     val reviewImages: List<String>? = null,
-    val contents : String
+    val contents : String? = null
 )

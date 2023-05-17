@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.screen_feed.ui.EmptyFeed
 import com.example.screen_feed.ui.Feeds
 import com.example.screen_feed.ui.Loading
@@ -40,6 +41,7 @@ fun FeedsScreen(
     onFavorite: ((Int) -> Unit)? = null // 즐겨찾기 클릭
 ) {
     val uiState by uiStateFlow.collectAsState()
+    Log.d("FeedsScreen", uiState.toString())
     Box {
         Column(
             Modifier.background(colorResource(id = R.color.colorSecondaryLight))
@@ -75,7 +77,6 @@ fun FeedsScreen(
                         // 네트워크 에러
                         NetworkError()
                     }
-                    Log.d("sryang123", uiState.isProgess.toString())
                     if (uiState.isProgess) {
                         // 로딩
                         Loading()
@@ -118,7 +119,13 @@ fun TestFeedsScreen(
         onAddReview = clickAddReview,
         onShare = clickShare,
         onComment = clickComment,
-        onLike = clickLike,
-        onFavorite = clickFavority
+        onLike = {
+            clickLike?.invoke(it)
+            feedsViewModel.clickLike(it)
+        },
+        onFavorite = {
+            clickFavority?.invoke(it)
+            feedsViewModel.clickFavorite(it)
+        }
     )
 }

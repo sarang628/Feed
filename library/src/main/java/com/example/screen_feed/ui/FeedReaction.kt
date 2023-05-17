@@ -14,19 +14,22 @@ import androidx.compose.ui.unit.dp
 import com.example.screen_feed.R
 
 @Composable
-fun ReactionBar(
+fun FeedReaction(
+    id : Int? = null,
     onLike: ((Int) -> Unit)? = null,
     onComment: ((Int) -> Unit)? = null,
     onShare: ((Int) -> Unit)? = null,
-    onClick: ((Int) -> Unit)? = null,
+    onFavorite: ((Int) -> Unit)? = null,
+    isLike : Boolean? = null,
+    isFavorite : Boolean? = null
 ) {
     Row {
         Spacer(modifier = Modifier.padding(start = 8.dp))
         Image(
-            painter = painterResource(id = R.drawable.b3s),
+            painter = if(isLike != null && isLike) painterResource(id = R.drawable.selected_heart) else painterResource(id = R.drawable.b3s),
             contentDescription = "",
             modifier = Modifier.size(25.dp).clickable {
-                onLike?.invoke(0)
+                id?.let { onLike?.invoke(it) }
             }
         )
         Spacer(modifier = Modifier.padding(start = 12.dp))
@@ -50,10 +53,10 @@ fun ReactionBar(
         Text(text = "", modifier = Modifier.weight(1f))
 
         Image(
-            painter = painterResource(id = R.drawable.star),
+            painter = if(isFavorite != null && isFavorite) painterResource(id = R.drawable.selected_star) else painterResource(id = R.drawable.star),
             contentDescription = "",
             modifier = Modifier.size(25.dp).clickable {
-                onClick?.invoke(0)
+                id?.let { onFavorite?.invoke(it) }
             }
         )
         Spacer(modifier = Modifier.padding(start = 4.dp))

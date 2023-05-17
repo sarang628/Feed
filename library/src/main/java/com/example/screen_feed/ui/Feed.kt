@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,9 +25,10 @@ fun Feed(
     onRestaurant: ((Int) -> Unit)? = null,
     onImage: ((Int) -> Unit)? = null,
 ) {
+    val scope = rememberCoroutineScope()
     Column {
         ItemFeedTop(
-            uiState.itemFeedTopUiState,
+            uiState = uiState.itemFeedTopUiState,
             onProfile = onProfile,
             onMenu = onMenu,
             onName = onName,
@@ -34,7 +36,7 @@ fun Feed(
         )
         Spacer(modifier = Modifier.height(4.dp))
         ItemFeedMid(uiState.reviewImages, onImage = onImage)
-        ItemFeedBottom(
+        FeedBottom(
             uiState = uiState.itemFeedBottomUiState,
             onLike = onLike,
             onComment = onComment,
