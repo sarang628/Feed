@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import coil.compose.AsyncImage
+import com.example.library.RatingBar
 import com.example.screen_feed.R
 import com.example.screen_feed.uistate.FeedTopUIState
 
