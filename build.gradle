@@ -22,6 +22,4 @@ ext {
     torangImageLoaderVersion = 'f4a2359698'
     themeVersion = '7c191eb4e6'
     navigationModuleVersion = 'd98f57435d'
-
-    feedService = "\"real\"" // real, local, test
 }

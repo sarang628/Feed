@@ -14,14 +14,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.screen_feed.ui.EmptyFeed
 import com.example.screen_feed.ui.Feeds
 import com.example.screen_feed.ui.Loading
 import com.example.screen_feed.ui.NetworkError
 import com.example.screen_feed.ui.TorangToolbar
-import com.example.screen_feed.uistate.FeedsScreenUiState
-import com.example.screen_feed.uistate.isVisibleRefreshButton
+import com.sarang.base_feed.uistate.FeedsScreenUiState
+import com.sarang.base_feed.uistate.isVisibleRefreshButton
 import kotlinx.coroutines.flow.StateFlow
 
 // UIState 처리
