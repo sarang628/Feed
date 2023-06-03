@@ -14,7 +14,7 @@ ext {
     buildToolsVersion = '30.0.3'
 
     //hilt
-    hiltVersion = '2.46'
+    hiltVersion = '2.44'
 
     //navigation
     navigationVersion = '2.4.0-alpha06'
@@ -22,4 +22,6 @@ ext {
     torangImageLoaderVersion = 'f4a2359698'
     themeVersion = '7c191eb4e6'
     navigationModuleVersion = 'd98f57435d'
+    repositoryVersion = '67fb33b59c'
+    baseFeedVersion = 'ae8504ef7b'
 }
