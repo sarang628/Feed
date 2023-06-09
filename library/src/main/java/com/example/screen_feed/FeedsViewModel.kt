@@ -1,11 +1,10 @@
 package com.example.screen_feed
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.screen_feed.data.Feed
 import com.sarang.base_feed.uistate.FeedsScreenUiState
-import com.sarang.base_feed.uistate.getTestFeedList
 import com.sarang.base_feed.uistate.testEmptyFeedOff
 import com.sarang.base_feed.uistate.testEmptyFeedOn
 import com.sarang.base_feed.uistate.testFailedConnectionOff
@@ -14,13 +13,18 @@ import com.sarang.base_feed.uistate.testProgressOff
 import com.sarang.base_feed.uistate.testProgressOn
 import com.sarang.base_feed.uistate.testRefreshingOff
 import com.sarang.base_feed.uistate.testRefreshingOn
+import com.sryang.torang_repository.data.dao.FeedDao
+import com.sryang.torang_repository.data.entity.FeedEntity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.streams.toList
 
-class FeedsViewModel(private val context: Context) : ViewModel() {
+class FeedsViewModel @Inject constructor(
+    val feedDao: FeedDao
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
         FeedsScreenUiState()
@@ -30,6 +34,34 @@ class FeedsViewModel(private val context: Context) : ViewModel() {
     init {
         testShowList()
 //        test()
+
+        viewModelScope.launch {
+            feedDao.getMyFeed(4).collect {
+                Log.d("sryang!!!", it.size.toString())
+                _uiState.emit(
+                    _uiState.value.copy(
+                        feeds = ArrayList<Feed>().apply {
+                            addAll(
+                                it.stream().map { feedEntity ->
+                                    Log.d("sryang!!!", feedEntity.toString())
+                                    feedEntity.toFeed()
+                                }.toList()
+                            )
+                        }
+                    )
+                )
+            }
+        }
+
+    }
+
+    fun FeedEntity.toFeed(): Feed {
+        return Feed(
+            name = userName,
+            contents = contents,
+            rating = rating,
+            profilePictureUrl = profilePicUrl
+        )
     }
 
     fun test() {
@@ -49,15 +81,15 @@ class FeedsViewModel(private val context: Context) : ViewModel() {
                 _uiState.emit(testFailedConnectionOn()); delay(delayCount)
                 _uiState.emit(testFailedConnectionOff()); delay(delayCount)
 //             피드 테스트
-                _uiState.emit(getTestFeedList(context)); delay(30000)
+//                _uiState.emit(getTestFeedList(context)); delay(30000)
             }
         }
     }
 
     fun testShowList() {
-        viewModelScope.launch {
-            _uiState.emit(getTestFeedList(context))
-        }
+//        viewModelScope.launch {
+//            _uiState.emit(getTestFeedList(context))
+//        }
     }
 
     fun testShowEmpty() {

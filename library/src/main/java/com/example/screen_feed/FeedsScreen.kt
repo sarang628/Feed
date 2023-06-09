@@ -94,6 +94,7 @@ fun FeedsScreen(
 
 @Composable
 fun TestFeedsScreen(
+    feedsViewModel: FeedsViewModel,
     onRefresh: (() -> Unit)? = null,
     clickProfile: ((Int) -> Unit)? = null,
     clickRestaurant: ((Int) -> Unit)? = null,
@@ -106,7 +107,6 @@ fun TestFeedsScreen(
     clickShare: ((Int) -> Unit)? = null,
     clickFavority: ((Int) -> Unit)? = null
 ) {
-    val feedsViewModel = FeedsViewModel(LocalContext.current)
     FeedsScreen(
         uiStateFlow = feedsViewModel.uiState,
         onRefresh = onRefresh,
