@@ -1,6 +1,7 @@
 package com.example.screen_feed
 
 import android.util.Log
+import android.view.InputEvent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.screen_feed.ui.EmptyFeed
 import com.example.screen_feed.ui.Feeds
 import com.example.screen_feed.ui.Loading
@@ -21,23 +23,14 @@ import com.example.screen_feed.ui.NetworkError
 import com.example.screen_feed.ui.TorangToolbar
 import com.sarang.base_feed.uistate.FeedsScreenUiState
 import com.sarang.base_feed.uistate.isVisibleRefreshButton
+import com.sryang.torang_repository.data.dao.FeedDao
 import kotlinx.coroutines.flow.StateFlow
 
 // UIState 처리
 @Composable
 fun FeedsScreen(
     uiStateFlow: StateFlow<FeedsScreenUiState>,
-    onRefresh: (() -> Unit)? = null, // 스와이프 리프레시 이벤트
-    onProfile: ((Int) -> Unit)? = null, // 프로필 이미지 클릭
-    onRestaurant: ((Int) -> Unit)? = null, // 식당명 클릭
-    onImage: ((Int) -> Unit)? = null, // 이미지 클릭
-    onMenu: ((Int) -> Unit)? = null, // 피드 메뉴 클릭
-    onName: ((Int) -> Unit)? = null, // 이름 클릭
-    onAddReview: ((Int) -> Unit)? = null, // 리뷰 추가 클릭
-    onLike: ((Int) -> Unit)? = null, // 좋아요 클릭
-    onComment: ((Int) -> Unit)? = null, // 코멘트 클릭
-    onShare: ((Int) -> Unit)? = null, // 공유 클릭
-    onFavorite: ((Int) -> Unit)? = null // 즐겨찾기 클릭
+    inputEvents: FeedsScreenInputEvents?
 ) {
     val uiState by uiStateFlow.collectAsState()
     Log.d("FeedsScreen", uiState.toString())
@@ -47,23 +40,23 @@ fun FeedsScreen(
         ) {
             // 타이틀과 추가버튼이 있는 툴바
             TorangToolbar(clickAddReview = {
-                onAddReview?.invoke(0)
+                inputEvents?.onAddReview?.invoke(0)
             })
             Box {
                 // 피드와 스와이프 리프레시
                 Feeds(
                     feeds = uiState.feeds,
                     isRefreshing = uiState.isRefreshing,
-                    onRefresh = onRefresh,
-                    onProfile = onProfile,
-                    onMenu = onMenu,
-                    onImage = onImage,
-                    onName = onName,
-                    onLike = onLike,
-                    onComment = onComment,
-                    onShare = onShare,
-                    onFavorite = onFavorite,
-                    onRestaurant = onRestaurant
+                    onRefresh = inputEvents?.onRefresh,
+                    onProfile = inputEvents?.onProfile,
+                    onMenu = inputEvents?.onMenu,
+                    onImage = inputEvents?.onImage,
+                    onName = inputEvents?.onName,
+                    onLike = inputEvents?.onLike,
+                    onComment = inputEvents?.onComment,
+                    onShare = inputEvents?.onShare,
+                    onFavorite = inputEvents?.onFavorite,
+                    onRestaurant = inputEvents?.onRestaurant
                 )
 
                 Column {
@@ -95,36 +88,24 @@ fun FeedsScreen(
 @Composable
 fun TestFeedsScreen(
     feedsViewModel: FeedsViewModel,
-    onRefresh: (() -> Unit)? = null,
-    clickProfile: ((Int) -> Unit)? = null,
-    clickRestaurant: ((Int) -> Unit)? = null,
-    clickImage: ((Int) -> Unit)? = null,
-    clickMenu: ((Int) -> Unit)? = null,
-    clickName: ((Int) -> Unit)? = null,
-    clickAddReview: ((Int) -> Unit)? = null,
-    clickLike: ((Int) -> Unit)? = null,
-    clickComment: ((Int) -> Unit)? = null,
-    clickShare: ((Int) -> Unit)? = null,
-    clickFavority: ((Int) -> Unit)? = null
+    feedsScreenInputEvents: FeedsScreenInputEvents? = null
 ) {
     FeedsScreen(
         uiStateFlow = feedsViewModel.uiState,
-        onRefresh = onRefresh,
-        onName = clickName,
-        onMenu = clickMenu,
-        onRestaurant = clickRestaurant,
-        onImage = clickImage,
-        onProfile = clickProfile,
-        onAddReview = clickAddReview,
-        onShare = clickShare,
-        onComment = clickComment,
-        onLike = {
-            clickLike?.invoke(it)
-            feedsViewModel.clickLike(it)
-        },
-        onFavorite = {
-            clickFavority?.invoke(it)
-            feedsViewModel.clickFavorite(it)
-        }
+        inputEvents = feedsScreenInputEvents
     )
 }
+
+data class FeedsScreenInputEvents(
+    val onRefresh: (() -> Unit)? = null, // 스와이프 리프레시 이벤트
+    val onProfile: ((Int) -> Unit)? = null, // 프로필 이미지 클릭
+    val onRestaurant: ((Int) -> Unit)? = null, // 식당명 클릭
+    val onImage: ((Int) -> Unit)? = null, // 이미지 클릭
+    val onMenu: ((Int) -> Unit)? = null, // 피드 메뉴 클릭
+    val onName: ((Int) -> Unit)? = null, // 이름 클릭
+    val onAddReview: ((Int) -> Unit)? = null, // 리뷰 추가 클릭
+    val onLike: ((Int) -> Unit)? = null, // 좋아요 클릭
+    val onComment: ((Int) -> Unit)? = null, // 코멘트 클릭
+    val onShare: ((Int) -> Unit)? = null, // 공유 클릭
+    val onFavorite: ((Int) -> Unit)? = null // 즐겨찾기 클릭
+)
