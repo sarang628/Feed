@@ -3,6 +3,7 @@ package com.posco.feedscreentestapp.di
 import com.sryang.torang_repository.data.AppDatabase
 import com.sryang.torang_repository.data.dao.FeedDao
 import com.sryang.torang_repository.data.dao.LoggedInUserDao
+import com.sryang.torang_repository.data.dao.PictureDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,5 +15,10 @@ class DaoModules {
     @Provides
     fun provideFeedDao(appDatabase: AppDatabase): FeedDao {
         return appDatabase.feedDao()
+    }
+
+    @Provides
+    fun providePictureDao(appDatabase: AppDatabase) : PictureDao{
+        return appDatabase.pictureDao()
     }
 }

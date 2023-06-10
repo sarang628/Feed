@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.screen_feed.FeedsViewModel
 import com.example.screen_feed.TestFeedsScreen
 import com.sryang.torang_repository.data.dao.FeedDao
+import com.sryang.torang_repository.data.dao.PictureDao
 import com.sryang.torang_repository.data.entity.FeedEntity
 import com.sryang.torang_repository.test.FeedRepositoryTest
 import com.sryang.torang_repository.test.FeedTestMenu
@@ -27,6 +28,9 @@ class FeedsFragmentTestActivity : ComponentActivity() {
     @Inject
     lateinit var feedDao: FeedDao
 
+    @Inject
+    lateinit var pictureDao: PictureDao
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -34,8 +38,8 @@ class FeedsFragmentTestActivity : ComponentActivity() {
             TestFeedsScreen(feedsViewModel = feedsViewModel)
 //
 //            Feed 데이터 테스트
-//            FeedRepositoryTest(context = LocalContext.current, feedDao = feedDao)
-            
+//            FeedRepositoryTest(context = LocalContext.current, feedDao = feedDao, pictureDao = pictureDao)
+
         }
     }
 }

@@ -15,9 +15,11 @@ import com.sarang.base_feed.uistate.testRefreshingOff
 import com.sarang.base_feed.uistate.testRefreshingOn
 import com.sryang.torang_repository.data.dao.FeedDao
 import com.sryang.torang_repository.data.entity.FeedEntity
+import com.sryang.torang_repository.data.entity.FeedEntity1
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.streams.toList
@@ -36,15 +38,13 @@ class FeedsViewModel @Inject constructor(
 //        test()
 
         viewModelScope.launch {
-            feedDao.getMyFeed(4).collect {
-                Log.d("sryang!!!", it.size.toString())
+            feedDao.getAllFeed1().collect {
                 _uiState.emit(
                     _uiState.value.copy(
                         feeds = ArrayList<Feed>().apply {
                             addAll(
-                                it.stream().map { feedEntity ->
-                                    Log.d("sryang!!!", feedEntity.toString())
-                                    feedEntity.toFeed()
+                                it.stream().map {
+                                    it.toFeed()
                                 }.toList()
                             )
                         }
@@ -52,6 +52,7 @@ class FeedsViewModel @Inject constructor(
                 )
             }
         }
+
 
     }
 
@@ -219,5 +220,13 @@ class FeedsViewModel @Inject constructor(
             }
         }
     }
+
+}
+
+fun FeedEntity1.toFeed(): Feed {
+    return Feed(
+        name = this.user.userName,
+        reviewImages = this.reviewImages.stream().map { it.picture_url }.toList()
+    )
 
 }
