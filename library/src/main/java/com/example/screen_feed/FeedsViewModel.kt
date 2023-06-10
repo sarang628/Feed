@@ -42,11 +42,7 @@ class FeedsViewModel @Inject constructor(
                 _uiState.emit(
                     _uiState.value.copy(
                         feeds = ArrayList<Feed>().apply {
-                            addAll(
-                                it.stream().map {
-                                    it.toFeed()
-                                }.toList()
-                            )
+                            addAll(it.stream().map { it.toFeed() }.toList())
                         }
                     )
                 )
@@ -226,7 +222,9 @@ class FeedsViewModel @Inject constructor(
 fun FeedEntity1.toFeed(): Feed {
     return Feed(
         name = this.user.userName,
-        reviewImages = this.reviewImages.stream().map { it.picture_url }.toList()
+        profilePictureUrl = this.user.profilePicUrl,
+        reviewImages = this.reviewImages.stream().map { it.picture_url }.toList(),
+        contents = this.user.contents,
+        restaurantName = this.user.restaurantName
     )
-
 }
