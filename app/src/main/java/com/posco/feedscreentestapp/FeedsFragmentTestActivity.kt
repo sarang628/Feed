@@ -8,11 +8,13 @@ import androidx.compose.material.Text
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.screen_feed.FeedsScreenInputEvents
 import com.example.screen_feed.FeedsViewModel
 import com.example.screen_feed.TestFeedsScreen
 import com.sryang.torang_repository.data.dao.FeedDao
 import com.sryang.torang_repository.data.dao.PictureDao
 import com.sryang.torang_repository.data.entity.FeedEntity
+import com.sryang.torang_repository.services.FeedServices
 import com.sryang.torang_repository.test.FeedRepositoryTest
 import com.sryang.torang_repository.test.FeedTestMenu
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,7 +37,13 @@ class FeedsFragmentTestActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            TestFeedsScreen(feedsViewModel = feedsViewModel)
+            TestFeedsScreen(
+                feedsViewModel = feedsViewModel, feedsScreenInputEvents = FeedsScreenInputEvents(
+                    onRefresh = {
+                        feedsViewModel.refreshFeed()
+                    }
+                )
+            )
 //
 //            Feed 데이터 테스트
 //            FeedRepositoryTest(context = LocalContext.current, feedDao = feedDao, pictureDao = pictureDao)
