@@ -23,5 +23,5 @@ ext {
     themeVersion = '7c191eb4e6'
     navigationModuleVersion = 'd98f57435d'
     repositoryVersion = '8d4bef8640'
-    baseFeedVersion = 'a02e8a9986'
+    baseFeedVersion = '401dba82c9'
 }

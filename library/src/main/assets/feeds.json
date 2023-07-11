@@ -15,9 +15,9 @@
     "contents": "새로나온 버거가 맛있군!",
     "isLike": false,
     "isFavorite": false,
-    "profilePictureUrl": "http://sarang628.iptime.org:88/1.png",
+    "profilePictureUrl": "http://sarang628.iptime.org:89/1.png",
     "reviewImages": [
-      "http://sarang628.iptime.org:88/restaurants/1-1.jpeg"
+      "http://sarang628.iptime.org:89/restaurants/1-1.jpeg"
     ]
   },
   {
@@ -36,15 +36,15 @@
     "isLike": false,
     "isFavorite": false,
     "contents": "이것은 홀리치킨 세트입니다.",
-    "profilePictureUrl": "http://sarang628.iptime.org:88/2.png",
+    "profilePictureUrl": "http://sarang628.iptime.org:89/2.png",
     "reviewImages": [
-      "http://sarang628.iptime.org:88/restaurants/2.jpeg",
-      "http://sarang628.iptime.org:88/restaurants/2-1.jpeg"
+      "http://sarang628.iptime.org:89/restaurants/2.jpeg",
+      "http://sarang628.iptime.org:89/restaurants/2-1.jpeg"
     ]
   },
   {
     "reviewId": 2,
-    "name": "여기",
+    "name": "다니엘",
     "restaurantName": "도스타코스 강남점",
     "rating": "3.5",
     "likeAmount": "20",
@@ -58,9 +58,9 @@
     "contents": "강남 도스타코스에 왔어요!",
     "isLike": false,
     "isFavorite": false,
-    "profilePictureUrl": "http://sarang628.iptime.org:88/3.png",
+    "profilePictureUrl": "http://sarang628.iptime.org:89/3.png",
     "reviewImages": [
-      "http://sarang628.iptime.org:88/restaurants/3.jpeg"
+      "http://sarang628.iptime.org:89/restaurants/3.jpeg"
     ]
   },
   {
@@ -79,9 +79,9 @@
     "contents": "강남 도스타코스에 왔어요!",
     "isLike": false,
     "isFavorite": false,
-    "profilePictureUrl": "http://sarang628.iptime.org:88/3.png",
+    "profilePictureUrl": "http://sarang628.iptime.org:89/3.png",
     "reviewImages": [
-      "http://sarang628.iptime.org:88/restaurants/4.jpeg"
+      "http://sarang628.iptime.org:89/restaurants/4.jpeg"
     ]
   },
   {
@@ -100,16 +100,16 @@
     "comment1": "채소만 보이는데?",
     "comment2": "얼마인가요?",
     "contents": "무한 삽겹살집에 왔어요!",
-    "profilePictureUrl": "http://sarang628.iptime.org:88/3.png",
+    "profilePictureUrl": "http://sarang628.iptime.org:89/3.png",
     "reviewImages": [
-      "http://sarang628.iptime.org:88/restaurants/5.jpeg",
-      "http://sarang628.iptime.org:88/restaurants/5-1.jpeg",
-      "http://sarang628.iptime.org:88/restaurants/5-2.jpeg"
+      "http://sarang628.iptime.org:89/restaurants/5.jpeg",
+      "http://sarang628.iptime.org:89/restaurants/5-1.jpeg",
+      "http://sarang628.iptime.org:89/restaurants/5-2.jpeg"
     ]
   },
   {
     "reviewId": 5,
-    "name": "6",
+    "name": "한나",
     "restaurantName": "맥도날드",
     "rating": "3.5",
     "likeAmount": "20",
@@ -117,14 +117,14 @@
     "author": "호호",
     "isLike": false,
     "isFavorite": false,
-    "profilePictureUrl": "http://sarang628.iptime.org:88/3.png",
+    "profilePictureUrl": "http://sarang628.iptime.org:89/3.png",
     "reviewImages": [
-      "http://sarang628.iptime.org:88/restaurants/6.jpeg"
+      "http://sarang628.iptime.org:89/restaurants/6.jpeg"
     ]
   },
   {
     "reviewId": 6,
-    "name": "7",
+    "name": "엘렌",
     "restaurantName": "맥도날드",
     "rating": "3.5",
     "likeAmount": "20",
@@ -132,16 +132,16 @@
     "author": "호호",
     "isLike": false,
     "isFavorite": false,
-    "profilePictureUrl": "http://sarang628.iptime.org:88/3.png",
+    "profilePictureUrl": "http://sarang628.iptime.org:89/3.png",
     "reviewImages": [
-      "http://sarang628.iptime.org:88/restaurants/7.jpeg",
-      "http://sarang628.iptime.org:88/restaurants/7-1.jpeg",
-      "http://sarang628.iptime.org:88/restaurants/7-2.jpeg"
+      "http://sarang628.iptime.org:89/restaurants/7.jpeg",
+      "http://sarang628.iptime.org:89/restaurants/7-1.jpeg",
+      "http://sarang628.iptime.org:89/restaurants/7-2.jpeg"
     ]
   },
   {
     "reviewId": 7,
-    "name": "8",
+    "name": "미카엘",
     "restaurantName": "맥도날드",
     "rating": "3.5",
     "likeAmount": "20",
@@ -149,14 +149,14 @@
     "author": "호호",
     "isLike": false,
     "isFavorite": false,
-    "profilePictureUrl": "http://sarang628.iptime.org:88/3.png",
+    "profilePictureUrl": "http://sarang628.iptime.org:89/3.png",
     "reviewImages": [
-      "http://sarang628.iptime.org:88/restaurants/8.jpeg"
+      "http://sarang628.iptime.org:89/restaurants/8.jpeg"
     ]
   },
   {
     "reviewId": 8,
-    "name": "9",
+    "name": "조안",
     "restaurantName": "맥도날드",
     "rating": "3.5",
     "likeAmount": "20",
@@ -164,12 +164,12 @@
     "author": "호호",
     "isLike": false,
     "isFavorite": false,
-    "profilePictureUrl": "http://sarang628.iptime.org:88/3.png",
+    "profilePictureUrl": "http://sarang628.iptime.org:89/3.png",
     "reviewImages": [
-      "http://sarang628.iptime.org:88/restaurants/9.jpeg",
-      "http://sarang628.iptime.org:88/restaurants/9-1.jpeg",
-      "http://sarang628.iptime.org:88/restaurants/9-2.jpeg",
-      "http://sarang628.iptime.org:88/restaurants/9-3.jpeg"
+      "http://sarang628.iptime.org:89/restaurants/9.jpeg",
+      "http://sarang628.iptime.org:89/restaurants/9-1.jpeg",
+      "http://sarang628.iptime.org:89/restaurants/9-2.jpeg",
+      "http://sarang628.iptime.org:89/restaurants/9-3.jpeg"
     ]
   }
 ]
