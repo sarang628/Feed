@@ -3,7 +3,7 @@ package com.example.screen_feed
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.screen_feed.data.Feed
+import com.sarang.base_feed.data.Feed
 import com.sarang.base_feed.uistate.FeedsScreenUiState
 import com.sryang.torang_repository.data.dao.FeedDao
 import com.sryang.torang_repository.data.entity.FeedEntity
@@ -112,6 +112,10 @@ class FeedsViewModel @Inject constructor(
                 )
             )
         }
+    }
+
+    fun onBottom() {
+        Log.d("sryang123", "onBottom!")
     }
 
 }

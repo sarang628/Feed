@@ -1,11 +1,12 @@
 package com.example.screen_feed.test
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.library.JsonToObjectGenerator
 import com.example.screen_feed.FeedsScreen
-import com.example.screen_feed.data.Feed
+import com.sarang.base_feed.data.Feed
 import com.sarang.base_feed.uistate.FeedsScreenUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -20,5 +21,11 @@ fun PreviewFeedScreenByFile() {
         }
     ))
 
-    FeedsScreen(uiStateFlow = data, inputEvents = null)
+    FeedsScreen(
+        uiStateFlow = data,
+        inputEvents = null,
+        onBottom = {
+            Log.d("sryang123", "onBottom")
+        }
+    )
 }

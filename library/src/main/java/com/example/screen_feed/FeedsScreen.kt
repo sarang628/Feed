@@ -30,7 +30,8 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun FeedsScreen(
     uiStateFlow: StateFlow<FeedsScreenUiState>,
-    inputEvents: FeedsScreenInputEvents?
+    inputEvents: FeedsScreenInputEvents?,
+    onBottom: ((Void?) -> Unit)? = null,
 ) {
     val uiState by uiStateFlow.collectAsState()
     Log.d("FeedsScreen", uiState.toString())
@@ -56,7 +57,8 @@ fun FeedsScreen(
                     onComment = inputEvents?.onComment,
                     onShare = inputEvents?.onShare,
                     onFavorite = inputEvents?.onFavorite,
-                    onRestaurant = inputEvents?.onRestaurant
+                    onRestaurant = inputEvents?.onRestaurant,
+                    onBottom = onBottom
                 )
 
                 Column {
@@ -92,7 +94,10 @@ fun TestFeedsScreen(
 ) {
     FeedsScreen(
         uiStateFlow = feedsViewModel.uiState,
-        inputEvents = feedsScreenInputEvents
+        inputEvents = feedsScreenInputEvents,
+        onBottom = {
+
+        }
     )
 }
 

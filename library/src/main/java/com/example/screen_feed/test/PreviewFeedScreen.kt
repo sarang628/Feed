@@ -3,7 +3,7 @@ package com.example.screen_feed.test
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.screen_feed.FeedsScreen
-import com.example.screen_feed.data.Feed
+import com.sarang.base_feed.data.Feed
 import com.sarang.base_feed.uistate.FeedsScreenUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -37,8 +37,38 @@ fun PreviewFeedScreen() {
             )
         }
     ))
+    FeedsScreen(uiStateFlow = data, inputEvents = null)
+}
 
+@Preview
+@Composable
+fun PreviewEmpty() {
+    val data = MutableStateFlow(
+        FeedsScreenUiState(
+            isEmptyFeed = true
+        )
+    )
+    FeedsScreen(uiStateFlow = data, inputEvents = null)
+}
 
+@Preview
+@Composable
+fun PreviewRefreshing() {
+    val data = MutableStateFlow(
+        FeedsScreenUiState(
+            isRefreshing = true
+        )
+    )
+    FeedsScreen(uiStateFlow = data, inputEvents = null)
+}
 
+@Preview
+@Composable
+fun PreviewNetworkError() {
+    val data = MutableStateFlow(
+        FeedsScreenUiState(
+            isFailedConnection = true
+        )
+    )
     FeedsScreen(uiStateFlow = data, inputEvents = null)
 }
