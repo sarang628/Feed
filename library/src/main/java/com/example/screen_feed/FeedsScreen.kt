@@ -9,7 +9,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Snackbar
 import androidx.compose.material.Text
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -32,57 +36,64 @@ fun FeedsScreen(
     uiStateFlow: StateFlow<FeedsScreenUiState>,
     inputEvents: FeedsScreenInputEvents?,
     onBottom: ((Void?) -> Unit)? = null,
+    snackBar: String = ""
 ) {
     val uiState by uiStateFlow.collectAsState()
-    Log.d("FeedsScreen", uiState.toString())
+
+    val snackBarHostState = SnackbarHostState()
+
+    LaunchedEffect(key1 = snackBar, block = {
+        if (snackBar != "")
+            snackBarHostState.showSnackbar(snackBar, null)
+    })
+
     Box {
-        Column(
-            Modifier.background(colorResource(id = R.color.colorSecondaryLight))
-        ) {
-            // 타이틀과 추가버튼이 있는 툴바
-            TorangToolbar(clickAddReview = {
-                inputEvents?.onAddReview?.invoke(0)
-            })
-            Box {
-                // 피드와 스와이프 리프레시
-                Feeds(
-                    feeds = uiState.feeds,
-                    isRefreshing = uiState.isRefreshing,
-                    onRefresh = inputEvents?.onRefresh,
-                    onProfile = inputEvents?.onProfile,
-                    onMenu = inputEvents?.onMenu,
-                    onImage = inputEvents?.onImage,
-                    onName = inputEvents?.onName,
-                    onLike = inputEvents?.onLike,
-                    onComment = inputEvents?.onComment,
-                    onShare = inputEvents?.onShare,
-                    onFavorite = inputEvents?.onFavorite,
-                    onRestaurant = inputEvents?.onRestaurant,
-                    onBottom = onBottom
-                )
+        Scaffold(
+            snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
+        ) { contentPadding ->
+            contentPadding.calculateTopPadding()
+            Column(
+                Modifier.background(colorResource(id = R.color.colorSecondaryLight))
+            ) {
+                // 타이틀과 추가버튼이 있는 툴바
+                TorangToolbar(clickAddReview = {
+                    inputEvents?.onAddReview?.invoke(0)
+                })
+                Box {
+                    // 피드와 스와이프 리프레시
+                    Feeds(
+                        feeds = uiState.feeds,
+                        isRefreshing = uiState.isRefreshing,
+                        onRefresh = inputEvents?.onRefresh,
+                        onProfile = inputEvents?.onProfile,
+                        onMenu = inputEvents?.onMenu,
+                        onImage = inputEvents?.onImage,
+                        onName = inputEvents?.onName,
+                        onLike = inputEvents?.onLike,
+                        onComment = inputEvents?.onComment,
+                        onShare = inputEvents?.onShare,
+                        onFavorite = inputEvents?.onFavorite,
+                        onRestaurant = inputEvents?.onRestaurant,
+                        onBottom = onBottom
+                    )
 
-                Column {
-                    if (uiState.isEmptyFeed) {
-                        // 피드가 비어있을 때
-                        EmptyFeed()
-                    }
+                    Column {
+                        if (uiState.isEmptyFeed) {
+                            // 피드가 비어있을 때
+                            EmptyFeed()
+                        }
 
-                    if (uiState.isVisibleRefreshButton()) {
-                        // 네트워크 에러
-                        NetworkError()
-                    }
-                    if (uiState.isProgess) {
-                        // 로딩
-                        Loading()
+                        if (uiState.isVisibleRefreshButton()) {
+                            // 네트워크 에러
+                            NetworkError()
+                        }
+                        if (uiState.isProgess) {
+                            // 로딩
+                            Loading()
+                        }
                     }
                 }
             }
-        }
-        Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom) {
-            if (uiState.snackBar != null)
-                Snackbar {
-                    Text(text = uiState.snackBar.toString())
-                }
         }
     }
 }
