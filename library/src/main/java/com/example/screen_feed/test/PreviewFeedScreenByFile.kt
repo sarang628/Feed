@@ -23,7 +23,7 @@ fun PreviewFeedScreenByFile() {
 }
 
 @Composable
-fun FeedScreenByFile(onAddReview: ((Int) -> Unit)) {
+fun FeedScreenByFile(onAddReview: ((Int) -> Unit)? = null) {
     val list = JsonToObjectGenerator<Feed>()
         .getListByFile(LocalContext.current, "feeds.json", Feed::class.java)
     val data = MutableStateFlow(FeedsScreenUiState(
