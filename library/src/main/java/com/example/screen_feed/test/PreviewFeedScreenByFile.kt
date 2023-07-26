@@ -1,12 +1,6 @@
 package com.example.screen_feed.test
 
-import android.util.Log
-import androidx.compose.foundation.layout.Box
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -15,6 +9,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.library.JsonToObjectGenerator
 import com.example.screen_feed.FeedsScreen
+import com.example.screen_feed.FeedsScreenInputEvents
 import com.sarang.base_feed.data.Feed
 import com.sarang.base_feed.uistate.FeedsScreenUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,6 +17,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @Preview
 @Composable
 fun PreviewFeedScreenByFile() {
+    FeedScreenByFile(onAddReview = {
+
+    })
+}
+
+@Composable
+fun FeedScreenByFile(onAddReview: ((Int) -> Unit)) {
     val list = JsonToObjectGenerator<Feed>()
         .getListByFile(LocalContext.current, "feeds.json", Feed::class.java)
     val data = MutableStateFlow(FeedsScreenUiState(
@@ -36,7 +38,9 @@ fun PreviewFeedScreenByFile() {
 
     FeedsScreen(
         uiStateFlow = d,
-        inputEvents = null,
+        inputEvents = FeedsScreenInputEvents(
+            onAddReview = onAddReview
+        ),
         onBottom = {
             d.value = d.value.copy(
                 feeds = ArrayList<Feed>().apply {
