@@ -3,9 +3,6 @@ package com.posco.feedscreentestapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.screen_feed.FeedsScreenInputEvents
@@ -14,9 +11,6 @@ import com.example.screen_feed.TestFeedsScreen
 import com.sryang.torang_repository.data.dao.FeedDao
 import com.sryang.torang_repository.data.dao.PictureDao
 import com.sryang.torang_repository.data.entity.FeedEntity
-import com.sryang.torang_repository.services.FeedServices
-import com.sryang.torang_repository.test.FeedRepositoryTest
-import com.sryang.torang_repository.test.FeedTestMenu
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
