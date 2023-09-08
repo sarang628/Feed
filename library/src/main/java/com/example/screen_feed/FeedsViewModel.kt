@@ -11,6 +11,7 @@ import javax.inject.Inject
 import kotlin.streams.toList
 
 class FeedsViewModel @Inject constructor(
+    private val feedservice: FeedService
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -19,6 +20,9 @@ class FeedsViewModel @Inject constructor(
     val uiState: StateFlow<FeedsScreenUiState> = _uiState
 
     init {
+        viewModelScope.launch {
+            feedservice.getFeeds(HashMap())
+        }
     }
 
     /*fun RemoteFeed.toFeed(): Feed {

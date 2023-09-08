@@ -18,3 +18,5 @@ dependencyResolutionManagement {
 rootProject.name = "Feed"
 include ':app'
 include ':library'
+
+//project(':app').projectDir = new File("../TorangRepository")
