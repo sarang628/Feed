@@ -1,14 +1,8 @@
 package com.example.screen_feed
 
-import android.util.Log
-import android.view.InputEvent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Snackbar
-import androidx.compose.material.Text
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -17,9 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.screen_feed.ui.EmptyFeed
 import com.example.screen_feed.ui.Feeds
 import com.example.screen_feed.ui.Loading
@@ -27,7 +19,6 @@ import com.example.screen_feed.ui.NetworkError
 import com.example.screen_feed.ui.TorangToolbar
 import com.sarang.base_feed.uistate.FeedsScreenUiState
 import com.sarang.base_feed.uistate.isVisibleRefreshButton
-import com.sryang.torang_repository.data.dao.FeedDao
 import kotlinx.coroutines.flow.StateFlow
 
 // UIState 처리

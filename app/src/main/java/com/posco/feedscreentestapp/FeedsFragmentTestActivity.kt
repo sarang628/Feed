@@ -34,7 +34,7 @@ class FeedsFragmentTestActivity : ComponentActivity() {
             TestFeedsScreen(
                 feedsViewModel = feedsViewModel, feedsScreenInputEvents = FeedsScreenInputEvents(
                     onRefresh = {
-                        feedsViewModel.refreshFeed()
+                        //feedsViewModel.refreshFeed()
                     }
                 )
             )

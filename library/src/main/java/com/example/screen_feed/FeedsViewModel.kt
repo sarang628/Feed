@@ -3,13 +3,7 @@ package com.example.screen_feed
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sarang.base_feed.data.Feed
 import com.sarang.base_feed.uistate.FeedsScreenUiState
-import com.sryang.torang_repository.data.dao.FeedDao
-import com.sryang.torang_repository.data.entity.FeedEntity
-import com.sryang.torang_repository.data.entity.FeedEntity1
-import com.sryang.torang_repository.data.remote.response.RemoteFeed
-import com.sryang.torang_repository.services.FeedServices
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -17,7 +11,6 @@ import javax.inject.Inject
 import kotlin.streams.toList
 
 class FeedsViewModel @Inject constructor(
-    private val feedDao: FeedDao, private val feedServices: FeedServices
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -26,22 +19,9 @@ class FeedsViewModel @Inject constructor(
     val uiState: StateFlow<FeedsScreenUiState> = _uiState
 
     init {
-        /*viewModelScope.launch {
-            feedDao.getAllFeed1().collect {
-                _uiState.emit(
-                    _uiState.value.copy(
-                        feeds = ArrayList<Feed>().apply {
-                            addAll(it.stream().map { it.toFeed() }.toList())
-                        }
-                    )
-                )
-            }
-        }*/
-
-        refreshFeed()
     }
 
-    fun RemoteFeed.toFeed(): Feed {
+    /*fun RemoteFeed.toFeed(): Feed {
         return Feed(
             reviewId = reviewId,
             reviewImages = pictures.stream().map {
@@ -51,7 +31,7 @@ class FeedsViewModel @Inject constructor(
             restaurantName = restaurant?.restaurantName,
         )
     }
-
+*/
     fun clickLike(id: Int) {
         Log.d("FeedsViewModel", id.toString())
         viewModelScope.launch {
@@ -91,7 +71,7 @@ class FeedsViewModel @Inject constructor(
         }
     }
 
-    fun refreshFeed() {
+    /*fun refreshFeed() {
         viewModelScope.launch {
             _uiState.emit(
                 _uiState.value.copy(
@@ -113,14 +93,14 @@ class FeedsViewModel @Inject constructor(
             )
         }
     }
-
+*/
     fun onBottom() {
         Log.d("sryang123", "onBottom!")
     }
 
 }
 
-fun FeedEntity1.toFeed(): Feed {
+/*fun FeedEntity1.toFeed(): Feed {
     return Feed(
         name = this.user.userName,
         profilePictureUrl = this.user.profilePicUrl,
@@ -128,8 +108,9 @@ fun FeedEntity1.toFeed(): Feed {
         contents = this.user.contents,
         restaurantName = this.user.restaurantName
     )
-}
+}*/
 
+/*
 fun FeedEntity.toFeed(): Feed {
     return Feed(
         name = userName,
@@ -137,4 +118,4 @@ fun FeedEntity.toFeed(): Feed {
         rating = rating,
         profilePictureUrl = profilePicUrl
     )
-}
+}*/
