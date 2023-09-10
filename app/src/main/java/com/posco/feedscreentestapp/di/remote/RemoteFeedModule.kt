@@ -1,7 +1,7 @@
-package com.posco.feedscreentestapp.di
+package com.sryang.torang_repository.di.remote
 
 import com.sryang.torang_repository.di.service.feed.FeedServiceProductImpl
-import com.sryang.torang_repository.services.FeedServices
+import com.sryang.torang_repository.services.RemoteFeedServices
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,12 +10,13 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-class RestaurantServiceModule {
+class RemoteFeedModule {
+
     @Singleton
     @Provides
-    fun provideFeedServiceService(
+    fun provideRemoveFeedService(
         productFeedServiceImpl: FeedServiceProductImpl
-    ): FeedServices {
+    ): RemoteFeedServices {
         return productFeedServiceImpl.create()
     }
 }

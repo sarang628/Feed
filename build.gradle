@@ -22,6 +22,6 @@ ext {
     torangImageLoaderVersion = 'f4a2359698'
     themeVersion = '7c191eb4e6'
     navigationModuleVersion = 'd98f57435d'
-    repositoryVersion = 'b9731af80c'
+    repositoryVersion = '8f3283c116'
     baseFeedVersion = 'aa5b46f3e0'
 }

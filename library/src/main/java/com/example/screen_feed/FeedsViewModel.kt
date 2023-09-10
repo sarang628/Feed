@@ -11,7 +11,7 @@ import javax.inject.Inject
 import kotlin.streams.toList
 
 class FeedsViewModel @Inject constructor(
-    private val feedservice: FeedService
+    private val feedService: FeedService
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -21,21 +21,15 @@ class FeedsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            feedservice.getFeeds(HashMap())
+            val result = feedService.getFeeds(HashMap())
+            _uiState.emit(
+                _uiState.value.copy(
+                    feeds = ArrayList(result)
+                )
+            )
         }
     }
 
-    /*fun RemoteFeed.toFeed(): Feed {
-        return Feed(
-            reviewId = reviewId,
-            reviewImages = pictures.stream().map {
-                "http://sarang628.iptime.org:89/review_images/" + it.picture_url
-            }.toList(),
-            name = user?.userName,
-            restaurantName = restaurant?.restaurantName,
-        )
-    }
-*/
     fun clickLike(id: Int) {
         Log.d("FeedsViewModel", id.toString())
         viewModelScope.launch {
