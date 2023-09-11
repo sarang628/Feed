@@ -36,7 +36,9 @@ class FeedsFragmentTestActivity : ComponentActivity() {
                     onRefresh = {
                         //feedsViewModel.refreshFeed()
                     }
-                )
+                ),
+                imageServerUrl = "http://sarang628.iptime.org:89/review_images/",
+                profileImageServerUrl = "http://sarang628.iptime.org:89/"
             )
 //
 //            Feed 데이터 테스트

@@ -50,6 +50,7 @@ fun FeedScreenByFile(onAddReview: ((Int) -> Unit)? = null) {
             )
             count++
         },
-        snackBar = "${count}th feed loading"
+        snackBar = "${count}th feed loading",
+        imageServerUrl = "http://sarang628.iptime.org:89/review_images/"
     )
 }

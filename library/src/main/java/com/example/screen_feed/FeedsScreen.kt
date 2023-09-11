@@ -27,7 +27,9 @@ fun FeedsScreen(
     uiStateFlow: StateFlow<FeedsScreenUiState>,
     inputEvents: FeedsScreenInputEvents?,
     onBottom: ((Void?) -> Unit)? = null,
-    snackBar: String = ""
+    snackBar: String = "",
+    imageServerUrl: String = "",
+    profileImageServerUrl: String = ""
 ) {
     val uiState by uiStateFlow.collectAsState()
 
@@ -65,7 +67,9 @@ fun FeedsScreen(
                         onShare = inputEvents?.onShare,
                         onFavorite = inputEvents?.onFavorite,
                         onRestaurant = inputEvents?.onRestaurant,
-                        onBottom = onBottom
+                        onBottom = onBottom,
+                        imageServerUrl = imageServerUrl,
+                        profileImageServerUrl = profileImageServerUrl
                     )
 
                     Column {
@@ -92,14 +96,18 @@ fun FeedsScreen(
 @Composable
 fun TestFeedsScreen(
     feedsViewModel: FeedsViewModel,
-    feedsScreenInputEvents: FeedsScreenInputEvents? = null
+    feedsScreenInputEvents: FeedsScreenInputEvents? = null,
+    imageServerUrl: String = "",
+    profileImageServerUrl: String = ""
 ) {
     FeedsScreen(
         uiStateFlow = feedsViewModel.uiState,
         inputEvents = feedsScreenInputEvents,
         onBottom = {
 
-        }
+        },
+        imageServerUrl = imageServerUrl,
+        profileImageServerUrl = profileImageServerUrl
     )
 }
 
