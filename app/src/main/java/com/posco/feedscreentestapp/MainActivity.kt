@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FeedsFragmentTestActivity : ComponentActivity() {
+class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var feedsViewModel: FeedsViewModel
@@ -34,7 +34,7 @@ class FeedsFragmentTestActivity : ComponentActivity() {
             TestFeedsScreen(
                 feedsViewModel = feedsViewModel, feedsScreenInputEvents = FeedsScreenInputEvents(
                     onRefresh = {
-                        //feedsViewModel.refreshFeed()
+                        feedsViewModel.refreshFeed()
                     }
                 ),
                 imageServerUrl = "http://sarang628.iptime.org:89/review_images/",

@@ -3,6 +3,7 @@ package com.example.screen_feed
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sarang.base_feed.data.Feed
 import com.sarang.base_feed.uistate.FeedsScreenUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -69,7 +70,7 @@ class FeedsViewModel @Inject constructor(
         }
     }
 
-    /*fun refreshFeed() {
+    fun refreshFeed() {
         viewModelScope.launch {
             _uiState.emit(
                 _uiState.value.copy(
@@ -77,21 +78,18 @@ class FeedsViewModel @Inject constructor(
                 )
             )
 
-            val result = feedServices.getFeeds(HashMap())
+            val result = feedService.getFeeds(HashMap())
             _uiState.emit(
                 _uiState.value.copy(
                     feeds = ArrayList<Feed>().apply {
-                        addAll(result.stream().map {
-                            Log.d("sryang123", it.toString())
-                            it.toFeed()
-                        }.toList())
+                        addAll(result)
                     },
                     isRefreshing = false
                 )
             )
         }
     }
-*/
+
     fun onBottom() {
         Log.d("sryang123", "onBottom!")
     }
@@ -116,4 +114,5 @@ fun FeedEntity.toFeed(): Feed {
         rating = rating,
         profilePictureUrl = profilePicUrl
     )
-}*/
+}
+*/
