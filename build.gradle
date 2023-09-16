@@ -24,4 +24,6 @@ ext {
     navigationModuleVersion = 'd98f57435d'
     repositoryVersion = '8f3283c116'
     baseFeedVersion = '8850dfce6f'
+    commonWidgetsVersion = '6c400e072c'
+    torangBottomSheetVersion = '85469049ba'
 }

@@ -1,8 +1,15 @@
 package com.posco.feedscreentestapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.screen_feed.FeedsScreenInputEvents
@@ -31,19 +38,24 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            TestFeedsScreen(
-                feedsViewModel = feedsViewModel, feedsScreenInputEvents = FeedsScreenInputEvents(
-                    onRefresh = {
-                        feedsViewModel.refreshFeed()
-                    }
-                ),
-                imageServerUrl = "http://sarang628.iptime.org:89/review_images/",
-                profileImageServerUrl = "http://sarang628.iptime.org:89/"
-            )
-//
-//            Feed 데이터 테스트
-//            FeedRepositoryTest(context = LocalContext.current, feedDao = feedDao, pictureDao = pictureDao)
-
+            var isExpandMenuBottomSheet by remember { mutableStateOf(false) }
+            Box() {
+                TestFeedsScreen(
+                    feedsViewModel = feedsViewModel,
+                    feedsScreenInputEvents = FeedsScreenInputEvents(
+                        onRefresh = {
+                            feedsViewModel.refreshFeed()
+                        },
+                        onMenu = {
+                            Log.d("MainActivity", "onMenu")
+                            isExpandMenuBottomSheet = !isExpandMenuBottomSheet
+                        }
+                    ),
+                    imageServerUrl = "http://sarang628.iptime.org:89/review_images/",
+                    profileImageServerUrl = "http://sarang628.iptime.org:89/",
+                    isExpandMenuBottomSheet = isExpandMenuBottomSheet
+                )
+            }
         }
     }
 }

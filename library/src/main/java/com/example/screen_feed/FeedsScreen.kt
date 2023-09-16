@@ -19,6 +19,7 @@ import com.example.screen_feed.ui.NetworkError
 import com.example.screen_feed.ui.TorangToolbar
 import com.sarang.base_feed.uistate.FeedsScreenUiState
 import com.sarang.base_feed.uistate.isVisibleRefreshButton
+import com.sryang.library.FeedMenuBottomSheetDialog
 import kotlinx.coroutines.flow.StateFlow
 
 // UIState 처리
@@ -29,7 +30,8 @@ fun FeedsScreen(
     onBottom: ((Void?) -> Unit)? = null,
     snackBar: String = "",
     imageServerUrl: String = "",
-    profileImageServerUrl: String = ""
+    profileImageServerUrl: String = "",
+    isExpandMenuBottomSheet: Boolean = false
 ) {
     val uiState by uiStateFlow.collectAsState()
 
@@ -45,49 +47,53 @@ fun FeedsScreen(
             snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
         ) { contentPadding ->
             contentPadding.calculateTopPadding()
-            Column(
-                Modifier.background(colorResource(id = R.color.colorSecondaryLight))
-            ) {
-                // 타이틀과 추가버튼이 있는 툴바
-                TorangToolbar(clickAddReview = {
-                    inputEvents?.onAddReview?.invoke(0)
-                })
-                Box {
-                    // 피드와 스와이프 리프레시
-                    Feeds(
-                        feeds = uiState.feeds,
-                        isRefreshing = uiState.isRefreshing,
-                        onRefresh = inputEvents?.onRefresh,
-                        onProfile = inputEvents?.onProfile,
-                        onMenu = inputEvents?.onMenu,
-                        onImage = inputEvents?.onImage,
-                        onName = inputEvents?.onName,
-                        onLike = inputEvents?.onLike,
-                        onComment = inputEvents?.onComment,
-                        onShare = inputEvents?.onShare,
-                        onFavorite = inputEvents?.onFavorite,
-                        onRestaurant = inputEvents?.onRestaurant,
-                        onBottom = onBottom,
-                        imageServerUrl = imageServerUrl,
-                        profileImageServerUrl = profileImageServerUrl
-                    )
+            Box {
+                Column(
+                    Modifier.background(colorResource(id = R.color.colorSecondaryLight))
+                ) {
+                    // 타이틀과 추가버튼이 있는 툴바
+                    TorangToolbar(clickAddReview = {
+                        inputEvents?.onAddReview?.invoke(0)
+                    })
+                    Box {
+                        // 피드와 스와이프 리프레시
+                        Feeds(
+                            feeds = uiState.feeds,
+                            isRefreshing = uiState.isRefreshing,
+                            onRefresh = inputEvents?.onRefresh,
+                            onProfile = inputEvents?.onProfile,
+                            onMenu = inputEvents?.onMenu,
+                            onImage = inputEvents?.onImage,
+                            onName = inputEvents?.onName,
+                            onLike = inputEvents?.onLike,
+                            onComment = inputEvents?.onComment,
+                            onShare = inputEvents?.onShare,
+                            onFavorite = inputEvents?.onFavorite,
+                            onRestaurant = inputEvents?.onRestaurant,
+                            onBottom = onBottom,
+                            imageServerUrl = imageServerUrl,
+                            profileImageServerUrl = profileImageServerUrl
+                        )
 
-                    Column {
-                        if (uiState.isEmptyFeed) {
-                            // 피드가 비어있을 때
-                            EmptyFeed()
-                        }
+                        Column {
+                            if (uiState.isEmptyFeed) {
+                                // 피드가 비어있을 때
+                                EmptyFeed()
+                            }
 
-                        if (uiState.isVisibleRefreshButton()) {
-                            // 네트워크 에러
-                            NetworkError()
-                        }
-                        if (uiState.isProgess) {
-                            // 로딩
-                            Loading()
+                            if (uiState.isVisibleRefreshButton()) {
+                                // 네트워크 에러
+                                NetworkError()
+                            }
+                            if (uiState.isProgess) {
+                                // 로딩
+                                Loading()
+                            }
                         }
                     }
                 }
+                if (isExpandMenuBottomSheet)
+                    FeedMenuBottomSheetDialog(isExpand = true, onSelect = {})
             }
         }
     }
@@ -98,7 +104,8 @@ fun TestFeedsScreen(
     feedsViewModel: FeedsViewModel,
     feedsScreenInputEvents: FeedsScreenInputEvents? = null,
     imageServerUrl: String = "",
-    profileImageServerUrl: String = ""
+    profileImageServerUrl: String = "",
+    isExpandMenuBottomSheet: Boolean = false
 ) {
     FeedsScreen(
         uiStateFlow = feedsViewModel.uiState,
@@ -107,7 +114,8 @@ fun TestFeedsScreen(
 
         },
         imageServerUrl = imageServerUrl,
-        profileImageServerUrl = profileImageServerUrl
+        profileImageServerUrl = profileImageServerUrl,
+        isExpandMenuBottomSheet = isExpandMenuBottomSheet
     )
 }
 
