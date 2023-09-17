@@ -21,8 +21,8 @@ import com.sarang.base_feed.uistate.FeedsScreenUiState
 import com.sarang.base_feed.uistate.isVisibleRefreshButton
 import com.sryang.library.CommentBottomSheetDialog
 import com.sryang.library.FeedMenuBottomSheetDialog
+import com.sryang.library.ShareBottomSheetDialog
 import kotlinx.coroutines.flow.StateFlow
-import org.w3c.dom.Comment
 
 // UIState 처리
 @Composable
@@ -34,7 +34,8 @@ fun FeedsScreen(
     imageServerUrl: String = "",
     profileImageServerUrl: String = "",
     isExpandMenuBottomSheet: Boolean = false,
-    isExpandCommentBottomSheet: Boolean = false
+    isExpandCommentBottomSheet: Boolean = false,
+    isShareCommentBottomSheet: Boolean = false
 ) {
     val uiState by uiStateFlow.collectAsState()
 
@@ -99,6 +100,9 @@ fun FeedsScreen(
                     FeedMenuBottomSheetDialog(isExpand = true, onSelect = {})
                 if (isExpandCommentBottomSheet)
                     CommentBottomSheetDialog(isExpand = true, onSelect = {})
+                if (isShareCommentBottomSheet) {
+                    ShareBottomSheetDialog(isExpand = true, onSelect = {})
+                }
             }
         }
     }
@@ -111,7 +115,8 @@ fun TestFeedsScreen(
     imageServerUrl: String = "",
     profileImageServerUrl: String = "",
     isExpandMenuBottomSheet: Boolean = false,
-    isExpandCommentBottomSheet: Boolean = false
+    isExpandCommentBottomSheet: Boolean = false,
+    isShareCommentBottomSheet: Boolean = false
 ) {
     FeedsScreen(
         uiStateFlow = feedsViewModel.uiState,
@@ -122,7 +127,8 @@ fun TestFeedsScreen(
         imageServerUrl = imageServerUrl,
         profileImageServerUrl = profileImageServerUrl,
         isExpandMenuBottomSheet = isExpandMenuBottomSheet,
-        isExpandCommentBottomSheet = isExpandCommentBottomSheet
+        isExpandCommentBottomSheet = isExpandCommentBottomSheet,
+        isShareCommentBottomSheet = isShareCommentBottomSheet
     )
 }
 

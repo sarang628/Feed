@@ -40,6 +40,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             var isExpandMenuBottomSheet by remember { mutableStateOf(false) }
             var isExpandCommentBottomSheet by remember { mutableStateOf(false) }
+            var isShareCommentBottomSheet by remember { mutableStateOf(false) }
             Box() {
                 TestFeedsScreen(
                     feedsViewModel = feedsViewModel,
@@ -53,12 +54,16 @@ class MainActivity : ComponentActivity() {
                         },
                         onComment = {
                             isExpandCommentBottomSheet = !isExpandCommentBottomSheet
+                        },
+                        onShare = {
+                            isShareCommentBottomSheet = !isShareCommentBottomSheet
                         }
                     ),
                     imageServerUrl = "http://sarang628.iptime.org:89/review_images/",
                     profileImageServerUrl = "http://sarang628.iptime.org:89/",
                     isExpandMenuBottomSheet = isExpandMenuBottomSheet,
-                    isExpandCommentBottomSheet = isExpandCommentBottomSheet
+                    isExpandCommentBottomSheet = isExpandCommentBottomSheet,
+                    isShareCommentBottomSheet = isShareCommentBottomSheet
                 )
             }
         }
