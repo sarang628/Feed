@@ -24,6 +24,7 @@ class ServiceModule {
                 return remoteFeedServices.getFeeds(params).stream().map {
                     Feed(
                         name = it.user?.userName,
+                        userId = it.user?.userId,
                         profilePictureUrl = it.user?.profilePicUrl,
                         contents = it.contents,
                         reviewImages = it.pictures.stream().map {

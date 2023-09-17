@@ -2,6 +2,7 @@ package com.posco.feedscreentestapp
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
@@ -57,6 +58,9 @@ class MainActivity : ComponentActivity() {
                         },
                         onShare = {
                             isShareCommentBottomSheet = !isShareCommentBottomSheet
+                        },
+                        onProfile = {
+                            Toast.makeText(this@MainActivity, "$it", Toast.LENGTH_SHORT).show()
                         }
                     ),
                     imageServerUrl = "http://sarang628.iptime.org:89/review_images/",
