@@ -39,6 +39,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             var isExpandMenuBottomSheet by remember { mutableStateOf(false) }
+            var isExpandCommentBottomSheet by remember { mutableStateOf(false) }
             Box() {
                 TestFeedsScreen(
                     feedsViewModel = feedsViewModel,
@@ -49,11 +50,15 @@ class MainActivity : ComponentActivity() {
                         onMenu = {
                             Log.d("MainActivity", "onMenu")
                             isExpandMenuBottomSheet = !isExpandMenuBottomSheet
+                        },
+                        onComment = {
+                            isExpandCommentBottomSheet = !isExpandCommentBottomSheet
                         }
                     ),
                     imageServerUrl = "http://sarang628.iptime.org:89/review_images/",
                     profileImageServerUrl = "http://sarang628.iptime.org:89/",
-                    isExpandMenuBottomSheet = isExpandMenuBottomSheet
+                    isExpandMenuBottomSheet = isExpandMenuBottomSheet,
+                    isExpandCommentBottomSheet = isExpandCommentBottomSheet
                 )
             }
         }
