@@ -17,13 +17,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @Preview
 @Composable
 fun PreviewFeedScreenByFile() {
-    FeedScreenByFile(onAddReview = {
-
-    })
+    FeedScreenByFile()
 }
 
 @Composable
-fun FeedScreenByFile(onAddReview: ((Int) -> Unit)? = null) {
+fun FeedScreenByFile() {
     val list = JsonToObjectGenerator<Feed>()
         .getListByFile(LocalContext.current, "feeds.json", Feed::class.java)
     val data = MutableStateFlow(FeedsScreenUiState(
@@ -38,9 +36,7 @@ fun FeedScreenByFile(onAddReview: ((Int) -> Unit)? = null) {
 
     FeedsScreen(
         uiStateFlow = d,
-        inputEvents = FeedsScreenInputEvents(
-            onAddReview = onAddReview
-        ),
+        inputEvents = dummyInput(),
         onBottom = {
             d.value = d.value.copy(
                 feeds = ArrayList<Feed>().apply {

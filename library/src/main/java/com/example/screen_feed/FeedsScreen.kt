@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun FeedsScreen(
     uiStateFlow: StateFlow<FeedsScreenUiState>,
-    inputEvents: FeedsScreenInputEvents?,
+    inputEvents: FeedsScreenInputEvents,
     onBottom: ((Void?) -> Unit)? = null,
     snackBar: String = "",
     imageServerUrl: String = "",
@@ -64,16 +64,16 @@ fun FeedsScreen(
                         Feeds(
                             feeds = uiState.feeds,
                             isRefreshing = uiState.isRefreshing,
-                            onRefresh = inputEvents?.onRefresh,
-                            onProfile = inputEvents?.onProfile,
-                            onMenu = inputEvents?.onMenu,
-                            onImage = inputEvents?.onImage,
-                            onName = inputEvents?.onName,
-                            onLike = inputEvents?.onLike,
-                            onComment = inputEvents?.onComment,
-                            onShare = inputEvents?.onShare,
-                            onFavorite = inputEvents?.onFavorite,
-                            onRestaurant = inputEvents?.onRestaurant,
+                            onRefresh = inputEvents.onRefresh,
+                            onProfile = inputEvents.onProfile,
+                            onMenu = inputEvents.onMenu,
+                            onImage = inputEvents.onImage,
+                            onName = inputEvents.onName,
+                            onLike = inputEvents.onLike,
+                            onComment = inputEvents.onComment,
+                            onShare = inputEvents.onShare,
+                            onFavorite = inputEvents.onFavorite,
+                            onRestaurant = inputEvents.onRestaurant,
                             onBottom = onBottom,
                             imageServerUrl = imageServerUrl,
                             profileImageServerUrl = profileImageServerUrl
@@ -111,7 +111,7 @@ fun FeedsScreen(
 @Composable
 fun TestFeedsScreen(
     feedsViewModel: FeedsViewModel,
-    feedsScreenInputEvents: FeedsScreenInputEvents? = null,
+    feedsScreenInputEvents: FeedsScreenInputEvents,
     imageServerUrl: String = "",
     profileImageServerUrl: String = "",
     isExpandMenuBottomSheet: Boolean = false,
@@ -131,17 +131,3 @@ fun TestFeedsScreen(
         isShareCommentBottomSheet = isShareCommentBottomSheet
     )
 }
-
-data class FeedsScreenInputEvents(
-    val onRefresh: (() -> Unit)? = null, // 스와이프 리프레시 이벤트
-    val onProfile: ((Int) -> Unit)? = null, // 프로필 이미지 클릭
-    val onRestaurant: (() -> Unit)? = null, // 식당명 클릭
-    val onImage: ((Int) -> Unit)? = null, // 이미지 클릭
-    val onMenu: (() -> Unit)? = null, // 피드 메뉴 클릭
-    val onName: (() -> Unit)? = null, // 이름 클릭
-    val onAddReview: ((Int) -> Unit)? = null, // 리뷰 추가 클릭
-    val onLike: ((Int) -> Unit)? = null, // 좋아요 클릭
-    val onComment: ((Int) -> Unit)? = null, // 코멘트 클릭
-    val onShare: ((Int) -> Unit)? = null, // 공유 클릭
-    val onFavorite: ((Int) -> Unit)? = null // 즐겨찾기 클릭
-)

@@ -3,6 +3,7 @@ package com.example.screen_feed.test
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.screen_feed.FeedsScreen
+import com.example.screen_feed.FeedsScreenInputEvents
 import com.sarang.base_feed.data.Feed
 import com.sarang.base_feed.uistate.FeedsScreenUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +15,8 @@ fun PreviewFeedScreen() {
         feeds = ArrayList<Feed>().apply {
             add(
                 Feed(
+                    reviewId = 1,
+                    userId = 1,
                     name = "monkey",
                     restaurantName = "Mcdonalds",
                     isFavorite = true,
@@ -32,12 +35,25 @@ fun PreviewFeedScreen() {
                         add("")
                         add("")
                     },
+                    profilePictureUrl = "",
                     contents = "abcd"
                 )
             )
         }
     ))
-    FeedsScreen(uiStateFlow = data, inputEvents = null)
+    FeedsScreen(uiStateFlow = data, inputEvents = FeedsScreenInputEvents(
+        onRefresh = {},
+        onProfile = {},
+        onShare = {},
+        onComment = {},
+        onMenu = {},
+        onRestaurant = {},
+        onAddReview = {},
+        onFavorite = {},
+        onImage = {},
+        onLike = {},
+        onName = {}
+    ))
 }
 
 @Preview
@@ -48,8 +64,22 @@ fun PreviewEmpty() {
             isEmptyFeed = true
         )
     )
-    FeedsScreen(uiStateFlow = data, inputEvents = null)
+    FeedsScreen(uiStateFlow = data, inputEvents = dummyInput())
 }
+
+fun dummyInput() = FeedsScreenInputEvents(
+    onName = {},
+    onLike = {},
+    onImage = {},
+    onFavorite = {},
+    onAddReview = {},
+    onRestaurant = {},
+    onMenu = {},
+    onComment = {},
+    onShare = {},
+    onProfile = {},
+    onRefresh = {}
+)
 
 @Preview
 @Composable
@@ -59,7 +89,7 @@ fun PreviewRefreshing() {
             isRefreshing = true
         )
     )
-    FeedsScreen(uiStateFlow = data, inputEvents = null)
+    FeedsScreen(uiStateFlow = data, inputEvents = dummyInput())
 }
 
 @Preview
@@ -70,5 +100,5 @@ fun PreviewNetworkError() {
             isFailedConnection = true
         )
     )
-    FeedsScreen(uiStateFlow = data, inputEvents = null)
+    FeedsScreen(uiStateFlow = data, inputEvents = dummyInput())
 }

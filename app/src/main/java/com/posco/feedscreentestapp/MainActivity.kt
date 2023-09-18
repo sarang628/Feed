@@ -61,6 +61,30 @@ class MainActivity : ComponentActivity() {
                         },
                         onProfile = {
                             Toast.makeText(this@MainActivity, "$it", Toast.LENGTH_SHORT).show()
+                        },
+                        onRestaurant = {
+                            Toast.makeText(this@MainActivity, "preparing..", Toast.LENGTH_SHORT)
+                                .show()
+                        },
+                        onAddReview = {
+                            Toast.makeText(this@MainActivity, "preparing..", Toast.LENGTH_SHORT)
+                                .show()
+                        },
+                        onFavorite = {
+                            Toast.makeText(this@MainActivity, "preparing..", Toast.LENGTH_SHORT)
+                                .show()
+                        },
+                        onImage = {
+                            Toast.makeText(this@MainActivity, "preparing..", Toast.LENGTH_SHORT)
+                                .show()
+                        },
+                        onLike = {
+                            Toast.makeText(this@MainActivity, "preparing..", Toast.LENGTH_SHORT)
+                                .show()
+                        },
+                        onName = {
+                            Toast.makeText(this@MainActivity, "preparing..", Toast.LENGTH_SHORT)
+                                .show()
                         }
                     ),
                     imageServerUrl = "http://sarang628.iptime.org:89/review_images/",

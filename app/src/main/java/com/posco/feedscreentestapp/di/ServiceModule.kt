@@ -23,14 +23,20 @@ class ServiceModule {
             override suspend fun getFeeds(params: Map<String, String>): List<Feed> {
                 return remoteFeedServices.getFeeds(params).stream().map {
                     Feed(
-                        name = it.user?.userName,
-                        userId = it.user?.userId,
-                        profilePictureUrl = it.user?.profilePicUrl,
-                        contents = it.contents,
+                        name = it.user!!.userName!!,
+                        userId = it.user!!.userId,
+                        profilePictureUrl = it.user!!.profilePicUrl!!,
+                        contents = it.contents!!,
                         reviewImages = it.pictures.stream().map {
                             it.picture_url
                         }.toList(),
-                        restaurantName = it.restaurant?.restaurantName
+                        restaurantName = it.restaurant!!.restaurantName!!,
+                        commentAmount = it.comment_amount!!,
+                        isFavorite = it.favorite!!.isFavority!!,
+                        isLike = it.like!!.isLike!!,
+                        likeAmount = it.like_amount!!,
+                        rating = it.rating!!,
+                        reviewId = it.reviewId
                     )
                 }.toList()
             }
