@@ -9,9 +9,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.library.JsonToObjectGenerator
 import com.example.screen_feed.FeedsScreen
-import com.example.screen_feed.FeedsScreenInputEvents
-import com.sarang.base_feed.data.Feed
 import com.sarang.base_feed.uistate.FeedsScreenUiState
+import com.sryang.library.entity.Feed
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Preview

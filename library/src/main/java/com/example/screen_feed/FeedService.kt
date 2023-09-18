@@ -1,6 +1,6 @@
 package com.example.screen_feed
 
-import com.sarang.base_feed.data.Feed
+import com.sryang.library.entity.Feed
 
 interface FeedService {
     suspend fun getFeeds(params: Map<String, String>): List<Feed>

@@ -1,4 +1,4 @@
-package com.posco.feedscreentestapp.di
+package com.posco.feedscreentestapp.di.room
 
 import android.content.Context
 import com.sryang.torang_repository.data.AppDatabase

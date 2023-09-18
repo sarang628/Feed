@@ -4,8 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.screen_feed.FeedsScreen
 import com.example.screen_feed.FeedsScreenInputEvents
-import com.sarang.base_feed.data.Feed
 import com.sarang.base_feed.uistate.FeedsScreenUiState
+import com.sryang.library.entity.Feed
+import com.sryang.library.entity.Restaurant
+import com.sryang.library.entity.User
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Preview
@@ -16,26 +18,19 @@ fun PreviewFeedScreen() {
             add(
                 Feed(
                     reviewId = 1,
-                    userId = 1,
-                    name = "monkey",
-                    restaurantName = "Mcdonalds",
-                    isFavorite = true,
-                    isLike = true,
+                    writer = User(userId = 0, name = "", profilePictureUrl = ""),
+                    restaurant = Restaurant(restaurantName = ""),
                     rating = 3.5f,
                     likeAmount = 10,
                     commentAmount = 10,
-                    author = "bb",
-                    author1 = "cc",
-                    author2 = "dd",
-                    comment = "aaaa",
-                    comment1 = "bbbb",
-                    comment2 = "cccc",
+                    comments = ArrayList(),
+                    isLike = true,
+                    isFavorite = true,
                     reviewImages = ArrayList<String>().apply {
                         add("")
                         add("")
                         add("")
                     },
-                    profilePictureUrl = "",
                     contents = "abcd"
                 )
             )
