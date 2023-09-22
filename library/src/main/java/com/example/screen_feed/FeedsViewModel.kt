@@ -3,14 +3,16 @@ package com.example.screen_feed
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sarang.base_feed.uistate.FeedUiState
 import com.sarang.base_feed.uistate.FeedsScreenUiState
-import com.sryang.library.entity.Feed
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.streams.toList
 
+@HiltViewModel
 class FeedsViewModel @Inject constructor(
     private val feedService: FeedService
 ) : ViewModel() {
@@ -37,7 +39,7 @@ class FeedsViewModel @Inject constructor(
             _uiState.value.feeds?.let {
                 val list = it.stream().map { feed ->
                     if (feed.reviewId == id)
-                        feed.copy(isLike = !feed.isLike!!)
+                        feed
                     else
                         feed
                 }.toList()
@@ -56,7 +58,7 @@ class FeedsViewModel @Inject constructor(
             _uiState.value.feeds?.let {
                 val list = it.stream().map { feed ->
                     if (feed.reviewId == id)
-                        feed.copy(isFavorite = !feed.isFavorite!!)
+                        feed
                     else
                         feed
                 }.toList()
@@ -81,7 +83,7 @@ class FeedsViewModel @Inject constructor(
             val result = feedService.getFeeds(HashMap())
             _uiState.emit(
                 _uiState.value.copy(
-                    feeds = ArrayList<Feed>().apply {
+                    feeds = ArrayList<FeedUiState>().apply {
                         addAll(result)
                     },
                     isRefreshing = false
