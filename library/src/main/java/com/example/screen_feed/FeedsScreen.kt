@@ -57,12 +57,12 @@ fun FeedsScreen(
                 ) {
                     // 타이틀과 추가버튼이 있는 툴바
                     TorangToolbar(clickAddReview = {
-                        inputEvents?.onAddReview?.invoke(0)
+                        inputEvents.onAddReview.invoke(0)
                     })
                     Box {
                         // 피드와 스와이프 리프레시
                         Feeds(
-                            feeds = uiState.feeds,
+                            feeds = uiState.feeds ?: ArrayList(),
                             isRefreshing = uiState.isRefreshing,
                             onRefresh = inputEvents.onRefresh,
                             onProfile = inputEvents.onProfile,

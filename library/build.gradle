@@ -76,5 +76,4 @@ dependencies {
     implementation "com.github.sarang628:CommonWidgets:$commonWidgetsVersion"
     implementation "com.github.sarang628:BaseFeed:$baseFeedVersion"
     implementation "com.github.sarang628:TorangBottomSheet:$torangBottomSheetVersion"
-    implementation 'com.github.sarang628:Design:973242b6ae'
 }

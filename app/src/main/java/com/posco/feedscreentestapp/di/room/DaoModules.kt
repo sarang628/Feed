@@ -1,4 +1,4 @@
-package com.posco.feedscreentestapp.di.room
+package com.sryang.torang_repository.di.room
 
 import com.sryang.torang_repository.data.AppDatabase
 import com.sryang.torang_repository.data.dao.FeedDao
@@ -19,7 +19,7 @@ class DaoModules {
     }
 
     @Provides
-    fun provideFeedDao(appDatabase: AppDatabase): FeedDao {
+    fun proviadeFeedDao(appDatabase: AppDatabase): FeedDao {
         return appDatabase.feedDao()
     }
 

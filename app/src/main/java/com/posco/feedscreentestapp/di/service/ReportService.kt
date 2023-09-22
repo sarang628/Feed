@@ -1,10 +1,10 @@
-package com.posco.feedscreentestapp.di.service
+package com.sryang.torang_repository.di.service
 
 import android.content.Context
 import com.sryang.torang_repository.di.RetrofitModule
 import com.sryang.torang_repository.di.TorangOkhttpClient
 import com.sryang.torang_repository.repository.preference.TorangPreference
-import com.sryang.torang_repository.services.ReportService
+import com.sryang.torang_repository.api.ApiReport
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,9 +28,9 @@ class ProductReportService @Inject constructor(
 ) {
     private var url = "http://sarang628.iptime.org:8080/"
 //    private var url = "https://www.vrscoo.com:8080/"
-    fun create(): ReportService {
+    fun create(): ApiReport {
         return retrofitModule.getRetrofit(torangOkHttpClientImpl.getHttpClient(), url).create(
-            ReportService::class.java
+            ApiReport::class.java
         )
     }
 }
@@ -77,8 +77,8 @@ class LocalReportService {
             .build()
     }
 
-    fun create(context: Context): ReportService {
-        return getRetrofit(getHttpClient(context = context)).create(ReportService::class.java)
+    fun create(context: Context): ApiReport {
+        return getRetrofit(getHttpClient(context = context)).create(ApiReport::class.java)
     }
 }
 
@@ -88,7 +88,7 @@ class ReportServiceModule {
 
     @Singleton
     @Provides
-    fun provideReportService(productReportService: ProductReportService): ReportService {
+    fun provideReportService(productReportService: ProductReportService): ApiReport {
         return productReportService.create()
     }
 }

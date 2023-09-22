@@ -9,8 +9,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.library.JsonToObjectGenerator
 import com.example.screen_feed.FeedsScreen
+import com.sarang.base_feed.uistate.FeedUiState
 import com.sarang.base_feed.uistate.FeedsScreenUiState
-import com.sryang.library.entity.Feed
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Preview
@@ -21,10 +21,10 @@ fun PreviewFeedScreenByFile() {
 
 @Composable
 fun FeedScreenByFile() {
-    val list = JsonToObjectGenerator<Feed>()
-        .getListByFile(LocalContext.current, "feeds.json", Feed::class.java)
+    val list = JsonToObjectGenerator<FeedUiState>()
+        .getListByFile(LocalContext.current, "feeds.json", FeedUiState::class.java)
     val data = MutableStateFlow(FeedsScreenUiState(
-        feeds = ArrayList<Feed>().apply {
+        feeds = ArrayList<FeedUiState>().apply {
             addAll(list)
         }
     ))
@@ -38,7 +38,7 @@ fun FeedScreenByFile() {
         inputEvents = dummyInput(),
         onBottom = {
             d.value = d.value.copy(
-                feeds = ArrayList<Feed>().apply {
+                feeds = ArrayList<FeedUiState>().apply {
                     d.value.feeds?.let { it1 -> addAll(it1) }
                     addAll(list)
                 }

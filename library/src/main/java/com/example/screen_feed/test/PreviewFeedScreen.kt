@@ -4,37 +4,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.screen_feed.FeedsScreen
 import com.example.screen_feed.FeedsScreenInputEvents
+import com.sarang.base_feed.uistate.FeedUiState
 import com.sarang.base_feed.uistate.FeedsScreenUiState
-import com.sryang.library.entity.Feed
-import com.sryang.library.entity.Restaurant
-import com.sryang.library.entity.User
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Preview
 @Composable
 fun PreviewFeedScreen() {
     val data = MutableStateFlow(FeedsScreenUiState(
-        feeds = ArrayList<Feed>().apply {
-            add(
-                Feed(
-                    reviewId = 1,
-                    writer = User(userId = 0, name = "", profilePictureUrl = ""),
-                    restaurant = Restaurant(restaurantName = ""),
-                    rating = 3.5f,
-                    likeAmount = 10,
-                    commentAmount = 10,
-                    comments = ArrayList(),
-                    isLike = true,
-                    isFavorite = true,
-                    reviewImages = ArrayList<String>().apply {
-                        add("")
-                        add("")
-                        add("")
-                    },
-                    contents = "abcd"
-                )
-            )
-        }
+        feeds = ArrayList<FeedUiState>()
     ))
     FeedsScreen(uiStateFlow = data, inputEvents = FeedsScreenInputEvents(
         onRefresh = {},
