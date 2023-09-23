@@ -15,21 +15,25 @@ import kotlin.streams.toList
 @HiltViewModel
 class FeedsViewModel @Inject constructor(
     private val feedService: FeedService
+
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
         FeedsScreenUiState()
     )
+
     val uiState: StateFlow<FeedsScreenUiState> = _uiState
 
     init {
         viewModelScope.launch {
-            val result = feedService.getFeeds(HashMap())
-            _uiState.emit(
-                _uiState.value.copy(
-                    feeds = ArrayList(result)
+            feedService.feeds.collect {
+                _uiState.emit(
+                    _uiState.value.copy(
+                        feeds = ArrayList(it)
+                    )
                 )
-            )
+            }
+            feedService.getFeeds(HashMap())
         }
     }
 
@@ -84,7 +88,7 @@ class FeedsViewModel @Inject constructor(
             _uiState.emit(
                 _uiState.value.copy(
                     feeds = ArrayList<FeedUiState>().apply {
-                        addAll(result)
+
                     },
                     isRefreshing = false
                 )

@@ -107,27 +107,3 @@ fun FeedsScreen(
         }
     }
 }
-
-@Composable
-fun TestFeedsScreen(
-    feedsViewModel: FeedsViewModel,
-    feedsScreenInputEvents: FeedsScreenInputEvents,
-    imageServerUrl: String = "",
-    profileImageServerUrl: String = "",
-    isExpandMenuBottomSheet: Boolean = false,
-    isExpandCommentBottomSheet: Boolean = false,
-    isShareCommentBottomSheet: Boolean = false
-) {
-    FeedsScreen(
-        uiStateFlow = feedsViewModel.uiState,
-        inputEvents = feedsScreenInputEvents,
-        onBottom = {
-
-        },
-        imageServerUrl = imageServerUrl,
-        profileImageServerUrl = profileImageServerUrl,
-        isExpandMenuBottomSheet = isExpandMenuBottomSheet,
-        isExpandCommentBottomSheet = isExpandCommentBottomSheet,
-        isShareCommentBottomSheet = isShareCommentBottomSheet
-    )
-}

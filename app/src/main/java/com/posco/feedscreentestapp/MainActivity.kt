@@ -8,16 +8,17 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import com.example.screen_feed.FeedService
+import com.example.screen_feed.FeedsScreen
 import com.example.screen_feed.FeedsScreenInputEvents
 import com.example.screen_feed.FeedsViewModel
-import com.example.screen_feed.TestFeedsScreen
+import com.sryang.torang_repository.data.dao.FeedDao
+import com.sryang.torang_repository.data.dao.PictureDao
 import com.sryang.torang_repository.datasource.FeedRemoteDataSource
 import com.sryang.torang_repository.repository.feed.FeedRepository
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,11 +29,11 @@ class MainActivity : ComponentActivity() {
 
     private val feedsViewModel: FeedsViewModel by viewModels()
 
-//    @Inject
-//    lateinit var feedDao: FeedDao
+    @Inject
+    lateinit var feedDao: FeedDao
 
-//    @Inject
-//    lateinit var pictureDao: PictureDao
+    @Inject
+    lateinit var pictureDao: PictureDao
 
     @Inject
     lateinit var feedService: FeedService
@@ -47,28 +48,23 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            LaunchedEffect(key1 = "", block = {
-                feedService.getFeeds(HashMap())
-            })
-
-            FeedScreen(feedsViewModel = feedsViewModel)
+            TestFeedScreen(feedsViewModel = feedsViewModel)
         }
     }
 }
 
 @Composable
-fun FeedScreen(
+fun TestFeedScreen(
     feedsViewModel: FeedsViewModel,
-
-    ) {
+) {
     val context = LocalContext.current
     var isExpandMenuBottomSheet by remember { mutableStateOf(false) }
     var isExpandCommentBottomSheet by remember { mutableStateOf(false) }
     var isShareCommentBottomSheet by remember { mutableStateOf(false) }
     Box() {
-        TestFeedsScreen(
-            feedsViewModel = feedsViewModel,
-            feedsScreenInputEvents = FeedsScreenInputEvents(
+        FeedsScreen(
+            uiStateFlow = feedsViewModel.uiState,
+            inputEvents = FeedsScreenInputEvents(
                 onRefresh = {
                     feedsViewModel.refreshFeed()
                 },
@@ -102,8 +98,7 @@ fun FeedScreen(
                         .show()
                 },
                 onLike = {
-                    Toast.makeText(context, "preparing..", Toast.LENGTH_SHORT)
-                        .show()
+                    feedsViewModel.clickLike(it)
                 },
                 onName = {
                     Toast.makeText(context, "preparing..", Toast.LENGTH_SHORT)

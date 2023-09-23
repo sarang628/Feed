@@ -1,9 +1,11 @@
 package com.example.screen_feed
 
 import com.sarang.base_feed.uistate.FeedUiState
+import kotlinx.coroutines.flow.Flow
 
 interface FeedService {
-    suspend fun getFeeds(params: Map<String, String>): List<FeedUiState>
+    suspend fun getFeeds(params: Map<String, String>)
+    val feeds : Flow<List<FeedUiState>>
 //    suspend fun deleteReview(review: ReviewDeleteRequestVO): Review
 //    suspend fun addLike(like: Like): Like
 //    suspend fun deleteLike(like: Like): Like
