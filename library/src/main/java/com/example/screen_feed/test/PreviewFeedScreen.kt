@@ -11,9 +11,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @Preview
 @Composable
 fun PreviewFeedScreen() {
-    val data = MutableStateFlow(FeedsScreenUiState(
-        feeds = ArrayList<FeedUiState>()
-    ))
+    val data = MutableStateFlow(
+        FeedsScreenUiState(
+            feeds = ArrayList<FeedUiState>()
+        )
+    )
     FeedsScreen(uiStateFlow = data, inputEvents = FeedsScreenInputEvents(
         onRefresh = {},
         onProfile = {},
@@ -26,7 +28,8 @@ fun PreviewFeedScreen() {
         onImage = {},
         onLike = {},
         onName = {}
-    ))
+    ), onBottom = {},
+        profileImageServerUrl = "http://sarang628.iptime.org:89/")
 }
 
 @Preview
@@ -37,7 +40,7 @@ fun PreviewEmpty() {
             isEmptyFeed = true
         )
     )
-    FeedsScreen(uiStateFlow = data, inputEvents = dummyInput())
+    FeedsScreen(uiStateFlow = data, inputEvents = dummyInput(), onBottom = {}, profileImageServerUrl = "http://sarang628.iptime.org:89/")
 }
 
 fun dummyInput() = FeedsScreenInputEvents(
@@ -62,7 +65,7 @@ fun PreviewRefreshing() {
             isRefreshing = true
         )
     )
-    FeedsScreen(uiStateFlow = data, inputEvents = dummyInput())
+    FeedsScreen(uiStateFlow = data, inputEvents = dummyInput(), onBottom = {}, profileImageServerUrl = "http://sarang628.iptime.org:89/")
 }
 
 @Preview
@@ -73,5 +76,5 @@ fun PreviewNetworkError() {
             isFailedConnection = true
         )
     )
-    FeedsScreen(uiStateFlow = data, inputEvents = dummyInput())
+    FeedsScreen(uiStateFlow = data, inputEvents = dummyInput(), onBottom = {}, profileImageServerUrl = "http://sarang628.iptime.org:89/")
 }

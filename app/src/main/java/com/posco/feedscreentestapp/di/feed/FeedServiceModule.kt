@@ -13,6 +13,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 import kotlin.streams.toList
 
 @InstallIn(SingletonComponent::class)
@@ -38,6 +39,33 @@ class FeedServiceModule {
                         )
                     }.toList()
                 }
+            override val feeds1: Flow<List<FeedUiState>>
+                get() = feedRepository.feeds1.map {
+                    it.stream().map {
+                        FeedUiState(
+                            reviewId = it.review.reviewId,
+                            itemFeedTopUiState = it.review.toFeedTopUiState(),
+                            itemFeedBottomUiState = it.review.toFeedBottomUiState(),
+                            reviewImages = it.images.stream().map { it.pictureUrl }.toList()
+                        )
+                    }.toList()
+                }
+
+            override suspend fun addLike(reviewId: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override suspend fun deleteLike(reviewId: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override suspend fun deleteFavorite(reviewId: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override suspend fun addFavorite(reviewId: Int) {
+                TODO("Not yet implemented")
+            }
         }
     }
 }

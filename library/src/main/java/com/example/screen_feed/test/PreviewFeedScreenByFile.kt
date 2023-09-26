@@ -46,6 +46,7 @@ fun FeedScreenByFile() {
             count++
         },
         snackBar = "${count}th feed loading",
-        imageServerUrl = "http://sarang628.iptime.org:89/review_images/"
+        imageServerUrl = "http://sarang628.iptime.org:89/review_images/",
+        profileImageServerUrl = "http://sarang628.iptime.org:89/"
     )
 }

@@ -109,7 +109,8 @@ fun TestFeedScreen(
             profileImageServerUrl = "http://sarang628.iptime.org:89/",
             isExpandMenuBottomSheet = isExpandMenuBottomSheet,
             isExpandCommentBottomSheet = isExpandCommentBottomSheet,
-            isShareCommentBottomSheet = isShareCommentBottomSheet
+            isShareCommentBottomSheet = isShareCommentBottomSheet,
+            onBottom = {}
         )
     }
 }

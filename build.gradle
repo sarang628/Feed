@@ -22,9 +22,9 @@ ext {
     torangImageLoaderVersion = 'f4a2359698'
     themeVersion = '7c191eb4e6'
     navigationModuleVersion = 'd98f57435d'
-    repositoryVersion = '766842a937'
-    baseFeedVersion = '8433e0850d'
+    repositoryVersion = 'a256580c95'
+    baseFeedVersion = 'e09ebcb091'
     commonWidgetsVersion = '6c400e072c'
-    torangBottomSheetVersion = '36a8232f18'
+    torangBottomSheetVersion = '9879c24910'
     JsonToObjectGeneratorVersion = '960fe9fece'
 }

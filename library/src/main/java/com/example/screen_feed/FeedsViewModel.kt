@@ -15,7 +15,6 @@ import kotlin.streams.toList
 @HiltViewModel
 class FeedsViewModel @Inject constructor(
     private val feedService: FeedService
-
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -26,7 +25,7 @@ class FeedsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            feedService.feeds.collect {
+            feedService.feeds1.collect {
                 _uiState.emit(
                     _uiState.value.copy(
                         feeds = ArrayList(it)
@@ -42,10 +41,11 @@ class FeedsViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value.feeds?.let {
                 val list = it.stream().map { feed ->
-                    if (feed.reviewId == id)
+                    if (feed.reviewId == id) {
                         feed
-                    else
+                    } else {
                         feed
+                    }
                 }.toList()
 
                 _uiState.emit(

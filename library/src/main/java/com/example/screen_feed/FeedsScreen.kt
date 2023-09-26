@@ -13,10 +13,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import com.example.screen_feed.ui.EmptyFeed
-import com.example.screen_feed.ui.Feeds
 import com.example.screen_feed.ui.Loading
 import com.example.screen_feed.ui.NetworkError
 import com.example.screen_feed.ui.TorangToolbar
+import com.sarang.base_feed.ui.Feeds
 import com.sarang.base_feed.uistate.FeedsScreenUiState
 import com.sarang.base_feed.uistate.isVisibleRefreshButton
 import com.sryang.library.CommentBottomSheetDialog
@@ -29,10 +29,10 @@ import kotlinx.coroutines.flow.StateFlow
 fun FeedsScreen(
     uiStateFlow: StateFlow<FeedsScreenUiState>,
     inputEvents: FeedsScreenInputEvents,
-    onBottom: ((Void?) -> Unit)? = null,
+    onBottom: ((Void?) -> Unit),
     snackBar: String = "",
     imageServerUrl: String = "",
-    profileImageServerUrl: String = "",
+    profileImageServerUrl: String,
     isExpandMenuBottomSheet: Boolean = false,
     isExpandCommentBottomSheet: Boolean = false,
     isShareCommentBottomSheet: Boolean = false
