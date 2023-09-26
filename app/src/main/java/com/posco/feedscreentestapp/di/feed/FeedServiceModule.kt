@@ -29,12 +29,12 @@ class FeedServiceModule {
             }
 
             override val feeds: Flow<List<FeedUiState>>
-                get() = feedRepository.feeds.map {
+                get() = feedRepository.feeds1.map {
                     it.stream().map {
                         FeedUiState(
-                            reviewId = it.reviewId,
-                            itemFeedTopUiState = it.toFeedTopUiState(),
-                            itemFeedBottomUiState = it.toFeedBottomUiState(),
+                            reviewId = it.review.reviewId,
+                            itemFeedTopUiState = it.review.toFeedTopUiState(),
+                            itemFeedBottomUiState = it.review.toFeedBottomUiState(),
                             reviewImages = ArrayList()
                         )
                     }.toList()
