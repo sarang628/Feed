@@ -74,5 +74,4 @@ dependencies {
     implementation "com.github.sarang628:JsonToObjectGenerator:$JsonToObjectGeneratorVersion"
     implementation "com.github.sarang628:Navigation:$navigationModuleVersion"
     implementation "com.github.sarang628:CommonWidgets:$commonWidgetsVersion"
-    implementation "com.github.sarang628:TorangBottomSheet:$torangBottomSheetVersion"
 }

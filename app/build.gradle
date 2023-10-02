@@ -80,4 +80,5 @@ dependencies {
     implementation "com.github.sarang628:Navigation:$navigationModuleVersion"
     implementation "com.github.sarang628:TorangRepository:$repositoryVersion"
     implementation "com.github.sarang628:BaseFeed:$baseFeedVersion"
+    implementation "com.github.sarang628:TorangBottomSheet:$torangBottomSheetVersion"
 }

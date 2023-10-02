@@ -21,6 +21,9 @@ import com.sarang.base_feed.ui.Feeds
 import com.sarang.base_feed.uistate.FeedBottomUIState
 import com.sarang.base_feed.uistate.FeedTopUIState
 import com.sarang.base_feed.uistate.FeedUiState
+import com.sryang.library.CommentBottomSheetDialog
+import com.sryang.library.FeedMenuBottomSheetDialog
+import com.sryang.library.ShareBottomSheetDialog
 import com.sryang.torang_repository.data.entity.FeedEntity
 import com.sryang.torang_repository.data.remote.response.RemoteFeed
 import com.sryang.torang_repository.repository.feed.FeedRepository
@@ -47,13 +50,13 @@ class FeedServiceModule {
             override val feeds1: Flow<List<FeedData>>
                 get() = feedRepository.feeds1.map {
                     it.stream().map {
-                        FeedData(
+                        val feedData = FeedData(
                             reviewId = it.review.reviewId,
-                            userId = it.user.userId,
-                            name = it.user.userName ?: "",
+                            userId = it.review.userId,
+                            name = it.review.userName,
                             restaurantName = it.review.restaurantName,
                             rating = it.review.rating,
-                            profilePictureUrl = it.user.profile_pic_url ?: "",
+                            profilePictureUrl = it.review.profilePicUrl,
                             likeAmount = it.review.likeAmount,
                             commentAmount = it.review.commentAmount,
                             author = "",
@@ -69,6 +72,7 @@ class FeedServiceModule {
                             contents = it.review.contents,
                             reviewImages = it.images.stream().map { it.pictureUrl }.toList()
                         )
+                        feedData
                     }.toList()
                 }
 
@@ -286,6 +290,15 @@ fun TestFeedScreen(
                     //Loading()
 //                            }
                 }
+            },
+            feedMenuBottomSheetDialog = {
+                FeedMenuBottomSheetDialog(isExpand = it, onSelect = {})
+            },
+            commentBottomSheetDialog = {
+                CommentBottomSheetDialog(isExpand = it, onSelect = {})
+            },
+            shareBottomSheetDialog = {
+                ShareBottomSheetDialog(isExpand = true, onSelect = {})
             }
         )
     }

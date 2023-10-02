@@ -1,9 +1,5 @@
 package com.example.screen_feed
 
-//import com.example.screen_feed.ui.EmptyFeed
-//import com.example.screen_feed.ui.Loading
-//import com.example.screen_feed.ui.NetworkError
-//import com.example.screen_feed.ui.TorangToolbar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,9 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
-import com.sryang.library.CommentBottomSheetDialog
-import com.sryang.library.FeedMenuBottomSheetDialog
-import com.sryang.library.ShareBottomSheetDialog
 
 // UIState 처리
 @Composable
@@ -30,6 +23,9 @@ fun FeedsScreen(
     itemFeed: @Composable () -> Unit,
     torangToolbar: @Composable () -> Unit,
     errorComponent: @Composable () -> Unit,
+    feedMenuBottomSheetDialog: @Composable (Boolean) -> Unit,
+    commentBottomSheetDialog: @Composable (Boolean) -> Unit,
+    shareBottomSheetDialog: @Composable (Boolean) -> Unit,
 ) {
     val snackBarHostState = SnackbarHostState()
 
@@ -57,11 +53,11 @@ fun FeedsScreen(
                     }
                 }
                 if (isExpandMenuBottomSheet)
-                    FeedMenuBottomSheetDialog(isExpand = true, onSelect = {})
+                    feedMenuBottomSheetDialog.invoke(true)
                 if (isExpandCommentBottomSheet)
-                    CommentBottomSheetDialog(isExpand = true, onSelect = {})
+                    commentBottomSheetDialog.invoke(true)
                 if (isShareCommentBottomSheet) {
-                    ShareBottomSheetDialog(isExpand = true, onSelect = {})
+                    shareBottomSheetDialog.invoke(true)
                 }
             }
         }
