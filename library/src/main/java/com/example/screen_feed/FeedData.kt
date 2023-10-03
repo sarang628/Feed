@@ -2,6 +2,7 @@ package com.example.screen_feed
 
 data class FeedData(
     val reviewId: Int,
+    val restaurantId: Int,
     val userId: Int,
     val name: String,
     val restaurantName: String,

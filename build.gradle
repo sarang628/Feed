@@ -23,7 +23,7 @@ ext {
     themeVersion = '7c191eb4e6'
     navigationModuleVersion = 'd98f57435d'
     repositoryVersion = '93996d0058'
-    baseFeedVersion = 'f434941e1b'
+    baseFeedVersion = '88ac59eafe'
     commonWidgetsVersion = '6c400e072c'
     torangBottomSheetVersion = '59a70047d3'
     JsonToObjectGeneratorVersion = '960fe9fece'

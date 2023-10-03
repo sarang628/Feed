@@ -16,8 +16,8 @@ import com.example.screen_feed.FeedService
 import com.example.screen_feed.FeedsScreen
 import com.example.screen_feed.FeedsScreenInputEvents
 import com.example.screen_feed.FeedsViewModel
-import com.example.screen_feed.ui.TorangToolbar
 import com.sarang.base_feed.ui.Feeds
+import com.sarang.base_feed.ui.TorangToolbar
 import com.sarang.base_feed.uistate.FeedBottomUIState
 import com.sarang.base_feed.uistate.FeedTopUIState
 import com.sarang.base_feed.uistate.FeedUiState
@@ -70,7 +70,8 @@ class FeedServiceModule {
                             visibleLike = false,
                             visibleComment = false,
                             contents = it.review.contents,
-                            reviewImages = it.images.stream().map { it.pictureUrl }.toList()
+                            reviewImages = it.images.stream().map { it.pictureUrl }.toList(),
+                            restaurantId = it.review.restaurantId
                         )
                         feedData
                     }.toList()
@@ -102,7 +103,8 @@ fun FeedEntity.toFeedTopUiState(): FeedTopUIState {
         profilePictureUrl = this.profilePicUrl,
         rating = this.rating,
         restaurantName = this.restaurantName,
-        userId = this.userId
+        userId = this.userId,
+        restaurantId = this.restaurantId
     )
 }
 
@@ -151,7 +153,8 @@ fun RemoteFeed.toFeedTopUiState(): FeedTopUIState {
         profilePictureUrl = this.user.profilePicUrl,
         rating = this.rating,
         restaurantName = this.restaurant.restaurantName,
-        userId = this.user.userId
+        userId = this.user.userId,
+        restaurantId = this.restaurant.restaurantId
     )
 }
 
@@ -191,7 +194,8 @@ fun FeedData.toFeedTopUIState(): FeedTopUIState {
         name = this.name,
         restaurantName = this.restaurantName,
         rating = this.rating,
-        profilePictureUrl = this.profilePictureUrl
+        profilePictureUrl = this.profilePictureUrl,
+        restaurantId = restaurantId
     )
 }
 
@@ -273,7 +277,7 @@ fun TestFeedScreen(
                     onRefresh = { feedsViewModel.refreshFeed() }
                 )
             },
-            torangToolbar = { TorangToolbar({ clickAddReview?.invoke(null) }) },
+            torangToolbar = { TorangToolbar { clickAddReview?.invoke(null) } },
             errorComponent = {
                 Column {
 //                            if (uiState.isEmptyFeed) {
