@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 data class AA(val a: Int) {
@@ -35,7 +35,13 @@ class FeedsViewModel @Inject constructor(
                     )
                 )
             }
-            feedService.getFeeds(HashMap())
+            try {
+                feedService.getFeeds(HashMap())
+            } catch (e: UnknownHostException) {
+                Log.e("FeedsViewModel", e.toString())
+            } catch (e: Exception) {
+                Log.e("FeedsViewModel", e.toString())
+            }
         }
     }
 
@@ -53,7 +59,16 @@ class FeedsViewModel @Inject constructor(
                     isRefreshing = true
                 )
             )
-            val result = feedService.getFeeds(HashMap())
+            try {
+                feedService.getFeeds(HashMap())
+            } catch (e: UnknownHostException) {
+                Log.e("FeedsViewModel", e.toString())
+                _uiState.emit(
+                    uiState.value.copy(isFailedLoadFeed = true)
+                )
+            } catch (e: Exception) {
+                Log.e("FeedsViewModel", e.toString())
+            }
 
             _uiState.emit(
                 _uiState.value.copy(
@@ -65,6 +80,58 @@ class FeedsViewModel @Inject constructor(
 
     fun onBottom() {
         Log.d("sryang123", "onBottom!")
+    }
+
+    fun onComment() {
+        viewModelScope.launch {
+            _uiState.emit(uiState.value.copy(isExpandCommentBottomSheet = true))
+        }
+    }
+
+    fun onShare() {
+        viewModelScope.launch {
+            _uiState.emit(uiState.value.copy(isShareCommentBottomSheet = true))
+        }
+    }
+
+    fun onFavorite() {
+
+
+    }
+
+    fun onLike() {
+
+
+    }
+
+    fun closeMenu() {
+        viewModelScope.launch {
+            _uiState.emit(uiState.value.copy(isExpandMenuBottomSheet = false))
+        }
+    }
+
+    fun closeComment() {
+        viewModelScope.launch {
+            _uiState.emit(uiState.value.copy(isExpandCommentBottomSheet = false))
+        }
+    }
+
+    fun closeShare() {
+        viewModelScope.launch {
+            _uiState.emit(uiState.value.copy(isShareCommentBottomSheet = false))
+        }
+    }
+
+    fun onMenu() {
+        viewModelScope.launch {
+            _uiState.emit(uiState.value.copy(isExpandMenuBottomSheet = true))
+        }
+    }
+
+    fun consumeFailedLoadFeedSnackBar() {
+        viewModelScope.launch {
+            _uiState.emit(uiState.value.copy(isFailedLoadFeed = false))
+        }
     }
 
 }

@@ -8,30 +8,38 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
+import kotlinx.coroutines.launch
 
-// UIState 처리
+/**
+ * DI 모듈에서 제공하는 FeedScreen을 사용해주세요
+ */
 @Composable
-fun FeedsScreen(
+fun _FeedsScreen(
     feedsViewModel: FeedsViewModel,
-    snackBar: String = "",
-    isExpandMenuBottomSheet: Boolean = false,
-    isExpandCommentBottomSheet: Boolean = false,
-    isShareCommentBottomSheet: Boolean = false,
     onReview: (Int) -> Unit,
-    itemFeed: @Composable () -> Unit,
+    feeds: @Composable () -> Unit,
     torangToolbar: @Composable () -> Unit,
     errorComponent: @Composable () -> Unit,
     feedMenuBottomSheetDialog: @Composable (Boolean) -> Unit,
     commentBottomSheetDialog: @Composable (Boolean) -> Unit,
     shareBottomSheetDialog: @Composable (Boolean) -> Unit,
+    emptyFeed: @Composable (Boolean) -> Unit,
+    networkError: @Composable (Boolean) -> Unit,
+    loading: @Composable (Boolean) -> Unit,
 ) {
+    val uiState by feedsViewModel.uiState.collectAsState()
     val snackBarHostState = SnackbarHostState()
+    LaunchedEffect(key1 = uiState.isFailedLoadFeed, block = {
+        if (uiState.isFailedLoadFeed) {
+            snackBarHostState.showSnackbar("피드를 불러오는데 실패하였습니다.", null)
+            feedsViewModel.consumeFailedLoadFeedSnackBar()
+        }
 
-    LaunchedEffect(key1 = snackBar, block = {
-        if (snackBar != "")
-            snackBarHostState.showSnackbar(snackBar, null)
     })
 
     Box {
@@ -48,15 +56,15 @@ fun FeedsScreen(
                     errorComponent.invoke()
                     Box {
                         // 피드와 스와이프 리프레시
-                        itemFeed.invoke()
+                        feeds.invoke()
                         errorComponent.invoke()
                     }
                 }
-                if (isExpandMenuBottomSheet)
+                if (uiState.isExpandMenuBottomSheet)
                     feedMenuBottomSheetDialog.invoke(true)
-                if (isExpandCommentBottomSheet)
+                if (uiState.isExpandCommentBottomSheet)
                     commentBottomSheetDialog.invoke(true)
-                if (isShareCommentBottomSheet) {
+                if (uiState.isShareCommentBottomSheet) {
                     shareBottomSheetDialog.invoke(true)
                 }
             }

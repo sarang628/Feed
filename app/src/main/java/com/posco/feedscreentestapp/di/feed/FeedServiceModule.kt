@@ -3,19 +3,14 @@ package com.posco.feedscreentestapp.di.feed
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import com.example.screen_feed.FeedData
 import com.example.screen_feed.FeedService
-import com.example.screen_feed.FeedsScreen
-import com.example.screen_feed.FeedsScreenInputEvents
 import com.example.screen_feed.FeedsViewModel
+import com.example.screen_feed._FeedsScreen
 import com.sarang.base_feed.ui.Feeds
 import com.sarang.base_feed.ui.TorangToolbar
 import com.sarang.base_feed.uistate.FeedBottomUIState
@@ -33,6 +28,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.net.UnknownHostException
 import kotlin.streams.toList
 
 @InstallIn(SingletonComponent::class)
@@ -200,110 +196,57 @@ fun FeedData.toFeedTopUIState(): FeedTopUIState {
 }
 
 @Composable
-fun TestFeedScreen(
+fun FeedScreen(
     feedsViewModel: FeedsViewModel,
     clickAddReview: ((Void?) -> Unit)? = null
 ) {
     val context = LocalContext.current
-    var isExpandMenuBottomSheet by remember { mutableStateOf(false) }
-    var isExpandCommentBottomSheet by remember { mutableStateOf(false) }
-    var isShareCommentBottomSheet by remember { mutableStateOf(false) }
-    val inputEvents = FeedsScreenInputEvents(
-        onRefresh = {
-            feedsViewModel.refreshFeed()
-        },
-        onMenu = {
-            Log.d("MainActivity", "onMenu")
-            isExpandMenuBottomSheet = !isExpandMenuBottomSheet
-        },
-        onComment = {
-            isExpandCommentBottomSheet = !isExpandCommentBottomSheet
-        },
-        onShare = {
-            isShareCommentBottomSheet = !isShareCommentBottomSheet
-        },
-        onProfile = {
-            Toast.makeText(context, "$it", Toast.LENGTH_SHORT).show()
-        },
-        onRestaurant = {
-            Toast.makeText(context, "preparing..", Toast.LENGTH_SHORT)
-                .show()
-        },
-        onAddReview = {
-            Toast.makeText(context, "preparing..", Toast.LENGTH_SHORT)
-                .show()
-        },
-        onFavorite = {
-            Toast.makeText(context, "preparing..", Toast.LENGTH_SHORT)
-                .show()
-        },
-        onImage = {
-            Toast.makeText(context, "preparing..", Toast.LENGTH_SHORT)
-                .show()
-        },
-        onLike = {
-            //feedsViewModel.clickLike(it)
-        },
-        onName = {
-            Toast.makeText(context, "preparing..", Toast.LENGTH_SHORT)
-                .show()
-        }
-    )
-
     val uiState by feedsViewModel.uiState.collectAsState()
 
     Box {
-        FeedsScreen(
+        _FeedsScreen(
             feedsViewModel = feedsViewModel,
-            isExpandMenuBottomSheet = isExpandMenuBottomSheet,
-            isExpandCommentBottomSheet = isExpandCommentBottomSheet,
-            isShareCommentBottomSheet = isShareCommentBottomSheet,
-            onReview = {},
-            itemFeed = {
+            onReview = { Toast.makeText(context, "preparing..", Toast.LENGTH_SHORT).show() },
+            feeds = {
                 Feeds(
                     list = ArrayList(uiState.list.stream().map { it.toFeedUiState() }.toList()),
-                    onProfile = inputEvents.onProfile,
-                    onMenu = inputEvents.onMenu,
-                    onImage = inputEvents.onImage,
-                    onName = inputEvents.onName,
-                    onLike = inputEvents.onLike,
-                    onComment = inputEvents.onComment,
-                    onShare = inputEvents.onShare,
-                    onFavorite = inputEvents.onFavorite,
-                    onRestaurant = inputEvents.onRestaurant,
+                    onProfile = { Toast.makeText(context, "$it", Toast.LENGTH_SHORT).show() },
+                    onMenu = { feedsViewModel.onMenu() },
+                    onImage = { Toast.makeText(context, "preparing..", Toast.LENGTH_SHORT).show() },
+                    onName = { Toast.makeText(context, "preparing..", Toast.LENGTH_SHORT).show() },
+                    onLike = { feedsViewModel.onLike() },
+                    onComment = { feedsViewModel.onComment() },
+                    onShare = { feedsViewModel.onShare() },
+                    onFavorite = { feedsViewModel.onFavorite() },
+                    onRestaurant = {
+                        Toast.makeText(context, "preparing..", Toast.LENGTH_SHORT).show()
+                    },
                     profileImageServerUrl = "http://sarang628.iptime.org:89/profile_images/",
                     imageServerUrl = "http://sarang628.iptime.org:89/review_images/",
                     isRefreshing = uiState.isRefreshing,
-                    onRefresh = { feedsViewModel.refreshFeed() }
+                    onRefresh = { feedsViewModel.refreshFeed() },
                 )
             },
             torangToolbar = { TorangToolbar { clickAddReview?.invoke(null) } },
-            errorComponent = {
-                Column {
-//                            if (uiState.isEmptyFeed) {
-                    // 피드가 비어있을 때
-                    //EmptyFeed()
-//                            }
-
-//                            if (uiState.isVisibleRefreshButton()) {
-                    // 네트워크 에러
-                    //NetworkError()
-//                            }
-//                            if (uiState.isProgess) {
-                    // 로딩
-                    //Loading()
-//                            }
-                }
-            },
             feedMenuBottomSheetDialog = {
-                FeedMenuBottomSheetDialog(isExpand = it, onSelect = {})
+                FeedMenuBottomSheetDialog(
+                    isExpand = it,
+                    onSelect = {},
+                    onClose = { feedsViewModel.closeMenu() })
             },
             commentBottomSheetDialog = {
-                CommentBottomSheetDialog(isExpand = it, onSelect = {})
+                CommentBottomSheetDialog(
+                    isExpand = it,
+                    onSelect = {},
+                    onClose = { feedsViewModel.closeComment() })
             },
             shareBottomSheetDialog = {
-                ShareBottomSheetDialog(isExpand = true, onSelect = {})
-            }
+                ShareBottomSheetDialog(
+                    isExpand = true,
+                    onSelect = {},
+                    onClose = { feedsViewModel.closeShare() })
+            },
+            errorComponent = {}, networkError = {}, loading = {}, emptyFeed = {}
         )
     }
 }

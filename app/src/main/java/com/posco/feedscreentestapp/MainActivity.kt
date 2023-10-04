@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import com.example.screen_feed.FeedService
 import com.example.screen_feed.FeedsViewModel
-import com.posco.feedscreentestapp.di.feed.TestFeedScreen
+import com.posco.feedscreentestapp.di.feed.FeedScreen
 import com.sryang.torang_repository.data.dao.FeedDao
 import com.sryang.torang_repository.data.dao.PictureDao
 import com.sryang.torang_repository.datasource.FeedRemoteDataSource
@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            TestFeedScreen(feedsViewModel = feedsViewModel)
+            FeedScreen(feedsViewModel = feedsViewModel)
         }
     }
 }

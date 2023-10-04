@@ -25,6 +25,6 @@ ext {
     repositoryVersion = '93996d0058'
     baseFeedVersion = '88ac59eafe'
     commonWidgetsVersion = '6c400e072c'
-    torangBottomSheetVersion = '59a70047d3'
+    torangBottomSheetVersion = '6c9aafcfbe'
     JsonToObjectGeneratorVersion = '960fe9fece'
 }
