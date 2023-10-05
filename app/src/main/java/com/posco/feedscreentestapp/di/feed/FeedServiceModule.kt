@@ -198,7 +198,7 @@ fun FeedData.toFeedTopUIState(): FeedTopUIState {
 @Composable
 fun FeedScreen(
     feedsViewModel: FeedsViewModel,
-    clickAddReview: ((Void?) -> Unit)? = null
+    clickAddReview: (() -> Unit)
 ) {
     val context = LocalContext.current
     val uiState by feedsViewModel.uiState.collectAsState()
@@ -206,7 +206,6 @@ fun FeedScreen(
     Box {
         _FeedsScreen(
             feedsViewModel = feedsViewModel,
-            onReview = { Toast.makeText(context, "preparing..", Toast.LENGTH_SHORT).show() },
             feeds = {
                 Feeds(
                     list = ArrayList(uiState.list.stream().map { it.toFeedUiState() }.toList()),
@@ -227,7 +226,7 @@ fun FeedScreen(
                     onRefresh = { feedsViewModel.refreshFeed() },
                 )
             },
-            torangToolbar = { TorangToolbar { clickAddReview?.invoke(null) } },
+            torangToolbar = { TorangToolbar { clickAddReview.invoke() } },
             feedMenuBottomSheetDialog = {
                 FeedMenuBottomSheetDialog(
                     isExpand = it,

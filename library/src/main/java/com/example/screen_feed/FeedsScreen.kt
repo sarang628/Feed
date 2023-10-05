@@ -21,7 +21,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun _FeedsScreen(
     feedsViewModel: FeedsViewModel,
-    onReview: (Int) -> Unit,
     feeds: @Composable () -> Unit,
     torangToolbar: @Composable () -> Unit,
     errorComponent: @Composable () -> Unit,
@@ -32,7 +31,7 @@ fun _FeedsScreen(
     networkError: @Composable (Boolean) -> Unit,
     loading: @Composable (Boolean) -> Unit,
 ) {
-    val uiState by feedsViewModel.uiState.collectAsState()
+    val uiState : FeedUiState by feedsViewModel.uiState.collectAsState()
     val snackBarHostState = SnackbarHostState()
     LaunchedEffect(key1 = uiState.isFailedLoadFeed, block = {
         if (uiState.isFailedLoadFeed) {
