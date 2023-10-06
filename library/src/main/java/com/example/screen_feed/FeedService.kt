@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import java.util.Objects
 
 interface FeedService {
-    suspend fun getFeeds(params: Map<String, String>)
+    suspend fun getFeeds(userId: Int)
     val feeds1: Flow<List<FeedData>>
     suspend fun addLike(reviewId: Int)
     suspend fun deleteLike(reviewId: Int)

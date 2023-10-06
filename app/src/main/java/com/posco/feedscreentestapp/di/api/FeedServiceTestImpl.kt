@@ -25,7 +25,7 @@ import javax.inject.Singleton
 class TestFeedServiceImpl @Inject constructor(
     @ApplicationContext val context: Context
 ) : ApiFeed {
-    override suspend fun getFeeds(params: Map<String, String>): List<RemoteFeed> {
+    override suspend fun getFeeds(userId: Int): List<RemoteFeed> {
         val feeds = ArrayList<RemoteFeed>()
         val list = JsonDataLoader<List<JsonObject>>(context).load(R.raw.feed_response1)
         for (jsonObject in list) {

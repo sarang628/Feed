@@ -36,7 +36,7 @@ class FeedsViewModel @Inject constructor(
                 )
             }
             try {
-                feedService.getFeeds(HashMap())
+                feedService.getFeeds(1)
             } catch (e: UnknownHostException) {
                 Log.e("FeedsViewModel", e.toString())
             } catch (e: Exception) {
@@ -60,7 +60,7 @@ class FeedsViewModel @Inject constructor(
                 )
             )
             try {
-                feedService.getFeeds(HashMap())
+                feedService.getFeeds(1)
             } catch (e: UnknownHostException) {
                 Log.e("FeedsViewModel", e.toString())
                 _uiState.emit(

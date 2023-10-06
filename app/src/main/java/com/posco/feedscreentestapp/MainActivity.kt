@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            FeedScreen(feedsViewModel = feedsViewModel)
+            FeedScreen(feedsViewModel = feedsViewModel, clickAddReview = {})
         }
     }
 }

@@ -39,14 +39,14 @@ class FeedServiceModule {
         feedRepository: FeedRepository
     ): FeedService {
         return object : FeedService {
-            override suspend fun getFeeds(params: Map<String, String>) {
-                feedRepository.loadFeed()
+            override suspend fun getFeeds(userId: Int) {
+                feedRepository.loadFeed(userId)
             }
 
             override val feeds1: Flow<List<FeedData>>
-                get() = feedRepository.feeds1.map {
+                get() = feedRepository.feeds1.map { it ->
                     it.stream().map {
-                        val feedData = FeedData(
+                        FeedData(
                             reviewId = it.review.reviewId,
                             userId = it.review.userId,
                             name = it.review.userName,
@@ -61,7 +61,7 @@ class FeedServiceModule {
                             comment = "",
                             comment1 = "",
                             comment2 = "",
-                            isLike = false,
+                            isLike = it.like != null,
                             isFavorite = false,
                             visibleLike = false,
                             visibleComment = false,
@@ -69,12 +69,11 @@ class FeedServiceModule {
                             reviewImages = it.images.stream().map { it.pictureUrl }.toList(),
                             restaurantId = it.review.restaurantId
                         )
-                        feedData
                     }.toList()
                 }
 
             override suspend fun addLike(reviewId: Int) {
-                TODO("Not yet implemented")
+
             }
 
             override suspend fun deleteLike(reviewId: Int) {
@@ -134,7 +133,7 @@ fun RemoteFeed.toFeedBottomUiState(): FeedBottomUIState {
         comment = "",
         comment1 = "",
         comment2 = "",
-        isLike = this.like?.isLike ?: false,
+        isLike = this.like != null,
         isFavorite = this.favorite?.isFavority ?: false,
         visibleLike = true,
         visibleComment = true,

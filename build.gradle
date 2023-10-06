@@ -22,7 +22,7 @@ ext {
     torangImageLoaderVersion = 'f4a2359698'
     themeVersion = '7c191eb4e6'
     navigationModuleVersion = 'd98f57435d'
-    repositoryVersion = 'dc8f880ac4'
+    repositoryVersion = 'bc575e6688'
     baseFeedVersion = '88ac59eafe'
     commonWidgetsVersion = '6c400e072c'
     torangBottomSheetVersion = '6c9aafcfbe'
