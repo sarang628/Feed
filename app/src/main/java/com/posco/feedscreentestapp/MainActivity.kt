@@ -41,7 +41,12 @@ class MainActivity : ComponentActivity() {
             FeedScreen(
                 feedsViewModel = feedsViewModel,
                 clickAddReview = {},
-                profileImageServerUrl = "http://sarang628.iptime.org:89/profile_images/"
+                profileImageServerUrl = "http://sarang628.iptime.org:89/profile_images/",
+                imageServerUrl = "http://sarang628.iptime.org:89/review_images/",
+                onRestaurant = {},
+                onName = {},
+                onImage = {},
+                onProfile = {}
             )
         }
     }

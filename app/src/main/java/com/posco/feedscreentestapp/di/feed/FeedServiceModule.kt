@@ -220,9 +220,13 @@ fun FeedData.toFeedTopUIState(): FeedTopUIState {
 fun FeedScreen(
     feedsViewModel: FeedsViewModel,
     clickAddReview: (() -> Unit),
-    profileImageServerUrl: String
+    profileImageServerUrl: String,
+    onProfile: ((Int) -> Unit),
+    onImage: ((Int) -> Unit),
+    onName: (() -> Unit),
+    onRestaurant: ((Int) -> Unit),
+    imageServerUrl: String
 ) {
-    val context = LocalContext.current
     val uiState by feedsViewModel.uiState.collectAsState()
 
     Box {
@@ -231,19 +235,17 @@ fun FeedScreen(
             feeds = {
                 Feeds(
                     list = ArrayList(uiState.list.stream().map { it.toFeedUiState() }.toList()),
-                    onProfile = { Toast.makeText(context, "$it", Toast.LENGTH_SHORT).show() },
+                    onProfile = onProfile,
                     onMenu = { feedsViewModel.onMenu() },
-                    onImage = { Toast.makeText(context, "preparing..", Toast.LENGTH_SHORT).show() },
-                    onName = { Toast.makeText(context, "preparing..", Toast.LENGTH_SHORT).show() },
+                    onImage = onImage,
+                    onName = onName,
                     onLike = { feedsViewModel.onLike(it) },
                     onComment = { feedsViewModel.onComment(it) },
                     onShare = { feedsViewModel.onShare() },
                     onFavorite = { feedsViewModel.onFavorite(it) },
-                    onRestaurant = {
-                        Toast.makeText(context, "preparing..", Toast.LENGTH_SHORT).show()
-                    },
+                    onRestaurant = onRestaurant,
                     profileImageServerUrl = profileImageServerUrl,
-                    imageServerUrl = "http://sarang628.iptime.org:89/review_images/",
+                    imageServerUrl = imageServerUrl,
                     isRefreshing = uiState.isRefreshing,
                     onRefresh = { feedsViewModel.refreshFeed() },
                 )
