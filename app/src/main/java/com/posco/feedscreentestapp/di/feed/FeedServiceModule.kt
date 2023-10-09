@@ -1,12 +1,12 @@
 package com.posco.feedscreentestapp.di.feed
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
+import com.example.screen_feed.CommentData
 import com.example.screen_feed.FeedData
 import com.example.screen_feed.FeedService
 import com.example.screen_feed.FeedsViewModel
@@ -17,8 +17,10 @@ import com.sarang.base_feed.uistate.FeedBottomUIState
 import com.sarang.base_feed.uistate.FeedTopUIState
 import com.sarang.base_feed.uistate.FeedUiState
 import com.sryang.library.CommentBottomSheetDialog
+import com.sryang.library.CommentItemUiState
 import com.sryang.library.FeedMenuBottomSheetDialog
 import com.sryang.library.ShareBottomSheetDialog
+import com.sryang.torang_repository.data.RemoteComment
 import com.sryang.torang_repository.data.entity.FeedEntity
 import com.sryang.torang_repository.data.remote.response.RemoteFeed
 import com.sryang.torang_repository.repository.feed.FeedRepository
@@ -28,7 +30,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import java.net.UnknownHostException
 import kotlin.streams.toList
 
 @InstallIn(SingletonComponent::class)
@@ -62,7 +63,7 @@ class FeedServiceModule {
                             comment1 = "",
                             comment2 = "",
                             isLike = it.like != null,
-                            isFavorite = false,
+                            isFavorite = it.favorite != null,
                             visibleLike = false,
                             visibleComment = false,
                             contents = it.review.contents,
@@ -72,23 +73,44 @@ class FeedServiceModule {
                     }.toList()
                 }
 
-            override suspend fun addLike(reviewId: Int) {
-
+            override suspend fun addLike(userId: Int, reviewId: Int) {
+                feedRepository.addLike(userId, reviewId)
             }
 
-            override suspend fun deleteLike(reviewId: Int) {
-                TODO("Not yet implemented")
+            override suspend fun deleteLike(userId: Int, reviewId: Int) {
+                feedRepository.deleteLike(userId, reviewId)
             }
 
-            override suspend fun deleteFavorite(reviewId: Int) {
-                TODO("Not yet implemented")
+            override suspend fun deleteFavorite(userId: Int, reviewId: Int) {
+                feedRepository.deleteFavorite(userId, reviewId)
             }
 
-            override suspend fun addFavorite(reviewId: Int) {
-                TODO("Not yet implemented")
+            override suspend fun addFavorite(userId: Int, reviewId: Int) {
+                feedRepository.addFavorite(userId, reviewId)
+            }
+
+            override suspend fun getComment(reviewId: Int): List<CommentData> {
+                return feedRepository.getComment(reviewId).stream().map {
+                    it.toCommentData()
+                }.toList()
+            }
+
+            override suspend fun addComment(reviewId: Int, userId: Int, comment: String) {
+                feedRepository.addComment(reviewId, userId, comment)
             }
         }
     }
+}
+
+fun RemoteComment.toCommentData(): CommentData {
+    return CommentData(
+        userId = this.user_id,
+        profileImageUrl = this.profile_pic_url,
+        date = this.create_date,
+        comment = this.comment,
+        name = this.user_name,
+        likeCount = 0
+    )
 }
 
 fun FeedEntity.toFeedTopUiState(): FeedTopUIState {
@@ -134,7 +156,7 @@ fun RemoteFeed.toFeedBottomUiState(): FeedBottomUIState {
         comment1 = "",
         comment2 = "",
         isLike = this.like != null,
-        isFavorite = this.favorite?.isFavority ?: false,
+        isFavorite = this.favorite != null,
         visibleLike = true,
         visibleComment = true,
         contents = this.contents
@@ -197,7 +219,8 @@ fun FeedData.toFeedTopUIState(): FeedTopUIState {
 @Composable
 fun FeedScreen(
     feedsViewModel: FeedsViewModel,
-    clickAddReview: (() -> Unit)
+    clickAddReview: (() -> Unit),
+    profileImageServerUrl: String
 ) {
     val context = LocalContext.current
     val uiState by feedsViewModel.uiState.collectAsState()
@@ -212,14 +235,14 @@ fun FeedScreen(
                     onMenu = { feedsViewModel.onMenu() },
                     onImage = { Toast.makeText(context, "preparing..", Toast.LENGTH_SHORT).show() },
                     onName = { Toast.makeText(context, "preparing..", Toast.LENGTH_SHORT).show() },
-                    onLike = { feedsViewModel.onLike() },
-                    onComment = { feedsViewModel.onComment() },
+                    onLike = { feedsViewModel.onLike(it) },
+                    onComment = { feedsViewModel.onComment(it) },
                     onShare = { feedsViewModel.onShare() },
-                    onFavorite = { feedsViewModel.onFavorite() },
+                    onFavorite = { feedsViewModel.onFavorite(it) },
                     onRestaurant = {
                         Toast.makeText(context, "preparing..", Toast.LENGTH_SHORT).show()
                     },
-                    profileImageServerUrl = "http://sarang628.iptime.org:89/profile_images/",
+                    profileImageServerUrl = profileImageServerUrl,
                     imageServerUrl = "http://sarang628.iptime.org:89/review_images/",
                     isRefreshing = uiState.isRefreshing,
                     onRefresh = { feedsViewModel.refreshFeed() },
@@ -236,7 +259,13 @@ fun FeedScreen(
                 CommentBottomSheetDialog(
                     isExpand = it,
                     onSelect = {},
-                    onClose = { feedsViewModel.closeComment() })
+                    onClose = { feedsViewModel.closeComment() },
+                    list = uiState.comments?.stream()?.map { it.toCommentItemUiState() }?.toList()
+                        ?: ArrayList(),
+                    onSend = { feedsViewModel.sendComment(it) },
+                    profileImageUrl = "",
+                    profileImageServerUrl = profileImageServerUrl
+                )
             },
             shareBottomSheetDialog = {
                 ShareBottomSheetDialog(
@@ -247,4 +276,15 @@ fun FeedScreen(
             errorComponent = {}, networkError = {}, loading = {}, emptyFeed = {}
         )
     }
+}
+
+fun CommentData.toCommentItemUiState(): CommentItemUiState {
+    return CommentItemUiState(
+        userId = userId,
+        profileImageUrl = profileImageUrl,
+        date = date,
+        comment = comment,
+        name = name,
+        likeCount = likeCount
+    )
 }

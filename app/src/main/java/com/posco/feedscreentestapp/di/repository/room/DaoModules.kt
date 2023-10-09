@@ -1,6 +1,7 @@
-package com.sryang.torang_repository.di.room
+package com.sryang.torang_repository.di.repository.room
 
 import com.sryang.torang_repository.data.AppDatabase
+import com.sryang.torang_repository.data.dao.FavoriteDao
 import com.sryang.torang_repository.data.dao.FeedDao
 import com.sryang.torang_repository.data.dao.LikeDao
 import com.sryang.torang_repository.data.dao.LoggedInUserDao
@@ -14,12 +15,6 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 @Module
 class DaoModules {
-
-    @Provides
-    fun likeDao(appDatabase: AppDatabase): LikeDao {
-        return appDatabase.likeDao()
-    }
-
     @Provides
     fun provideLoggedInUserDao(appDatabase: AppDatabase): LoggedInUserDao {
         return appDatabase.LoggedInUserDao()
@@ -38,5 +33,15 @@ class DaoModules {
     @Provides
     fun provideUserDao(appDatabase: AppDatabase): UserDao {
         return appDatabase.userDao()
+    }
+
+    @Provides
+    fun provideLikeDao(appDatabase: AppDatabase): LikeDao {
+        return appDatabase.likeDao()
+    }
+
+    @Provides
+    fun provideFavoriteDao(appDatabase: AppDatabase): FavoriteDao {
+        return appDatabase.favoriteDao()
     }
 }

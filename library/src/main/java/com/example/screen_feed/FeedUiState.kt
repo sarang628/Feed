@@ -6,5 +6,7 @@ data class FeedUiState(
     val isExpandMenuBottomSheet: Boolean = false,
     val isExpandCommentBottomSheet: Boolean = false,
     val isShareCommentBottomSheet: Boolean = false,
-    val isFailedLoadFeed: Boolean = false
+    val isFailedLoadFeed: Boolean = false,
+    val selectedReviewId: Int? = null,
+    val comments: List<CommentData>? = null
 )

@@ -82,9 +82,16 @@ class FeedsViewModel @Inject constructor(
         Log.d("sryang123", "onBottom!")
     }
 
-    fun onComment() {
+    fun onComment(reviewId: Int) {
         viewModelScope.launch {
-            _uiState.emit(uiState.value.copy(isExpandCommentBottomSheet = true))
+            val list: List<CommentData> = feedService.getComment(reviewId)
+            _uiState.emit(
+                uiState.value.copy(
+                    selectedReviewId = reviewId,
+                    isExpandCommentBottomSheet = true,
+                    comments = list
+                )
+            )
         }
     }
 
@@ -94,14 +101,31 @@ class FeedsViewModel @Inject constructor(
         }
     }
 
-    fun onFavorite() {
-
-
+    fun onFavorite(reviewId: Int) {
+        viewModelScope.launch {
+            val review = uiState.value.list.find { it.reviewId == reviewId }
+            review?.let {
+                Log.d("FeedsViewModel", it.isFavorite.toString())
+                if (it.isFavorite) {
+                    feedService.deleteFavorite(1, reviewId)
+                } else {
+                    feedService.addFavorite(1, reviewId)
+                }
+            }
+        }
     }
 
-    fun onLike() {
-
-
+    fun onLike(reviewId: Int) {
+        viewModelScope.launch {
+            val review = uiState.value.list.find { it.reviewId == reviewId }
+            review?.let {
+                if (it.isLike) {
+                    feedService.deleteLike(1, reviewId)
+                } else {
+                    feedService.addLike(1, reviewId)
+                }
+            }
+        }
     }
 
     fun closeMenu() {
@@ -112,7 +136,9 @@ class FeedsViewModel @Inject constructor(
 
     fun closeComment() {
         viewModelScope.launch {
-            _uiState.emit(uiState.value.copy(isExpandCommentBottomSheet = false))
+            _uiState.emit(
+                uiState.value.copy(isExpandCommentBottomSheet = false, selectedReviewId = null)
+            )
         }
     }
 
@@ -131,6 +157,15 @@ class FeedsViewModel @Inject constructor(
     fun consumeFailedLoadFeedSnackBar() {
         viewModelScope.launch {
             _uiState.emit(uiState.value.copy(isFailedLoadFeed = false))
+        }
+    }
+
+    fun sendComment(comment: String) {
+        viewModelScope.launch {
+            uiState.value.selectedReviewId?.let { reviewId ->
+                feedService.addComment(reviewId = reviewId, comment = comment, userId = 1)
+            }
+
         }
     }
 

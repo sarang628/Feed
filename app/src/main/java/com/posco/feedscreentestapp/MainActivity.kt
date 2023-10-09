@@ -38,7 +38,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            FeedScreen(feedsViewModel = feedsViewModel, clickAddReview = {})
+            FeedScreen(
+                feedsViewModel = feedsViewModel,
+                clickAddReview = {},
+                profileImageServerUrl = "http://sarang628.iptime.org:89/profile_images/"
+            )
         }
     }
 }

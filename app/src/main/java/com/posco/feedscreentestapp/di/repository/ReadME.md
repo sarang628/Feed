@@ -1,10 +1,3 @@
-# 피드
-
-## 서비스
-사용자 리뷰(피드)리스트 화면 제공
-좋아요, 저장, 공유, 코멘트 등 사용자 입력 이벤트
-
-
 # Retrofit 모듈 만들기
 
 https://square.github.io/retrofit/

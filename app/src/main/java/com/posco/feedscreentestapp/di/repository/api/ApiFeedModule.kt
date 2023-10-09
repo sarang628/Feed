@@ -1,17 +1,22 @@
-package com.sryang.torang_repository.di.api
+package com.sryang.torang_repository.di.repository.api
 
 import android.content.Context
 import com.example.torangrepository.R
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
-import com.sryang.torang_repository.data.Favorite
-import com.sryang.torang_repository.data.Like
+import com.sryang.torang_repository.api.ApiFeed
+import com.sryang.torang_repository.data.RemoteFavorite
+import com.sryang.torang_repository.data.RemoteLike
 import com.sryang.torang_repository.data.Review
 import com.sryang.torang_repository.data.entity.ReviewDeleteRequestVO
 import com.sryang.torang_repository.data.remote.response.RemoteFeed
-import com.sryang.torang_repository.api.ApiFeed
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import retrofit2.http.Field
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -20,6 +25,53 @@ import java.io.StringWriter
 import java.io.Writer
 import javax.inject.Inject
 import javax.inject.Singleton
+
+
+@InstallIn(SingletonComponent::class)
+@Module
+class ApiFeedModule {
+    @Singleton
+    @Provides
+    fun provideRemoteFeedService(
+        apiFeed: ProductApiFeed,
+//        apiFeed: LocalApiFeed
+    ): ApiFeed {
+        return apiFeed.create()
+    }
+}
+
+/**
+ * 피드 서비스 Product
+ */
+@Singleton
+class ProductApiFeed @Inject constructor(
+    private val torangOkHttpClientImpl: TorangOkhttpClient,
+    private val retrofitModule: RetrofitModule
+) {
+    private var url = "http://sarang628.iptime.org:8081/"
+    fun create(): ApiFeed {
+        return retrofitModule
+//            .getRetrofit(torangOkHttpClientImpl.getUnsafeOkHttpClient(), url)
+            .getRetrofit(torangOkHttpClientImpl.getHttpClient(), url)
+            .create(ApiFeed::class.java)
+    }
+}
+
+/**
+ * 로컬 서버 피드 서비스
+ */
+@Singleton
+class LocalApiFeed @Inject constructor(
+    private val torangOkHttpClientImpl: TorangOkhttpClient,
+    private val retrofitModule: RetrofitModule
+) {
+    private var url = "http://192.168.0.14:8081/"
+    fun create(): ApiFeed {
+        return retrofitModule.getRetrofit(torangOkHttpClientImpl.getHttpClient(), url).create(
+            ApiFeed::class.java
+        )
+    }
+}
 
 @Singleton
 class TestFeedServiceImpl @Inject constructor(
@@ -41,19 +93,25 @@ class TestFeedServiceImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override suspend fun addLike(like: Like): Like {
+    override suspend fun addLike(
+        @Field(value = "userId") userId: Int,
+        @Field(value = "reviewId") reviewId: Int
+    ): RemoteLike {
         TODO("Not yet implemented")
     }
 
-    override suspend fun deleteLike(like: Like): Like {
+    override suspend fun deleteLike(@Field(value = "likeId") likeId: Int): RemoteLike {
         TODO("Not yet implemented")
     }
 
-    override suspend fun deleteFavorite(favorite: Favorite): Favorite {
+    override suspend fun deleteFavorite(@Field(value = "favoriteId") likeId: Int): RemoteFavorite {
         TODO("Not yet implemented")
     }
 
-    override suspend fun addFavorite(favorite: Favorite): Favorite {
+    override suspend fun addFavorite(
+        @Field(value = "userId") userId: Int,
+        @Field(value = "reviewId") reviewId: Int
+    ): RemoteFavorite {
         TODO("Not yet implemented")
     }
 
