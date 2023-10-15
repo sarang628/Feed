@@ -1,11 +1,9 @@
 package com.posco.feedscreentestapp.di.feed
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalContext
 import com.example.screen_feed.CommentData
 import com.example.screen_feed.FeedData
 import com.example.screen_feed.FeedService
@@ -23,7 +21,7 @@ import com.sryang.library.ShareBottomSheetDialog
 import com.sryang.torang_repository.data.RemoteComment
 import com.sryang.torang_repository.data.entity.FeedEntity
 import com.sryang.torang_repository.data.remote.response.RemoteFeed
-import com.sryang.torang_repository.repository.feed.FeedRepository
+import com.sryang.torang_repository.repository.FeedRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -40,12 +38,12 @@ class FeedServiceModule {
         feedRepository: FeedRepository
     ): FeedService {
         return object : FeedService {
-            override suspend fun getFeeds(userId: Int) {
-                feedRepository.loadFeed(userId)
+            override suspend fun getFeeds() {
+                feedRepository.loadFeed()
             }
 
             override val feeds1: Flow<List<FeedData>>
-                get() = feedRepository.feeds1.map { it ->
+                get() = feedRepository.feeds.map { it ->
                     it.stream().map {
                         FeedData(
                             reviewId = it.review.reviewId,
@@ -73,20 +71,20 @@ class FeedServiceModule {
                     }.toList()
                 }
 
-            override suspend fun addLike(userId: Int, reviewId: Int) {
-                feedRepository.addLike(userId, reviewId)
+            override suspend fun addLike(reviewId: Int) {
+                feedRepository.addLike(reviewId)
             }
 
-            override suspend fun deleteLike(userId: Int, reviewId: Int) {
-                feedRepository.deleteLike(userId, reviewId)
+            override suspend fun deleteLike(reviewId: Int) {
+                feedRepository.deleteLike(reviewId)
             }
 
-            override suspend fun deleteFavorite(userId: Int, reviewId: Int) {
-                feedRepository.deleteFavorite(userId, reviewId)
+            override suspend fun deleteFavorite(reviewId: Int) {
+                feedRepository.deleteFavorite(reviewId)
             }
 
-            override suspend fun addFavorite(userId: Int, reviewId: Int) {
-                feedRepository.addFavorite(userId, reviewId)
+            override suspend fun addFavorite(reviewId: Int) {
+                feedRepository.addFavorite(reviewId)
             }
 
             override suspend fun getComment(reviewId: Int): List<CommentData> {
@@ -95,8 +93,8 @@ class FeedServiceModule {
                 }.toList()
             }
 
-            override suspend fun addComment(reviewId: Int, userId: Int, comment: String) {
-                feedRepository.addComment(reviewId, userId, comment)
+            override suspend fun addComment(reviewId: Int, comment: String) {
+                feedRepository.addComment(reviewId, comment)
             }
         }
     }

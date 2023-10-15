@@ -36,7 +36,7 @@ class FeedsViewModel @Inject constructor(
                 )
             }
             try {
-                feedService.getFeeds(1)
+                feedService.getFeeds()
             } catch (e: UnknownHostException) {
                 Log.e("FeedsViewModel", e.toString())
             } catch (e: Exception) {
@@ -60,7 +60,7 @@ class FeedsViewModel @Inject constructor(
                 )
             )
             try {
-                feedService.getFeeds(1)
+                feedService.getFeeds()
             } catch (e: UnknownHostException) {
                 Log.e("FeedsViewModel", e.toString())
                 _uiState.emit(
@@ -107,9 +107,9 @@ class FeedsViewModel @Inject constructor(
             review?.let {
                 Log.d("FeedsViewModel", it.isFavorite.toString())
                 if (it.isFavorite) {
-                    feedService.deleteFavorite(1, reviewId)
+                    feedService.deleteFavorite( reviewId)
                 } else {
-                    feedService.addFavorite(1, reviewId)
+                    feedService.addFavorite( reviewId)
                 }
             }
         }
@@ -120,9 +120,9 @@ class FeedsViewModel @Inject constructor(
             val review = uiState.value.list.find { it.reviewId == reviewId }
             review?.let {
                 if (it.isLike) {
-                    feedService.deleteLike(1, reviewId)
+                    feedService.deleteLike( reviewId)
                 } else {
-                    feedService.addLike(1, reviewId)
+                    feedService.addLike( reviewId)
                 }
             }
         }
@@ -163,7 +163,7 @@ class FeedsViewModel @Inject constructor(
     fun sendComment(comment: String) {
         viewModelScope.launch {
             uiState.value.selectedReviewId?.let { reviewId ->
-                feedService.addComment(reviewId = reviewId, comment = comment, userId = 1)
+                feedService.addComment(reviewId = reviewId, comment = comment)
             }
 
         }

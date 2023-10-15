@@ -10,7 +10,9 @@ import com.posco.feedscreentestapp.di.feed.FeedScreen
 import com.sryang.torang_repository.data.dao.FeedDao
 import com.sryang.torang_repository.data.dao.PictureDao
 import com.sryang.torang_repository.datasource.FeedRemoteDataSource
-import com.sryang.torang_repository.repository.feed.FeedRepository
+import com.sryang.torang_repository.repository.FeedRepository
+import com.sryang.torang_repository.repository.LoginRepository
+import com.sryang.torang_repository.repository.LoginRepositoryTest
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -34,10 +36,16 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var feedRemoteDataSource: FeedRemoteDataSource
 
+    @Inject
+    lateinit var loginRepository: LoginRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
+
+            //LoginRepositoryTest(loginRepository = loginRepository)
+
             FeedScreen(
                 feedsViewModel = feedsViewModel,
                 clickAddReview = {},
