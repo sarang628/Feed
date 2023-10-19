@@ -47,7 +47,6 @@ class MainActivity : ComponentActivity() {
             //LoginRepositoryTest(loginRepository = loginRepository)
 
             FeedScreen(
-                feedsViewModel = feedsViewModel,
                 clickAddReview = {},
                 profileImageServerUrl = "http://sarang628.iptime.org:89/profile_images/",
                 imageServerUrl = "http://sarang628.iptime.org:89/review_images/",

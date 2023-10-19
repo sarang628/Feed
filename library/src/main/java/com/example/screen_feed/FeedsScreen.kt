@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 
 /**
@@ -20,7 +21,7 @@ import kotlinx.coroutines.launch
  */
 @Composable
 fun _FeedsScreen(
-    feedsViewModel: FeedsViewModel,
+    feedsViewModel: FeedsViewModel = hiltViewModel(),
     feeds: @Composable () -> Unit,
     torangToolbar: @Composable () -> Unit,
     errorComponent: @Composable () -> Unit,
@@ -31,7 +32,7 @@ fun _FeedsScreen(
     networkError: @Composable (Boolean) -> Unit,
     loading: @Composable (Boolean) -> Unit,
 ) {
-    val uiState : FeedUiState by feedsViewModel.uiState.collectAsState()
+    val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
     val snackBarHostState = SnackbarHostState()
     LaunchedEffect(key1 = uiState.isFailedLoadFeed, block = {
         if (uiState.isFailedLoadFeed) {
