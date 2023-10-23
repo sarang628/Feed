@@ -109,10 +109,14 @@ class FeedsViewModel @Inject constructor(
             val review = uiState.value.list.find { it.reviewId == reviewId }
             review?.let {
                 Log.d("FeedsViewModel", it.isFavorite.toString())
-                if (it.isFavorite) {
-                    feedService.deleteFavorite(reviewId)
-                } else {
-                    feedService.addFavorite(reviewId)
+                try {
+                    if (it.isFavorite) {
+                        feedService.deleteFavorite(reviewId)
+                    } else {
+                        feedService.addFavorite(reviewId)
+                    }
+                } catch (e: Exception) {
+                    _uiState.emit(uiState.value.copy(error = e.message))
                 }
             }
         }
