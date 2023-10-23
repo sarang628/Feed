@@ -1,8 +1,12 @@
-package com.example.screen_feed
+package com.sryang.torang.compose
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material.Text
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -10,11 +14,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import kotlinx.coroutines.launch
+import com.sryang.torang.R
+import com.sryang.torang.uistate.FeedUiState
+import com.sryang.torang.viewmodels.FeedsViewModel
 
 /**
  * DI 모듈에서 제공하는 FeedScreen을 사용해주세요
@@ -66,6 +72,16 @@ fun _FeedsScreen(
                     commentBottomSheetDialog.invoke(true)
                 if (uiState.isShareCommentBottomSheet) {
                     shareBottomSheetDialog.invoke(true)
+                }
+                uiState.error?.let {
+                    AlertDialog(
+                        onDismissRequest = { feedsViewModel.removeErrorMsg() },
+                        confirmButton = {
+                            Button(onClick = { feedsViewModel.removeErrorMsg() }) {
+                                Text(text = "확인", color = Color.White)
+                            }
+                        },
+                        title = { Text(text = it) })
                 }
             }
         }

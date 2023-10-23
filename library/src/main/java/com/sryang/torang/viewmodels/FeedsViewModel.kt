@@ -1,8 +1,11 @@
-package com.example.screen_feed
+package com.sryang.torang.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import coil.network.HttpException
+import com.sryang.torang.data.CommentData
+import com.sryang.torang.uistate.FeedUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,7 +22,7 @@ class FeedsViewModel @Inject constructor(
     private val feedService: FeedService
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<FeedUiState>(
+    private val _uiState = MutableStateFlow(
         FeedUiState()
     )
 
@@ -107,9 +110,9 @@ class FeedsViewModel @Inject constructor(
             review?.let {
                 Log.d("FeedsViewModel", it.isFavorite.toString())
                 if (it.isFavorite) {
-                    feedService.deleteFavorite( reviewId)
+                    feedService.deleteFavorite(reviewId)
                 } else {
-                    feedService.addFavorite( reviewId)
+                    feedService.addFavorite(reviewId)
                 }
             }
         }
@@ -119,10 +122,14 @@ class FeedsViewModel @Inject constructor(
         viewModelScope.launch {
             val review = uiState.value.list.find { it.reviewId == reviewId }
             review?.let {
-                if (it.isLike) {
-                    feedService.deleteLike( reviewId)
-                } else {
-                    feedService.addLike( reviewId)
+                try {
+                    if (it.isLike) {
+                        feedService.deleteLike(reviewId)
+                    } else {
+                        feedService.addLike(reviewId)
+                    }
+                } catch (e: Exception) {
+                    _uiState.emit(uiState.value.copy(error = e.message))
                 }
             }
         }
@@ -166,6 +173,16 @@ class FeedsViewModel @Inject constructor(
                 feedService.addComment(reviewId = reviewId, comment = comment)
             }
 
+        }
+    }
+
+    fun removeErrorMsg() {
+        viewModelScope.launch {
+            _uiState.emit(
+                uiState.value.copy(
+                    error = null
+                )
+            )
         }
     }
 

@@ -1,7 +1,8 @@
-package com.example.screen_feed
+package com.sryang.torang.viewmodels
 
+import com.sryang.torang.data.CommentData
+import com.sryang.torang.data.FeedData
 import kotlinx.coroutines.flow.Flow
-import java.util.Objects
 
 interface FeedService {
     suspend fun getFeeds()

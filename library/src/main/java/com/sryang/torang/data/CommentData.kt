@@ -1,4 +1,4 @@
-package com.example.screen_feed
+package com.sryang.torang.data
 
 data class CommentData(
     val userId: Int,

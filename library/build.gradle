@@ -1,6 +1,6 @@
 plugins {
     id 'com.android.library'
-    id 'kotlin-android'
+    id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
 }
@@ -22,58 +22,62 @@ android {
         }
     }
 
+    buildFeatures {compose true}
+    composeOptions {kotlinCompilerExtensionVersion = "1.4.6"}
     compileOptions {
         targetCompatibility JavaVersion.VERSION_17
         sourceCompatibility JavaVersion.VERSION_17
     }
 
-    buildFeatures {
-        dataBinding true
-        viewBinding true
-        compose true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.6"
-    }
-
-    namespace 'com.example.screen_feed'
+    namespace 'com.sryang.torang'
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     /** hilt */
     implementation "com.google.dagger:hilt-android:$hiltVersion"
-    kapt "com.google.dagger:hilt-compiler:$hiltVersion"
+    implementation 'androidx.test.ext:junit-ktx:1.1.5'
+    kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
+    implementation"androidx.hilt:hilt-navigation-compose:1.0.0" // hiltViewModel
 
     /** compose */
     def composeBom = platform('androidx.compose:compose-bom:2023.05.01')
     implementation composeBom
     androidTestImplementation composeBom
-    //없으면 @Composable import 안됨
-    implementation 'androidx.compose.ui:ui'
-    //없으면 Text("Hello") 안됨
-    implementation 'androidx.compose.material:material'
-    // Android Studio Preview support
-    implementation 'androidx.compose.ui:ui-tooling-preview'
-    debugImplementation 'androidx.compose.ui:ui-tooling'
-    //JetNews Main 따라하기
+    implementation 'androidx.compose.ui:ui' //없으면 @Composable import 안됨
+    implementation 'androidx.compose.material:material' //없으면 Text("Hello") 안됨
+    implementation 'androidx.compose.ui:ui-tooling-preview' // Android Studio Preview support
     implementation 'androidx.compose.material3:material3'
     implementation "androidx.compose.material3:material3-window-size-class"
-    // collectAsState
-    implementation "androidx.lifecycle:lifecycle-runtime-compose:2.6.1"
+    implementation "androidx.lifecycle:lifecycle-runtime-compose:2.6.1" // collectAsState
+    implementation 'androidx.activity:activity-compose:1.7.1' // Optional - Integration with activities
+    debugImplementation 'androidx.compose.ui:ui-tooling'
 
-    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1"
-
+    /** utils */
     implementation 'com.google.code.gson:gson:2.10.1'
-
     implementation("io.coil-kt:coil-compose:2.3.0")
 
-    /** local */
+    /** unittest */
+    testImplementation "junit:junit:$jUnitVersion" // Required -- JUnit 4 framework
+    testImplementation "androidx.test:core:$androidXTestVersion" // Optional -- Robolectric environment // To use the androidx.test.core APIs
+    //testImplementation "org.mockito:mockito-core:$mockitoVersion" // Optional -- Mockito framework
+    //testImplementation "org.mockito.kotlin:mockito-kotlin:$mockitoKotlinVersion" // Optional -- mockito-kotlin
+    //testImplementation "io.mockk:mockk:$mockkVersion" // Optional -- Mockk framework
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version" // Test rules and transitive dependencies:
+    //debugImplementation("androidx.compose.ui:ui-test-manifest:$compose_version") // Needed for createAndroidComposeRule, but not createComposeRule:
+
+    // androidTestImplementation "androidx.test:core-ktx:1.5.0" // Kotlin extensions for androidx.test.core
+    // androidTestImplementation "androidx.test.espresso:espresso-core:3.5.1" // To use the androidx.test.espresso
+    // androidTestImplementation "androidx.test.ext:junit:1.1.5" // To use the JUnit Extension APIs
+    // androidTestImplementation "androidx.test.ext:junit-ktx:1.1.5" // Kotlin extensions for androidx.test.ext.junit
+    // androidTestImplementation "androidx.test.ext:truth:1.5.0" // To use the Truth Extension APIs
+    // androidTestImplementation "androidx.test:runner:1.5.2" // To use the androidx.test.runner APIs
+    // androidTestUtil "androidx.test:orchestrator:1.4.2" // To use android test orchestrator
+
+    /* torang modules*/
     implementation "com.github.sarang628:Theme:$themeVersion"
     implementation "com.github.sarang628:JsonToObjectGenerator:$JsonToObjectGeneratorVersion"
     implementation "com.github.sarang628:Navigation:$navigationModuleVersion"
     implementation "com.github.sarang628:CommonWidgets:$commonWidgetsVersion"
-    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
 
 }

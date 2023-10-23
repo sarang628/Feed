@@ -1,4 +1,4 @@
-package com.example.screen_feed
+package com.sryang.torang.viewmodels
 
 data class FeedsScreenInputEvents(
     val onRefresh: (() -> Unit), // 스와이프 리프레시 이벤트

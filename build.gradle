@@ -16,13 +16,18 @@ ext {
     //hilt
     hiltVersion = '2.44'
 
+    //test
+    jUnitVersion = '4.13.2'
+    compose_version = '1.4.0-alpha03'
+    androidXTestVersion = '1.5.0'
+
     //navigation
     navigationVersion = '2.4.0-alpha06'
 
     torangImageLoaderVersion = 'f4a2359698'
     themeVersion = '7c191eb4e6'
     navigationModuleVersion = 'd98f57435d'
-    repositoryVersion = 'e19aa56801'
+    repositoryVersion = '558fa14ed5'
     baseFeedVersion = '691a642d82'
     commonWidgetsVersion = '6c400e072c'
     torangBottomSheetVersion = '8640ae1592'
