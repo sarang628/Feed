@@ -19,6 +19,7 @@ import com.sryang.library.CommentBottomSheetDialog
 import com.sryang.library.CommentItemUiState
 import com.sryang.library.FeedMenuBottomSheetDialog
 import com.sryang.library.ShareBottomSheetDialog
+import com.sryang.torang.data.CommentDataUiState
 import com.sryang.torang_repository.data.RemoteComment
 import com.sryang.torang_repository.data.entity.FeedEntity
 import com.sryang.torang_repository.data.entity.ReviewAndImageEntity
@@ -67,10 +68,13 @@ class FeedServiceModule {
                 feedRepository.addFavorite(reviewId)
             }
 
-            override suspend fun getComment(reviewId: Int): List<CommentData> {
-                return feedRepository.getComment(reviewId).stream().map {
-                    it.toCommentData()
-                }.toList()
+            override suspend fun getComment(reviewId: Int): CommentDataUiState {
+                return CommentDataUiState(
+                    myProfileUrl = "",
+                    commentList = feedRepository.getComment(reviewId).stream().map {
+                        it.toCommentData()
+                    }.toList()
+                )
             }
 
             override suspend fun addComment(reviewId: Int, comment: String) {

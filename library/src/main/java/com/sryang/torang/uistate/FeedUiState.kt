@@ -12,5 +12,6 @@ data class FeedUiState(
     val isFailedLoadFeed: Boolean = false,
     val selectedReviewId: Int? = null,
     val comments: List<CommentData>? = null,
+    val myProfileUrl: String? = null,
     val error: String? = null
 )

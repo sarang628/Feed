@@ -8,3 +8,8 @@ data class CommentData(
     val name: String,
     val likeCount: Int
 )
+
+data class CommentDataUiState(
+    val commentList: List<CommentData>,
+    val myProfileUrl: String
+)

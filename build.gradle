@@ -30,6 +30,6 @@ ext {
     repositoryVersion = '558fa14ed5'
     baseFeedVersion = '691a642d82'
     commonWidgetsVersion = '6c400e072c'
-    torangBottomSheetVersion = '8640ae1592'
+    torangBottomSheetVersion = 'cf0c634b14'
     JsonToObjectGeneratorVersion = '960fe9fece'
 }

@@ -16,7 +16,7 @@ class ApiCommentModule {
     @Provides
     fun provideRemoteFeedService(
         apiComment: ProductApiComment,
-//        apiFeed: LocalApiComment
+//        apiComment: LocalApiComment
     ): ApiComment {
         return apiComment.create()
     }

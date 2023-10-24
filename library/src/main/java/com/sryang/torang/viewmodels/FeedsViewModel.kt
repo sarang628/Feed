@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.network.HttpException
 import com.sryang.torang.data.CommentData
+import com.sryang.torang.data.CommentDataUiState
 import com.sryang.torang.uistate.FeedUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -87,12 +88,13 @@ class FeedsViewModel @Inject constructor(
 
     fun onComment(reviewId: Int) {
         viewModelScope.launch {
-            val list: List<CommentData> = feedService.getComment(reviewId)
+            val result: CommentDataUiState = feedService.getComment(reviewId)
             _uiState.emit(
                 uiState.value.copy(
                     selectedReviewId = reviewId,
                     isExpandCommentBottomSheet = true,
-                    comments = list
+                    comments = result.commentList,
+                    myProfileUrl = result.myProfileUrl
                 )
             )
         }
