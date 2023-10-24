@@ -69,11 +69,10 @@ class FeedServiceModule {
             }
 
             override suspend fun getComment(reviewId: Int): CommentDataUiState {
+                val result = feedRepository.getComment(reviewId)
                 return CommentDataUiState(
-                    myProfileUrl = "",
-                    commentList = feedRepository.getComment(reviewId).stream().map {
-                        it.toCommentData()
-                    }.toList()
+                    myProfileUrl = result.profilePicUrl,
+                    commentList = result.list.stream().map { it.toCommentData() }.toList()
                 )
             }
 
@@ -86,11 +85,11 @@ class FeedServiceModule {
 
 fun RemoteComment.toCommentData(): CommentData {
     return CommentData(
-        userId = this.user_id,
-        profileImageUrl = this.profile_pic_url,
+        userId = this.user.userId,
+        profileImageUrl = this.user.profilePicUrl,
         date = this.create_date,
         comment = this.comment,
-        name = this.user_name,
+        name = this.user.userName,
         likeCount = 0
     )
 }
@@ -247,7 +246,7 @@ fun FeedScreen(
                     list = uiState.comments?.stream()?.map { it.toCommentItemUiState() }?.toList()
                         ?: ArrayList(),
                     onSend = { feedsViewModel.sendComment(it) },
-                    profileImageUrl = "",
+                    profileImageUrl = uiState.myProfileUrl ?: "",
                     profileImageServerUrl = profileImageServerUrl
                 )
             },

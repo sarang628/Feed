@@ -177,8 +177,8 @@ class FeedsViewModel @Inject constructor(
         viewModelScope.launch {
             uiState.value.selectedReviewId?.let { reviewId ->
                 feedService.addComment(reviewId = reviewId, comment = comment)
+                onComment(reviewId = reviewId)
             }
-
         }
     }
 

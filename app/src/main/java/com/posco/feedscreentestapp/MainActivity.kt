@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
                     onImage = {},
                     onProfile = {}
                 )
-                //LoginRepositoryTest(loginRepository = loginRepository)
+                LoginRepositoryTest(loginRepository = loginRepository)
             }
         }
 
