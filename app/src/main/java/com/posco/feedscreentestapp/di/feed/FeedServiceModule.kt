@@ -206,7 +206,8 @@ fun FeedScreen(
     onImage: ((Int) -> Unit),
     onName: (() -> Unit),
     onRestaurant: ((Int) -> Unit),
-    imageServerUrl: String
+    imageServerUrl: String,
+    ratingBar: @Composable (Float) -> Unit
 ) {
     val uiState by feedsViewModel.uiState.collectAsState()
 
@@ -229,6 +230,7 @@ fun FeedScreen(
                     imageServerUrl = imageServerUrl,
                     isRefreshing = uiState.isRefreshing,
                     onRefresh = { feedsViewModel.refreshFeed() },
+                    ratingBar = {}
                 )
             },
             torangToolbar = { TorangToolbar { clickAddReview.invoke() } },

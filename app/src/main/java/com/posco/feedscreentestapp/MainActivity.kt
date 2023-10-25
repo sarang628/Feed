@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
+import com.example.library.RatingBar
 import com.posco.feedscreentestapp.di.feed.FeedScreen
 import com.sryang.torang_repository.repository.LoginRepository
 import com.sryang.torang_repository.repository.LoginRepositoryTest
@@ -28,7 +29,8 @@ class MainActivity : ComponentActivity() {
                     onRestaurant = {},
                     onName = {},
                     onImage = {},
-                    onProfile = {}
+                    onProfile = {},
+                    ratingBar = { RatingBar(rating = it) }
                 )
                 LoginRepositoryTest(loginRepository = loginRepository)
             }
