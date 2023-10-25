@@ -76,8 +76,5 @@ dependencies {
 
     /* torang modules*/
     implementation "com.github.sarang628:Theme:$themeVersion"
-    implementation "com.github.sarang628:JsonToObjectGenerator:$JsonToObjectGeneratorVersion"
-    implementation "com.github.sarang628:Navigation:$navigationModuleVersion"
-    implementation "com.github.sarang628:CommonWidgets:$commonWidgetsVersion"
 
 }
