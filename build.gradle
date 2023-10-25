@@ -10,7 +10,7 @@ ext {
     // Sdk and tools
     compileSdk = 33
     minSdk = 24
-    targetSdk = 30
+    targetSdk = 33
     buildToolsVersion = '30.0.3'
 
     //hilt
@@ -31,5 +31,5 @@ ext {
     baseFeedVersion = '691a642d82'
     commonWidgetsVersion = '6c400e072c'
     torangBottomSheetVersion = 'eeb2d06d1e'
-    JsonToObjectGeneratorVersion = '960fe9fece'
+    JsonToObjectGeneratorVersion = '8d8a65e1f1'
 }
