@@ -7,7 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sryang.torang.data.CommentData
 import com.sryang.torang.data.FeedData
-import com.sryang.torang.viewmodels.FeedService
+import com.sryang.torang.usecase.FeedService
 import com.sryang.torang.viewmodels.FeedsViewModel
 import com.sryang.torang.compose._FeedsScreen
 import com.sarang.base_feed.ui.Feeds

@@ -3,20 +3,15 @@ package com.sryang.torang.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import coil.network.HttpException
-import com.sryang.torang.data.CommentData
 import com.sryang.torang.data.CommentDataUiState
 import com.sryang.torang.uistate.FeedUiState
+import com.sryang.torang.usecase.FeedService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 import javax.inject.Inject
-
-data class AA(val a: Int) {
-
-}
 
 @HiltViewModel
 class FeedsViewModel @Inject constructor(

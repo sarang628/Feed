@@ -1,4 +1,4 @@
-package com.sryang.torang.viewmodels
+package com.sryang.torang.usecase
 
 import com.sryang.torang.data.CommentData
 import com.sryang.torang.data.CommentDataUiState
