@@ -69,9 +69,7 @@ fun _FeedsScreen(
         ) { contentPadding ->
             contentPadding.calculateTopPadding()
             Box {
-                Column(
-                    Modifier.background(colorResource(id = R.color.colorSecondaryLight))
-                ) {
+                Column {
                     // 타이틀과 추가버튼이 있는 툴바
                     torangToolbar.invoke()
                     errorComponent.invoke()
