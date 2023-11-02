@@ -2,12 +2,10 @@ package com.sryang.torang.compose
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Text
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -49,49 +47,33 @@ fun _FeedsScreen(
     loading: @Composable (Boolean) -> Unit,
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
-    val snackBarHostState = SnackbarHostState()
-    LaunchedEffect(key1 = uiState.isFailedLoadFeed, block = {
-        if (uiState.isFailedLoadFeed) {
-            snackBarHostState.showSnackbar("피드를 불러오는데 실패하였습니다.", null)
-            feedsViewModel.consumeFailedLoadFeedSnackBar()
-        }
-
-    })
-
     Box {
-        Scaffold(
-            snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
-        ) { contentPadding ->
-            contentPadding.calculateTopPadding()
+        Column {
+            // 타이틀과 추가버튼이 있는 툴바
+            torangToolbar.invoke()
+            errorComponent.invoke()
             Box {
-                Column {
-                    // 타이틀과 추가버튼이 있는 툴바
-                    torangToolbar.invoke()
-                    errorComponent.invoke()
-                    Box {
-                        // 피드와 스와이프 리프레시
-                        feeds.invoke()
-                        errorComponent.invoke()
-                    }
-                }
-                if (uiState.isExpandMenuBottomSheet)
-                    feedMenuBottomSheetDialog.invoke(true)
-                if (uiState.isExpandCommentBottomSheet)
-                    commentBottomSheetDialog.invoke(true)
-                if (uiState.isShareCommentBottomSheet) {
-                    shareBottomSheetDialog.invoke(true)
-                }
-                uiState.error?.let {
-                    AlertDialog(
-                        onDismissRequest = { feedsViewModel.removeErrorMsg() },
-                        confirmButton = {
-                            Button(onClick = { feedsViewModel.removeErrorMsg() }) {
-                                Text(text = "확인", color = Color.White)
-                            }
-                        },
-                        title = { Text(text = it) })
-                }
+                // 피드와 스와이프 리프레시
+                feeds.invoke()
+                errorComponent.invoke()
             }
+        }
+        if (uiState.isExpandMenuBottomSheet)
+            feedMenuBottomSheetDialog.invoke(true)
+        if (uiState.isExpandCommentBottomSheet)
+            commentBottomSheetDialog.invoke(true)
+        if (uiState.isShareCommentBottomSheet) {
+            shareBottomSheetDialog.invoke(true)
+        }
+        uiState.error?.let {
+            AlertDialog(
+                onDismissRequest = { feedsViewModel.removeErrorMsg() },
+                confirmButton = {
+                    Button(onClick = { feedsViewModel.removeErrorMsg() }) {
+                        Text(text = "확인", color = Color.White)
+                    }
+                },
+                title = { Text(text = it) })
         }
     }
 }
