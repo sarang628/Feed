@@ -36,16 +36,14 @@ implementation 'com.github.sarang628:Feed:02a97b8010'
 ```
 
 ```
-setContent {
-FeedsScreen(feedsViewModel = FeedsViewModel(this))
-}
-```
+@AndroidEntryPoint
+class MainActivity : ComponentActivity() {
 
-### Jetpack Compose 사용
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-#### 최종 모듈 호출 함수
-```
-TorangTheme {
+        setContent {
+            TorangTheme {
                 Column {
                     FeedScreen(
                         clickAddReview = {},
@@ -55,9 +53,41 @@ TorangTheme {
                         onProfile = {},
                         ratingBar = { RatingBar(rating = it) }
                     )
-                    LoginRepositoryTest(loginRepository = loginRepository)
                 }
             }
+        }
+
+    }
+}
+```
+
+### Jetpack Compose 사용
+
+#### 최종 모듈 호출 함수
+```
+@AndroidEntryPoint
+class MainActivity : ComponentActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContent {
+            TorangTheme {
+                Column {
+                    FeedScreen(
+                        clickAddReview = {},
+                        onRestaurant = {},
+                        onName = {},
+                        onImage = {},
+                        onProfile = {},
+                        ratingBar = { RatingBar(rating = it) }
+                    )
+                }
+            }
+        }
+
+    }
+}
 ```
 ```
 /**
