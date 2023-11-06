@@ -54,13 +54,4 @@ dependencies {
     /** utils */
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation("io.coil-kt:coil-compose:2.3.0")
-
-    /** unittest */
-    //testImplementation "junit:junit:$jUnitVersion" // Required -- JUnit 4 framework
-    //testImplementation "androidx.test:core:$androidXTestVersion" // Optional -- Robolectric environment // To use the androidx.test.core APIs
-    //testImplementation "org.mockito:mockito-core:$mockitoVersion" // Optional -- Mockito framework
-    //testImplementation "org.mockito.kotlin:mockito-kotlin:$mockitoKotlinVersion" // Optional -- mockito-kotlin
-    //testImplementation "io.mockk:mockk:$mockkVersion" // Optional -- Mockk framework
-    //androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version" // Test rules and transitive dependencies:
-    //debugImplementation("androidx.compose.ui:ui-test-manifest:$compose_version") // Needed for createAndroidComposeRule, but not createComposeRule:
 }

@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.posco.feedscreentestapp.BuildConfig
 import com.sryang.torang.data.CommentData
 import com.sryang.torang.data.FeedData
 import com.sryang.torang.usecase.FeedService
@@ -45,7 +46,7 @@ class FeedServiceModule {
                 feedRepository.loadFeed()
             }
 
-            override val feeds1: Flow<List<FeedData>>
+            override val feeds: Flow<List<FeedData>>
                 get() = feedRepository.feeds.map { it ->
                     it.stream().map {
                         it.toFeedData()
@@ -201,12 +202,12 @@ fun FeedData.toFeedTopUIState(): FeedTopUIState {
 fun FeedScreen(
     feedsViewModel: FeedsViewModel = hiltViewModel(),
     clickAddReview: (() -> Unit),
-    profileImageServerUrl: String,
+    profileImageServerUrl: String = BuildConfig.PROFILE_IMAGE_SERVER_URL,
     onProfile: ((Int) -> Unit),
     onImage: ((Int) -> Unit),
     onName: (() -> Unit),
     onRestaurant: ((Int) -> Unit),
-    imageServerUrl: String,
+    imageServerUrl: String = BuildConfig.REVIEW_IMAGE_SERVER_URL,
     ratingBar: @Composable (Float) -> Unit
 ) {
     val uiState by feedsViewModel.uiState.collectAsState()
