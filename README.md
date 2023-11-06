@@ -1,3 +1,13 @@
+- 피드화면
+  - 스크린샷
+  - 특징
+    - 멀티 모듈
+    - Jetpack Compose
+      - 모듈 호출
+    - 최신 아키텍처
+      - UIState
+      - ViewModel
+
 # 피드 화면
 피드 화면은 사용자가 작성한 리뷰를 리스트로 보여주는 화면입니다.
 
@@ -17,8 +27,6 @@
 Jitpack를 사용하여 이 모듈을 빌드 할 수 있게 적용하였습니다.
 
 <img src="screenshots/jitpack.png" width="600" height="500"/>
-
-아래 3가지 코드를 추가 하면 어떤 프로젝트든지 간단하게 화면을 적용 시킬 수 있습니다.
 
 ```
 allprojects {
@@ -63,7 +71,7 @@ class MainActivity : ComponentActivity() {
 
 ### Jetpack Compose 사용
 
-#### 최종 모듈 호출 함수
+#### 모듈 호출
 ```
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -141,7 +149,7 @@ fun _FeedsScreen(
 
 ### 최신 아키텍처 적용
 
-### UIState 활용
+#### UIState
 ```
 data class FeedUiState(
     val isRefreshing: Boolean = false                   // 스크롤 리프레시
@@ -156,7 +164,7 @@ data class FeedUiState(
     , val error: String? = null                         // 에러 메시지
 )
 ```
-### ViewModel 구현
+### ViewModel
 ```
 @HiltViewModel
 class FeedsViewModel @Inject constructor(
@@ -210,6 +218,65 @@ class FeedsViewModel @Inject constructor(
     // 에러메시지 삭제
     fun removeErrorMsg() {...}
 
+}
+```
+
+Hilt
+```
+/**
+ * DataLayer 과 UILayer을 연결해주는 역할
+ * ViewModel안에서 Repository를 바로 주입할 수 있지만
+ * UI를 DayaLayer와 완전히 분리시켜보기위해 구현
+ * DomainLayer의 역할
+ */
+@InstallIn(SingletonComponent::class)
+@Module
+class FeedServiceModule {
+    @Provides
+    fun provideFeedService(
+        feedRepository: FeedRepository
+    ): FeedService {
+        return object : FeedService {
+            override suspend fun getFeeds() {
+                feedRepository.loadFeed()
+            }
+
+            override val feeds: Flow<List<FeedData>>
+                get() = feedRepository.feeds.map { it ->
+                    it.stream().map {
+                        it.toFeedData()
+                    }.toList()
+                }
+
+            override suspend fun addLike(reviewId: Int) {
+                feedRepository.addLike(reviewId)
+            }
+
+            override suspend fun deleteLike(reviewId: Int) {
+                feedRepository.deleteLike(reviewId)
+            }
+
+            override suspend fun deleteFavorite(reviewId: Int) {
+                feedRepository.deleteFavorite(reviewId)
+            }
+
+            override suspend fun addFavorite(reviewId: Int) {
+                feedRepository.addFavorite(reviewId)
+            }
+
+            override suspend fun getComment(reviewId: Int): CommentDataUiState {
+                val result = feedRepository.getComment(reviewId)
+                return CommentDataUiState(
+                    myProfileUrl = result.profilePicUrl,
+                    commentList = result.list.stream().map { it.toCommentData() }.toList()
+                )
+            }
+
+            override suspend fun addComment(reviewId: Int, comment: String) {
+                feedRepository.addComment(reviewId, comment)
+            }
+        }
+    }
 }
 ```
 

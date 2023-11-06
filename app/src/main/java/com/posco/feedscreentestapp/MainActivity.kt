@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
                         onProfile = {},
                         ratingBar = { RatingBar(rating = it) }
                     )
-                    LoginRepositoryTest(loginRepository = loginRepository)
+                    //LoginRepositoryTest(loginRepository = loginRepository)
                 }
             }
         }
