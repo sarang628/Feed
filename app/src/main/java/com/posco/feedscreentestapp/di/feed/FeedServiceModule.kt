@@ -12,10 +12,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 /**
- * DataLayer 과 UILayer을 연결해주는 역할
- * ViewModel안에서 Repository를 바로 주입할 수 있지만
- * UI를 DayaLayer와 완전히 분리시켜보기위해 구현
- * DomainLayer의 역할
+ * DomainLayer
+ * DataLayer 과 UILayer을 연결
  */
 @InstallIn(SingletonComponent::class)
 @Module

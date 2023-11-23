@@ -6,7 +6,7 @@
 # Convention
 ## package
 
-<img src="screenshots/package.png" width="300px" height="200px"/>
+<img src="screenshots/package.png" width="400px" height="200px"/>
 
 # Architecture
 ## UI Layer
@@ -106,32 +106,6 @@ implementation 'com.github.sarang628:Feed:02a97b8010'
 }
 ```
 
-```
-@AndroidEntryPoint
-class MainActivity : ComponentActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setContent {
-            TorangTheme {
-                Column {
-                    FeedScreen(
-                        clickAddReview = {},
-                        onRestaurant = {},
-                        onName = {},
-                        onImage = {},
-                        onProfile = {},
-                        ratingBar = { RatingBar(rating = it) }
-                    )
-                }
-            }
-        }
-
-    }
-}
-```
-
 ### Jetpack Compose
 ```
 @AndroidEntryPoint
@@ -158,63 +132,12 @@ class MainActivity : ComponentActivity() {
     }
 }
 ```
-```
-/**
- * DI 모듈에서 제공하는 FeedScreen을 사용해주세요
- */
-@Composable
-fun _FeedsScreen(
-    feedsViewModel: FeedsViewModel = hiltViewModel(),
-    feeds: @Composable () -> Unit,
-    torangToolbar: @Composable () -> Unit,
-    errorComponent: @Composable () -> Unit,
-    feedMenuBottomSheetDialog: @Composable (Boolean) -> Unit,
-    commentBottomSheetDialog: @Composable (Boolean) -> Unit,
-    shareBottomSheetDialog: @Composable (Boolean) -> Unit,
-    emptyFeed: @Composable (Boolean) -> Unit,
-    networkError: @Composable (Boolean) -> Unit,
-    loading: @Composable (Boolean) -> Unit,
-) {
-    val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
-    Box {
-        Column {
-            // 타이틀과 추가버튼이 있는 툴바
-            torangToolbar.invoke()
-            errorComponent.invoke()
-            Box {
-                // 피드와 스와이프 리프레시
-                feeds.invoke()
-                errorComponent.invoke()
-            }
-        }
-        if (uiState.isExpandMenuBottomSheet)
-            feedMenuBottomSheetDialog.invoke(true)
-        if (uiState.isExpandCommentBottomSheet)
-            commentBottomSheetDialog.invoke(true)
-        if (uiState.isShareCommentBottomSheet) {
-            shareBottomSheetDialog.invoke(true)
-        }
-        uiState.error?.let {
-            AlertDialog(
-                onDismissRequest = { feedsViewModel.removeErrorMsg() },
-                confirmButton = {
-                    Button(onClick = { feedsViewModel.removeErrorMsg() }) {
-                        Text(text = "확인", color = Color.White)
-                    }
-                },
-                title = { Text(text = it) })
-        }
-    }
-}
-```
 
 Hilt
 ```
 /**
- * DataLayer 과 UILayer을 연결해주는 역할
- * ViewModel안에서 Repository를 바로 주입할 수 있지만
- * UI를 DayaLayer와 완전히 분리시켜보기위해 구현
- * DomainLayer의 역할
+ * Domain Layer
+ * DataLayer와 UILayer을 연결
  */
 @InstallIn(SingletonComponent::class)
 @Module
