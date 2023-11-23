@@ -3,13 +3,13 @@
 
 <img src="screenshots/feed.png" width="800" height="400"/>
 
-# Convention
-## package
+## Convention
+### package
 
 <img src="screenshots/package.png" width="300px" height="400px"/>
 
-# Architecture
-## UI Layer
+## Architecture
+### UI Layer
 UI state
 ```
 data class FeedUiState(
@@ -84,7 +84,6 @@ class FeedsViewModel @Inject constructor(
 ```
 
 
-
 ## 멀티 모듈
 
 Jitpack를 사용하여 모듈을 빌드 할 수 있게 적용.
@@ -133,7 +132,7 @@ class MainActivity : ComponentActivity() {
 }
 ```
 
-Hilt
+## Hilt
 ```
 /**
  * Domain Layer
@@ -190,6 +189,7 @@ class FeedServiceModule {
 }
 ```
 
-### 화면 UnitTest 작성
+## 화면 UnitTest 작성
 
-### Preview
+## Preview
+<img src="screenshots/demonstrate.gif" />
