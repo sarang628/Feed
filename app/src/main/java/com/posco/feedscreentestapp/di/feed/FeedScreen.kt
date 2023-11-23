@@ -6,12 +6,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.posco.feedscreentestapp.BuildConfig
-import com.sarang.base_feed.ui.Feeds
-import com.sarang.base_feed.ui.TorangToolbar
+import com.sryang.base.feed.compose.feed.Feeds
+import com.sryang.base.feed.compose.feed.TorangToolbar
 import com.sryang.library.CommentBottomSheetDialog
 import com.sryang.library.FeedMenuBottomSheetDialog
 import com.sryang.library.ShareBottomSheetDialog
-import com.sryang.torang.compose._FeedsScreen
+import com.sryang.torang.compose.FeedsScreen
 import com.sryang.torang.viewmodels.FeedsViewModel
 
 @Composable
@@ -29,11 +29,11 @@ fun FeedScreen(
     val uiState by feedsViewModel.uiState.collectAsState()
 
     Box {
-        _FeedsScreen(
+        FeedsScreen(
             feedsViewModel = feedsViewModel,
             feeds = {
                 Feeds(
-                    list = ArrayList(uiState.list.stream().map { it.toFeedUiState() }.toList()),
+                    list = ArrayList(uiState.list.stream().map { it.review() }.toList()),
                     onProfile = onProfile,
                     onMenu = { feedsViewModel.onMenu() },
                     onImage = onImage,
@@ -47,7 +47,11 @@ fun FeedScreen(
                     imageServerUrl = imageServerUrl,
                     isRefreshing = uiState.isRefreshing,
                     onRefresh = { feedsViewModel.refreshFeed() },
-                    ratingBar = {}
+                    ratingBar = {},
+                    isEmpty = false,
+                    isVisibleList = true,
+                    isLoaded = true,
+                    onBottom = {}
                 )
             },
             torangToolbar = { TorangToolbar { clickAddReview.invoke() } },
@@ -75,7 +79,7 @@ fun FeedScreen(
                     onSelect = {},
                     onClose = { feedsViewModel.closeShare() })
             },
-            errorComponent = {}, networkError = {}, loading = {}, emptyFeed = {}
+            errorComponent = {}
         )
     }
 }

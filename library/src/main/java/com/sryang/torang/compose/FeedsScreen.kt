@@ -17,17 +17,14 @@ import com.sryang.torang.viewmodels.FeedsViewModel
  * DI 모듈에서 제공하는 FeedScreen을 사용해주세요
  */
 @Composable
-fun _FeedsScreen(
+fun FeedsScreen(
     feedsViewModel: FeedsViewModel = hiltViewModel(),
     feeds: @Composable () -> Unit,
     torangToolbar: @Composable () -> Unit,
     errorComponent: @Composable () -> Unit,
     feedMenuBottomSheetDialog: @Composable (Boolean) -> Unit,
     commentBottomSheetDialog: @Composable (Boolean) -> Unit,
-    shareBottomSheetDialog: @Composable (Boolean) -> Unit,
-    emptyFeed: @Composable (Boolean) -> Unit,
-    networkError: @Composable (Boolean) -> Unit,
-    loading: @Composable (Boolean) -> Unit,
+    shareBottomSheetDialog: @Composable (Boolean) -> Unit
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
     Box {

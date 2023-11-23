@@ -4,6 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
 import com.example.library.RatingBar
 import com.google.samples.apps.sunflower.ui.TorangTheme
 import com.posco.feedscreentestapp.di.feed.FeedScreen
@@ -23,16 +27,21 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             TorangTheme {
-                Column {
-                    FeedScreen(
-                        clickAddReview = {},
-                        onRestaurant = {},
-                        onName = {},
-                        onImage = {},
-                        onProfile = {},
-                        ratingBar = { RatingBar(rating = it) }
-                    )
-                    //LoginRepositoryTest(loginRepository = loginRepository)
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    Column {
+                        FeedScreen(
+                            clickAddReview = {},
+                            onRestaurant = {},
+                            onName = {},
+                            onImage = {},
+                            onProfile = {},
+                            ratingBar = { RatingBar(rating = it) }
+                        )
+                        //LoginRepositoryTest(loginRepository = loginRepository)
+                    }
                 }
             }
         }
