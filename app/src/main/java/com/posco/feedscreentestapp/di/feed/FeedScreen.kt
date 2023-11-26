@@ -29,8 +29,7 @@ fun FeedScreen(
     onRestaurant: ((Int) -> Unit),
     imageServerUrl: String = BuildConfig.REVIEW_IMAGE_SERVER_URL,
     ratingBar: @Composable (Float) -> Unit
-)
-{
+) {
     val uiState by feedsViewModel.uiState.collectAsState()
 
     Box {
@@ -56,9 +55,10 @@ fun FeedScreen(
                     isLoaded = true,
                     onBottom = {})
             },
-            torangToolbar = { TorangToolbar { clickAddReview.invoke() } },
+            onAddReview = { clickAddReview.invoke() },
             feedMenuBottomSheetDialog = {
-                FeedMenuBottomSheetDialog(isExpand = it,
+                FeedMenuBottomSheetDialog(
+                    isExpand = it,
                     onEdit = {},
                     onDelete = {},
                     onReport = { feedsViewModel.onReport() },
@@ -79,7 +79,8 @@ fun FeedScreen(
                 )
             },
             shareBottomSheetDialog = {
-                ShareBottomSheetDialog(isExpand = true,
+                ShareBottomSheetDialog(
+                    isExpand = true,
                     onSelect = {},
                     onClose = { feedsViewModel.closeShare() },
                     list = ArrayList()
@@ -88,7 +89,11 @@ fun FeedScreen(
             errorComponent = {},
             reportDialog = {
                 uiState.selectedReviewId?.let {
-                    ReportModal(reviewId = it, onReported = {feedsViewModel.closeReportDialog()}, profileServerUrl = profileImageServerUrl)
+                    ReportModal(
+                        reviewId = it,
+                        onReported = { feedsViewModel.closeReportDialog() },
+                        profileServerUrl = profileImageServerUrl
+                    )
                 }
             })
     }

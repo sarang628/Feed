@@ -15,9 +15,7 @@ import java.net.UnknownHostException
 import javax.inject.Inject
 
 @HiltViewModel
-class FeedsViewModel @Inject constructor(
-    private val feedService: FeedService
-) : ViewModel()
+class FeedsViewModel @Inject constructor(private val feedService: FeedService) : ViewModel()
 {
 
     // UIState
@@ -66,12 +64,7 @@ class FeedsViewModel @Inject constructor(
             {
                 val result: CommentDataUiState = feedService.getComment(reviewId)
                 _uiState.update {
-                    it.copy(
-                        selectedReviewId = reviewId,
-                        showCommentDialog = true,
-                        comments = result.commentList,
-                        myProfileUrl = result.myProfileUrl
-                    )
+                    it.copy(selectedReviewId = reviewId, showComment = true, comments = result.commentList, myProfileUrl = result.myProfileUrl)
                 }
             } catch (e: Exception)
             {
@@ -84,7 +77,7 @@ class FeedsViewModel @Inject constructor(
     fun onShare()
     {
         viewModelScope.launch {
-            _uiState.update { it.copy(showShareDialog = true) }
+            _uiState.update { it.copy(showShare = true) }
         }
     }
 
@@ -138,7 +131,7 @@ class FeedsViewModel @Inject constructor(
     fun closeMenu()
     {
         viewModelScope.launch {
-            _uiState.update { (it.copy(showFeedMenuDialog = false)) }
+            _uiState.update { (it.copy(showMenu = false)) }
         }
     }
 
@@ -146,7 +139,7 @@ class FeedsViewModel @Inject constructor(
     fun closeComment()
     {
         viewModelScope.launch {
-            _uiState.update { it.copy(showCommentDialog = false, selectedReviewId = null) }
+            _uiState.update { it.copy(showComment = false, selectedReviewId = null) }
         }
     }
 
@@ -154,7 +147,7 @@ class FeedsViewModel @Inject constructor(
     fun closeShare()
     {
         viewModelScope.launch {
-            _uiState.update { it.copy(showShareDialog = false) }
+            _uiState.update { it.copy(showShare = false) }
         }
     }
 
@@ -162,7 +155,7 @@ class FeedsViewModel @Inject constructor(
     fun onMenu(reviewId: Int)
     {
         viewModelScope.launch {
-            _uiState.update { it.copy(showFeedMenuDialog = true, selectedReviewId = reviewId) }
+            _uiState.update { it.copy(showMenu = true, selectedReviewId = reviewId) }
         }
     }
 
@@ -185,12 +178,12 @@ class FeedsViewModel @Inject constructor(
 
     fun onReport()
     {
-        _uiState.update { it.copy(showReportDialog = true, showFeedMenuDialog = false) }
+        _uiState.update { it.copy(showReport = true, showMenu = false) }
     }
 
     fun closeReportDialog()
     {
-        _uiState.update { it.copy(showReportDialog = false) }
+        _uiState.update { it.copy(showReport = false) }
     }
 
 }
