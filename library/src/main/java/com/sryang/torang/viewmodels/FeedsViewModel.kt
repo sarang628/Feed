@@ -17,13 +17,15 @@ import javax.inject.Inject
 @HiltViewModel
 class FeedsViewModel @Inject constructor(
     private val feedService: FeedService
-) : ViewModel() {
+) : ViewModel()
+{
 
     // UIState
     private val _uiState = MutableStateFlow(FeedUiState())
     val uiState = _uiState.asStateFlow()
 
-    init {
+    init
+    {
         viewModelScope.launch {
             feedService.feeds.collect { newData -> _uiState.update { it.copy(list = newData) } } // feed 리스트 수집
             getFeed() // feed 가져오기
@@ -31,7 +33,8 @@ class FeedsViewModel @Inject constructor(
     }
 
     // 피드 리스트 갱신
-    fun refreshFeed() {
+    fun refreshFeed()
+    {
         viewModelScope.launch {
             _uiState.update { it.copy(isRefreshing = true) }
             getFeed() // feed 가져오기
@@ -40,55 +43,68 @@ class FeedsViewModel @Inject constructor(
     }
 
     // 피드 가져오기
-    private suspend fun getFeed() {
-        try {
+    private suspend fun getFeed()
+    {
+        try
+        {
             feedService.getFeeds()
-        } catch (e: UnknownHostException) {
+        } catch (e: UnknownHostException)
+        {
             Log.e("FeedsViewModel", e.toString())
             _uiState.update { it.copy(isFailedLoadFeed = true) }
-        } catch (e: Exception) {
+        } catch (e: Exception)
+        {
             Log.e("FeedsViewModel", e.toString())
         }
     }
 
     // 커멘트 가져오기
-    fun onComment(reviewId: Int) {
+    fun onComment(reviewId: Int)
+    {
         viewModelScope.launch {
-            try {
+            try
+            {
                 val result: CommentDataUiState = feedService.getComment(reviewId)
                 _uiState.update {
                     it.copy(
                         selectedReviewId = reviewId,
-                        isExpandCommentBottomSheet = true,
+                        showCommentDialog = true,
                         comments = result.commentList,
                         myProfileUrl = result.myProfileUrl
                     )
                 }
-            } catch (e: Exception) {
+            } catch (e: Exception)
+            {
                 Log.e("FeedsViewModel", e.toString())
             }
         }
     }
 
     // 공유 클릭
-    fun onShare() {
+    fun onShare()
+    {
         viewModelScope.launch {
-            _uiState.update { it.copy(isShareCommentBottomSheet = true) }
+            _uiState.update { it.copy(showShareDialog = true) }
         }
     }
 
     // 즐겨찾기 클릭
-    fun onFavorite(reviewId: Int) {
+    fun onFavorite(reviewId: Int)
+    {
         viewModelScope.launch {
             val review = uiState.value.list.find { it.reviewId == reviewId }
             review?.let {
-                try {
-                    if (it.isFavorite) {
+                try
+                {
+                    if (it.isFavorite)
+                    {
                         feedService.deleteFavorite(reviewId)
-                    } else {
+                    } else
+                    {
                         feedService.addFavorite(reviewId)
                     }
-                } catch (e: Exception) {
+                } catch (e: Exception)
+                {
                     _uiState.update { it.copy(error = e.message) }
                 }
             }
@@ -96,17 +112,22 @@ class FeedsViewModel @Inject constructor(
     }
 
     // 좋아여 클릭
-    fun onLike(reviewId: Int) {
+    fun onLike(reviewId: Int)
+    {
         viewModelScope.launch {
             val review = uiState.value.list.find { it.reviewId == reviewId }
             review?.let {
-                try {
-                    if (it.isLike) {
+                try
+                {
+                    if (it.isLike)
+                    {
                         feedService.deleteLike(reviewId)
-                    } else {
+                    } else
+                    {
                         feedService.addLike(reviewId)
                     }
-                } catch (e: Exception) {
+                } catch (e: Exception)
+                {
                     _uiState.update { it.copy(error = e.message) }
                 }
             }
@@ -114,35 +135,40 @@ class FeedsViewModel @Inject constructor(
     }
 
     // 메뉴 닫기
-    fun closeMenu() {
+    fun closeMenu()
+    {
         viewModelScope.launch {
-            _uiState.update { (it.copy(isExpandMenuBottomSheet = false)) }
+            _uiState.update { (it.copy(showFeedMenuDialog = false)) }
         }
     }
 
     // 코멘트창 닫기
-    fun closeComment() {
+    fun closeComment()
+    {
         viewModelScope.launch {
-            _uiState.update { it.copy(isExpandCommentBottomSheet = false, selectedReviewId = null) }
+            _uiState.update { it.copy(showCommentDialog = false, selectedReviewId = null) }
         }
     }
 
     // 공유창 닫기
-    fun closeShare() {
+    fun closeShare()
+    {
         viewModelScope.launch {
-            _uiState.update { it.copy(isShareCommentBottomSheet = false) }
+            _uiState.update { it.copy(showShareDialog = false) }
         }
     }
 
     // 메뉴 열기
-    fun onMenu() {
+    fun onMenu(reviewId: Int)
+    {
         viewModelScope.launch {
-            _uiState.update { it.copy(isExpandMenuBottomSheet = true) }
+            _uiState.update { it.copy(showFeedMenuDialog = true, selectedReviewId = reviewId) }
         }
     }
 
     // 코멘트 작성하기
-    fun sendComment(comment: String) {
+    fun sendComment(comment: String)
+    {
         viewModelScope.launch {
             uiState.value.selectedReviewId?.let { reviewId ->
                 feedService.addComment(reviewId = reviewId, comment = comment)
@@ -152,10 +178,19 @@ class FeedsViewModel @Inject constructor(
     }
 
     // 에러메시지 삭제
-    fun removeErrorMsg() {
-        viewModelScope.launch {
-            _uiState.update { it.copy(error = null) }
-        }
+    fun removeErrorMsg()
+    {
+        _uiState.update { it.copy(error = null) }
+    }
+
+    fun onReport()
+    {
+        _uiState.update { it.copy(showReportDialog = true, showFeedMenuDialog = false) }
+    }
+
+    fun closeReportDialog()
+    {
+        _uiState.update { it.copy(showReportDialog = false) }
     }
 
 }

@@ -3,7 +3,7 @@ package com.posco.feedscreentestapp.di.feed
 import com.sryang.base.feed.data.Restaurant
 import com.sryang.base.feed.data.Review
 import com.sryang.base.feed.data.User
-import com.sryang.library.CommentItemUiState
+import com.sryang.library.data.CommentItemUiState
 import com.sryang.torang.data.CommentData
 import com.sryang.torang.data.FeedData
 import com.sryang.torang_repository.data.RemoteComment
@@ -68,7 +68,8 @@ fun FeedData.review(): Review {
 }
 
 
-fun CommentData.toCommentItemUiState(): CommentItemUiState {
+fun CommentData.toCommentItemUiState(): CommentItemUiState
+{
     return CommentItemUiState(
         userId = userId,
         profileImageUrl = profileImageUrl,

@@ -24,36 +24,30 @@ fun FeedsScreen(
     errorComponent: @Composable () -> Unit,
     feedMenuBottomSheetDialog: @Composable (Boolean) -> Unit,
     commentBottomSheetDialog: @Composable (Boolean) -> Unit,
-    shareBottomSheetDialog: @Composable (Boolean) -> Unit
-) {
+    shareBottomSheetDialog: @Composable (Boolean) -> Unit,
+    reportDialog: @Composable () -> Unit
+)
+{
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
     Box {
-        Column {
-            // 타이틀과 추가버튼이 있는 툴바
+        Column { // 타이틀과 추가버튼이 있는 툴바
             torangToolbar.invoke()
             errorComponent.invoke()
-            Box {
-                // 피드와 스와이프 리프레시
+            Box { // 피드와 스와이프 리프레시
                 feeds.invoke()
                 errorComponent.invoke()
             }
         }
-        if (uiState.isExpandMenuBottomSheet)
-            feedMenuBottomSheetDialog.invoke(true)
-        if (uiState.isExpandCommentBottomSheet)
-            commentBottomSheetDialog.invoke(true)
-        if (uiState.isShareCommentBottomSheet) {
-            shareBottomSheetDialog.invoke(true)
-        }
+        if (uiState.showFeedMenuDialog) feedMenuBottomSheetDialog.invoke(true)
+        if (uiState.showCommentDialog) commentBottomSheetDialog.invoke(true)
+        if (uiState.showShareDialog) shareBottomSheetDialog.invoke(true)
+        if (uiState.showReportDialog && uiState.selectedReviewId != null) reportDialog.invoke()
         uiState.error?.let {
-            AlertDialog(
-                onDismissRequest = { feedsViewModel.removeErrorMsg() },
-                confirmButton = {
-                    Button(onClick = { feedsViewModel.removeErrorMsg() }) {
-                        Text(text = "확인", color = Color.White)
-                    }
-                },
-                title = { Text(text = it) })
+            AlertDialog(onDismissRequest = { feedsViewModel.removeErrorMsg() }, confirmButton = {
+                Button(onClick = { feedsViewModel.removeErrorMsg() }) {
+                    Text(text = "확인", color = Color.White)
+                }
+            }, title = { Text(text = it) })
         }
     }
 }
