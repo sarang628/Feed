@@ -6,7 +6,7 @@
 ## Convention
 ### package
 
-<img src="screenshots/package.png" width="300px" height="400px"/>
+<img src="screenshots/package.png" width="250px" height="350px"/>
 
 ## Architecture
 ### UI Layer
