@@ -92,10 +92,13 @@ class FeedRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addLike(reviewId: Int) {
-        sessionClientService.getToken()?.let {
-            val result = apiFeed.addLike(it, reviewId)
+        val token = sessionClientService.getToken()
+        if (token != null) {
+            val result = apiFeed.addLike(token, reviewId)
 //            val result = apiFeed.addLike(it, reviewId)
             likeDao.insertLike(result.toLikeEntity())
+        } else {
+            throw java.lang.Exception("로그인을 해주세요.")
         }
     }
 
@@ -108,18 +111,26 @@ class FeedRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addFavorite(reviewId: Int) {
-        sessionClientService.getToken()?.let {
-            val result = apiFeed.addFavorite(it, reviewId)
+        val token = sessionClientService.getToken()
+        if (token != null) {
+            val result = apiFeed.addFavorite(token, reviewId)
             favoriteDao.insertFavorite(result.toFavoriteEntity())
+        } else {
+            throw Exception("로그인을 해주세요.")
         }
     }
 
     override suspend fun deleteFavorite(reviewId: Int) {
-        val favorite = favoriteDao.getFavorite1(reviewId = reviewId)
-        val remoteFavorite = apiFeed.deleteFavorite(favorite.favoriteId)
-        favoriteDao.deleteFavorite(
-            remoteFavorite.toFavoriteEntity()
-        )
+        val token = sessionClientService.getToken()
+        if (token != null) {
+            val favorite = favoriteDao.getFavorite1(reviewId = reviewId)
+            val remoteFavorite = apiFeed.deleteFavorite(favorite.favoriteId)
+            favoriteDao.deleteFavorite(
+                remoteFavorite.toFavoriteEntity()
+            )
+        } else {
+            throw Exception("로그인을 해주세요.")
+        }
     }
 
     override suspend fun getComment(reviewId: Int): RemoteCommentList {

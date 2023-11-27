@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Column {
                         FeedScreen(
-                            clickAddReview = {},
+                            onAddReview = {},
                             onRestaurant = {},
                             onName = {},
                             onImage = {},

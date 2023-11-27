@@ -1,8 +1,12 @@
 package com.posco.torang.di.feed
 
-import com.sryang.torang.data1.CommentDataUiState
 import com.sryang.torang.data1.FeedData
-import com.sryang.torang.usecase.FeedService
+import com.sryang.torang.usecase.AddFavoriteUseCase
+import com.sryang.torang.usecase.AddLikeUseCase
+import com.sryang.torang.usecase.DeleteFavoriteUseCase
+import com.sryang.torang.usecase.DeleteLikeUseCase
+import com.sryang.torang.usecase.FeedRefreshUseCase
+import com.sryang.torang.usecase.GetFeedFlowUseCase
 import com.sryang.torang_repository.repository.FeedRepository
 import dagger.Module
 import dagger.Provides
@@ -10,6 +14,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.net.ConnectException
 
 /**
  * DomainLayer
@@ -21,45 +26,62 @@ class FeedServiceModule {
     @Provides
     fun provideFeedService(
         feedRepository: FeedRepository
-    ): FeedService {
-        return object : FeedService {
-            override suspend fun getFeeds() {
-                feedRepository.loadFeed()
-            }
-
-            override val feeds: Flow<List<FeedData>>
-                get() = feedRepository.feeds.map { it ->
-                    it.stream().map {
-                        it.toFeedData()
-                    }.toList()
+    ): FeedRefreshUseCase {
+        return object : FeedRefreshUseCase {
+            override suspend fun invoke() {
+                try {
+                    feedRepository.loadFeed()
+                } catch (e: ConnectException) {
+                    throw Exception("서버 접속에 실패하였습니다.")
                 }
+            }
+        }
+    }
 
-            override suspend fun addLike(reviewId: Int) {
+    @Provides
+    fun provideAddLikeUsecase(feedRepository: FeedRepository): AddLikeUseCase {
+        return object : AddLikeUseCase {
+            override suspend fun invoke(reviewId: Int) {
                 feedRepository.addLike(reviewId)
             }
+        }
+    }
 
-            override suspend fun deleteLike(reviewId: Int) {
+    @Provides
+    fun provideDeleteLikeUsecase(feedRepository: FeedRepository): DeleteLikeUseCase {
+        return object : DeleteLikeUseCase {
+            override suspend fun invoke(reviewId: Int) {
                 feedRepository.deleteLike(reviewId)
             }
 
-            override suspend fun deleteFavorite(reviewId: Int) {
-                feedRepository.deleteFavorite(reviewId)
-            }
+        }
+    }
 
-            override suspend fun addFavorite(reviewId: Int) {
+    @Provides
+    fun provideAddFavoriteUseCase(feedRepository: FeedRepository): AddFavoriteUseCase {
+        return object : AddFavoriteUseCase {
+            override suspend fun invoke(reviewId: Int) {
                 feedRepository.addFavorite(reviewId)
             }
+        }
+    }
 
-            override suspend fun getComment(reviewId: Int): CommentDataUiState {
-                val result = feedRepository.getComment(reviewId)
-                return CommentDataUiState(
-                    myProfileUrl = result.profilePicUrl,
-                    commentList = result.list.stream().map { it.toCommentData() }.toList()
-                )
+    @Provides
+    fun provideDeleteFavoriteUsecase(feedRepository: FeedRepository): DeleteFavoriteUseCase {
+        return object : DeleteFavoriteUseCase {
+            override suspend fun invoke(reviewId: Int) {
+                feedRepository.deleteFavorite(reviewId)
             }
+        }
+    }
 
-            override suspend fun addComment(reviewId: Int, comment: String) {
-                feedRepository.addComment(reviewId, comment)
+    @Provides
+    fun provideGetFeedFlowUseCase(feedRepository: FeedRepository): GetFeedFlowUseCase {
+        return object : GetFeedFlowUseCase {
+            override suspend fun invoke(): Flow<List<FeedData>> {
+                return feedRepository.feeds.map { it ->
+                    it.map { it.toFeedData() }
+                }
             }
         }
     }

@@ -23,7 +23,7 @@ fun FeedScreen(
     profileImageServerUrl: String = BuildConfig.PROFILE_IMAGE_SERVER_URL,
     imageServerUrl: String = BuildConfig.REVIEW_IMAGE_SERVER_URL,
     feedsViewModel: FeedsViewModel = hiltViewModel(),
-    clickAddReview: (() -> Unit),
+    onAddReview: (() -> Unit),
     onProfile: ((Int) -> Unit),
     onImage: ((Int) -> Unit),
     onName: (() -> Unit),
@@ -69,7 +69,7 @@ fun FeedScreen(
                         isLoaded = true,
                         onBottom = {})
                 },
-                onAddReview = { clickAddReview.invoke() },
+                onAddReview = { onAddReview.invoke() },
                 errorComponent = {},
             )
         }

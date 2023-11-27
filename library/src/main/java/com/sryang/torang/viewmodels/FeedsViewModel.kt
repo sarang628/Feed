@@ -1,10 +1,14 @@
 package com.sryang.torang.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sryang.torang.uistate.FeedUiState
-import com.sryang.torang.usecase.FeedService
+import com.sryang.torang.usecase.AddFavoriteUseCase
+import com.sryang.torang.usecase.AddLikeUseCase
+import com.sryang.torang.usecase.DeleteFavoriteUseCase
+import com.sryang.torang.usecase.DeleteLikeUseCase
+import com.sryang.torang.usecase.FeedRefreshUseCase
+import com.sryang.torang.usecase.GetFeedFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,15 +17,28 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FeedsViewModel @Inject constructor(private val feedService: FeedService) : ViewModel() {
+class FeedsViewModel @Inject constructor(
+    private val feedRefreshUseCase: FeedRefreshUseCase,
+    private val addLikeUseCase: AddLikeUseCase,
+    private val deleteLikeUseCase: DeleteLikeUseCase,
+    private val addFavoriteUseCase: AddFavoriteUseCase,
+    private val deleteFavoriteUseCase: DeleteFavoriteUseCase,
+    private val getFeedFlowUseCase: GetFeedFlowUseCase
+) : ViewModel() {
 
-    // UIState
     private val _uiState = MutableStateFlow(FeedUiState())
     val uiState = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
-            feedService.feeds.collect { newData -> _uiState.update { it.copy(list = newData, error = "피드를 가져왔습니다.") } } // feed 리스트 수집
+            getFeedFlowUseCase.invoke().collect { newData ->
+                _uiState.update {
+                    it.copy(
+                        list = newData,
+                        error = "피드를 가져왔습니다."
+                    )
+                }
+            }
         }
         refreshFeed()
     }
@@ -38,9 +55,9 @@ class FeedsViewModel @Inject constructor(private val feedService: FeedService) :
     // 피드 가져오기
     private suspend fun getFeed() {
         try {
-            feedService.getFeeds()
+            feedRefreshUseCase.invoke()
         } catch (e: Exception) {
-            Log.e("FeedsViewModel", e.toString())
+            _uiState.update { it.copy(error = e.message) }
         }
     }
 
@@ -52,9 +69,9 @@ class FeedsViewModel @Inject constructor(private val feedService: FeedService) :
             review?.let {
                 try {
                     if (it.isFavorite) {
-                        feedService.deleteFavorite(reviewId)
+                        deleteFavoriteUseCase.invoke(reviewId)
                     } else {
-                        feedService.addFavorite(reviewId)
+                        addFavoriteUseCase.invoke(reviewId)
                     }
                 } catch (e: Exception) {
                     _uiState.update { it.copy(error = e.message) }
@@ -70,9 +87,9 @@ class FeedsViewModel @Inject constructor(private val feedService: FeedService) :
             review?.let {
                 try {
                     if (it.isLike) {
-                        feedService.deleteLike(reviewId)
+                        deleteLikeUseCase.invoke(reviewId)
                     } else {
-                        feedService.addLike(reviewId)
+                        addLikeUseCase.invoke(reviewId)
                     }
                 } catch (e: Exception) {
                     _uiState.update { it.copy(error = e.message) }
