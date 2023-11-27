@@ -1,6 +1,6 @@
 package com.sryang.torangbottomsheet.di.bottomsheet
 
-import com.sryang.torang.data.User
+import com.sryang.torang.data1.User
 import com.sryang.torang.usecase.GetFollowerUseCase
 import com.sryang.torang_repository.api.ApiProfile
 import com.sryang.torang_repository.data.dao.LoggedInUserDao

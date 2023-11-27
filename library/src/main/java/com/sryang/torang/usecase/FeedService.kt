@@ -1,7 +1,7 @@
 package com.sryang.torang.usecase
 
-import com.sryang.torang.data.CommentDataUiState
-import com.sryang.torang.data.FeedData
+import com.sryang.torang.data1.CommentDataUiState
+import com.sryang.torang.data1.FeedData
 import kotlinx.coroutines.flow.Flow
 
 interface FeedService {
