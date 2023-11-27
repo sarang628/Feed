@@ -32,16 +32,10 @@ import com.sryang.torang.viewmodels.FeedsViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedsScreen(
-    feedsViewModel: FeedsViewModel = hiltViewModel(),
     feeds: @Composable () -> Unit,
     errorComponent: @Composable () -> Unit,
-    feedMenuBottomSheetDialog: @Composable (Boolean) -> Unit,
-    commentBottomSheetDialog: @Composable (Boolean) -> Unit,
-    shareBottomSheetDialog: @Composable (Boolean) -> Unit,
-    reportDialog: @Composable () -> Unit,
     onAddReview: () -> Unit
 ) {
-    val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
     Scaffold(topBar = {
         TopAppBar(
             title = { Text(text = "Torang", fontSize = 21.sp, fontWeight = FontWeight.Bold) },
@@ -62,20 +56,6 @@ fun FeedsScreen(
                     feeds.invoke()
                     errorComponent.invoke()
                 }
-            }
-            if (uiState.showMenu) feedMenuBottomSheetDialog.invoke(true)
-            if (uiState.showComment) commentBottomSheetDialog.invoke(true)
-            if (uiState.showShare) shareBottomSheetDialog.invoke(true)
-            if (uiState.showReport && uiState.selectedReviewId != null) reportDialog.invoke()
-            uiState.error?.let {
-                AlertDialog(
-                    onDismissRequest = { feedsViewModel.removeErrorMsg() },
-                    confirmButton = {
-                        Button(onClick = { feedsViewModel.removeErrorMsg() }) {
-                            Text(text = "확인", color = Color.White)
-                        }
-                    },
-                    title = { Text(text = it) })
             }
         }
     }

@@ -97,7 +97,5 @@ dependencies {
     implementation "com.github.sarang628:Theme:$themeVersion"
     implementation "com.github.sarang628:TorangRepository:$repositoryVersion"
     implementation "com.github.sarang628:BaseFeed:$baseFeedVersion"
-    implementation "com.github.sarang628:TorangBottomSheet:$torangBottomSheetVersion"
     implementation "com.github.sarang628:CommonWidgets:$commonWidgetsVersion"
-    implementation "com.github.sarang628:Report:$reportVersion"
 }

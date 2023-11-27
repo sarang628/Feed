@@ -5,7 +5,6 @@ import com.sryang.base.feed.data.Review
 import com.sryang.base.feed.data.User
 import com.sryang.torang.data1.CommentData
 import com.sryang.torang.data1.FeedData
-import com.sryang.torang.uistate.CommentItemUiState
 import com.sryang.torang_repository.data.RemoteComment
 import com.sryang.torang_repository.data.entity.FeedEntity
 import com.sryang.torang_repository.data.entity.ReviewAndImageEntity
@@ -67,19 +66,6 @@ fun FeedData.review(): Review {
     )
 }
 
-
-fun CommentData.toCommentItemUiState(): CommentItemUiState
-{
-    return CommentItemUiState(
-        userId = userId,
-        profileImageUrl = profileImageUrl,
-        date = date,
-        comment = comment,
-        name = name,
-        likeCount = likeCount
-    )
-}
-
 fun ReviewAndImageEntity.toFeedData(): FeedData {
     return FeedData(
         reviewId = this.review.reviewId,
@@ -101,7 +87,7 @@ fun ReviewAndImageEntity.toFeedData(): FeedData {
         visibleLike = false,
         visibleComment = false,
         contents = this.review.contents,
-        reviewImages = this.images.stream().map { it.pictureUrl }.toList(),
+        reviewImages = this.images.map { it.pictureUrl },
         restaurantId = this.review.restaurantId
     )
 }
