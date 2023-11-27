@@ -3,7 +3,7 @@ package com.sryang.torang.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sryang.torang.data1.CommentDataUiState
+import com.sryang.torang.data.CommentDataUiState
 import com.sryang.torang.uistate.FeedUiState
 import com.sryang.torang.usecase.FeedService
 import dagger.hilt.android.lifecycle.HiltViewModel
