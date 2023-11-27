@@ -31,7 +31,7 @@ fun FeedScreen(
     Box {
         FeedsScreen(feedsViewModel = feedsViewModel,
             feeds = {
-                Feeds(list = ArrayList(uiState.list.stream().map { it.review() }.toList()),
+                Feeds(list = ArrayList(uiState.list.map { it.review() }),
                     onProfile = onProfile,
                     onMenu = { feedsViewModel.onMenu(it) },
                     onImage = onImage,
@@ -66,8 +66,7 @@ fun FeedScreen(
                 CommentBottomSheetDialog(isExpand = it,
                     onSelect = {},
                     onClose = { feedsViewModel.closeComment() },
-                    list = uiState.comments?.stream()?.map { it.toCommentItemUiState() }
-                        ?.toList() ?: ArrayList(),
+                    list = uiState.comments?.map { it.toCommentItemUiState() } ?: ArrayList(),
                     onSend = { feedsViewModel.sendComment(it) },
                     profileImageUrl = uiState.myProfileUrl ?: "",
                     profileImageServerUrl = profileImageServerUrl,
