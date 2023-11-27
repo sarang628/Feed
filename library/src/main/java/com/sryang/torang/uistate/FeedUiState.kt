@@ -1,7 +1,7 @@
 package com.sryang.torang.uistate
 
-import com.sryang.torang.data.CommentData
-import com.sryang.torang.data.FeedData
+import com.sryang.torang.data1.CommentData
+import com.sryang.torang.data1.FeedData
 
 data class FeedUiState(
     val isRefreshing: Boolean = false                   // 스크롤 리프레시
