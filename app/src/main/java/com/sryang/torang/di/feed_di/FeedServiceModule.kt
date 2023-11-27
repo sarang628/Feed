@@ -1,4 +1,4 @@
-package com.posco.torang.di.feed
+package com.sryang.torang.di.feed_di
 
 import com.sryang.torang.data1.FeedData
 import com.sryang.torang.usecase.AddFavoriteUseCase
@@ -14,7 +14,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import java.net.ConnectException
 
 /**
  * DomainLayer
@@ -24,22 +23,20 @@ import java.net.ConnectException
 @Module
 class FeedServiceModule {
     @Provides
-    fun provideFeedService(
+    fun provideFeedRefreshUseCase(
         feedRepository: FeedRepository
     ): FeedRefreshUseCase {
         return object : FeedRefreshUseCase {
             override suspend fun invoke() {
-                try {
-                    feedRepository.loadFeed()
-                } catch (e: ConnectException) {
-                    throw Exception("서버 접속에 실패하였습니다.")
-                }
+                feedRepository.loadFeed()
             }
         }
     }
 
     @Provides
-    fun provideAddLikeUsecase(feedRepository: FeedRepository): AddLikeUseCase {
+    fun provideAddLikeUseCase(
+        feedRepository: FeedRepository
+    ): AddLikeUseCase {
         return object : AddLikeUseCase {
             override suspend fun invoke(reviewId: Int) {
                 feedRepository.addLike(reviewId)
@@ -48,17 +45,20 @@ class FeedServiceModule {
     }
 
     @Provides
-    fun provideDeleteLikeUsecase(feedRepository: FeedRepository): DeleteLikeUseCase {
+    fun provideDeleteLikeUseCase(
+        feedRepository: FeedRepository
+    ): DeleteLikeUseCase {
         return object : DeleteLikeUseCase {
             override suspend fun invoke(reviewId: Int) {
-                feedRepository.deleteLike(reviewId)
+                feedRepository.deleteFavorite(reviewId)
             }
-
         }
     }
 
     @Provides
-    fun provideAddFavoriteUseCase(feedRepository: FeedRepository): AddFavoriteUseCase {
+    fun provideAddFavoriteUseCase(
+        feedRepository: FeedRepository
+    ): AddFavoriteUseCase {
         return object : AddFavoriteUseCase {
             override suspend fun invoke(reviewId: Int) {
                 feedRepository.addFavorite(reviewId)
@@ -67,7 +67,9 @@ class FeedServiceModule {
     }
 
     @Provides
-    fun provideDeleteFavoriteUsecase(feedRepository: FeedRepository): DeleteFavoriteUseCase {
+    fun provideDeleteFavoriteUseCase(
+        feedRepository: FeedRepository
+    ): DeleteFavoriteUseCase {
         return object : DeleteFavoriteUseCase {
             override suspend fun invoke(reviewId: Int) {
                 feedRepository.deleteFavorite(reviewId)
@@ -76,10 +78,12 @@ class FeedServiceModule {
     }
 
     @Provides
-    fun provideGetFeedFlowUseCase(feedRepository: FeedRepository): GetFeedFlowUseCase {
+    fun provideGetFeedFlowUseCase(
+        feedRepository: FeedRepository
+    ): GetFeedFlowUseCase {
         return object : GetFeedFlowUseCase {
             override suspend fun invoke(): Flow<List<FeedData>> {
-                return feedRepository.feeds.map { it ->
+                return feedRepository.feeds.map {
                     it.map { it.toFeedData() }
                 }
             }

@@ -1,4 +1,4 @@
-package com.posco.torang.di.feed
+package com.sryang.torang.di.feed_di
 
 import com.sryang.base.feed.data.Restaurant
 import com.sryang.base.feed.data.Review
@@ -87,7 +87,7 @@ fun ReviewAndImageEntity.toFeedData(): FeedData {
         visibleLike = false,
         visibleComment = false,
         contents = this.review.contents,
-        reviewImages = this.images.map { it.pictureUrl },
+        reviewImages = this.images.stream().map { it.pictureUrl }.toList(),
         restaurantId = this.review.restaurantId
     )
 }
