@@ -8,6 +8,10 @@
 
 <img src="screenshots/package.png" width="250px" height="300px"/>
 
+## case
+- 피드를 로드 후 피드가 없으면 비어있음 표시
+
+
 ## Architecture
 ### UI Layer
 UI state
