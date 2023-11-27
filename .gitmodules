@@ -10,6 +10,3 @@
 [submodule "app/src/main/java/com/sryang/torang/di/profile_di"]
 	path = app/src/main/java/com/sryang/torang/di/profile_di
 	url = https://github.com/sarang628/profile_di.git
-[submodule "app/src/main/java/com/sryang/torang/data"]
-	path = app/src/main/java/com/sryang/torang/data
-	url = https://github.com/sarang628/data.git
