@@ -11,7 +11,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.library.RatingBar
 import com.google.samples.apps.sunflower.ui.TorangTheme
-import com.posco.torang.di.feed.FeedScreen
+import com.sryang.torang.di.feed_di.FeedScreen
 import com.sryang.torang_repository.repository.LoginRepository
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -35,15 +35,12 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Column {
                         FeedScreen(
-                            onAddReview = {},
                             onRestaurant = {},
                             onName = {},
                             onImage = {},
                             onProfile = {},
                             ratingBar = { RatingBar(rating = it) },
-                            onMenu = {},
-                            onComment = {},
-                            onShare = {}
+                            clickAddReview = {}
                         )
                         //LoginRepositoryTest(loginRepository = loginRepository)
                     }
