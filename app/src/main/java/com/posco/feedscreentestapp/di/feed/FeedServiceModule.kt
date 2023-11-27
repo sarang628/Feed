@@ -1,7 +1,7 @@
 package com.posco.feedscreentestapp.di.feed
 
-import com.sryang.torang.data1.CommentDataUiState
-import com.sryang.torang.data1.FeedData
+import com.sryang.torang.data.CommentDataUiState
+import com.sryang.torang.data.FeedData
 import com.sryang.torang.usecase.FeedService
 import com.sryang.torang_repository.repository.FeedRepository
 import dagger.Module
