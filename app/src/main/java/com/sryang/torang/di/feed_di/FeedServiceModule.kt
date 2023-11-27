@@ -1,4 +1,4 @@
-package com.posco.feedscreentestapp.di.feed
+package com.posco.torang.di.feed
 
 import com.sryang.torang.data.CommentDataUiState
 import com.sryang.torang.data.FeedData

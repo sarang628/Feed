@@ -1,21 +1,17 @@
-package com.posco.feedscreentestapp.di.feed
+package com.posco.torang.di.feed
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.posco.feedscreentestapp.BuildConfig
 import com.sryang.base.feed.compose.feed.Feeds
-import com.sryang.base.feed.compose.feed.TorangToolbar
-import com.sryang.library.comment.CommentBottomSheetDialog
-import com.sryang.library.feed_menu.FeedMenuBottomSheetDialog
-import com.sryang.library.share.ShareBottomSheetDialog
+import com.sryang.torang.BuildConfig
 import com.sryang.torang.compose.FeedsScreen
+import com.sryang.torang.compose.bottomsheet.comment.CommentBottomSheetDialog
+import com.sryang.torang.compose.bottomsheet.feed.FeedMenuBottomSheetDialog
+import com.sryang.torang.compose.bottomsheet.share.ShareBottomSheetDialog
 import com.sryang.torang.compose.report.ReportModal
-import com.sryang.torang.compose.report.ReportScreen
 import com.sryang.torang.viewmodels.FeedsViewModel
 
 @Composable
@@ -83,7 +79,7 @@ fun FeedScreen(
                     isExpand = true,
                     onSelect = {},
                     onClose = { feedsViewModel.closeShare() },
-                    list = ArrayList()
+                    profileServerUrl = BuildConfig.PROFILE_IMAGE_SERVER_URL
                 )
             },
             errorComponent = {},

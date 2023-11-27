@@ -7,9 +7,9 @@ plugins {
 
 android {
     compileSdk rootProject.compileSdk
-
+    namespace 'com.sryang.torang'
     defaultConfig {
-        applicationId "com.sryang.feedscreentestapp"
+        applicationId "com.sryang.torang"
         minSdk rootProject.minSdk
         targetSdk rootProject.targetSdk
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -45,7 +45,6 @@ android {
         targetCompatibility JavaVersion.VERSION_17
         sourceCompatibility JavaVersion.VERSION_17
     }
-    namespace 'com.posco.feedscreentestapp'
 }
 
 dependencies {

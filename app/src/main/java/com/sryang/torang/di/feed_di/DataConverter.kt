@@ -1,11 +1,11 @@
-package com.posco.feedscreentestapp.di.feed
+package com.posco.torang.di.feed
 
 import com.sryang.base.feed.data.Restaurant
 import com.sryang.base.feed.data.Review
 import com.sryang.base.feed.data.User
-import com.sryang.library.data.CommentItemUiState
 import com.sryang.torang.data.CommentData
 import com.sryang.torang.data.FeedData
+import com.sryang.torang.uistate.CommentItemUiState
 import com.sryang.torang_repository.data.RemoteComment
 import com.sryang.torang_repository.data.entity.FeedEntity
 import com.sryang.torang_repository.data.entity.ReviewAndImageEntity

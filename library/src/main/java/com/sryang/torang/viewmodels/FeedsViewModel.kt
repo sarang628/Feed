@@ -26,8 +26,8 @@ class FeedsViewModel @Inject constructor(private val feedService: FeedService) :
     {
         viewModelScope.launch {
             feedService.feeds.collect { newData -> _uiState.update { it.copy(list = newData) } } // feed 리스트 수집
-            getFeed() // feed 가져오기
         }
+        refreshFeed()
     }
 
     // 피드 리스트 갱신

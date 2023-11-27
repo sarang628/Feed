@@ -1,4 +1,4 @@
-package com.posco.feedscreentestapp
+package com.sryang.torang
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

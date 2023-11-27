@@ -1,4 +1,4 @@
-package com.posco.feedscreentestapp
+package com.sryang.torang
 
 import android.os.Bundle
 import android.view.Window
@@ -6,16 +6,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.library.RatingBar
 import com.google.samples.apps.sunflower.ui.TorangTheme
-import com.posco.feedscreentestapp.di.feed.FeedScreen
+import com.posco.torang.di.feed.FeedScreen
 import com.sryang.torang_repository.repository.LoginRepository
-import com.sryang.torang_repository.repository.LoginRepositoryTest
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
