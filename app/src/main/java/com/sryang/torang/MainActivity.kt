@@ -40,7 +40,10 @@ class MainActivity : ComponentActivity() {
                             onImage = {},
                             onProfile = {},
                             ratingBar = { RatingBar(rating = it) },
-                            clickAddReview = {}
+                            clickAddReview = {},
+                            onComment = {},
+                            onShare = {},
+                            onMenu = {}
                         )
                         //LoginRepositoryTest(loginRepository = loginRepository)
                     }

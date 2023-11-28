@@ -7,4 +7,7 @@ data class FeedUiState(
     , val list: List<FeedData> = listOf()   // 피드 리스트
     , val faliedLoad: Boolean = false       // 피드 로딩 실패
     , val error: String? = null             // 에러 메시지
+    , val isLoaded: Boolean = false
 )
+
+val FeedUiState.isEmpty: Boolean get() = this.list.isEmpty() && isLoaded

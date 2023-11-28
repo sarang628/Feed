@@ -35,7 +35,6 @@ class FeedsViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         list = newData,
-                        error = "피드를 가져왔습니다."
                     )
                 }
             }
@@ -48,7 +47,13 @@ class FeedsViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isRefreshing = true) }
             getFeed() // feed 가져오기
-            _uiState.update { it.copy(isRefreshing = false) }
+            _uiState.update {
+                it.copy(
+                    isRefreshing = false,
+                    isLoaded = true,
+                    error = "피드를 가져왔습니다."
+                )
+            }
         }
     }
 
@@ -102,5 +107,9 @@ class FeedsViewModel @Inject constructor(
     // 에러메시지 삭제
     fun clearErrorMsg() {
         _uiState.update { it.copy(error = null) }
+    }
+
+    fun onBottom() {
+
     }
 }
