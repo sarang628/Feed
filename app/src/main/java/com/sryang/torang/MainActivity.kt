@@ -11,7 +11,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.library.RatingBar
 import com.google.samples.apps.sunflower.ui.TorangTheme
-import com.sryang.torang.compose.FeedScreen
 import com.sryang.torang.di.feed_di.ProvideFeedScreen
 import com.sryang.torang_repository.repository.LoginRepository
 import dagger.hilt.android.AndroidEntryPoint
