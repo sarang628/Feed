@@ -1,6 +1,6 @@
 package com.sryang.torang.data.feed
 
-data class FeedData(
+data class Feed(
     val reviewId: Int,
     val restaurantId: Int,
     val userId: Int,

@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sryang.torang.R
-import com.sryang.torang.data.feed.FeedData
+import com.sryang.torang.data.feed.Feed
 import com.sryang.torang.uistate.FeedUiState
 import com.sryang.torang.uistate.isEmpty
 import com.sryang.torang.viewmodels.FeedsViewModel
@@ -35,7 +35,7 @@ fun FeedScreen(
     feedsViewModel: FeedsViewModel = hiltViewModel(),
     clickAddReview: (() -> Unit),
     feeds: @Composable (
-        list: List<FeedData>,
+        list: List<Feed>,
         onLike: ((Int) -> Unit),
         onFavorite: ((Int) -> Unit),
         onRefresh: (() -> Unit),
