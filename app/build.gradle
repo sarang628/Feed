@@ -74,23 +74,13 @@ dependencies {
     /** room */
     def room_version = "2.5.1"
     implementation          "androidx.room:room-runtime:$room_version"
-    annotationProcessor     "androidx.room:room-compiler:$room_version"
     kapt                    "androidx.room:room-compiler:$room_version" // To use Kotlin annotation processing tool (kapt)
-    implementation          "androidx.room:room-rxjava2:$room_version" // optional - RxJava2 support for Room
-    implementation          "androidx.room:room-rxjava3:$room_version" // optional - RxJava3 support for Room
-    implementation          "androidx.room:room-guava:$room_version" // optional - Guava support for Room, including Optional and ListenableFuture
-    testImplementation      "androidx.room:room-testing:$room_version" // optional - Test helpers
-    implementation          "androidx.room:room-paging:$room_version" // optional - Paging 3 Integration
     implementation          "androidx.room:room-ktx:$room_version"
 
     /** unittest */
     testImplementation "junit:junit:$jUnitVersion" // Required -- JUnit 4 framework
     testImplementation "androidx.test:core:$androidXTestVersion" // Optional -- Robolectric environment // To use the androidx.test.core APIs
-    //testImplementation "org.mockito:mockito-core:$mockitoVersion" // Optional -- Mockito framework
-    //testImplementation "org.mockito.kotlin:mockito-kotlin:$mockitoKotlinVersion" // Optional -- mockito-kotlin
-    //testImplementation "io.mockk:mockk:$mockkVersion" // Optional -- Mockk framework
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version" // Test rules and transitive dependencies:
-    //debugImplementation("androidx.compose.ui:ui-test-manifest:$compose_version") // Needed for createAndroidComposeRule, but not createComposeRule:
 
     /* torang modules*/
     implementation project(path: ':library')

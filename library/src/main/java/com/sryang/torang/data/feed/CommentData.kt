@@ -1,4 +1,4 @@
-package com.sryang.torang.data1
+package com.sryang.torang.data.feed
 
 data class CommentData(
     val userId: Int,
