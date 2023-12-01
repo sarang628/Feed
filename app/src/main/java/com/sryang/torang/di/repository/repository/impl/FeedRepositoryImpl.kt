@@ -28,7 +28,6 @@ import com.sryang.torang_repository.session.SessionClientService
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.streams.toList
 
 @Singleton
 class FeedRepositoryImpl @Inject constructor(
@@ -60,27 +59,25 @@ class FeedRepositoryImpl @Inject constructor(
     override suspend fun loadFeed() {
         val feedList = apiFeed.getFeeds(sessionClientService.getToken())
         try {
-            feedDao.insertAll(feedList.stream().map {
-                it.toFeedEntity()
-            }.toList())
+            deleteFeedAll()
+            feedDao.insertAll(feedList.map { it.toFeedEntity() })
 
             val list = feedList
-                .stream().map { it.pictures }.toList()
-                .stream().flatMap { it.stream() }.toList()
-                .stream().map { it.toReviewImage() }.toList()
+                .map { it.pictures }
+                .flatMap { it }
+                .map { it.toReviewImage() }
 
             feedDao.insertAllFeed(
-                feedList = feedList.stream().map { it.toFeedEntity() }.toList(),
+                feedList = feedList.map { it.toFeedEntity() },
                 userDao = userDao,
                 pictureDao = pictureDao,
                 reviewImages = list,
-                userList = feedList.stream().map { it.toUserEntity() }.toList(),
+                userList = feedList.map { it.toUserEntity() },
                 likeDao = likeDao,
-                likeList = feedList.stream().filter { it.like != null }
-                    .map { it.like!!.toLikeEntity() }.toList(),
+                likeList = feedList.filter { it.like != null }.map { it.like!!.toLikeEntity() },
                 favoriteDao = favoriteDao,
-                favorites = feedList.stream().filter { it.favorite != null }
-                    .map { it.favorite!!.toFavoriteEntity() }.toList()
+                favorites = feedList.filter { it.favorite != null }
+                    .map { it.favorite!!.toFavoriteEntity() }
             )
         } catch (e: Exception) {
             Log.e("FeedRepositoryImpl", e.toString())
@@ -88,6 +85,7 @@ class FeedRepositoryImpl @Inject constructor(
                 "FeedRepositoryImpl",
                 Gson().newBuilder().setPrettyPrinting().create().toJson(feedList)
             )
+            throw Exception("피드를 가져오는데 실패하였습니다.")
         }
     }
 
