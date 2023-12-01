@@ -67,6 +67,12 @@ class FeedsViewModel @Inject constructor(
 }
 ```
 
+## UnitTest
+like가 1개 이상이면 갯수를 표시 한다.
+comment가 1개 이상이면 코멘트 갯수를 표시 한다.
+
+
+
 
 ## Preview
 <img src="screenshots/demonstrate.gif" />

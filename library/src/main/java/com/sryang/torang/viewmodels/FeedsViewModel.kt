@@ -31,12 +31,8 @@ class FeedsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            getFeedFlowUseCase.invoke().collect { newData ->
-                _uiState.update {
-                    it.copy(
-                        list = newData,
-                    )
-                }
+            getFeedFlowUseCase.invoke().collect { list ->
+                _uiState.update { it.copy(list = list) }
             }
         }
         refreshFeed()

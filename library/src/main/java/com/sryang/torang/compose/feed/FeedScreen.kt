@@ -1,7 +1,8 @@
-package com.sryang.torang.compose
+package com.sryang.torang.compose.feed
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -20,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,7 +31,6 @@ import com.sryang.torang.uistate.FeedUiState
 import com.sryang.torang.uistate.isEmpty
 import com.sryang.torang.viewmodels.FeedsViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedScreen(
     feedsViewModel: FeedsViewModel = hiltViewModel(),
@@ -45,12 +46,40 @@ fun FeedScreen(
     ) -> Unit
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
+    FeedScreen(uiState = uiState,
+        clickAddReview = clickAddReview,
+        feeds = {
+            feeds.invoke(
+                list = uiState.list,
+                isEmpty = uiState.isEmpty,
+                isRefreshing = uiState.isRefreshing,
+                onBottom = { feedsViewModel.onBottom() },
+                onFavorite = { feedsViewModel.onFavorite(it) },
+                onLike = { feedsViewModel.onLike(it) },
+                onRefresh = { feedsViewModel.refreshFeed() }
+            )
+        },
+        consumeErrorMessage = {
+            feedsViewModel.clearErrorMsg()
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FeedScreen(
+    uiState: FeedUiState,
+    clickAddReview: (() -> Unit),
+    feeds: @Composable () -> Unit,
+    consumeErrorMessage: () -> Unit
+) {
     val snackBarHostState = remember { SnackbarHostState() }
+    val interactionSource = remember { MutableInteractionSource() }
 
     LaunchedEffect(key1 = uiState.error, block = {
         uiState.error?.let {
             snackBarHostState.showSnackbar(it, duration = SnackbarDuration.Short)
-            feedsViewModel.clearErrorMsg()
+            consumeErrorMessage.invoke()
         }
     })
 
@@ -66,22 +95,27 @@ fun FeedScreen(
                         contentDescription = "",
                         modifier = Modifier
                             .size(32.dp)
-                            .clickable {
+                            .clickable(
+                                indication = null,
+                                interactionSource = interactionSource
+                            ) {
                                 clickAddReview.invoke()
                             })
                 })
         }) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues))
         {
-            feeds.invoke(
-                list = uiState.list,
-                isEmpty = uiState.isEmpty,
-                isRefreshing = uiState.isRefreshing,
-                onBottom = { feedsViewModel.onBottom() },
-                onFavorite = { feedsViewModel.onFavorite(it) },
-                onLike = { feedsViewModel.onLike(it) },
-                onRefresh = { feedsViewModel.refreshFeed() }
-            )
+            feeds.invoke()
         }
     }
+}
+
+@Preview
+@Composable
+fun PreviewFeedScreen() {
+    FeedScreen(
+        uiState = FeedUiState(),
+        clickAddReview = { /*TODO*/ }, consumeErrorMessage = {},
+        feeds = {}
+    )
 }

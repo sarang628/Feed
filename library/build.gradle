@@ -49,6 +49,10 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-compose"
     implementation "androidx.navigation:navigation-compose:$nav_version"
 
+    /*test*/
+    // Required -- JUnit 4 framework
+    testImplementation "junit:junit:$jUnitVersion"
+
     /** utils */
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation("io.coil-kt:coil-compose:2.3.0")

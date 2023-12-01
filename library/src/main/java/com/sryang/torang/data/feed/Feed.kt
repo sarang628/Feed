@@ -15,3 +15,5 @@ data class Feed(
     val contents: String,
     val reviewImages: List<String> = ArrayList()
 )
+
+val Feed.visibleLike: Boolean get() = this.likeAmount > 0
