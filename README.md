@@ -3,12 +3,12 @@
 <br>
 좋아요, 즐겨찾기, 공유, 코멘트, 신고 등 다양한 이벤트 이용 가능.
 
-<img src="screenshots/feed.png" width="50%" height="50%"/>
+<img src="screenshots/feed.png" width="70%" height="70%"/>
 
 ## Convention
 ### package
 
-<img src="screenshots/package.png" width="50%" height="50%"/>
+<img src="screenshots/package.png" width="40%" height="40%"/>
 
 ## case
 - 피드를 로드 후 피드가 없으면 비어있음 표시
