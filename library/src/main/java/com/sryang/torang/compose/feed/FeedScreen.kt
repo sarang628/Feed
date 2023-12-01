@@ -68,24 +68,26 @@ fun FeedScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedScreen(
-    uiState: FeedUiState,
-    clickAddReview: (() -> Unit),
-    feeds: @Composable () -> Unit,
-    consumeErrorMessage: () -> Unit
+    uiState: FeedUiState,           /* ui state */
+    clickAddReview: (() -> Unit),   /* click add review */
+    feeds: @Composable () -> Unit,  /* feed list ui module(common) */
+    consumeErrorMessage: () -> Unit /* consume error message */
 ) {
-    val snackBarHostState = remember { SnackbarHostState() }
+    val snackbarHostState = remember { SnackbarHostState() }
     val interactionSource = remember { MutableInteractionSource() }
 
+    // snackbar process
     LaunchedEffect(key1 = uiState.error, block = {
         uiState.error?.let {
-            snackBarHostState.showSnackbar(it, duration = SnackbarDuration.Short)
+            snackbarHostState.showSnackbar(it, duration = SnackbarDuration.Short)
             consumeErrorMessage.invoke()
         }
     })
 
+    // snackbar + topAppBar + feedList
     Scaffold(
         snackbarHost = {
-            SnackbarHost(hostState = snackBarHostState)
+            SnackbarHost(hostState = snackbarHostState)
         },
         topBar = {
             TopAppBar(

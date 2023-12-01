@@ -18,7 +18,54 @@
 ## Architecture
 ### UI Layer
 UI element
+```
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FeedScreen(
+    uiState: FeedUiState,           /* ui state */
+    clickAddReview: (() -> Unit),   /* click add review */
+    feeds: @Composable () -> Unit,  /* feed list ui module(common) */
+    consumeErrorMessage: () -> Unit /* consume error message */
+) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val interactionSource = remember { MutableInteractionSource() }
 
+    // snackbar process
+    LaunchedEffect(key1 = uiState.error, block = {
+        uiState.error?.let {
+            snackbarHostState.showSnackbar(it, duration = SnackbarDuration.Short)
+            consumeErrorMessage.invoke()
+        }
+    })
+
+    // snackbar + topAppBar + feedList
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Torang", fontSize = 21.sp, fontWeight = FontWeight.Bold) },
+                actions = {
+                    Image(painter = painterResource(id = R.drawable.ic_add),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clickable(
+                                indication = null,
+                                interactionSource = interactionSource
+                            ) {
+                                clickAddReview.invoke()
+                            })
+                })
+        }) { paddingValues ->
+        Box(modifier = Modifier.padding(paddingValues))
+        {
+            feeds.invoke()
+        }
+    }
+}
+```
 UI state
 ```
 data class FeedUiState(
@@ -78,6 +125,16 @@ like가 1개 이상이면 갯수를 표시 한다.
 comment가 1개 이상이면 코멘트 갯수를 표시 한다.
 
 
+## 어려웠던 점
+
+- 유닛코드 테스트 작성 어려움(현재 진행중)
+  - 명제와 진리표 등을 작성해서 코드로 옮겨야 함.
+  - 테스트 라이브러리 학습 필요.
+- 피드 리스트 공통 모듈작업
+  - 피드 리스트는 프로필 화면 음식점 상세화면 등에도 사용하여 공통 모듈로 작업 필요.
+  - 공통 모듈의 라이브러리 의존성을 추가하지 않고 주입하는 방법을 사용
+  - 의존성 없이 공통 모듈을 주입하는데 여러 추가 작업이 필요 했음.
+  - 이게 맞는 방법인지 잘 모르겠음.
 
 
 ## Preview
