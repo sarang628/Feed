@@ -1,4 +1,4 @@
-# 피드 화면
+# Feed Module
 피드 화면은 사용자가 작성한 리뷰를 리스트로 보여주는 화면.
 <br>
 좋아요, 즐겨찾기, 공유, 코멘트, 신고 등 다양한 이벤트 이용 가능.
@@ -10,16 +10,22 @@
 
 <img src="screenshots/package.png" width="40%" height="40%"/>
 
-## case
+## Case
 - 피드를 로드 후 피드가 없으면 비어있음 표시
 - 좋아요 추가하기
 - 즐겨찾기 추가하기
 - 피드 불러오기
 
+### Function
+- Feed + Screen
+- Feed + ViewModel
+- GetFeed + UseCase
+
 
 ## Architecture
 ### UI Layer
-UI element
+#### UI element
+UI elements such as activities and fragments that display the data
 ```
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,7 +74,8 @@ fun FeedScreen(
     }
 }
 ```
-UI state
+#### UI state
+The UI state is what the app says they should see.
 ```
 data class FeedUiState(
     val isRefreshing: Boolean = false       // 스크롤 리프레시
@@ -77,8 +84,8 @@ data class FeedUiState(
     , val error: String? = null             // 에러 메시지
 )
 ```
-
-state holder(ViewModel)
+#### State holder(ViewModel)
+Responsible for the production of UI state and contain the necessary logic for that task
 ```
 @HiltViewModel
 class FeedsViewModel @Inject constructor(
@@ -118,7 +125,7 @@ class FeedsViewModel @Inject constructor(
 }
 ```
 
-## illustrating cycle of event
+## Illustrating cycle of event
 <img src="screenshots/event_cycle.jpg">
 
 
@@ -127,7 +134,7 @@ like가 1개 이상이면 갯수를 표시 한다.
 comment가 1개 이상이면 코멘트 갯수를 표시 한다.
 
 
-## 어려웠던 점
+## What was difficult
 
 - 유닛코드 테스트 작성 어려움(현재 진행중)
   - 명제와 진리표 등을 작성해서 코드로 옮겨야 함.
