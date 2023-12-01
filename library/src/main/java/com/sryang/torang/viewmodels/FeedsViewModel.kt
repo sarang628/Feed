@@ -42,24 +42,20 @@ class FeedsViewModel @Inject constructor(
     fun refreshFeed() {
         viewModelScope.launch {
             _uiState.update { it.copy(isRefreshing = true) }
-            getFeed() // feed 가져오기
-            _uiState.update {
-                it.copy(
-                    isRefreshing = false,
-                    isLoaded = true,
-                    error = "피드를 가져왔습니다."
-                )
+            try {
+                feedRefreshUseCase.invoke()
+                _uiState.update { it.copy(error = "피드를 가져왔습니다.") }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(error = e.message) }
+            } finally {
+                _uiState.update { it.copy(isRefreshing = false, isLoaded = true) }
             }
         }
     }
 
     // 피드 가져오기
     private suspend fun getFeed() {
-        try {
-            feedRefreshUseCase.invoke()
-        } catch (e: Exception) {
-            _uiState.update { it.copy(error = e.message) }
-        }
+
     }
 
 
