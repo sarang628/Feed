@@ -3,7 +3,7 @@
 <br>
 좋아요, 즐겨찾기, 공유, 코멘트, 신고 등 다양한 이벤트 이용 가능.
 
-<img src="screenshots/feed.png" width="70%" height="70%"/>
+<img src="screenshots/feed.png"/>
 
 ## Convention
 ### package
