@@ -7,19 +7,18 @@
 
 ## Convention
 ### package
-
 <img src="screenshots/package.png" width="40%" height="40%"/>
+
+### Function
+- Feed + Screen
+- Feed + ViewModel
+- GetFeed + UseCase
 
 ## Case
 - 피드를 로드 후 피드가 없으면 비어있음 표시
 - 좋아요 추가하기
 - 즐겨찾기 추가하기
 - 피드 불러오기
-
-### Function
-- Feed + Screen
-- Feed + ViewModel
-- GetFeed + UseCase
 
 
 ## Architecture
