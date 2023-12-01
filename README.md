@@ -17,6 +17,8 @@
 
 ## Architecture
 ### UI Layer
+UI element
+
 UI state
 ```
 data class FeedUiState(
@@ -27,7 +29,7 @@ data class FeedUiState(
 )
 ```
 
-ViewModel
+state holder(ViewModel)
 ```
 @HiltViewModel
 class FeedsViewModel @Inject constructor(
@@ -66,6 +68,10 @@ class FeedsViewModel @Inject constructor(
     fun onLike(reviewId: Int) {...}
 }
 ```
+
+## illustrating cycle of event
+<img src="screenshots/event_cycle.jpg">
+
 
 ## UnitTest
 like가 1개 이상이면 갯수를 표시 한다.
