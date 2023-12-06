@@ -1,5 +1,6 @@
 package com.sryang.torang.viewmodels
 
+import androidx.annotation.MainThread
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sryang.torang.uistate.FeedUiState
@@ -10,6 +11,7 @@ import com.sryang.torang.usecase.DeleteLikeUseCase
 import com.sryang.torang.usecase.FeedRefreshUseCase
 import com.sryang.torang.usecase.GetFeedFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -26,10 +28,14 @@ class FeedsViewModel @Inject constructor(
     private val getFeedFlowUseCase: GetFeedFlowUseCase
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(FeedUiState())
+    private val _uiState = MutableStateFlow(FeedUiState(isRefreshing = true))
     val uiState = _uiState.asStateFlow()
+    private var initializeCalled = false
 
-    init {
+    @MainThread
+    fun initialize() {
+        if (initializeCalled) return
+        initializeCalled = true
         viewModelScope.launch {
             getFeedFlowUseCase.invoke().collect { list ->
                 _uiState.update { it.copy(list = list) }

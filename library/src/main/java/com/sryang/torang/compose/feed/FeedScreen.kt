@@ -46,6 +46,9 @@ fun FeedScreen(
     ) -> Unit
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
+
+    feedsViewModel.initialize()
+
     FeedScreen(uiState = uiState,
         clickAddReview = clickAddReview,
         feeds = {
