@@ -10,3 +10,5 @@ data class FeedUiState(
 )
 
 val FeedUiState.isEmpty: Boolean get() = this.list.isEmpty() && isLoaded
+
+val FeedUiState.showShimmer: Boolean get() = false

@@ -42,7 +42,8 @@ fun FeedScreen(
         onRefresh: (() -> Unit),
         onBottom: (() -> Unit),
         isRefreshing: Boolean,
-        isEmpty: Boolean
+        isEmpty: Boolean,
+        isLoading: Boolean
     ) -> Unit
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
@@ -59,7 +60,8 @@ fun FeedScreen(
                 onBottom = { feedsViewModel.onBottom() },
                 onFavorite = { feedsViewModel.onFavorite(it) },
                 onLike = { feedsViewModel.onLike(it) },
-                onRefresh = { feedsViewModel.refreshFeed() }
+                onRefresh = { feedsViewModel.refreshFeed() },
+                isLoading = !uiState.isLoaded
             )
         },
         consumeErrorMessage = {
