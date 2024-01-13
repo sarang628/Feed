@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
                     Column {
                         ProvideFeedScreen(
                             ratingBar = { RatingBar(rating = it) },
-                            clickAddReview = {},
+                            onAddReview = {},
                         )
                         //LoginRepositoryTest(loginRepository = loginRepository)
                     }

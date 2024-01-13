@@ -36,7 +36,15 @@ class FeedsViewModel @Inject constructor(
     private var initializeCalled = false
 
     @MainThread
-    fun initialize() {
+    fun initialize(
+        onComment: ((Int) -> Unit)? = null,
+        onShare: ((Int) -> Unit)? = null,
+        onMenu: ((Int) -> Unit)? = null,
+        onName: ((Int) -> Unit)? = null,
+        onRestaurant: ((Int) -> Unit)? = null,
+        onImage: ((Int) -> Unit)? = null,
+        onProfile: ((Int) -> Unit)? = null,
+    ) {
         if (initializeCalled) return
         initializeCalled = true
         viewModelScope.launch {
@@ -48,13 +56,13 @@ class FeedsViewModel @Inject constructor(
                             it.copy(
                                 onFavorite = { onFavorite(it.reviewId) },
                                 onLike = { onLike(it.reviewId) },
-                                onComment = {},
-                                onShare = {},
-                                onMenu = {},
-                                onName = {},
-                                onRestaurant = {},
-                                onImage = {},
-                                onProfile = {},
+                                onComment = { onComment?.invoke(it.reviewId) },
+                                onShare = { onShare?.invoke(it.reviewId) },
+                                onMenu = { onMenu?.invoke(it.reviewId) },
+                                onName = { onName?.invoke(it.reviewId) },
+                                onRestaurant = { onRestaurant?.invoke(it.restaurantId) },
+                                onImage = { onImage?.invoke(0) },
+                                onProfile = { onProfile?.invoke(it.userId) },
                             )
                         })
                     }

@@ -33,7 +33,14 @@ import com.sryang.torang.viewmodels.FeedsViewModel
 @Composable
 fun FeedScreen(
     feedsViewModel: FeedsViewModel = hiltViewModel(),
-    clickAddReview: (() -> Unit),
+    onAddReview: (() -> Unit),
+    onComment: ((Int) -> Unit)? = null,
+    onShare: ((Int) -> Unit)? = null,
+    onMenu: ((Int) -> Unit)? = null,
+    onName: ((Int) -> Unit)? = null,
+    onRestaurant: ((Int) -> Unit)? = null,
+    onImage: ((Int) -> Unit)? = null,
+    onProfile: ((Int) -> Unit)? = null,
     feeds: @Composable (
         list: List<Feed>,
         onRefresh: (() -> Unit),
@@ -43,10 +50,12 @@ fun FeedScreen(
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
 
-    feedsViewModel.initialize()
+    feedsViewModel.initialize(
+        onComment, onShare, onMenu, onName, onRestaurant, onImage, onProfile
+    )
 
     FeedScreen(uiState = uiState,
-        clickAddReview = clickAddReview,
+        onAddReview = onAddReview,
         feeds = {
             feeds.invoke(
                 list = uiState.list,
@@ -65,7 +74,7 @@ fun FeedScreen(
 @Composable
 fun FeedScreen(
     uiState: FeedUiState,           /* ui state */
-    clickAddReview: (() -> Unit),   /* click add review */
+    onAddReview: (() -> Unit),   /* click add review */
     feeds: @Composable () -> Unit,  /* feed list ui module(common) */
     consumeErrorMessage: () -> Unit /* consume error message */
 ) {
@@ -97,7 +106,7 @@ fun FeedScreen(
                                 indication = null,
                                 interactionSource = interactionSource
                             ) {
-                                clickAddReview.invoke()
+                                onAddReview.invoke()
                             })
                 })
         }) { paddingValues ->
@@ -113,7 +122,7 @@ fun FeedScreen(
 fun PreviewFeedScreen() {
     FeedScreen(
         uiState = FeedUiState(),
-        clickAddReview = { /*TODO*/ }, consumeErrorMessage = {},
+        onAddReview = { /*TODO*/ }, consumeErrorMessage = {},
         feeds = {}
     )
 }
