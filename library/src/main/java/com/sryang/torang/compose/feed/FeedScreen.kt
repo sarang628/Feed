@@ -28,7 +28,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.sryang.torang.R
 import com.sryang.torang.data.feed.Feed
 import com.sryang.torang.uistate.FeedUiState
-import com.sryang.torang.uistate.isEmpty
 import com.sryang.torang.viewmodels.FeedsViewModel
 
 @Composable
@@ -37,13 +36,9 @@ fun FeedScreen(
     clickAddReview: (() -> Unit),
     feeds: @Composable (
         list: List<Feed>,
-        onLike: ((Int) -> Unit),
-        onFavorite: ((Int) -> Unit),
         onRefresh: (() -> Unit),
         onBottom: (() -> Unit),
         isRefreshing: Boolean,
-        isEmpty: Boolean,
-        isLoading: Boolean
     ) -> Unit
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
@@ -55,13 +50,9 @@ fun FeedScreen(
         feeds = {
             feeds.invoke(
                 list = uiState.list,
-                isEmpty = uiState.isEmpty,
                 isRefreshing = uiState.isRefreshing,
                 onBottom = { feedsViewModel.onBottom() },
-                onFavorite = { feedsViewModel.onFavorite(it) },
-                onLike = { feedsViewModel.onLike(it) },
                 onRefresh = { feedsViewModel.refreshFeed() },
-                isLoading = !uiState.isLoaded
             )
         },
         consumeErrorMessage = {

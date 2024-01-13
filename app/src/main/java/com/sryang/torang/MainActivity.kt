@@ -35,15 +35,8 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Column {
                         ProvideFeedScreen(
-                            onRestaurant = {},
-                            onName = {},
-                            onImage = {},
-                            onProfile = {},
                             ratingBar = { RatingBar(rating = it) },
                             clickAddReview = {},
-                            onComment = {},
-                            onShare = {},
-                            onMenu = {}
                         )
                         //LoginRepositoryTest(loginRepository = loginRepository)
                     }

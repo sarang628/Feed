@@ -13,7 +13,16 @@ data class Feed(
     val isLike: Boolean,
     val isFavorite: Boolean,
     val contents: String,
-    val reviewImages: List<String> = ArrayList()
+    val reviewImages: List<String> = ArrayList(),
+    val onProfile: (() -> Unit)? = null,
+    val onLike: (() -> Unit)? = null,
+    val onComment: (() -> Unit)? = null,
+    val onShare: (() -> Unit)? = null,
+    val onFavorite: (() -> Unit)? = null,
+    val onMenu: (() -> Unit)? = null,
+    val onName: (() -> Unit)? = null,
+    val onRestaurant: (() -> Unit)? = null,
+    val onImage: ((Int) -> Unit)? = null,
 )
 
 val Feed.visibleLike: Boolean get() = this.likeAmount > 0

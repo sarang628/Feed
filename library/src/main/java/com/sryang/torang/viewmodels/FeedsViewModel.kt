@@ -1,5 +1,6 @@
 package com.sryang.torang.viewmodels
 
+import android.util.Log
 import androidx.annotation.MainThread
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,6 +18,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+val TAG = "_FeedsViewModel"
 
 @HiltViewModel
 class FeedsViewModel @Inject constructor(
@@ -37,9 +40,25 @@ class FeedsViewModel @Inject constructor(
         if (initializeCalled) return
         initializeCalled = true
         viewModelScope.launch {
-            getFeedFlowUseCase.invoke().collect { list ->
-                _uiState.update { it.copy(list = list) }
-            }
+            getFeedFlowUseCase
+                .invoke() //TODO:: 어떻기 클릭 이벤트를 처리 할 것인가?
+                .collect { list ->
+                    _uiState.update {
+                        it.copy(list = list.map {
+                            it.copy(
+                                onFavorite = { onFavorite(it.reviewId) },
+                                onLike = { onLike(it.reviewId) },
+                                onComment = {},
+                                onShare = {},
+                                onMenu = {},
+                                onName = {},
+                                onRestaurant = {},
+                                onImage = {},
+                                onProfile = {},
+                            )
+                        })
+                    }
+                }
         }
         refreshFeed()
     }
@@ -54,16 +73,10 @@ class FeedsViewModel @Inject constructor(
             } catch (e: Exception) {
                 _uiState.update { it.copy(error = e.message) }
             } finally {
-                _uiState.update { it.copy(isRefreshing = false, isLoaded = true) }
+                _uiState.update { it.copy(isRefreshing = false) }
             }
         }
     }
-
-    // 피드 가져오기
-    private suspend fun getFeed() {
-
-    }
-
 
     // 즐겨찾기 클릭
     fun onFavorite(reviewId: Int) {
