@@ -34,13 +34,6 @@ import com.sryang.torang.viewmodels.FeedsViewModel
 fun FeedScreen(
     feedsViewModel: FeedsViewModel = hiltViewModel(),
     onAddReview: (() -> Unit),
-    onComment: ((Int) -> Unit)? = null,
-    onShare: ((Int) -> Unit)? = null,
-    onMenu: ((Int) -> Unit)? = null,
-    onName: ((Int) -> Unit)? = null,
-    onRestaurant: ((Int) -> Unit)? = null,
-    onImage: ((Int) -> Unit)? = null,
-    onProfile: ((Int) -> Unit)? = null,
     feeds: @Composable (
         list: List<Feed>,
         onRefresh: (() -> Unit),
@@ -50,9 +43,7 @@ fun FeedScreen(
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
 
-    feedsViewModel.initialize(
-        onComment, onShare, onMenu, onName, onRestaurant, onImage, onProfile
-    )
+    feedsViewModel.initialize()
 
     FeedScreen(uiState = uiState,
         onAddReview = onAddReview,
@@ -120,7 +111,7 @@ fun FeedScreen(
 @Preview
 @Composable
 fun PreviewFeedScreen() {
-    FeedScreen(
+    FeedScreen( /*Preview*/
         uiState = FeedUiState(),
         onAddReview = { /*TODO*/ }, consumeErrorMessage = {},
         feeds = {}

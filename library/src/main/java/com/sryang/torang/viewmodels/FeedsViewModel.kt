@@ -36,15 +36,7 @@ class FeedsViewModel @Inject constructor(
     private var initializeCalled = false
 
     @MainThread
-    fun initialize(
-        onComment: ((Int) -> Unit)? = null,
-        onShare: ((Int) -> Unit)? = null,
-        onMenu: ((Int) -> Unit)? = null,
-        onName: ((Int) -> Unit)? = null,
-        onRestaurant: ((Int) -> Unit)? = null,
-        onImage: ((Int) -> Unit)? = null,
-        onProfile: ((Int) -> Unit)? = null,
-    ) {
+    fun initialize() {
         if (initializeCalled) return
         initializeCalled = true
         viewModelScope.launch {
@@ -52,19 +44,7 @@ class FeedsViewModel @Inject constructor(
                 .invoke() //TODO:: 어떻기 클릭 이벤트를 처리 할 것인가?
                 .collect { list ->
                     _uiState.update {
-                        it.copy(list = list.map {
-                            it.copy(
-                                onFavorite = { onFavorite(it.reviewId) },
-                                onLike = { onLike(it.reviewId) },
-                                onComment = { onComment?.invoke(it.reviewId) },
-                                onShare = { onShare?.invoke(it.reviewId) },
-                                onMenu = { onMenu?.invoke(it.reviewId) },
-                                onName = { onName?.invoke(it.reviewId) },
-                                onRestaurant = { onRestaurant?.invoke(it.restaurantId) },
-                                onImage = { onImage?.invoke(0) },
-                                onProfile = { onProfile?.invoke(it.userId) },
-                            )
-                        })
+                        it.copy(list = list)
                     }
                 }
         }
