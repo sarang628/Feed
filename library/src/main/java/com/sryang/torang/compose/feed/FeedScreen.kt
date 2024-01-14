@@ -35,24 +35,26 @@ fun FeedScreen(
     feedsViewModel: FeedsViewModel = hiltViewModel(),
     onAddReview: (() -> Unit),
     feeds: @Composable (
+        /*base feed와 의존성 제거를 위해 함수 밖에서 호출*/
         list: List<Feed>,
-        onRefresh: (() -> Unit),
-        onBottom: (() -> Unit),
-        isRefreshing: Boolean,
+        onRefresh: (() -> Unit),/*base feed 에서 제공*/
+        onBottom: (() -> Unit),/*base feed 에서 제공*/
+        isRefreshing: Boolean,/*base feed 에서 제공*/
     ) -> Unit
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
 
     feedsViewModel.initialize()
 
-    FeedScreen(uiState = uiState,
+    FeedScreen(
+        uiState = uiState,
         onAddReview = onAddReview,
         feeds = {
             feeds.invoke(
-                list = uiState.list,
-                isRefreshing = uiState.isRefreshing,
-                onBottom = { feedsViewModel.onBottom() },
-                onRefresh = { feedsViewModel.refreshFeed() },
+                uiState.list,
+                { feedsViewModel.refreshFeed() },
+                { feedsViewModel.onBottom() },
+                uiState.isRefreshing,
             )
         },
         consumeErrorMessage = {
@@ -64,9 +66,9 @@ fun FeedScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedScreen(
-    uiState: FeedUiState,           /* ui state */
-    onAddReview: (() -> Unit),   /* click add review */
-    feeds: @Composable () -> Unit,  /* feed list ui module(common) */
+    uiState: FeedUiState, /* ui state */
+    onAddReview: (() -> Unit), /* click add review */
+    feeds: @Composable () -> Unit, /* feed list ui module(common) */
     consumeErrorMessage: () -> Unit /* consume error message */
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
