@@ -7,7 +7,7 @@ plugins {
 
 android {
     compileSdk rootProject.compileSdk
-    namespace 'com.sryang.torang'
+    namespace 'com.sarang.torang'
     defaultConfig {
         minSdk rootProject.minSdk
         targetSdk rootProject.targetSdk

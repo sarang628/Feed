@@ -1,5 +1,5 @@
-import com.sryang.torang.data.feed.Feed
-import com.sryang.torang.data.feed.visibleLike
+import com.sarang.torang.data.feed.Feed
+import com.sarang.torang.data.feed.visibleLike
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.Calendar
