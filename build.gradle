@@ -29,7 +29,7 @@ ext {
     themeVersion = '1557f652d3'
     repositoryVersion = 'ba032f80ca'
     baseFeedVersion = '65e291c2f3'
-    commonWidgetsVersion = '6c400e072c'
+    commonWidgetsVersion = '501b7b057a'
     torangBottomSheetVersion = '19e86938f4'
     reportVersion = '4fb865eeb3'
 }
