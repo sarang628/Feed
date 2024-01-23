@@ -1,6 +1,5 @@
 package com.sarang.torang.viewmodels
 
-import android.util.Log
 import androidx.annotation.MainThread
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,7 +11,6 @@ import com.sarang.torang.usecase.DeleteLikeUseCase
 import com.sarang.torang.usecase.FeedRefreshUseCase
 import com.sarang.torang.usecase.GetFeedFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -41,10 +39,15 @@ class FeedsViewModel @Inject constructor(
         initializeCalled = true
         viewModelScope.launch {
             getFeedFlowUseCase
-                .invoke() //TODO:: 어떻기 클릭 이벤트를 처리 할 것인가?
+                .invoke()
                 .collect { list ->
-                    _uiState.update {
-                        it.copy(list = list)
+                    _uiState.update { uiState ->
+                        uiState.copy(list = list.map { review ->
+                            review.copy(
+                                onLike = { onLike(review.reviewId) },
+                                onFavorite = { onFavorite(review.reviewId) }
+                            )
+                        })
                     }
                 }
         }
@@ -67,7 +70,7 @@ class FeedsViewModel @Inject constructor(
     }
 
     // 즐겨찾기 클릭
-    fun onFavorite(reviewId: Int) {
+    private fun onFavorite(reviewId: Int) {
         viewModelScope.launch {
             val review = uiState.value.list.find { it.reviewId == reviewId }
             review?.let {
@@ -85,7 +88,7 @@ class FeedsViewModel @Inject constructor(
     }
 
     // 좋아여 클릭
-    fun onLike(reviewId: Int) {
+    private fun onLike(reviewId: Int) {
         viewModelScope.launch {
             val review = uiState.value.list.find { it.reviewId == reviewId }
             review?.let {

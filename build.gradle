@@ -26,9 +26,9 @@ ext {
     nav_version = '2.5.3'
 
     torangImageLoaderVersion = 'f4a2359698'
-    themeVersion = '1557f652d3'
+    themeVersion = '28a1702347'
     repositoryVersion = 'ba032f80ca'
-    baseFeedVersion = 'fe603983cc'
+    baseFeedVersion = '8050bd4034'
     commonWidgetsVersion = '501b7b057a'
     torangBottomSheetVersion = '19e86938f4'
     reportVersion = '4fb865eeb3'

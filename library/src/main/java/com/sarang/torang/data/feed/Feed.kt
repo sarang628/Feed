@@ -13,6 +13,7 @@ data class Feed(
     val isLike: Boolean,
     val isFavorite: Boolean,
     val contents: String,
+    val createDate : String,
     val reviewImages: List<String> = ArrayList(),
     val onProfile: (() -> Unit)? = null,
     val onLike: (() -> Unit)? = null,
