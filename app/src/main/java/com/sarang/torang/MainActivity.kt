@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.example.commonwidgets.torangcomposepack.AndroidViewRatingBar
 import com.google.samples.apps.sunflower.ui.TorangTheme
 import com.sarang.torang.di.feed_di.ProvideFeedScreen
 import com.sryang.torang_repository.repository.LoginRepository
@@ -35,13 +34,6 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Column {
                         ProvideFeedScreen(
-                            ratingBar = { modifier, rating ->
-                                AndroidViewRatingBar(
-                                    modifier = modifier,
-                                    rating = rating,
-                                    isSmall = true
-                                )
-                            },
                             onAddReview = {},
                         )
                         //LoginRepositoryTest(loginRepository = loginRepository)

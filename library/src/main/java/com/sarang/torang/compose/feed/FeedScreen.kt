@@ -36,13 +36,14 @@ fun FeedScreen(
     onAddReview: (() -> Unit),
     feeds: @Composable (
         /*base feed와 의존성 제거를 위해 함수 밖에서 호출*/
-        list: List<Feed>,
+        feedUiState: FeedUiState,
         onRefresh: (() -> Unit),/*base feed 에서 제공*/
         onBottom: (() -> Unit),/*base feed 에서 제공*/
         isRefreshing: Boolean,/*base feed 에서 제공*/
     ) -> Unit
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
+    val isRefreshing: Boolean by feedsViewModel.isRefreshing.collectAsState()
 
     feedsViewModel.initialize()
 
@@ -51,10 +52,10 @@ fun FeedScreen(
         onAddReview = onAddReview,
         feeds = {
             feeds.invoke(
-                uiState.list,
+                uiState,
                 { feedsViewModel.refreshFeed() },
                 { feedsViewModel.onBottom() },
-                uiState.isRefreshing,
+                isRefreshing,
             )
         },
         consumeErrorMessage = {
@@ -75,10 +76,12 @@ fun FeedScreen(
     val interactionSource = remember { MutableInteractionSource() }
 
     // snackbar process
-    LaunchedEffect(key1 = uiState.error, block = {
-        uiState.error?.let {
-            snackbarHostState.showSnackbar(it, duration = SnackbarDuration.Short)
-            consumeErrorMessage.invoke()
+    LaunchedEffect(key1 = uiState, block = {
+        if (uiState is FeedUiState.Error) {
+            uiState.msg?.let {
+                snackbarHostState.showSnackbar(it, duration = SnackbarDuration.Short)
+                consumeErrorMessage.invoke()
+            }
         }
     })
 
@@ -114,7 +117,7 @@ fun FeedScreen(
 @Composable
 fun PreviewFeedScreen() {
     FeedScreen( /*Preview*/
-        uiState = FeedUiState(),
+        uiState = FeedUiState.Loading,
         onAddReview = { /*TODO*/ }, consumeErrorMessage = {},
         feeds = {}
     )
