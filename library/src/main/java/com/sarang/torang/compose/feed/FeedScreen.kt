@@ -6,7 +6,10 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AddCircle
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -94,7 +97,7 @@ fun FeedScreen(
             TopAppBar(
                 title = { Text(text = "Torang", fontSize = 21.sp, fontWeight = FontWeight.Bold) },
                 actions = {
-                    Image(painter = painterResource(id = R.drawable.ic_add),
+                    Icon(imageVector = Icons.Outlined.AddCircle,
                         contentDescription = "",
                         modifier = Modifier
                             .size(32.dp)
