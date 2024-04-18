@@ -38,16 +38,16 @@ dependencies {
     implementation"androidx.hilt:hilt-navigation-compose:1.0.0" // hiltViewModel
 
     /** compose */
-    def composeBom = platform('androidx.compose:compose-bom:2023.04.01')
+    def composeBom = platform('androidx.compose:compose-bom:2024.04.00')
     implementation composeBom
     androidTestImplementation composeBom
     implementation 'androidx.compose.ui:ui' //없으면 @Composable import 안됨
     implementation 'androidx.compose.ui:ui-tooling-preview' // Android Studio Preview support
     debugImplementation 'androidx.compose.ui:ui-tooling'
-    implementation 'androidx.compose.material3:material3:1.2.0-alpha10' //JetNews Main 따라하기
+    implementation 'androidx.compose.material3:material3' //JetNews Main 따라하기
     implementation "androidx.compose.material3:material3-window-size-class"
     implementation "androidx.lifecycle:lifecycle-runtime-compose"
-    implementation "androidx.navigation:navigation-compose:$nav_version"
+    implementation "androidx.navigation:navigation-compose"
 
     /*test*/
     // Required -- JUnit 4 framework
@@ -55,5 +55,5 @@ dependencies {
 
     /** utils */
     implementation 'com.google.code.gson:gson:2.10.1'
-    implementation("io.coil-kt:coil-compose:2.3.0")
+    implementation("io.coil-kt:coil-compose:2.6.0")
 }
