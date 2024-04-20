@@ -11,7 +11,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.google.samples.apps.sunflower.ui.TorangTheme
 import com.sarang.torang.di.feed_di.ProvideFeedScreen
-import com.sryang.torang_repository.repository.LoginRepository
+import com.sarang.torang.repository.LoginRepository
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
