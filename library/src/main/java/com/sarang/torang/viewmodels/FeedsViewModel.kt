@@ -1,6 +1,5 @@
 package com.sarang.torang.viewmodels
 
-import android.util.Log
 import androidx.annotation.MainThread
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,16 +12,13 @@ import com.sarang.torang.usecase.FeedRefreshUseCase
 import com.sarang.torang.usecase.GetFeedFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-val TAG = "_FeedsViewModel"
-
 @HiltViewModel
-class FeedsViewModel @Inject constructor(
+open class FeedsViewModel @Inject constructor(
     private val feedRefreshUseCase: FeedRefreshUseCase,
     private val addLikeUseCase: AddLikeUseCase,
     private val deleteLikeUseCase: DeleteLikeUseCase,
@@ -30,6 +26,7 @@ class FeedsViewModel @Inject constructor(
     private val deleteFavoriteUseCase: DeleteFavoriteUseCase,
     private val getFeedFlowUseCase: GetFeedFlowUseCase
 ) : ViewModel() {
+    val TAG = "_FeedsViewModel"
 
     private val _uiState: MutableStateFlow<FeedUiState> = MutableStateFlow(FeedUiState.Loading)
     val uiState = _uiState.asStateFlow()
