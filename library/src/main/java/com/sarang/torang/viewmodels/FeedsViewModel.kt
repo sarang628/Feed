@@ -28,7 +28,7 @@ open class FeedsViewModel @Inject constructor(
 ) : ViewModel() {
     val TAG = "_FeedsViewModel"
 
-    private val _uiState: MutableStateFlow<FeedUiState> = MutableStateFlow(FeedUiState.Loading)
+    internal val _uiState: MutableStateFlow<FeedUiState> = MutableStateFlow(FeedUiState.Loading)
     val uiState = _uiState.asStateFlow()
     private var initializeCalled = false
 
@@ -76,7 +76,7 @@ open class FeedsViewModel @Inject constructor(
     }
 
     // 즐겨찾기 클릭
-    private fun onFavorite(reviewId: Int) {
+    internal fun onFavorite(reviewId: Int) {
         if (uiState.value is FeedUiState.Success) {
             viewModelScope.launch {
                 val review =
@@ -97,7 +97,7 @@ open class FeedsViewModel @Inject constructor(
     }
 
     // 좋아여 클릭
-    private fun onLike(reviewId: Int) {
+    internal fun onLike(reviewId: Int) {
         if (uiState.value is FeedUiState.Success) {
 
             viewModelScope.launch {

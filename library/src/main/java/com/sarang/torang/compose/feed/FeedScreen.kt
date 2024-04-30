@@ -72,9 +72,40 @@ fun FeedScreen(
     feeds: @Composable () -> Unit, /* feed list ui module(common) */
     consumeErrorMessage: () -> Unit /* consume error message */
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
     val interactionSource = remember { MutableInteractionSource() }
+    FeedScreen(
+        uiState = uiState,
+        onAddReview = onAddReview,
+        feeds = feeds,
+        consumeErrorMessage = consumeErrorMessage,
+        topAppBar = {
+            TopAppBar(
+                title = { Text(text = "Torang", fontSize = 21.sp, fontWeight = FontWeight.Bold) },
+                actions = {
+                    Icon(imageVector = Icons.Outlined.AddCircle,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clickable(
+                                indication = null,
+                                interactionSource = interactionSource
+                            ) {
+                                onAddReview.invoke()
+                            })
+                })
+        }
+    )
+}
 
+@Composable
+internal fun FeedScreen(
+    uiState: FeedUiState, /* ui state */
+    onAddReview: (() -> Unit), /* click add review */
+    feeds: @Composable () -> Unit, /* feed list ui module(common) */
+    consumeErrorMessage: () -> Unit, /* consume error message */
+    topAppBar: @Composable () -> Unit
+) {
+    val snackbarHostState = remember { SnackbarHostState() }
     // snackbar process
     LaunchedEffect(key1 = uiState, block = {
         if (uiState is FeedUiState.Error) {
@@ -90,28 +121,15 @@ fun FeedScreen(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         },
-        topBar = {
-            TopAppBar(
-                title = { Text(text = "Torang", fontSize = 21.sp, fontWeight = FontWeight.Bold) },
-                actions = {
-                    Icon(imageVector = Icons.Outlined.AddCircle,
-                        contentDescription = "",
-                        modifier = Modifier
-                            .size(32.dp)
-                            .clickable(
-                                indication = null,
-                                interactionSource = interactionSource
-                            ) {
-                                onAddReview.invoke()
-                            })
-                })
-        }) { paddingValues ->
+        topBar = topAppBar
+    ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues))
         {
             feeds.invoke()
         }
     }
 }
+
 
 @Preview
 @Composable

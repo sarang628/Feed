@@ -25,10 +25,10 @@ ext {
     navigationVersion = '2.4.0-alpha06'
     nav_version = '2.5.3'
 
-    torangImageLoaderVersion = 'f4a2359698'
+    torangImageLoaderVersion = '9ec5b04dfa'
     themeVersion = '28a1702347'
-    repositoryVersion = 'ddea611460'
-    baseFeedVersion = '9b1bf3ecd1'
+    repositoryVersion = 'bfd27dc8e9'
+    baseFeedVersion = '42d25f12fa'
     commonWidgetsVersion = '501b7b057a'
     torangBottomSheetVersion = '19e86938f4'
     reportVersion = '4fb865eeb3'
