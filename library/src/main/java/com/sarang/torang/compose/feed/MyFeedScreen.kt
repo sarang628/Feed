@@ -46,7 +46,7 @@ fun MyFeedScreen(
     LaunchedEffect(key1 = uiState is FeedUiState.Success) {
         val position = feedsViewModel.findIndexByReviewId(reviewId)
         baseFeedLog("position = ${position}")
-        delay(10)
+        delay(100)
         baseFeedLog("scrollState = ${position}")
         scrollState.scrollToItem(position)
     }
