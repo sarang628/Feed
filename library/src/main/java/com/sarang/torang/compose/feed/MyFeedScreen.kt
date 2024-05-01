@@ -20,6 +20,9 @@ import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.MyFeedsViewModel
 import kotlinx.coroutines.delay
 
+/**
+ * @param listState - feeds 항목에 같은 listState를 넣어줘야 프로필에서 피드 클릭 시 해당 항목으로 이동함.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyFeedScreen(
@@ -27,7 +30,7 @@ fun MyFeedScreen(
     reviewId: Int,
     onAddReview: (() -> Unit),
     onBack: (() -> Unit)? = null,
-    scrollState: LazyListState,
+    listState: LazyListState,
     feeds: @Composable (
         /*base feed와 의존성 제거를 위해 함수 밖에서 호출*/
         feedUiState: FeedUiState,
@@ -46,9 +49,9 @@ fun MyFeedScreen(
     LaunchedEffect(key1 = uiState is FeedUiState.Success) {
         val position = feedsViewModel.findIndexByReviewId(reviewId)
         baseFeedLog("position = ${position}")
-        delay(100)
+        delay(10)
         baseFeedLog("scrollState = ${position}")
-        scrollState.scrollToItem(position)
+        listState.scrollToItem(position)
     }
 
     FeedScreen(
