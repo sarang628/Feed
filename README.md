@@ -147,3 +147,4 @@ comment가 1개 이상이면 코멘트 갯수를 표시 한다.
 
 ## Preview
 <img src="screenshots/preview.gif" />
+ 
