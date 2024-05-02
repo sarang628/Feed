@@ -49,7 +49,7 @@ open class FeedsViewModel @Inject constructor(
             getFeedFlowUseCase
                 .invoke()
                 .collect { list ->
-                    _uiState.update { uiState ->
+                    _uiState.update {
                         FeedUiState.Success(list = list.map { review ->
                             review.copy(
                                 onLike = { onLike(review.reviewId) },
