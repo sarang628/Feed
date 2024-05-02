@@ -10,14 +10,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedUiState
+import com.sarang.torang.uistate.FeedsUiState
 
 @Composable
 internal fun FeedScreen(
     uiState: FeedUiState, /* ui state */
-    feeds: @Composable () -> Unit, /* feed list ui module(common) */
     consumeErrorMessage: () -> Unit, /* consume error message */
-    topAppBar: @Composable () -> Unit
+    topAppBar: @Composable () -> Unit,
+    feed: @Composable ((Feed) -> Unit)? = null,
+    onBottom: () -> Unit,
+    onRefresh: (() -> Unit),
+    isRefreshing: Boolean
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     // snackbar process
@@ -39,7 +44,26 @@ internal fun FeedScreen(
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues))
         {
-            feeds.invoke()
+            Feeds(
+                onRefresh = onRefresh,
+                onBottom = onBottom,
+                isRefreshing = isRefreshing,
+                feed = { feed?.invoke(it) },
+                feedsUiState = when (uiState) {
+                    is FeedUiState.Loading -> {
+                        FeedsUiState.Loading
+                    }
+
+                    is FeedUiState.Error -> {
+                        FeedsUiState.Error("")
+                    }
+
+                    is FeedUiState.Success -> {
+                        FeedsUiState.Success(uiState.list)
+                    }
+                }
+
+            )
         }
     }
 }

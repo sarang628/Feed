@@ -73,7 +73,6 @@ class MainActivity : ComponentActivity() {
                             onAddReview = {},
                         )*/
                             ProvideMyFeedScreen(
-                                onAddReview = {},
                                 reviewId = try { Integer.parseInt(reviewId) } catch (e: Exception) { 0 }
                             )
                         }

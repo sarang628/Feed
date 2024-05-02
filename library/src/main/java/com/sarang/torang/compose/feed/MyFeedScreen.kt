@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.MyFeedsViewModel
 import kotlinx.coroutines.delay
@@ -30,13 +31,7 @@ fun MyFeedScreen(
     reviewId: Int,
     onBack: (() -> Unit)? = null,
     listState: LazyListState,
-    feeds: @Composable (
-        /*base feed와 의존성 제거를 위해 함수 밖에서 호출*/
-        feedUiState: FeedUiState,
-        onRefresh: (() -> Unit),/*base feed 에서 제공*/
-        onBottom: (() -> Unit),/*base feed 에서 제공*/
-        isRefreshing: Boolean,/*base feed 에서 제공*/
-    ) -> Unit
+    feed: @Composable ((Feed) -> Unit)? = null,
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
     val isRefreshing: Boolean by feedsViewModel.isRefreshing.collectAsState()
@@ -58,9 +53,9 @@ fun MyFeedScreen(
         isRefreshing = isRefreshing,
         onBack = onBack,
         consumeErrorMessage = { feedsViewModel.clearErrorMsg() },
-        feeds = feeds,
         onRefresh = { feedsViewModel.refreshFeed() },
-        onBottom = { feedsViewModel.onBottom() }
+        onBottom = { feedsViewModel.onBottom() },
+        feed = feed
     )
 }
 
@@ -73,24 +68,11 @@ internal fun _MyFeedScreen(
     onRefresh: (() -> Unit),/*base feed 에서 제공*/
     onBottom: (() -> Unit),/*base feed 에서 제공*/
     consumeErrorMessage: () -> Unit,
-    feeds: @Composable ((
-        /*base feed와 의존성 제거를 위해 함수 밖에서 호출*/
-        feedUiState: FeedUiState,
-        onRefresh: (() -> Unit),/*base feed 에서 제공*/
-        onBottom: (() -> Unit),/*base feed 에서 제공*/
-        isRefreshing: Boolean,/*base feed 에서 제공*/
-    ) -> Unit)? = null
+    feed: @Composable ((Feed) -> Unit)? = null,
 ) {
     FeedScreen(
         uiState = uiState,
-        feeds = {
-            feeds?.invoke(
-                uiState,
-                onRefresh,
-                onBottom,
-                isRefreshing,
-            )
-        },
+        feed = feed,
         topAppBar = {
             TopAppBar(
                 title = { Text(text = "Post", fontSize = 21.sp, fontWeight = FontWeight.Bold) },
@@ -103,7 +85,10 @@ internal fun _MyFeedScreen(
                     }
                 })
         },
-        consumeErrorMessage = consumeErrorMessage
+        consumeErrorMessage = consumeErrorMessage,
+        onRefresh = onRefresh,
+        onBottom = onBottom,
+        isRefreshing = isRefreshing
     )
 }
 

@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.MainFeedsViewModel
 
@@ -28,14 +29,8 @@ import com.sarang.torang.viewmodels.MainFeedsViewModel
 @Composable
 fun MainFeedScreen(
     feedsViewModel: MainFeedsViewModel = hiltViewModel(),
+    feed: @Composable ((Feed) -> Unit)? = null,
     onAddReview: (() -> Unit),
-    feeds: @Composable (
-        /*base feed와 의존성 제거를 위해 함수 밖에서 호출*/
-        feedUiState: FeedUiState,
-        onRefresh: (() -> Unit),/*base feed 에서 제공*/
-        onBottom: (() -> Unit),/*base feed 에서 제공*/
-        isRefreshing: Boolean,/*base feed 에서 제공*/
-    ) -> Unit
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
     val isRefreshing: Boolean by feedsViewModel.isRefreshing.collectAsState()
@@ -45,14 +40,9 @@ fun MainFeedScreen(
     _MainFeedScreen(
         uiState = uiState,
         onAddReview = onAddReview,
-        feeds = {
-            feeds.invoke(
-                uiState,
-                { feedsViewModel.refreshFeed() },
-                { feedsViewModel.onBottom() },
-                isRefreshing,
-            )
-        },
+        isRefreshing = isRefreshing,
+        onBottom = { feedsViewModel.onBottom() },
+        onRefresh = { feedsViewModel.refreshFeed() },
         consumeErrorMessage = {
             feedsViewModel.clearErrorMsg()
         }
@@ -64,14 +54,20 @@ fun MainFeedScreen(
 internal fun _MainFeedScreen(
     uiState: FeedUiState, /* ui state */
     onAddReview: (() -> Unit), /* click add review */
-    feeds: @Composable () -> Unit, /* feed list ui module(common) */
-    consumeErrorMessage: () -> Unit /* consume error message */
+    consumeErrorMessage: () -> Unit /* consume error message */,
+    onBottom: () -> Unit,
+    feed: @Composable ((Feed) -> Unit)? = null,
+    onRefresh: (() -> Unit),
+    isRefreshing: Boolean
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     FeedScreen(
         uiState = uiState,
-        feeds = feeds,
         consumeErrorMessage = consumeErrorMessage,
+        onBottom = onBottom,
+        isRefreshing = isRefreshing,
+        feed = feed,
+        onRefresh = onRefresh,
         topAppBar = {
             TopAppBar(
                 title = { Text(text = "Torang", fontSize = 21.sp, fontWeight = FontWeight.Bold) },
@@ -94,9 +90,13 @@ internal fun _MainFeedScreen(
 @Preview
 @Composable
 fun PreviewMainFeedScreen() {
-    _MainFeedScreen( /*Preview*/
+    _MainFeedScreen(
+        /*Preview*/
         uiState = FeedUiState.Loading,
-        onAddReview = { /*TODO*/ }, consumeErrorMessage = {},
-        feeds = {}
+        onAddReview = { /*TODO*/ },
+        consumeErrorMessage = {},
+        onRefresh = {},
+        onBottom = {},
+        isRefreshing = false
     )
 }

@@ -32,4 +32,6 @@ ext {
     commonWidgetsVersion = '501b7b057a'
     torangBottomSheetVersion = '19e86938f4'
     reportVersion = '4fb865eeb3'
+    MUI3ScrollToRefreshVersion = 'dd57844809'
+    bottomDetectLazyColunmVersion = '2486834b10'
 }

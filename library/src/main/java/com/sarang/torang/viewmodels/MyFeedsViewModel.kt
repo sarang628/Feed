@@ -1,7 +1,6 @@
 package com.sarang.torang.viewmodels
 
 import androidx.lifecycle.viewModelScope
-import com.sarang.torang.feedLog
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.usecase.AddFavoriteUseCase
 import com.sarang.torang.usecase.AddLikeUseCase
@@ -33,7 +32,6 @@ class MyFeedsViewModel @Inject constructor(
     getFeedFlowUseCase
 ) {
     fun getUserFeed(reviewId: Int) {
-        feedLog("getUserFeed: ${reviewId}")
         _uiState.value = FeedUiState.Loading
         viewModelScope.launch {
             getMyFeedFlowUseCase.invoke(reviewId).collect { list ->
@@ -55,9 +53,7 @@ class MyFeedsViewModel @Inject constructor(
 
     fun findIndexByReviewId(reviewId: Int): Int {
         val state = uiState.value
-        feedLog("uiState is ${state}")
         if (state is FeedUiState.Success) {
-            feedLog(state.list.size.toString())
             return state.list.indexOf(state.list.find { it.reviewId == reviewId })
         }
         return 0
