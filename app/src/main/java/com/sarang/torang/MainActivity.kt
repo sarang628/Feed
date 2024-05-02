@@ -69,12 +69,12 @@ class MainActivity : ComponentActivity() {
                             })
                         }
                         Box(modifier = Modifier.height((LocalConfiguration.current.screenHeightDp - 30).dp)) {
-                            /*ProvideFeedScreen(
+                            ProvideFeedScreen(
                             onAddReview = {},
-                        )*/
-                            ProvideMyFeedScreen(
+                        )
+                            /*ProvideMyFeedScreen(
                                 reviewId = try { Integer.parseInt(reviewId) } catch (e: Exception) { 0 }
-                            )
+                            )*/
                         }
                         LoginRepositoryTest(loginRepository = loginRepository)
                         ProfileRepositoryTest(profileRepository = profileRepository)

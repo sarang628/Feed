@@ -45,7 +45,8 @@ fun MainFeedScreen(
         onRefresh = { feedsViewModel.refreshFeed() },
         consumeErrorMessage = {
             feedsViewModel.clearErrorMsg()
-        }
+        },
+        feed = feed
     )
 }
 
