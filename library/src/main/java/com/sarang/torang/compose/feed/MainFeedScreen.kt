@@ -32,8 +32,7 @@ import com.sarang.torang.viewmodels.MainFeedsViewModel
 fun MainFeedScreen(
     feedsViewModel: MainFeedsViewModel = hiltViewModel(),
     feed: @Composable ((Feed) -> Unit)? = null,
-    onAddReview: (() -> Unit),
-    listState: LazyListState
+    onAddReview: (() -> Unit)
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
     val isRefreshing: Boolean by feedsViewModel.isRefreshing.collectAsState()
@@ -49,8 +48,7 @@ fun MainFeedScreen(
         consumeErrorMessage = {
             feedsViewModel.clearErrorMsg()
         },
-        feed = feed,
-        listState = listState
+        feed = feed
     )
 }
 
@@ -63,8 +61,7 @@ internal fun _MainFeedScreen(
     onBottom: () -> Unit,
     feed: @Composable ((Feed) -> Unit)? = null,
     onRefresh: (() -> Unit),
-    isRefreshing: Boolean,
-    listState: LazyListState,
+    isRefreshing: Boolean
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     FeedScreen(
@@ -74,7 +71,6 @@ internal fun _MainFeedScreen(
         isRefreshing = isRefreshing,
         feed = feed,
         onRefresh = onRefresh,
-        listState = listState,
         topAppBar = {
             TopAppBar(
                 title = { Text(text = "Torang", fontSize = 21.sp, fontWeight = FontWeight.Bold) },
@@ -104,7 +100,6 @@ fun PreviewMainFeedScreen() {
         consumeErrorMessage = {},
         onRefresh = {},
         onBottom = {},
-        isRefreshing = false,
-        listState = rememberLazyListState()
+        isRefreshing = false
     )
 }
