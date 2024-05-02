@@ -12,7 +12,7 @@ fun Feeds(
     onBottom: () -> Unit,
     isRefreshing: Boolean,
     feedsUiState: FeedsUiState,
-    listState: LazyListState = rememberLazyListState(),
+    listState: LazyListState,
     scrollEnabled : Boolean = true,
     feed: @Composable ((Feed) -> Unit)? = null
 ) {
@@ -62,6 +62,7 @@ fun PreviewFeeds() {
         onBottom = { /*TODO*/ },
         isRefreshing = false,
         feed = {},
+        listState = rememberLazyListState(),
         //feedsUiState = FeedsUiState.Loading
         feedsUiState = FeedsUiState.Success(ArrayList<Feed>().apply {
         })

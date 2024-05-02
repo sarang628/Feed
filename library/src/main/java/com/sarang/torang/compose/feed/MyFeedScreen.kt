@@ -2,6 +2,7 @@ package com.sarang.torang.compose.feed
 
 import android.util.Log
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -55,7 +56,8 @@ fun MyFeedScreen(
         consumeErrorMessage = { feedsViewModel.clearErrorMsg() },
         onRefresh = { feedsViewModel.refreshFeed() },
         onBottom = { feedsViewModel.onBottom() },
-        feed = feed
+        feed = feed,
+        listState = listState
     )
 }
 
@@ -68,11 +70,13 @@ internal fun _MyFeedScreen(
     onRefresh: (() -> Unit),/*base feed 에서 제공*/
     onBottom: (() -> Unit),/*base feed 에서 제공*/
     consumeErrorMessage: () -> Unit,
+    listState: LazyListState,
     feed: @Composable ((Feed) -> Unit)? = null,
 ) {
     FeedScreen(
         uiState = uiState,
         feed = feed,
+        listState = listState,
         topAppBar = {
             TopAppBar(
                 title = { Text(text = "Post", fontSize = 21.sp, fontWeight = FontWeight.Bold) },
@@ -100,6 +104,7 @@ fun PreviewMyFeedScreen() {
         isRefreshing = false,
         onRefresh = { /*TODO*/ },
         onBottom = { /*TODO*/ },
-        consumeErrorMessage = { /*TODO*/ }
+        consumeErrorMessage = { /*TODO*/ },
+        listState = rememberLazyListState()
     )
 }

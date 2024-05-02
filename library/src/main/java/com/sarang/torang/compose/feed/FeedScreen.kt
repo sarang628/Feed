@@ -2,6 +2,8 @@ package com.sarang.torang.compose.feed
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -22,7 +24,8 @@ internal fun FeedScreen(
     feed: @Composable ((Feed) -> Unit)? = null,
     onBottom: () -> Unit,
     onRefresh: (() -> Unit),
-    isRefreshing: Boolean
+    isRefreshing: Boolean,
+    listState: LazyListState = rememberLazyListState(),
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     // snackbar process
@@ -49,6 +52,7 @@ internal fun FeedScreen(
                 onBottom = onBottom,
                 isRefreshing = isRefreshing,
                 feed = { feed?.invoke(it) },
+                listState = listState,
                 feedsUiState = when (uiState) {
                     is FeedUiState.Loading -> {
                         FeedsUiState.Loading

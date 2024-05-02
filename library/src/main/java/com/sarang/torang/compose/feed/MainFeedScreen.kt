@@ -3,6 +3,8 @@ package com.sarang.torang.compose.feed
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddCircle
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,6 +33,7 @@ fun MainFeedScreen(
     feedsViewModel: MainFeedsViewModel = hiltViewModel(),
     feed: @Composable ((Feed) -> Unit)? = null,
     onAddReview: (() -> Unit),
+    listState: LazyListState
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
     val isRefreshing: Boolean by feedsViewModel.isRefreshing.collectAsState()
@@ -46,7 +49,8 @@ fun MainFeedScreen(
         consumeErrorMessage = {
             feedsViewModel.clearErrorMsg()
         },
-        feed = feed
+        feed = feed,
+        listState = listState
     )
 }
 
@@ -55,11 +59,12 @@ fun MainFeedScreen(
 internal fun _MainFeedScreen(
     uiState: FeedUiState, /* ui state */
     onAddReview: (() -> Unit), /* click add review */
-    consumeErrorMessage: () -> Unit /* consume error message */,
+    consumeErrorMessage: () -> Unit, /* consume error message */
     onBottom: () -> Unit,
     feed: @Composable ((Feed) -> Unit)? = null,
     onRefresh: (() -> Unit),
-    isRefreshing: Boolean
+    isRefreshing: Boolean,
+    listState: LazyListState,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     FeedScreen(
@@ -69,6 +74,7 @@ internal fun _MainFeedScreen(
         isRefreshing = isRefreshing,
         feed = feed,
         onRefresh = onRefresh,
+        listState = listState,
         topAppBar = {
             TopAppBar(
                 title = { Text(text = "Torang", fontSize = 21.sp, fontWeight = FontWeight.Bold) },
@@ -98,6 +104,7 @@ fun PreviewMainFeedScreen() {
         consumeErrorMessage = {},
         onRefresh = {},
         onBottom = {},
-        isRefreshing = false
+        isRefreshing = false,
+        listState = rememberLazyListState()
     )
 }
