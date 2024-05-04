@@ -26,8 +26,6 @@ open class FeedsViewModel @Inject constructor(
     private val deleteFavoriteUseCase: DeleteFavoriteUseCase,
     private val getFeedFlowUseCase: GetFeedFlowUseCase
 ) : ViewModel() {
-    val TAG = "_FeedsViewModel"
-
     internal val _uiState: MutableStateFlow<FeedUiState> = MutableStateFlow(FeedUiState.Loading)
     val uiState = _uiState.asStateFlow()
     private var initializeCalled = false
@@ -68,7 +66,7 @@ open class FeedsViewModel @Inject constructor(
             try {
                 feedRefreshUseCase.invoke()
             } catch (e: Exception) {
-                _uiState.update { FeedUiState.Error(e.message) }
+                handleErrorMsg(e)
             } finally {
                 _isRefreshing.update { false }
             }
@@ -89,7 +87,7 @@ open class FeedsViewModel @Inject constructor(
                             addFavoriteUseCase.invoke(reviewId)
                         }
                     } catch (e: Exception) {
-                        _uiState.update { FeedUiState.Error(e.message) }
+                        handleErrorMsg(e)
                     }
                 }
             }
@@ -111,17 +109,25 @@ open class FeedsViewModel @Inject constructor(
                             addLikeUseCase.invoke(reviewId)
                         }
                     } catch (e: Exception) {
-                        _uiState.update { FeedUiState.Error(e.message) }
+                        handleErrorMsg(e)
                     }
                 }
             }
         }
     }
 
+    private fun handleErrorMsg(e: Exception) {
+        if (_uiState.value is FeedUiState.Success) {
+            _uiState.update { (it as FeedUiState.Success).copy(msg = e.message) }
+        }
+    }
+
 
     // 에러메시지 삭제
     fun clearErrorMsg() {
-
+        if (_uiState.value is FeedUiState.Success) {
+            _uiState.update { (it as FeedUiState.Success).copy(msg = null) }
+        }
     }
 
     fun onBottom() {

@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.sunflower.ui.TorangTheme
+import com.sarang.torang.di.feed_di.ProvideFeedScreen
 import com.sarang.torang.di.feed_di.ProvideMyFeedScreen
 import com.sarang.torang.repository.LoginRepository
 import com.sarang.torang.repository.LoginRepositoryTest
@@ -67,12 +68,12 @@ class MainActivity : ComponentActivity() {
                             })
                         }
                         Box(modifier = Modifier.height((LocalConfiguration.current.screenHeightDp - 30).dp)) {
-                            /*ProvideFeedScreen(
+                            ProvideFeedScreen(
                             onAddReview = {},
-                        )*/
-                            ProvideMyFeedScreen(
+                        )
+                            /*ProvideMyFeedScreen(
                                 reviewId = try { Integer.parseInt(reviewId) } catch (e: Exception) { 0 }
-                            )
+                            )*/
                         }
                         LoginRepositoryTest(loginRepository = loginRepository)
                         ProfileRepositoryTest(profileRepository = profileRepository)

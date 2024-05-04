@@ -93,7 +93,7 @@ internal fun _MainFeedScreen(
 @Preview
 @Composable
 fun PreviewMainFeedScreen() {
-    _MainFeedScreen(
+    _MainFeedScreen(/*Preview*/
         /*Preview*/
         uiState = FeedUiState.Loading,
         onAddReview = { /*TODO*/ },
