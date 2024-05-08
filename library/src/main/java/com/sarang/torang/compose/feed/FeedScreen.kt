@@ -1,5 +1,6 @@
 package com.sarang.torang.compose.feed
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
@@ -11,10 +12,13 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.uistate.FeedsUiState
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun FeedScreen(
@@ -26,8 +30,11 @@ internal fun FeedScreen(
     onRefresh: (() -> Unit),
     isRefreshing: Boolean,
     listState: LazyListState = rememberLazyListState(),
+    onTop: Boolean,
+    consumeOnTop: () -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
+    val coroutine = rememberCoroutineScope()
     // snackbar process
     LaunchedEffect(key1 = uiState, block = {
         if (uiState is FeedUiState.Error) {
@@ -37,6 +44,17 @@ internal fun FeedScreen(
             }
         }
     })
+
+    LaunchedEffect(key1 = onTop) {
+        Log.d("__FeedScreen", "received onTop:${onTop}")
+        if (onTop) {
+            consumeOnTop.invoke()
+            coroutine.launch {
+                listState.animateScrollToItem(0)
+            }
+            //listState.scrollToItem(0)
+        }
+    }
 
     // snackbar + topAppBar + feedList
     Scaffold(

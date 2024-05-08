@@ -12,6 +12,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -32,7 +33,9 @@ import com.sarang.torang.viewmodels.MainFeedsViewModel
 fun MainFeedScreen(
     feedsViewModel: MainFeedsViewModel = hiltViewModel(),
     feed: @Composable ((Feed) -> Unit)? = null,
-    onAddReview: (() -> Unit)
+    onAddReview: (() -> Unit),
+    onTop: Boolean,
+    consumeOnTop: () -> Unit
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
     val isRefreshing: Boolean by feedsViewModel.isRefreshing.collectAsState()
@@ -48,7 +51,9 @@ fun MainFeedScreen(
         consumeErrorMessage = {
             feedsViewModel.clearErrorMsg()
         },
-        feed = feed
+        feed = feed,
+        onTop = onTop,
+        consumeOnTop = consumeOnTop
     )
 }
 
@@ -61,7 +66,9 @@ internal fun _MainFeedScreen(
     onBottom: () -> Unit,
     feed: @Composable ((Feed) -> Unit)? = null,
     onRefresh: (() -> Unit),
-    isRefreshing: Boolean
+    isRefreshing: Boolean,
+    onTop: Boolean,
+    consumeOnTop: () -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     FeedScreen(
@@ -71,6 +78,8 @@ internal fun _MainFeedScreen(
         isRefreshing = isRefreshing,
         feed = feed,
         onRefresh = onRefresh,
+        onTop = onTop,
+        consumeOnTop = consumeOnTop,
         topAppBar = {
             TopAppBar(
                 title = { Text(text = "Torang", fontSize = 21.sp, fontWeight = FontWeight.Bold) },
@@ -100,6 +109,8 @@ fun PreviewMainFeedScreen() {
         consumeErrorMessage = {},
         onRefresh = {},
         onBottom = {},
-        isRefreshing = false
+        isRefreshing = false,
+        onTop = false,
+        consumeOnTop = {}
     )
 }

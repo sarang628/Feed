@@ -4,13 +4,16 @@ import android.os.Bundle
 import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text2.BasicTextField2
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -42,13 +45,15 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var profileRepository: ProfileRepository
 
+    @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        window.requestFeature(Window.FEATURE_ACTION_BAR);
         getActionBar()?.hide();
 
         setContent {
             var reviewId by remember { mutableStateOf("0") }
+            var onTop by remember { mutableStateOf(false) }
             TorangTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -56,21 +61,24 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Column(Modifier.verticalScroll(rememberScrollState())) {
                         Row {
-                            Button(onClick = { /*TODO*/ }) {
-                                Text(text = "MyFeed")
-                            }
-                            OutlinedTextField(value = reviewId, onValueChange = {
-                                try {
-                                    reviewId = it
-                                } catch (e: Exception) {
+                            AssistChip(onClick = { /*TODO*/ }, label = {
+                                Text(text = "MyFeed reviewId:")
+                                BasicTextField2(value = reviewId, onValueChange = {
+                                    try {
+                                        reviewId = it
+                                    } catch (e: Exception) {
 
-                                }
+                                    }
+                                })
                             })
+                            AssistChip(onClick = { onTop = true }, label = { Text(text = "onTop") })
                         }
                         Box(modifier = Modifier.height((LocalConfiguration.current.screenHeightDp - 30).dp)) {
                             ProvideFeedScreen(
-                            onAddReview = {},
-                        )
+                                onAddReview = {},
+                                onTop = onTop,
+                                consumeOnTop = { onTop = false }
+                            )
                             /*ProvideMyFeedScreen(
                                 reviewId = try { Integer.parseInt(reviewId) } catch (e: Exception) { 0 }
                             )*/

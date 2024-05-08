@@ -92,19 +92,21 @@ internal fun _MyFeedScreen(
         consumeErrorMessage = consumeErrorMessage,
         onRefresh = onRefresh,
         onBottom = onBottom,
-        isRefreshing = isRefreshing
+        isRefreshing = isRefreshing,
+        onTop = false,
+        consumeOnTop = { }
     )
 }
 
 @Preview
 @Composable
 fun PreviewMyFeedScreen() {
-    _MyFeedScreen(
+    _MyFeedScreen(/*Preview*/
         uiState = FeedUiState.Loading,
         isRefreshing = false,
         onRefresh = { /*TODO*/ },
         onBottom = { /*TODO*/ },
         consumeErrorMessage = { /*TODO*/ },
-        listState = rememberLazyListState()
+        listState = rememberLazyListState(),
     )
 }
