@@ -26,9 +26,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 import com.google.samples.apps.sunflower.ui.TorangTheme
 import com.sarang.torang.di.feed_di.ProvideFeedScreen
-import com.sarang.torang.di.feed_di.ProvideMyFeedScreen
+import com.sarang.torang.repository.FeedRepository
+import com.sarang.torang.repository.FeedRepositoryTest
 import com.sarang.torang.repository.LoginRepository
 import com.sarang.torang.repository.LoginRepositoryTest
 import com.sarang.torang.repository.ProfileRepository
@@ -44,6 +46,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var profileRepository: ProfileRepository
+
+    @Inject
+    lateinit var feedRepository: FeedRepository
 
     @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,14 +82,17 @@ class MainActivity : ComponentActivity() {
                             ProvideFeedScreen(
                                 onAddReview = {},
                                 onTop = onTop,
-                                consumeOnTop = { onTop = false }
-                            )
+                                consumeOnTop = { onTop = false },
+                                onShowComment = {},
+                                navController = rememberNavController()
+                            ).invoke({  }, {  }, {  })
                             /*ProvideMyFeedScreen(
                                 reviewId = try { Integer.parseInt(reviewId) } catch (e: Exception) { 0 }
                             )*/
                         }
                         LoginRepositoryTest(loginRepository = loginRepository)
                         ProfileRepositoryTest(profileRepository = profileRepository)
+                        FeedRepositoryTest(feedRepository = feedRepository)
                     }
                 }
             }

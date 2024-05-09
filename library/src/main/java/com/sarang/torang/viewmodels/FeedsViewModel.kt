@@ -1,5 +1,6 @@
 package com.sarang.torang.viewmodels
 
+import android.util.Log
 import androidx.annotation.MainThread
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,7 +25,7 @@ open class FeedsViewModel @Inject constructor(
     private val deleteLikeUseCase: DeleteLikeUseCase,
     private val addFavoriteUseCase: AddFavoriteUseCase,
     private val deleteFavoriteUseCase: DeleteFavoriteUseCase,
-    private val getFeedFlowUseCase: GetFeedFlowUseCase
+    private val getFeedFlowUseCase: GetFeedFlowUseCase,
 ) : ViewModel() {
     internal val _uiState: MutableStateFlow<FeedUiState> = MutableStateFlow(FeedUiState.Loading)
     val uiState = _uiState.asStateFlow()
@@ -36,6 +37,7 @@ open class FeedsViewModel @Inject constructor(
     @MainThread
     fun initialize() {
         if (initializeCalled) return
+        Log.d("__FeedsViewModel", "call init")
         initializeCalled = true
         viewModelScope.launch {
             try {
@@ -47,6 +49,7 @@ open class FeedsViewModel @Inject constructor(
             getFeedFlowUseCase
                 .invoke()
                 .collect { list ->
+                    Log.d("__FeedsViewModel", "received list : ${list.size}")
                     _uiState.update {
                         FeedUiState.Success(list = list.map { review ->
                             review.copy(
