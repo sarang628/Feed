@@ -1,8 +1,9 @@
-package com.sarang.torang.compose.feed
+package com.sarang.torang.compose.feed.component
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedsUiState
 
@@ -13,8 +14,8 @@ fun Feeds(
     isRefreshing: Boolean,
     feedsUiState: FeedsUiState,
     listState: LazyListState,
-    scrollEnabled : Boolean = true,
-    feed: @Composable ((Feed) -> Unit)? = null
+    scrollEnabled: Boolean = true,
+    feed: @Composable ((Feed) -> Unit)? = null,
 ) {
     when (feedsUiState) {
         is FeedsUiState.Loading -> {
@@ -55,6 +56,7 @@ fun Feeds(
     }
 }
 
+@Preview
 @Composable
 fun PreviewFeeds() {
     Feeds(/* Preview */

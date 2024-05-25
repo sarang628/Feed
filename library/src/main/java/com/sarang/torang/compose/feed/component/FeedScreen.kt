@@ -1,4 +1,4 @@
-package com.sarang.torang.compose.feed
+package com.sarang.torang.compose.feed.component
 
 import android.util.Log
 import androidx.compose.foundation.layout.Box
@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.uistate.FeedsUiState
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable

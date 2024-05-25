@@ -14,9 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text2.BasicTextField2
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AssistChip
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
@@ -26,9 +24,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.rememberNavController
 import com.google.samples.apps.sunflower.ui.TorangTheme
-import com.sarang.torang.di.feed_di.ProvideFeedScreen
+import com.sarang.torang.compose.feed.Feed
+import com.sarang.torang.compose.feed.FeedScreenByRestaurantId
+import com.sarang.torang.compose.feed.MainFeedScreen
+import com.sarang.torang.di.feed_di.review
+import com.sarang.torang.di.image.provideTorangAsyncImage
 import com.sarang.torang.repository.FeedRepository
 import com.sarang.torang.repository.FeedRepositoryTest
 import com.sarang.torang.repository.LoginRepository
@@ -58,6 +59,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             var reviewId by remember { mutableStateOf("0") }
+            var restaurantId by remember { mutableStateOf("0") }
             var onTop by remember { mutableStateOf(false) }
             TorangTheme {
                 Surface(
@@ -65,7 +67,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Column(Modifier.verticalScroll(rememberScrollState())) {
-                        Row {
+                        Column {
                             AssistChip(onClick = { /*TODO*/ }, label = {
                                 Text(text = "MyFeed reviewId:")
                                 BasicTextField2(value = reviewId, onValueChange = {
@@ -77,18 +79,41 @@ class MainActivity : ComponentActivity() {
                                 })
                             })
                             AssistChip(onClick = { onTop = true }, label = { Text(text = "onTop") })
+                            AssistChip(onClick = { /*TODO*/ }, label = {
+                                Text(text = "restaurantId:")
+                                BasicTextField2(value = restaurantId, onValueChange = {
+                                    try {
+                                        restaurantId = it
+                                    } catch (e: Exception) {
+
+                                    }
+                                })
+                            })
                         }
                         Box(modifier = Modifier.height((LocalConfiguration.current.screenHeightDp - 30).dp)) {
-                            ProvideFeedScreen(
+                            /*MainFeedScreen(
                                 onAddReview = {},
                                 onTop = onTop,
                                 consumeOnTop = { onTop = false },
-                                onShowComment = {},
-                                navController = rememberNavController()
-                            ).invoke({  }, {  }, {  })
+                            )*/
                             /*ProvideMyFeedScreen(
                                 reviewId = try { Integer.parseInt(reviewId) } catch (e: Exception) { 0 }
                             )*/
+
+                            FeedScreenByRestaurantId(
+                                restaurantId =
+                                try {
+                                    restaurantId.toInt()
+                                } catch (e: Exception) {
+                                    0
+                                },
+                                feed = {
+                                    Feed(
+                                        review = it.review(),
+                                        image = provideTorangAsyncImage()
+                                    )
+                                }
+                            )
                         }
                         LoginRepositoryTest(loginRepository = loginRepository)
                         ProfileRepositoryTest(profileRepository = profileRepository)

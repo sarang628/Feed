@@ -1,4 +1,4 @@
-package com.sarang.torang.compose.feed
+package com.sarang.torang.compose.feed.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
