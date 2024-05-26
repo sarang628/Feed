@@ -22,18 +22,25 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.compose.feed.component.FeedScreen
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedUiState
-import com.sarang.torang.viewmodels.MainFeedsViewModel
+import com.sarang.torang.viewmodels.FeedsViewModel
 
 /**
- *
+ * 메인화면용 FeedScreen
+ * 피드 가져오기, 리프레시, 좋아요, 즐겨찾기 기능 담당
+ * 피드 프로필, 코멘트, 메뉴 등은 피드 컴포저블을 통해 상위 컴포저블에서 처리
+ * @param feedsViewModel 피드 뷰모델
+ * @param feed 피드 컴포저블 (제공받아야 함)
+ * @param onAddReview 피드 추가 리뷰
+ * @param onTop 피드 스크롤 탑
+ * @param consumeOnTop 스크롤 탑 컨슈머
  */
 @Composable
-fun MainFeedScreen(
-    feedsViewModel: MainFeedsViewModel = hiltViewModel(),
+fun FeedScreenForMain(
+    feedsViewModel: FeedsViewModel = hiltViewModel(),
     feed: @Composable ((Feed) -> Unit)? = null,
     onAddReview: (() -> Unit),
     onTop: Boolean,
-    consumeOnTop: () -> Unit
+    consumeOnTop: () -> Unit,
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
     val isRefreshing: Boolean by feedsViewModel.isRefreshing.collectAsState()
@@ -66,7 +73,7 @@ internal fun _MainFeedScreen(
     onRefresh: (() -> Unit),
     isRefreshing: Boolean,
     onTop: Boolean,
-    consumeOnTop: () -> Unit
+    consumeOnTop: () -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     FeedScreen(
