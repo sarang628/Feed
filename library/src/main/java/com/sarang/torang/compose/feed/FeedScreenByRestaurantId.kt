@@ -38,7 +38,7 @@ fun FeedScreenByRestaurantId(
         onBottom = { feedsViewModel.onBottom() },
         isRefreshing = isRefreshing,
         onTop = ontop,
-        feed = {
+        feed = { it, _, _ ->
             feed(
                 it,
                 { feedsViewModel.onLike(it) },

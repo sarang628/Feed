@@ -24,13 +24,17 @@ internal fun FeedScreen(
     uiState: FeedUiState, /* ui state */
     consumeErrorMessage: () -> Unit, /* consume error message */
     topAppBar: @Composable () -> Unit,
-    feed: @Composable ((Feed) -> Unit),
+    feed: @Composable ((
+        feed: Feed,
+        onLike: (Int) -> Unit,
+        onFavorite: (Int) -> Unit,
+    ) -> Unit),
     onBottom: () -> Unit,
     onRefresh: (() -> Unit),
     isRefreshing: Boolean,
     listState: LazyListState = rememberLazyListState(),
     onTop: Boolean,
-    consumeOnTop: () -> Unit
+    consumeOnTop: () -> Unit,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutine = rememberCoroutineScope()
@@ -68,7 +72,7 @@ internal fun FeedScreen(
                 onRefresh = onRefresh,
                 onBottom = onBottom,
                 isRefreshing = isRefreshing,
-                feed = { feed.invoke(it) },
+                feed = feed,
                 listState = listState,
                 feedsUiState = when (uiState) {
                     is FeedUiState.Loading -> {

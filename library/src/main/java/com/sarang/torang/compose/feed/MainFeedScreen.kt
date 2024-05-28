@@ -61,7 +61,7 @@ fun FeedScreenForMain(
         consumeErrorMessage = {
             feedsViewModel.clearErrorMsg()
         },
-        feed = {
+        feed = { it, _, _ ->
             feed(
                 it,
                 { feedsViewModel.onLike(it) },
@@ -80,7 +80,11 @@ internal fun _MainFeedScreen(
     onAddReview: (() -> Unit), /* click add review */
     consumeErrorMessage: () -> Unit, /* consume error message */
     onBottom: () -> Unit,
-    feed: @Composable ((Feed) -> Unit),
+    feed: @Composable ((
+        feed: Feed,
+        onLike: (Int) -> Unit,
+        onFavorite: (Int) -> Unit,
+    ) -> Unit),
     onRefresh: (() -> Unit),
     isRefreshing: Boolean,
     onTop: Boolean,
@@ -128,6 +132,6 @@ fun PreviewMainFeedScreen() {
         isRefreshing = false,
         onTop = false,
         consumeOnTop = {},
-        feed = {}
+        feed = { _, _, _ -> }
     )
 }

@@ -1,5 +1,6 @@
 package com.sarang.torang.compose.feed.component
 
+import android.util.Log
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
@@ -15,7 +16,11 @@ fun Feeds(
     feedsUiState: FeedsUiState,
     listState: LazyListState,
     scrollEnabled: Boolean = true,
-    feed: @Composable ((Feed) -> Unit)? = null,
+    feed: @Composable ((
+        feed: Feed,
+        onLike: (Int) -> Unit,
+        onFavorite: (Int) -> Unit,
+    ) -> Unit),
 ) {
     when (feedsUiState) {
         is FeedsUiState.Loading -> {
@@ -43,7 +48,11 @@ fun Feeds(
                 count = feedsUiState.reviews.size,
                 onBottom = onBottom,
                 itemCompose = {
-                    feed?.invoke(feedsUiState.reviews[it])
+                    feed.invoke(feedsUiState.reviews[it], {
+                        Log.w("__Feed", "onLike is nothing")
+                    }, {
+                        Log.w("__feed", "onFavorite is nothing")
+                    })
                 },
                 onRefresh = onRefresh,
                 isRefreshing = isRefreshing,
@@ -63,7 +72,7 @@ fun PreviewFeeds() {
         onRefresh = { /*TODO*/ },
         onBottom = { /*TODO*/ },
         isRefreshing = false,
-        feed = {},
+        feed = { _, _, _ -> },
         listState = rememberLazyListState(),
         //feedsUiState = FeedsUiState.Loading
         feedsUiState = FeedsUiState.Success(ArrayList<Feed>().apply {
