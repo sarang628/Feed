@@ -24,7 +24,7 @@ internal fun FeedScreen(
     uiState: FeedUiState, /* ui state */
     consumeErrorMessage: () -> Unit, /* consume error message */
     topAppBar: @Composable () -> Unit,
-    feed: @Composable ((Feed) -> Unit)? = null,
+    feed: @Composable ((Feed) -> Unit),
     onBottom: () -> Unit,
     onRefresh: (() -> Unit),
     isRefreshing: Boolean,
@@ -68,7 +68,7 @@ internal fun FeedScreen(
                 onRefresh = onRefresh,
                 onBottom = onBottom,
                 isRefreshing = isRefreshing,
-                feed = { feed?.invoke(it) },
+                feed = { feed.invoke(it) },
                 listState = listState,
                 feedsUiState = when (uiState) {
                     is FeedUiState.Loading -> {

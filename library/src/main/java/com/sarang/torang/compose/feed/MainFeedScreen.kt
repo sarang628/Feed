@@ -37,7 +37,12 @@ import com.sarang.torang.viewmodels.FeedsViewModel
 @Composable
 fun FeedScreenForMain(
     feedsViewModel: FeedsViewModel = hiltViewModel(),
-    feed: @Composable ((Feed) -> Unit)? = null,
+    feed: @Composable ((
+        feed: Feed,
+        onLike: (Int) -> Unit,
+        onFavorite: (Int) -> Unit,
+    ) -> Unit
+    ),
     onAddReview: (() -> Unit),
     onTop: Boolean,
     consumeOnTop: () -> Unit,
@@ -56,7 +61,13 @@ fun FeedScreenForMain(
         consumeErrorMessage = {
             feedsViewModel.clearErrorMsg()
         },
-        feed = feed,
+        feed = {
+            feed(
+                it,
+                { feedsViewModel.onLike(it) },
+                { feedsViewModel.onFavorite(it) },
+            )
+        },
         onTop = onTop,
         consumeOnTop = consumeOnTop
     )
@@ -69,7 +80,7 @@ internal fun _MainFeedScreen(
     onAddReview: (() -> Unit), /* click add review */
     consumeErrorMessage: () -> Unit, /* consume error message */
     onBottom: () -> Unit,
-    feed: @Composable ((Feed) -> Unit)? = null,
+    feed: @Composable ((Feed) -> Unit),
     onRefresh: (() -> Unit),
     isRefreshing: Boolean,
     onTop: Boolean,
@@ -116,6 +127,7 @@ fun PreviewMainFeedScreen() {
         onBottom = {},
         isRefreshing = false,
         onTop = false,
-        consumeOnTop = {}
+        consumeOnTop = {},
+        feed = {}
     )
 }
