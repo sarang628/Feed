@@ -12,11 +12,15 @@ import com.sarang.torang.viewmodels.FeedScreenByRestaurantIdViewModel
 
 @Composable
 fun FeedScreenByRestaurantId(
+    feedsViewModel: FeedScreenByRestaurantIdViewModel = hiltViewModel(),
     restaurantId: Int,
     ontop: Boolean = false,
     consumeOnTop: (() -> Unit)? = null,
-    feedsViewModel: FeedScreenByRestaurantIdViewModel = hiltViewModel(),
-    feed: @Composable ((Feed) -> Unit)? = null,
+    feed: @Composable ((
+        feed: Feed,
+        onLike: (Int) -> Unit,
+        onFavorite: (Int) -> Unit,
+    ) -> Unit),
 ) {
 
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
@@ -34,7 +38,13 @@ fun FeedScreenByRestaurantId(
         onBottom = { feedsViewModel.onBottom() },
         isRefreshing = isRefreshing,
         onTop = ontop,
-        feed = feed,
+        feed = {
+            feed(
+                it,
+                { feedsViewModel.onLike(it) },
+                { feedsViewModel.onFavorite(it) },
+            )
+        },
         consumeOnTop = { consumeOnTop?.invoke() }
     )
 }

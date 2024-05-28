@@ -28,7 +28,7 @@ ext {
     commonImageLoaderVersion = '8230ade5ca'
     themeVersion = '28a1702347'
     repositoryVersion = 'a0f934c0e1'
-    baseFeedVersion = '9c54383490'
+    baseFeedVersion = '660cae8e6b'
     commonWidgetsVersion = '501b7b057a'
     torangBottomSheetVersion = '19e86938f4'
     reportVersion = '4fb865eeb3'

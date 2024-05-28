@@ -33,7 +33,7 @@ fun MyFeedScreen(
     reviewId: Int,
     onBack: (() -> Unit)? = null,
     listState: LazyListState,
-    feed: @Composable ((Feed) -> Unit)? = null,
+    feed: @Composable ((Feed) -> Unit),
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
     val isRefreshing: Boolean by feedsViewModel.isRefreshing.collectAsState()
@@ -72,7 +72,7 @@ internal fun _MyFeedScreen(
     onBottom: (() -> Unit),/*base feed 에서 제공*/
     consumeErrorMessage: () -> Unit,
     listState: LazyListState,
-    feed: @Composable ((Feed) -> Unit)? = null,
+    feed: @Composable ((Feed) -> Unit),
 ) {
     FeedScreen(
         uiState = uiState,
@@ -102,12 +102,14 @@ internal fun _MyFeedScreen(
 @Preview
 @Composable
 fun PreviewMyFeedScreen() {
-    _MyFeedScreen(/*Preview*/
+    _MyFeedScreen(
+        /*Preview*/
         uiState = FeedUiState.Loading,
         isRefreshing = false,
         onRefresh = { /*TODO*/ },
         onBottom = { /*TODO*/ },
         consumeErrorMessage = { /*TODO*/ },
         listState = rememberLazyListState(),
+        feed = {},
     )
 }

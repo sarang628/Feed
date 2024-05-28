@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.google.samples.apps.sunflower.ui.TorangTheme
 import com.sarang.torang.compose.feed.Feed
 import com.sarang.torang.compose.feed.FeedScreenByRestaurantId
-import com.sarang.torang.di.feed_di.review
+import com.sarang.torang.di.feed_di.toReview
 import com.sarang.torang.di.image.provideTorangAsyncImage
 import com.sarang.torang.repository.FeedRepository
 import com.sarang.torang.repository.FeedRepositoryTest
@@ -105,10 +105,20 @@ class MainActivity : ComponentActivity() {
                                 } catch (e: Exception) {
                                     0
                                 },
-                                feed = {
+                                feed = { it, onLike, onFavorite ->
                                     Feed(
-                                        review = it.review(),
-                                        image = provideTorangAsyncImage()
+                                        review = it.toReview(),
+                                        image = provideTorangAsyncImage(),
+                                        onMenu = {},
+                                        onLike = { onLike.invoke(it.reviewId) },
+                                        onFavorite = { onFavorite.invoke(it.reviewId) },
+                                        onComment = {},
+                                        onShare = {},
+                                        onProfile = {},
+                                        isZooming = {},
+                                        onName = {},
+                                        onImage = {},
+                                        onRestaurant = {}
                                     )
                                 }
                             )
