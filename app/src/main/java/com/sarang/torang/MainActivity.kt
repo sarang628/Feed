@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.google.samples.apps.sunflower.ui.TorangTheme
 import com.sarang.torang.compose.feed.Feed
 import com.sarang.torang.compose.feed.FeedScreenByRestaurantId
+import com.sarang.torang.compose.feed.FeedScreenByReviewId
 import com.sarang.torang.di.feed_di.toReview
 import com.sarang.torang.di.image.provideTorangAsyncImage
 import com.sarang.torang.repository.FeedRepository
@@ -98,8 +99,9 @@ class MainActivity : ComponentActivity() {
                                 reviewId = try { Integer.parseInt(reviewId) } catch (e: Exception) { 0 }
                             )*/
 
-                            FeedScreenByRestaurantId(
-                                restaurantId =
+//                            FeedScreenByRestaurantId(
+                            FeedScreenByReviewId(
+                                reviewId =
                                 try {
                                     restaurantId.toInt()
                                 } catch (e: Exception) {
