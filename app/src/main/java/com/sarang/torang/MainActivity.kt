@@ -25,8 +25,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.sunflower.ui.TorangTheme
 import com.sarang.torang.compose.feed.Feed
-import com.sarang.torang.compose.feed.FeedScreenByRestaurantId
-import com.sarang.torang.compose.feed.FeedScreenByReviewId
+import com.sarang.torang.compose.feed.FeedScreenForMain
 import com.sarang.torang.di.feed_di.toReview
 import com.sarang.torang.di.image.provideTorangAsyncImage
 import com.sarang.torang.repository.FeedRepository
@@ -66,8 +65,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Column(Modifier.verticalScroll(rememberScrollState())) {
-                        Column {
-                            AssistChip(onClick = { /*TODO*/ }, label = {
+                        /*Column {
+                            AssistChip(onClick = { *//*TODO*//* }, label = {
                                 Text(text = "MyFeed reviewId:")
                                 BasicTextField2(value = reviewId, onValueChange = {
                                     try {
@@ -78,7 +77,7 @@ class MainActivity : ComponentActivity() {
                                 })
                             })
                             AssistChip(onClick = { onTop = true }, label = { Text(text = "onTop") })
-                            AssistChip(onClick = { /*TODO*/ }, label = {
+                            AssistChip(onClick = { *//*TODO*//* }, label = {
                                 Text(text = "restaurantId:")
                                 BasicTextField2(value = restaurantId, onValueChange = {
                                     try {
@@ -88,19 +87,35 @@ class MainActivity : ComponentActivity() {
                                     }
                                 })
                             })
-                        }
+                        }*/
                         Box(modifier = Modifier.height((LocalConfiguration.current.screenHeightDp - 30).dp)) {
-                            /*MainFeedScreen(
+                            FeedScreenForMain(
                                 onAddReview = {},
                                 onTop = onTop,
                                 consumeOnTop = { onTop = false },
-                            )*/
+                                feed = { it, onLike, onFavorite ->
+                                    Feed(
+                                        review = it.toReview(),
+                                        image = provideTorangAsyncImage(),
+                                        onMenu = {},
+                                        onLike = { onLike.invoke(it.reviewId) },
+                                        onFavorite = { onFavorite.invoke(it.reviewId) },
+                                        onComment = {},
+                                        onShare = {},
+                                        onProfile = {},
+                                        isZooming = {},
+                                        onName = {},
+                                        onImage = {},
+                                        onRestaurant = {}
+                                    )
+                                }
+                            )
                             /*ProvideMyFeedScreen(
                                 reviewId = try { Integer.parseInt(reviewId) } catch (e: Exception) { 0 }
                             )*/
 
 //                            FeedScreenByRestaurantId(
-                            FeedScreenByReviewId(
+                            /*FeedScreenByReviewId(
                                 reviewId =
                                 try {
                                     restaurantId.toInt()
@@ -124,14 +139,14 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
                             )
+                        }*/
+//                            LoginRepositoryTest(loginRepository = loginRepository)
+//                            ProfileRepositoryTest(profileRepository = profileRepository)
+//                            FeedRepositoryTest(feedRepository = feedRepository)
                         }
-                        LoginRepositoryTest(loginRepository = loginRepository)
-                        ProfileRepositoryTest(profileRepository = profileRepository)
-                        FeedRepositoryTest(feedRepository = feedRepository)
                     }
                 }
             }
         }
-
     }
 }

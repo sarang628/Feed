@@ -9,6 +9,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -90,6 +93,8 @@ internal fun _MainFeedScreen(
     onTop: Boolean,
     consumeOnTop: () -> Unit,
 ) {
+    val scrollBehavior =
+        TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val interactionSource = remember { MutableInteractionSource() }
     FeedScreen(
         uiState = uiState,
@@ -99,6 +104,7 @@ internal fun _MainFeedScreen(
         feed = feed,
         onRefresh = onRefresh,
         onTop = onTop,
+        scrollBehavior = scrollBehavior,
         consumeOnTop = consumeOnTop,
         topAppBar = {
             TopAppBar(
@@ -114,7 +120,9 @@ internal fun _MainFeedScreen(
                             ) {
                                 onAddReview.invoke()
                             })
-                })
+                },
+                scrollBehavior = scrollBehavior
+            )
         }
     )
 }
