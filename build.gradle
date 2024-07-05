@@ -23,12 +23,13 @@ ext {
 
     //navigation
     navigationVersion = '2.4.0-alpha06'
-    nav_version = '2.5.3'
+    nav_version = "2.8.0-alpha08"
+//    nav_version = '2.5.3'
 
     commonImageLoaderVersion = '8230ade5ca'
     themeVersion = '28a1702347'
     repositoryVersion = '186804ba56'
-    baseFeedVersion = '660cae8e6b'
+    baseFeedVersion = '6307ce6df9'
     commonWidgetsVersion = '501b7b057a'
     torangBottomSheetVersion = '19e86938f4'
     reportVersion = '4fb865eeb3'
