@@ -8,6 +8,7 @@ import com.sarang.torang.usecase.AddLikeUseCase
 import com.sarang.torang.usecase.DeleteFavoriteUseCase
 import com.sarang.torang.usecase.DeleteLikeUseCase
 import com.sarang.torang.usecase.FeedRefreshUseCase
+import com.sarang.torang.usecase.FeedWithPageUseCase
 import com.sarang.torang.usecase.GetFeedByRestaurantIdFlowUseCase
 import com.sarang.torang.usecase.GetFeedByReviewIdUseCase
 import com.sarang.torang.usecase.GetFeedFlowUseCase
@@ -25,9 +26,11 @@ class FeedScreenByReviewIdViewModel @Inject constructor(
     addFavoriteUseCase: AddFavoriteUseCase,
     deleteFavoriteUseCase: DeleteFavoriteUseCase,
     getFeedFlowUseCase: GetFeedFlowUseCase,
+    feedWithPageUseCase: FeedWithPageUseCase,
     private val getFeedByReviewIdUseCase: GetFeedByReviewIdUseCase,
 ) : FeedsViewModel(
     feedRefreshUseCase,
+    feedWithPageUseCase,
     addLikeUseCase,
     deleteLikeUseCase,
     addFavoriteUseCase,

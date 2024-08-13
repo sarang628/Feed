@@ -54,7 +54,7 @@ fun MyFeedScreen(
         listState.scrollToItem(position)
     }
 
-    _MyFeedScreen(
+    MyFeed(
         uiState = uiState,
         isRefreshing = isRefreshing,
         onBack = onBack,
@@ -74,7 +74,7 @@ fun MyFeedScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun _MyFeedScreen(
+internal fun MyFeed(
     uiState: FeedUiState,
     isRefreshing: Boolean,
     onBack: (() -> Unit)? = null,
@@ -116,7 +116,7 @@ internal fun _MyFeedScreen(
 @Preview
 @Composable
 fun PreviewMyFeedScreen() {
-    _MyFeedScreen(
+    MyFeed(
         /*Preview*/
         uiState = FeedUiState.Loading,
         isRefreshing = false,

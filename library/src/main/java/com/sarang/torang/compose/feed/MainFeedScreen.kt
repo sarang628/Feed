@@ -10,7 +10,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -55,7 +54,7 @@ fun FeedScreenForMain(
 
     feedsViewModel.initialize()
 
-    _MainFeedScreen(
+    MainFeed(
         uiState = uiState,
         onAddReview = onAddReview,
         isRefreshing = isRefreshing,
@@ -78,7 +77,7 @@ fun FeedScreenForMain(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun _MainFeedScreen(
+internal fun MainFeed(
     uiState: FeedUiState, /* ui state */
     onAddReview: (() -> Unit), /* click add review */
     consumeErrorMessage: () -> Unit, /* consume error message */
@@ -130,8 +129,7 @@ internal fun _MainFeedScreen(
 @Preview
 @Composable
 fun PreviewMainFeedScreen() {
-    _MainFeedScreen(/*Preview*/
-        /*Preview*/
+    MainFeed(/*Preview*/
         uiState = FeedUiState.Loading,
         onAddReview = { /*TODO*/ },
         consumeErrorMessage = {},

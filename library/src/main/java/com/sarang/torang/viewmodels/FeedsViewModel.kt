@@ -10,6 +10,7 @@ import com.sarang.torang.usecase.AddLikeUseCase
 import com.sarang.torang.usecase.DeleteFavoriteUseCase
 import com.sarang.torang.usecase.DeleteLikeUseCase
 import com.sarang.torang.usecase.FeedRefreshUseCase
+import com.sarang.torang.usecase.FeedWithPageUseCase
 import com.sarang.torang.usecase.GetFeedFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 open class FeedsViewModel @Inject constructor(
     private val feedRefreshUseCase: FeedRefreshUseCase,
+    private val feedWithPageUseCase: FeedWithPageUseCase,
     private val addLikeUseCase: AddLikeUseCase,
     private val deleteLikeUseCase: DeleteLikeUseCase,
     private val addFavoriteUseCase: AddFavoriteUseCase,
@@ -30,6 +32,7 @@ open class FeedsViewModel @Inject constructor(
     internal val _uiState: MutableStateFlow<FeedUiState> = MutableStateFlow(FeedUiState.Loading)
     val uiState = _uiState.asStateFlow()
     private var initializeCalled = false
+    private var page = 0
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
@@ -41,7 +44,8 @@ open class FeedsViewModel @Inject constructor(
         initializeCalled = true
         viewModelScope.launch {
             try {
-                feedRefreshUseCase.invoke()
+                feedWithPageUseCase.invoke(page)
+                page++
             } catch (e: Exception) {
                 _uiState.update { FeedUiState.Error(e.message) }
             }
@@ -67,7 +71,9 @@ open class FeedsViewModel @Inject constructor(
         viewModelScope.launch {
             _isRefreshing.update { true }
             try {
-                feedRefreshUseCase.invoke()
+                page = 1
+                feedWithPageUseCase.invoke(page)
+                page++
             } catch (e: Exception) {
                 handleErrorMsg(e)
             } finally {
@@ -134,6 +140,14 @@ open class FeedsViewModel @Inject constructor(
     }
 
     fun onBottom() {
-
+        viewModelScope.launch {
+            try {
+                feedWithPageUseCase.invoke(page)
+                page++
+            } catch (e: Exception) {
+                handleErrorMsg(e)
+            } finally {
+            }
+        }
     }
 }

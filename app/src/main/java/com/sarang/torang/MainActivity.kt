@@ -26,6 +26,7 @@ import com.sarang.torang.compose.feed.FeedScreenForMain
 import com.sarang.torang.di.feed_di.toReview
 import com.sarang.torang.di.image.provideTorangAsyncImage
 import com.sarang.torang.repository.FeedRepository
+import com.sarang.torang.repository.FeedRepositoryTest
 import com.sarang.torang.repository.LoginRepository
 import com.sarang.torang.repository.ProfileRepository
 import dagger.hilt.android.AndroidEntryPoint
