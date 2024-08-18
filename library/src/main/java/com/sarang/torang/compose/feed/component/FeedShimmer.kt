@@ -21,8 +21,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+@Preview
 @Composable
 internal fun FeedShimmer() {
     val showShimmer by remember { mutableStateOf(true) }
@@ -99,6 +101,7 @@ internal fun FeedShimmer() {
     }
 }
 
+@Preview
 @Composable
 fun shimmerBrush(showShimmer: Boolean = true, targetValue: Float = 1000f): Brush {
     return if (showShimmer) {
@@ -113,13 +116,14 @@ fun shimmerBrush(showShimmer: Boolean = true, targetValue: Float = 1000f): Brush
             initialValue = 0f,
             targetValue = targetValue,
             animationSpec = infiniteRepeatable(
-                animation = tween(800), repeatMode = RepeatMode.Reverse
+                animation = tween(2000), repeatMode = RepeatMode.Restart
             ), label = ""
         )
         Brush.linearGradient(
             colors = shimmerColors,
-            start = Offset.Zero,
-            end = Offset(x = translateAnimation.value, y = translateAnimation.value)
+            start = Offset(x = translateAnimation.value - 300, y = 0f),
+            //end = Offset(x = translateAnimation.value, y = translateAnimation.value)
+            end = Offset(x = translateAnimation.value - 0, y = 0f)
         )
     } else {
         Brush.linearGradient(

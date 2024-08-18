@@ -44,7 +44,6 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var feedRepository: FeedRepository
 
-    @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.requestFeature(Window.FEATURE_ACTION_BAR);

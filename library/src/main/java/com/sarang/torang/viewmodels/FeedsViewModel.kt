@@ -40,7 +40,6 @@ open class FeedsViewModel @Inject constructor(
     @MainThread
     fun initialize() {
         if (initializeCalled) return
-        Log.d("__FeedsViewModel", "call init")
         initializeCalled = true
         viewModelScope.launch {
             try {
