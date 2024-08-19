@@ -70,7 +70,7 @@ open class FeedsViewModel @Inject constructor(
         viewModelScope.launch {
             _isRefreshing.update { true }
             try {
-                page = 1
+                page = 0
                 feedWithPageUseCase.invoke(page)
                 page++
             } catch (e: Exception) {

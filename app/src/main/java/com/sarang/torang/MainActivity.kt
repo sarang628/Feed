@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import com.google.samples.apps.sunflower.ui.TorangTheme
 import com.sarang.torang.compose.feed.Feed
 import com.sarang.torang.compose.feed.FeedScreenForMain
+import com.sarang.torang.di.feed_di.ShimmerBrushPreview
+import com.sarang.torang.di.feed_di.shimmerBrush
 import com.sarang.torang.di.feed_di.toReview
 import com.sarang.torang.di.image.provideTorangAsyncImage
 import com.sarang.torang.repository.FeedRepository
@@ -86,6 +88,7 @@ class MainActivity : ComponentActivity() {
                             FeedScreenForMain(
                                 onAddReview = {},
                                 onTop = onTop,
+                                shimmerBrush = { shimmerBrush(it) },
                                 consumeOnTop = { onTop = false },
                                 feed = { it, onLike, onFavorite ->
                                     Feed(

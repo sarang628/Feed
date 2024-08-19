@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.Brush
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.compose.feed.component.FeedScreen
 import com.sarang.torang.data.feed.Feed
@@ -18,6 +19,7 @@ fun FeedScreenByReviewId(
     reviewId: Int,
     ontop: Boolean = false,
     consumeOnTop: (() -> Unit)? = null,
+    shimmerBrush: @Composable (Boolean) -> Brush,
     feed: @Composable ((
         feed: Feed,
         onLike: (Int) -> Unit,
@@ -47,6 +49,7 @@ fun FeedScreenByReviewId(
                 { feedsViewModel.onFavorite(it) },
             )
         },
-        consumeOnTop = { consumeOnTop?.invoke() }
+        consumeOnTop = { consumeOnTop?.invoke() },
+        shimmerBrush = shimmerBrush
     )
 }

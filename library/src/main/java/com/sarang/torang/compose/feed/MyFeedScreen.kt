@@ -14,6 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.LinearGradient
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
@@ -33,6 +35,7 @@ fun MyFeedScreen(
     reviewId: Int,
     onBack: (() -> Unit)? = null,
     listState: LazyListState,
+    shimmerBrush: @Composable (Boolean) -> Brush,
     feed: @Composable ((
         feed: Feed,
         onLike: (Int) -> Unit,
@@ -68,7 +71,8 @@ fun MyFeedScreen(
                 feedsViewModel.onFavorite(it)
             })
         },
-        listState = listState
+        listState = listState,
+        shimmerBrush = shimmerBrush
     )
 }
 
@@ -82,6 +86,7 @@ internal fun MyFeed(
     onBottom: (() -> Unit),/*base feed 에서 제공*/
     consumeErrorMessage: () -> Unit,
     listState: LazyListState,
+    shimmerBrush: @Composable (Boolean) -> Brush,
     feed: @Composable ((
         feed: Feed,
         onLike: (Int) -> Unit,
@@ -109,7 +114,8 @@ internal fun MyFeed(
         onBottom = onBottom,
         isRefreshing = isRefreshing,
         onTop = false,
-        consumeOnTop = { }
+        consumeOnTop = { },
+        shimmerBrush = shimmerBrush
     )
 }
 
@@ -125,5 +131,6 @@ fun PreviewMyFeedScreen() {
         consumeErrorMessage = { /*TODO*/ },
         listState = rememberLazyListState(),
         feed = { _, _, _ -> },
+        shimmerBrush = { it -> Brush.linearGradient() },
     )
 }

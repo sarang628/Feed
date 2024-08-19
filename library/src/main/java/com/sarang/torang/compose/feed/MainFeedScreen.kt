@@ -16,6 +16,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Brush.Companion.linearGradient
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,6 +50,7 @@ fun FeedScreenForMain(
     onAddReview: (() -> Unit),
     onTop: Boolean,
     consumeOnTop: () -> Unit,
+    shimmerBrush: @Composable (Boolean) -> Brush,
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
     val isRefreshing: Boolean by feedsViewModel.isRefreshing.collectAsState()
@@ -71,7 +74,8 @@ fun FeedScreenForMain(
             )
         },
         onTop = onTop,
-        consumeOnTop = consumeOnTop
+        consumeOnTop = consumeOnTop,
+        shimmerBrush = shimmerBrush
     )
 }
 
@@ -91,6 +95,7 @@ internal fun MainFeed(
     isRefreshing: Boolean,
     onTop: Boolean,
     consumeOnTop: () -> Unit,
+    shimmerBrush: @Composable (Boolean) -> Brush,
 ) {
     val scrollBehavior =
         TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
@@ -122,7 +127,8 @@ internal fun MainFeed(
                 },
                 scrollBehavior = scrollBehavior
             )
-        }
+        },
+        shimmerBrush = shimmerBrush
     )
 }
 
@@ -138,6 +144,7 @@ fun PreviewMainFeedScreen() {
         isRefreshing = false,
         onTop = false,
         consumeOnTop = {},
-        feed = { _, _, _ -> }
+        feed = { _, _, _ -> },
+        shimmerBrush = { it -> linearGradient() }
     )
 }

@@ -16,6 +16,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedUiState
@@ -40,6 +41,7 @@ internal fun FeedScreen(
     onTop: Boolean,
     consumeOnTop: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior? = null,
+    shimmerBrush: @Composable (Boolean) -> Brush,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutine = rememberCoroutineScope()
@@ -94,7 +96,8 @@ internal fun FeedScreen(
                     is FeedUiState.Success -> {
                         FeedsUiState.Success(uiState.list)
                     }
-                }
+                },
+                shimmerBrush = shimmerBrush
 
             )
         }

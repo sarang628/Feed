@@ -7,6 +7,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import com.sarang.torang.data.feed.Feed
@@ -28,10 +29,11 @@ fun Feeds(
         onFavorite: (Int) -> Unit,
     ) -> Unit),
     scrollBehavior: TopAppBarScrollBehavior? = null,
+    shimmerBrush: @Composable (Boolean) -> Brush,
 ) {
     when (feedsUiState) {
         is FeedsUiState.Loading -> {
-            FeedShimmer()
+            FeedShimmer(shimmerBrush)
         }
 
         is FeedsUiState.Empty -> {
@@ -85,6 +87,7 @@ fun PreviewFeeds() {
         listState = rememberLazyListState(),
         //feedsUiState = FeedsUiState.Loading
         feedsUiState = FeedsUiState.Success(ArrayList<Feed>().apply {
-        })
+        }),
+        shimmerBrush = { it -> Brush.linearGradient() }
     )
 }
