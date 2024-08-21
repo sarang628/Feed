@@ -1,6 +1,8 @@
 package com.sarang.torang.compose.feed.component
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
@@ -42,9 +44,11 @@ internal fun FeedScreen(
     consumeOnTop: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior? = null,
     shimmerBrush: @Composable (Boolean) -> Brush,
+    onBackToTop: Boolean = true,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutine = rememberCoroutineScope()
+    val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     // snackbar process
     LaunchedEffect(key1 = uiState, block = {
         if (uiState is FeedUiState.Error) {
@@ -54,6 +58,18 @@ internal fun FeedScreen(
             }
         }
     })
+
+    if (onBackToTop) {
+        BackHandler {
+            if (listState.firstVisibleItemIndex != 0) {
+                coroutine.launch {
+                    listState.animateScrollToItem(0)
+                }
+            } else {
+                onBackPressedDispatcher?.onBackPressed()
+            }
+        }
+    }
 
     LaunchedEffect(key1 = onTop) {
         Log.d("__FeedScreen", "received onTop:${onTop}")
