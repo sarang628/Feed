@@ -93,7 +93,7 @@ class MainActivity : ComponentActivity() {
                                 feed = { it, onLike, onFavorite ->
                                     Feed(
                                         review = it.toReview(),
-                                        image = provideTorangAsyncImage(),
+                                        imageLoadCompose = provideTorangAsyncImage(),
                                         onMenu = {},
                                         onLike = { onLike.invoke(it.reviewId) },
                                         onFavorite = { onFavorite.invoke(it.reviewId) },

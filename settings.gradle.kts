@@ -10,13 +10,11 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://jitpack.io' }
-        maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' }
+        maven("https://jitpack.io")
+        maven("https://devrepo.kakao.com/nexus/content/groups/public/")
     }
 }
 
 rootProject.name = "Feed"
-include ':app'
-include ':library'
-
-//project(':app').projectDir = new File("../TorangRepository")
+include(":app")
+include(":library")
