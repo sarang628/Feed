@@ -51,6 +51,7 @@ fun FeedScreenForMain(
     onTop: Boolean,
     consumeOnTop: () -> Unit,
     shimmerBrush: @Composable (Boolean) -> Brush,
+    pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
     val isRefreshing: Boolean by feedsViewModel.isRefreshing.collectAsState()
@@ -75,7 +76,8 @@ fun FeedScreenForMain(
         },
         onTop = onTop,
         consumeOnTop = consumeOnTop,
-        shimmerBrush = shimmerBrush
+        shimmerBrush = shimmerBrush,
+        pullToRefreshLayout = pullToRefreshLayout
     )
 }
 
@@ -96,6 +98,7 @@ internal fun MainFeed(
     onTop: Boolean,
     consumeOnTop: () -> Unit,
     shimmerBrush: @Composable (Boolean) -> Brush,
+    pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
 ) {
     val scrollBehavior =
         TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
@@ -128,7 +131,8 @@ internal fun MainFeed(
                 scrollBehavior = scrollBehavior
             )
         },
-        shimmerBrush = shimmerBrush
+        shimmerBrush = shimmerBrush,
+        pullToRefreshLayout = pullToRefreshLayout
     )
 }
 

@@ -92,6 +92,7 @@ internal fun MyFeed(
         onLike: (Int) -> Unit,
         onFavorite: (Int) -> Unit,
     ) -> Unit),
+    pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
 ) {
     FeedScreen(
         uiState = uiState,
@@ -115,7 +116,8 @@ internal fun MyFeed(
         isRefreshing = isRefreshing,
         onTop = false,
         consumeOnTop = { },
-        shimmerBrush = shimmerBrush
+        shimmerBrush = shimmerBrush,
+        pullToRefreshLayout = pullToRefreshLayout
     )
 }
 

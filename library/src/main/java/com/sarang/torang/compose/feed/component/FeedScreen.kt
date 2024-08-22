@@ -37,14 +37,15 @@ internal fun FeedScreen(
         onFavorite: (Int) -> Unit,
     ) -> Unit),
     onBottom: () -> Unit,
-    onRefresh: (() -> Unit),
     isRefreshing: Boolean,
+    onRefresh: (() -> Unit),
     listState: LazyListState = rememberLazyListState(),
     onTop: Boolean,
     consumeOnTop: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior? = null,
     shimmerBrush: @Composable (Boolean) -> Brush,
     onBackToTop: Boolean = true,
+    pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutine = rememberCoroutineScope()
@@ -95,9 +96,7 @@ internal fun FeedScreen(
                 modifier = if (scrollBehavior != null) {
                     Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
                 } else Modifier,
-                onRefresh = onRefresh,
                 onBottom = onBottom,
-                isRefreshing = isRefreshing,
                 feed = feed,
                 listState = listState,
                 feedsUiState = when (uiState) {
@@ -113,8 +112,10 @@ internal fun FeedScreen(
                         FeedsUiState.Success(uiState.list)
                     }
                 },
-                shimmerBrush = shimmerBrush
-
+                shimmerBrush = shimmerBrush,
+                pullToRefreshLayout = pullToRefreshLayout,
+                isRefreshing = isRefreshing,
+                onRefresh = onRefresh
             )
         }
     }

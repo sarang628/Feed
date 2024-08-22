@@ -25,6 +25,7 @@ fun FeedScreenByRestaurantId(
         onLike: (Int) -> Unit,
         onFavorite: (Int) -> Unit,
     ) -> Unit),
+    pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
 ) {
 
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
@@ -49,6 +50,7 @@ fun FeedScreenByRestaurantId(
                 { feedsViewModel.onFavorite(it) },
             )
         },
-        consumeOnTop = { consumeOnTop?.invoke() }, shimmerBrush = shimmerBrush
+        consumeOnTop = { consumeOnTop?.invoke() }, shimmerBrush = shimmerBrush,
+        pullToRefreshLayout = pullToRefreshLayout
     )
 }

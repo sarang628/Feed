@@ -13,6 +13,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +32,9 @@ import com.sarang.torang.repository.FeedRepository
 import com.sarang.torang.repository.FeedRepositoryTest
 import com.sarang.torang.repository.LoginRepository
 import com.sarang.torang.repository.ProfileRepository
+import com.sryang.library.pullrefresh.PullToRefreshLayout
+import com.sryang.library.pullrefresh.RefreshIndicatorState
+import com.sryang.library.pullrefresh.rememberPullToRefreshState
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -55,6 +59,9 @@ class MainActivity : ComponentActivity() {
             var reviewId by remember { mutableStateOf("0") }
             var restaurantId by remember { mutableStateOf("0") }
             var onTop by remember { mutableStateOf(false) }
+
+            val state = rememberPullToRefreshState()
+
             TorangTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -106,6 +113,22 @@ class MainActivity : ComponentActivity() {
                                         onRestaurant = {},
                                         onLikes = {}
                                     )
+                                },
+                                pullToRefreshLayout = { isRefreshing, onRefresh, contents ->
+
+                                    if (isRefreshing) {
+                                        state.updateState(RefreshIndicatorState.Refreshing)
+                                    } else {
+                                        state.updateState(RefreshIndicatorState.Default)
+                                    }
+
+                                    PullToRefreshLayout(
+                                        pullRefreshLayoutState = state,
+                                        refreshThreshold = 80,
+                                        onRefresh = onRefresh
+                                    ) {
+                                        contents.invoke()
+                                    }
                                 }
                             )
                             /*ProvideMyFeedScreen(

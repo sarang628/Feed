@@ -13,13 +13,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedsUiState
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Feeds(
     modifier: Modifier = Modifier,
-    onRefresh: (() -> Unit),
     onBottom: () -> Unit,
     isRefreshing: Boolean,
+    onRefresh: (() -> Unit),
     feedsUiState: FeedsUiState,
     listState: LazyListState,
     scrollEnabled: Boolean = true,
@@ -28,8 +27,8 @@ fun Feeds(
         onLike: (Int) -> Unit,
         onFavorite: (Int) -> Unit,
     ) -> Unit),
-    scrollBehavior: TopAppBarScrollBehavior? = null,
     shimmerBrush: @Composable (Boolean) -> Brush,
+    pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
 ) {
     when (feedsUiState) {
         is FeedsUiState.Loading -> {
@@ -42,10 +41,10 @@ fun Feeds(
                 count = 0,
                 onBottom = {},
                 itemCompose = {},
-                onRefresh = onRefresh,
                 isRefreshing = isRefreshing,
                 listState = listState,
-                userScrollEnabled = scrollEnabled
+                userScrollEnabled = scrollEnabled,
+                onRefresh = onRefresh
             ) {
                 EmptyFeed()
             }
@@ -63,11 +62,12 @@ fun Feeds(
                         Log.w("__feed", "onFavorite is nothing")
                     })
                 },
-                onRefresh = onRefresh,
-                isRefreshing = isRefreshing,
                 userScrollEnabled = scrollEnabled,
                 listState = listState,
-                modifier = modifier
+                modifier = modifier,
+                pullToRefreshLayout = pullToRefreshLayout,
+                isRefreshing = isRefreshing,
+                onRefresh = onRefresh
             )
         }
 
@@ -80,7 +80,7 @@ fun Feeds(
 @Composable
 fun PreviewFeeds() {
     Feeds(/* Preview */
-        onRefresh = { /*TODO*/ },
+        onRefresh = {},
         onBottom = { /*TODO*/ },
         isRefreshing = false,
         feed = { _, _, _ -> },

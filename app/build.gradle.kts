@@ -130,4 +130,6 @@ dependencies {
     implementation(libs.theme)
     implementation(libs.basefeed)
     implementation(libs.commonImageLoader)
+
+    implementation(libs.mui3scrolltorefresh)
 }
