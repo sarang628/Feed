@@ -20,42 +20,9 @@ private fun MyFeedScreen(reviewId: String) {
             0
         },
         shimmerBrush = { shimmerBrush(it) },
-        feed = { it, onLike, onFavorite, isLogin ->
-            Feed(
-                review = it.toReview(),
-                imageLoadCompose = provideTorangAsyncImage(),
-                onMenu = {},
-                onLike = { onLike.invoke(it.reviewId) },
-                onFavorite = { onFavorite.invoke(it.reviewId) },
-                onComment = {},
-                onShare = {},
-                onProfile = {},
-                isZooming = {},
-                onName = {},
-                onImage = {},
-                onRestaurant = {},
-                onLikes = {},
-                expandableText = provideExpandableText(),
-                isLogin = isLogin
-            )
-        },
+        feed = provideFeed(),
         onBack = { },
         listState = rememberLazyListState(),
-        pullToRefreshLayout = { isRefreshing, onRefresh, contents ->
-
-            if (isRefreshing) {
-                state.updateState(RefreshIndicatorState.Refreshing)
-            } else {
-                state.updateState(RefreshIndicatorState.Default)
-            }
-
-            PullToRefreshLayout(
-                pullRefreshLayoutState = state,
-                refreshThreshold = 80,
-                onRefresh = onRefresh
-            ) {
-                contents.invoke()
-            }
-        }
+        pullToRefreshLayout = providePullToRefresh(state)
     )
 }

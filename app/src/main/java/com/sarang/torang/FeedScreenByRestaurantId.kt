@@ -15,40 +15,7 @@ private fun FeedScreenByRestaurantId(restaurantId: Int) {
     com.sarang.torang.compose.feed.FeedScreenByRestaurantId(
         restaurantId = restaurantId,
         shimmerBrush = { shimmerBrush(it) },
-        feed = { it, onLike, onFavorite, isLogin ->
-            Feed(
-                review = it.toReview(),
-                imageLoadCompose = provideTorangAsyncImage(),
-                onMenu = {},
-                onLike = { onLike.invoke(it.reviewId) },
-                onFavorite = { onFavorite.invoke(it.reviewId) },
-                onComment = {},
-                onShare = {},
-                onProfile = {},
-                isZooming = {},
-                onName = {},
-                onImage = {},
-                onRestaurant = {},
-                onLikes = {},
-                isLogin = isLogin,
-                expandableText = provideExpandableText()
-            )
-        },
-        pullToRefreshLayout = { isRefreshing, onRefresh, contents ->
-
-            if (isRefreshing) {
-                state.updateState(RefreshIndicatorState.Refreshing)
-            } else {
-                state.updateState(RefreshIndicatorState.Default)
-            }
-
-            PullToRefreshLayout(
-                pullRefreshLayoutState = state,
-                refreshThreshold = 80,
-                onRefresh = onRefresh
-            ) {
-                contents.invoke()
-            }
-        }
+        feed = provideFeed(),
+        pullToRefreshLayout = providePullToRefresh(state)
     )
 }
