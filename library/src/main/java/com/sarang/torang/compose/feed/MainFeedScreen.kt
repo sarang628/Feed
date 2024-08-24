@@ -53,7 +53,6 @@ fun FeedScreenForMain(
     consumeOnTop: () -> Unit,
     shimmerBrush: @Composable (Boolean) -> Brush,
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
-    onLogin: () -> Unit,
 ) {
     val uiState: FeedUiState = feedsViewModel.uiState
     val isRefreshing: Boolean = feedsViewModel.isRefreshing
@@ -73,8 +72,8 @@ fun FeedScreenForMain(
         feed = { it ->
             feed(
                 it,
-                { if (isLogin) feedsViewModel.onLike(it) else onLogin.invoke() },
-                { if (isLogin) feedsViewModel.onFavorite(it) else onLogin.invoke() },
+                { if (isLogin) feedsViewModel.onLike(it) },
+                { if (isLogin) feedsViewModel.onFavorite(it) },
                 isLogin
             )
         },
