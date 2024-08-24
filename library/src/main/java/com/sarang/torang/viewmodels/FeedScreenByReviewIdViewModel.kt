@@ -9,27 +9,23 @@ import com.sarang.torang.usecase.DeleteFavoriteUseCase
 import com.sarang.torang.usecase.DeleteLikeUseCase
 import com.sarang.torang.usecase.FeedRefreshUseCase
 import com.sarang.torang.usecase.FeedWithPageUseCase
-import com.sarang.torang.usecase.GetFeedByRestaurantIdFlowUseCase
 import com.sarang.torang.usecase.GetFeedByReviewIdUseCase
 import com.sarang.torang.usecase.GetFeedFlowUseCase
-import com.sarang.torang.usecase.GetMyFeedFlowUseCase
+import com.sarang.torang.usecase.GetUserAllFeedByReviewIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class FeedScreenByReviewIdViewModel @Inject constructor(
-    feedRefreshUseCase: FeedRefreshUseCase,
     addLikeUseCase: AddLikeUseCase,
     deleteLikeUseCase: DeleteLikeUseCase,
     addFavoriteUseCase: AddFavoriteUseCase,
     deleteFavoriteUseCase: DeleteFavoriteUseCase,
     getFeedFlowUseCase: GetFeedFlowUseCase,
     feedWithPageUseCase: FeedWithPageUseCase,
-    private val getFeedByReviewIdUseCase: GetFeedByReviewIdUseCase,
+    private val getFeedByReviewIdUseCase: GetFeedByReviewIdUseCase
 ) : FeedsViewModel(
-    feedRefreshUseCase,
     feedWithPageUseCase,
     addLikeUseCase,
     deleteLikeUseCase,
@@ -39,13 +35,13 @@ class FeedScreenByReviewIdViewModel @Inject constructor(
 ) {
     fun getFeedByReviewId(reviewId: Int) {
         Log.d("__FeedScreenByReviewIdViewModel", "load feed by reviewId : ${reviewId}")
-        _uiState.value = FeedUiState.Loading
+        uiState = FeedUiState.Loading
         viewModelScope.launch {
 
             try {
                 val result = getFeedByReviewIdUseCase.invoke(reviewId)
 
-                _uiState.value = FeedUiState.Success(
+                uiState = FeedUiState.Success(
                     list = listOf(result.copy(
                         onLike = { onLike(reviewId) },
                         onFavorite = { onFavorite(reviewId) }
@@ -57,7 +53,7 @@ class FeedScreenByReviewIdViewModel @Inject constructor(
     }
 
     fun findIndexByReviewId(reviewId: Int): Int {
-        val state = uiState.value
+        val state = uiState
         if (state is FeedUiState.Success) {
             return state.list.indexOf(state.list.find { it.reviewId == reviewId })
         }

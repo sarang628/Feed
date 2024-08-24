@@ -28,7 +28,7 @@ fun FeedScreenByRestaurantId(
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
 ) {
 
-    val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
+    val uiState: FeedUiState = feedsViewModel.uiState
     val isRefreshing: Boolean by feedsViewModel.isRefreshing.collectAsState()
 
     LaunchedEffect(key1 = restaurantId) {

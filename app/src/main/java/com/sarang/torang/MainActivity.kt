@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.google.samples.apps.sunflower.ui.TorangTheme
 import com.sarang.torang.compose.feed.Feed
 import com.sarang.torang.compose.feed.FeedScreenForMain
+import com.sarang.torang.compose.feed.MyFeedScreen
 import com.sarang.torang.di.feed_di.ShimmerBrushPreview
 import com.sarang.torang.di.feed_di.shimmerBrush
 import com.sarang.torang.di.feed_di.toReview
@@ -56,7 +58,7 @@ class MainActivity : ComponentActivity() {
         getActionBar()?.hide();
 
         setContent {
-            var reviewId by remember { mutableStateOf("0") }
+            var reviewId by remember { mutableStateOf("425") }
             var restaurantId by remember { mutableStateOf("0") }
             var onTop by remember { mutableStateOf(false) }
 
@@ -92,7 +94,7 @@ class MainActivity : ComponentActivity() {
                             })
                         }*/
                         Box(modifier = Modifier.height((LocalConfiguration.current.screenHeightDp - 30).dp)) {
-                            FeedScreenForMain(
+                            /*FeedScreenForMain(
                                 onAddReview = {},
                                 onTop = onTop,
                                 shimmerBrush = { shimmerBrush(it) },
@@ -130,10 +132,46 @@ class MainActivity : ComponentActivity() {
                                         contents.invoke()
                                     }
                                 }
-                            )
-                            /*ProvideMyFeedScreen(
-                                reviewId = try { Integer.parseInt(reviewId) } catch (e: Exception) { 0 }
                             )*/
+                            MyFeedScreen(
+                                reviewId = try { Integer.parseInt(reviewId) } catch (e: Exception) { 0 },
+                                shimmerBrush = { shimmerBrush(it) },
+                                feed = { it, onLike, onFavorite ->
+                                    Feed(
+                                        review = it.toReview(),
+                                        imageLoadCompose = provideTorangAsyncImage(),
+                                        onMenu = {},
+                                        onLike = { onLike.invoke(it.reviewId) },
+                                        onFavorite = { onFavorite.invoke(it.reviewId) },
+                                        onComment = {},
+                                        onShare = {},
+                                        onProfile = {},
+                                        isZooming = {},
+                                        onName = {},
+                                        onImage = {},
+                                        onRestaurant = {},
+                                        onLikes = {}
+                                    )
+                                },
+                                onBack = { finish() },
+                                listState = rememberLazyListState(),
+                                pullToRefreshLayout = { isRefreshing, onRefresh, contents ->
+
+                                    if (isRefreshing) {
+                                        state.updateState(RefreshIndicatorState.Refreshing)
+                                    } else {
+                                        state.updateState(RefreshIndicatorState.Default)
+                                    }
+
+                                    PullToRefreshLayout(
+                                        pullRefreshLayoutState = state,
+                                        refreshThreshold = 80,
+                                        onRefresh = onRefresh
+                                    ) {
+                                        contents.invoke()
+                                    }
+                                }
+                            )
 
 //                            FeedScreenByRestaurantId(
                             /*FeedScreenByReviewId(

@@ -73,7 +73,9 @@ internal fun FeedScreen(
     }
 
     LaunchedEffect(key1 = onTop) {
-        Log.d("__FeedScreen", "received onTop:${onTop}")
+        if (onTop)
+            Log.d("__FeedScreen", "received onTop:${onTop}")
+
         if (onTop) {
             consumeOnTop.invoke()
             coroutine.launch {

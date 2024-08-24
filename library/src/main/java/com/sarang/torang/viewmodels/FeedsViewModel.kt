@@ -2,6 +2,9 @@ package com.sarang.torang.viewmodels
 
 import android.util.Log
 import androidx.annotation.MainThread
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sarang.torang.uistate.FeedUiState
@@ -21,7 +24,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 open class FeedsViewModel @Inject constructor(
-    private val feedRefreshUseCase: FeedRefreshUseCase,
     private val feedWithPageUseCase: FeedWithPageUseCase,
     private val addLikeUseCase: AddLikeUseCase,
     private val deleteLikeUseCase: DeleteLikeUseCase,
@@ -29,8 +31,7 @@ open class FeedsViewModel @Inject constructor(
     private val deleteFavoriteUseCase: DeleteFavoriteUseCase,
     private val getFeedFlowUseCase: GetFeedFlowUseCase,
 ) : ViewModel() {
-    internal val _uiState: MutableStateFlow<FeedUiState> = MutableStateFlow(FeedUiState.Loading)
-    val uiState = _uiState.asStateFlow()
+    var uiState: FeedUiState by mutableStateOf(FeedUiState.Loading)
     private var initializeCalled = false
     private var page = 0
 
@@ -46,27 +47,25 @@ open class FeedsViewModel @Inject constructor(
                 feedWithPageUseCase.invoke(page)
                 page++
             } catch (e: Exception) {
-                _uiState.update { FeedUiState.Error(e.message) }
+                uiState = FeedUiState.Error(e.message)
             }
 
             getFeedFlowUseCase
                 .invoke()
                 .collect { list ->
                     Log.d("__FeedsViewModel", "received list : ${list.size}")
-                    _uiState.update {
-                        FeedUiState.Success(list = list.map { review ->
-                            review.copy(
-                                onLike = { onLike(review.reviewId) },
-                                onFavorite = { onFavorite(review.reviewId) }
-                            )
-                        })
-                    }
+                    uiState = FeedUiState.Success(list = list.map { review ->
+                        review.copy(
+                            onLike = { onLike(review.reviewId) },
+                            onFavorite = { onFavorite(review.reviewId) }
+                        )
+                    })
                 }
         }
     }
 
     // 피드 리스트 갱신
-    fun refreshFeed() {
+    open fun refreshFeed() {
         viewModelScope.launch {
             _isRefreshing.update { true }
             try {
@@ -83,10 +82,10 @@ open class FeedsViewModel @Inject constructor(
 
     // 즐겨찾기 클릭
     internal fun onFavorite(reviewId: Int) {
-        if (uiState.value is FeedUiState.Success) {
+        if (uiState is FeedUiState.Success) {
             viewModelScope.launch {
                 val review =
-                    (uiState.value as FeedUiState.Success).list.find { it.reviewId == reviewId }
+                    (uiState as FeedUiState.Success).list.find { it.reviewId == reviewId }
                 review?.let {
                     try {
                         if (it.isFavorite) {
@@ -104,11 +103,11 @@ open class FeedsViewModel @Inject constructor(
 
     // 좋아여 클릭
     internal fun onLike(reviewId: Int) {
-        if (uiState.value is FeedUiState.Success) {
+        if (uiState is FeedUiState.Success) {
 
             viewModelScope.launch {
                 val review =
-                    (uiState.value as FeedUiState.Success).list.find { it.reviewId == reviewId }
+                    (uiState as FeedUiState.Success).list.find { it.reviewId == reviewId }
                 review?.let {
                     try {
                         if (it.isLike) {
@@ -125,20 +124,20 @@ open class FeedsViewModel @Inject constructor(
     }
 
     private fun handleErrorMsg(e: Exception) {
-        if (_uiState.value is FeedUiState.Success) {
-            _uiState.update { (it as FeedUiState.Success).copy(msg = e.message) }
+        if (uiState is FeedUiState.Success) {
+            uiState = (uiState as FeedUiState.Success).copy(msg = e.message)
         }
     }
 
 
     // 에러메시지 삭제
     fun clearErrorMsg() {
-        if (_uiState.value is FeedUiState.Success) {
-            _uiState.update { (it as FeedUiState.Success).copy(msg = null) }
+        if (uiState is FeedUiState.Success) {
+            uiState = (uiState as FeedUiState.Success).copy(msg = null)
         }
     }
 
-    fun onBottom() {
+    open fun onBottom() {
         viewModelScope.launch {
             try {
                 feedWithPageUseCase.invoke(page)

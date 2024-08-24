@@ -1,6 +1,5 @@
 package com.sarang.torang.compose.feed
 
-import android.util.Log
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -15,7 +14,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.LinearGradient
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
@@ -41,19 +39,18 @@ fun MyFeedScreen(
         onLike: (Int) -> Unit,
         onFavorite: (Int) -> Unit,
     ) -> Unit),
+    pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
 ) {
-    val uiState: FeedUiState by feedsViewModel.uiState.collectAsState()
+    val uiState: FeedUiState = feedsViewModel.uiState
     val isRefreshing: Boolean by feedsViewModel.isRefreshing.collectAsState()
 
     LaunchedEffect(key1 = reviewId) {
-        feedsViewModel.getUserFeed(reviewId)
+        feedsViewModel.getUserFeedByReviewId(reviewId)
     }
 
     LaunchedEffect(key1 = uiState is FeedUiState.Success) {
         val position = feedsViewModel.findIndexByReviewId(reviewId)
-        Log.d("__MyFeedScreen", "position = ${position}")
         delay(10)
-        Log.d("__MyFeedScreen", "scrollState = ${position}")
         listState.scrollToItem(position)
     }
 
@@ -72,7 +69,8 @@ fun MyFeedScreen(
             })
         },
         listState = listState,
-        shimmerBrush = shimmerBrush
+        shimmerBrush = shimmerBrush,
+        pullToRefreshLayout = pullToRefreshLayout
     )
 }
 

@@ -1,5 +1,6 @@
 package com.sarang.torang.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.usecase.AddFavoriteUseCase
@@ -9,7 +10,9 @@ import com.sarang.torang.usecase.DeleteLikeUseCase
 import com.sarang.torang.usecase.FeedRefreshUseCase
 import com.sarang.torang.usecase.FeedWithPageUseCase
 import com.sarang.torang.usecase.GetFeedFlowUseCase
+import com.sarang.torang.usecase.GetMyAllFeedByReviewIdUseCase
 import com.sarang.torang.usecase.GetMyFeedFlowUseCase
+import com.sarang.torang.usecase.GetUserAllFeedByReviewIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -17,7 +20,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyFeedsViewModel @Inject constructor(
-    feedRefreshUseCase: FeedRefreshUseCase,
     addLikeUseCase: AddLikeUseCase,
     deleteLikeUseCase: DeleteLikeUseCase,
     addFavoriteUseCase: AddFavoriteUseCase,
@@ -25,8 +27,8 @@ class MyFeedsViewModel @Inject constructor(
     getFeedFlowUseCase: GetFeedFlowUseCase,
     feedWithPageUseCase: FeedWithPageUseCase,
     private val getMyFeedFlowUseCase: GetMyFeedFlowUseCase,
+    private val getMyAllFeedByReviewIdUseCase: GetMyAllFeedByReviewIdUseCase,
 ) : FeedsViewModel(
-    feedRefreshUseCase,
     feedWithPageUseCase,
     addLikeUseCase,
     deleteLikeUseCase,
@@ -34,9 +36,11 @@ class MyFeedsViewModel @Inject constructor(
     deleteFavoriteUseCase,
     getFeedFlowUseCase
 ) {
-    fun getUserFeed(reviewId: Int) {
-        _uiState.value = FeedUiState.Loading
+    fun getUserFeedByReviewId(reviewId: Int) {
+        Log.d("__MyFeedsViewModel", "get user feed by reviewId : $reviewId")
+        uiState = FeedUiState.Loading
         viewModelScope.launch {
+            getMyAllFeedByReviewIdUseCase.invoke(reviewId)
             getMyFeedFlowUseCase.invoke(reviewId).collect { list ->
                 list.map { review ->
                     review.copy(
@@ -45,17 +49,26 @@ class MyFeedsViewModel @Inject constructor(
                     )
                 }.let { list ->
                     if (list.isNotEmpty()) {
-                        _uiState.update {
-                            FeedUiState.Success(list = list)
-                        }
+                        uiState = FeedUiState.Success(list = list)
+                    } else {
+                        uiState = FeedUiState.Error("피드가 없습니다.")
                     }
                 }
             }
         }
     }
 
+    override fun refreshFeed() {
+
+    }
+
+    override fun onBottom() {
+
+    }
+
+
     fun findIndexByReviewId(reviewId: Int): Int {
-        val state = uiState.value
+        val state = uiState
         if (state is FeedUiState.Success) {
             return state.list.indexOf(state.list.find { it.reviewId == reviewId })
         }
