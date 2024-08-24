@@ -1,22 +1,17 @@
 package com.sarang.torang.viewmodels
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.usecase.AddFavoriteUseCase
 import com.sarang.torang.usecase.AddLikeUseCase
 import com.sarang.torang.usecase.DeleteFavoriteUseCase
 import com.sarang.torang.usecase.DeleteLikeUseCase
-import com.sarang.torang.usecase.FeedRefreshUseCase
 import com.sarang.torang.usecase.FeedWithPageUseCase
 import com.sarang.torang.usecase.GetFeedByRestaurantIdFlowUseCase
 import com.sarang.torang.usecase.GetFeedFlowUseCase
-import com.sarang.torang.usecase.IsLoginFlowUseCase
+import com.sarang.torang.usecase.IsLoginFlowForFeedUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,7 +23,7 @@ class FeedScreenByRestaurantIdViewModel @Inject constructor(
     deleteFavoriteUseCase: DeleteFavoriteUseCase,
     getFeedFlowUseCase: GetFeedFlowUseCase,
     feedWithPageUseCase: FeedWithPageUseCase,
-    isLoginFlowUseCase: IsLoginFlowUseCase,
+    isLoginFlowUseCase: IsLoginFlowForFeedUseCase,
     private val getFeedByRestaurantIdFlowUseCase: GetFeedByRestaurantIdFlowUseCase,
 ) : FeedsViewModel(
     feedWithPageUseCase,

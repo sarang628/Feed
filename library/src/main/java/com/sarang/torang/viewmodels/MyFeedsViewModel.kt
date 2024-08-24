@@ -7,15 +7,12 @@ import com.sarang.torang.usecase.AddFavoriteUseCase
 import com.sarang.torang.usecase.AddLikeUseCase
 import com.sarang.torang.usecase.DeleteFavoriteUseCase
 import com.sarang.torang.usecase.DeleteLikeUseCase
-import com.sarang.torang.usecase.FeedRefreshUseCase
 import com.sarang.torang.usecase.FeedWithPageUseCase
 import com.sarang.torang.usecase.GetFeedFlowUseCase
 import com.sarang.torang.usecase.GetMyAllFeedByReviewIdUseCase
 import com.sarang.torang.usecase.GetMyFeedFlowUseCase
-import com.sarang.torang.usecase.GetUserAllFeedByReviewIdUseCase
-import com.sarang.torang.usecase.IsLoginFlowUseCase
+import com.sarang.torang.usecase.IsLoginFlowForFeedUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,7 +26,7 @@ class MyFeedsViewModel @Inject constructor(
     feedWithPageUseCase: FeedWithPageUseCase,
     private val getMyFeedFlowUseCase: GetMyFeedFlowUseCase,
     private val getMyAllFeedByReviewIdUseCase: GetMyAllFeedByReviewIdUseCase,
-    isLoginFlowUseCase: IsLoginFlowUseCase,
+    isLoginFlowUseCase: IsLoginFlowForFeedUseCase,
 ) : FeedsViewModel(
     feedWithPageUseCase,
     addLikeUseCase,
