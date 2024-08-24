@@ -24,12 +24,14 @@ fun FeedScreenByRestaurantId(
         feed: Feed,
         onLike: (Int) -> Unit,
         onFavorite: (Int) -> Unit,
+        isLogin: Boolean,
     ) -> Unit),
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
 ) {
 
     val uiState: FeedUiState = feedsViewModel.uiState
     val isRefreshing: Boolean = feedsViewModel.isRefreshing
+    val isLogin by feedsViewModel.isLogin.collectAsState(initial = false)
 
     LaunchedEffect(key1 = restaurantId) {
         feedsViewModel.getFeedByRestaurantId(restaurantId)
@@ -43,11 +45,12 @@ fun FeedScreenByRestaurantId(
         onBottom = { feedsViewModel.onBottom() },
         isRefreshing = isRefreshing,
         onTop = ontop,
-        feed = { it, _, _ ->
+        feed = { it ->
             feed(
                 it,
                 { feedsViewModel.onLike(it) },
                 { feedsViewModel.onFavorite(it) },
+                isLogin
             )
         },
         consumeOnTop = { consumeOnTop?.invoke() }, shimmerBrush = shimmerBrush,

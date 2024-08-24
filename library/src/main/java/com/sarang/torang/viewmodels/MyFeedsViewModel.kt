@@ -13,6 +13,7 @@ import com.sarang.torang.usecase.GetFeedFlowUseCase
 import com.sarang.torang.usecase.GetMyAllFeedByReviewIdUseCase
 import com.sarang.torang.usecase.GetMyFeedFlowUseCase
 import com.sarang.torang.usecase.GetUserAllFeedByReviewIdUseCase
+import com.sarang.torang.usecase.IsLoginFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -28,13 +29,15 @@ class MyFeedsViewModel @Inject constructor(
     feedWithPageUseCase: FeedWithPageUseCase,
     private val getMyFeedFlowUseCase: GetMyFeedFlowUseCase,
     private val getMyAllFeedByReviewIdUseCase: GetMyAllFeedByReviewIdUseCase,
+    isLoginFlowUseCase: IsLoginFlowUseCase,
 ) : FeedsViewModel(
     feedWithPageUseCase,
     addLikeUseCase,
     deleteLikeUseCase,
     addFavoriteUseCase,
     deleteFavoriteUseCase,
-    getFeedFlowUseCase
+    getFeedFlowUseCase,
+    isLoginFlowUseCase
 ) {
     fun getUserFeedByReviewId(reviewId: Int) {
         Log.d("__MyFeedsViewModel", "get user feed by reviewId : $reviewId")

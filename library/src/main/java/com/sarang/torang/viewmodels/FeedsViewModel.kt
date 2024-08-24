@@ -15,6 +15,7 @@ import com.sarang.torang.usecase.DeleteLikeUseCase
 import com.sarang.torang.usecase.FeedRefreshUseCase
 import com.sarang.torang.usecase.FeedWithPageUseCase
 import com.sarang.torang.usecase.GetFeedFlowUseCase
+import com.sarang.torang.usecase.IsLoginFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,10 +31,12 @@ open class FeedsViewModel @Inject constructor(
     private val addFavoriteUseCase: AddFavoriteUseCase,
     private val deleteFavoriteUseCase: DeleteFavoriteUseCase,
     private val getFeedFlowUseCase: GetFeedFlowUseCase,
+    private val isLoginFlowUseCase: IsLoginFlowUseCase,
 ) : ViewModel() {
     var uiState: FeedUiState by mutableStateOf(FeedUiState.Loading)
     private var initializeCalled = false
     private var page = 0
+    val isLogin = isLoginFlowUseCase.isLogin
 
     var isRefreshing by mutableStateOf(false)
         private set

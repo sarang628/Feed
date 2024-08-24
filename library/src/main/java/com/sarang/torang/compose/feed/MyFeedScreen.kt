@@ -38,11 +38,13 @@ fun MyFeedScreen(
         feed: Feed,
         onLike: (Int) -> Unit,
         onFavorite: (Int) -> Unit,
+        isLogin: Boolean,
     ) -> Unit),
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
 ) {
     val uiState: FeedUiState = feedsViewModel.uiState
     val isRefreshing: Boolean = feedsViewModel.isRefreshing
+    val isLogin by feedsViewModel.isLogin.collectAsState(false)
 
     LaunchedEffect(key1 = reviewId) {
         feedsViewModel.getUserFeedByReviewId(reviewId)
@@ -61,12 +63,14 @@ fun MyFeedScreen(
         consumeErrorMessage = { feedsViewModel.clearErrorMsg() },
         onRefresh = { feedsViewModel.refreshFeed() },
         onBottom = { feedsViewModel.onBottom() },
-        feed = { it, _, _ ->
+        feed = { it ->
             feed.invoke(it, {
                 feedsViewModel.onLike(it)
             }, {
                 feedsViewModel.onFavorite(it)
-            })
+            },
+                isLogin
+            )
         },
         listState = listState,
         shimmerBrush = shimmerBrush,
@@ -87,8 +91,6 @@ internal fun MyFeed(
     shimmerBrush: @Composable (Boolean) -> Brush,
     feed: @Composable ((
         feed: Feed,
-        onLike: (Int) -> Unit,
-        onFavorite: (Int) -> Unit,
     ) -> Unit),
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
 ) {
@@ -130,7 +132,7 @@ fun PreviewMyFeedScreen() {
         onBottom = { /*TODO*/ },
         consumeErrorMessage = { /*TODO*/ },
         listState = rememberLazyListState(),
-        feed = { _, _, _ -> },
+        feed = { _ -> },
         shimmerBrush = { it -> Brush.linearGradient() },
     )
 }

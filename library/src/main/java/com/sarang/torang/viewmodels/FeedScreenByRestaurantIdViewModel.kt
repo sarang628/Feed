@@ -14,6 +14,7 @@ import com.sarang.torang.usecase.FeedRefreshUseCase
 import com.sarang.torang.usecase.FeedWithPageUseCase
 import com.sarang.torang.usecase.GetFeedByRestaurantIdFlowUseCase
 import com.sarang.torang.usecase.GetFeedFlowUseCase
+import com.sarang.torang.usecase.IsLoginFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -27,6 +28,7 @@ class FeedScreenByRestaurantIdViewModel @Inject constructor(
     deleteFavoriteUseCase: DeleteFavoriteUseCase,
     getFeedFlowUseCase: GetFeedFlowUseCase,
     feedWithPageUseCase: FeedWithPageUseCase,
+    isLoginFlowUseCase: IsLoginFlowUseCase,
     private val getFeedByRestaurantIdFlowUseCase: GetFeedByRestaurantIdFlowUseCase,
 ) : FeedsViewModel(
     feedWithPageUseCase,
@@ -34,7 +36,8 @@ class FeedScreenByRestaurantIdViewModel @Inject constructor(
     deleteLikeUseCase,
     addFavoriteUseCase,
     deleteFavoriteUseCase,
-    getFeedFlowUseCase
+    getFeedFlowUseCase,
+    isLoginFlowUseCase
 ) {
     fun getFeedByRestaurantId(restaurantId: Int) {
         Log.d("__FeedScreenByRestaurantIdViewModel", "load feed by restaurantId : ${restaurantId}")

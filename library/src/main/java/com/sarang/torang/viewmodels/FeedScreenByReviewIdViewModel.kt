@@ -12,6 +12,7 @@ import com.sarang.torang.usecase.FeedWithPageUseCase
 import com.sarang.torang.usecase.GetFeedByReviewIdUseCase
 import com.sarang.torang.usecase.GetFeedFlowUseCase
 import com.sarang.torang.usecase.GetUserAllFeedByReviewIdUseCase
+import com.sarang.torang.usecase.IsLoginFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,6 +25,7 @@ class FeedScreenByReviewIdViewModel @Inject constructor(
     deleteFavoriteUseCase: DeleteFavoriteUseCase,
     getFeedFlowUseCase: GetFeedFlowUseCase,
     feedWithPageUseCase: FeedWithPageUseCase,
+    isLoginFlowUseCase: IsLoginFlowUseCase,
     private val getFeedByReviewIdUseCase: GetFeedByReviewIdUseCase,
 ) : FeedsViewModel(
     feedWithPageUseCase,
@@ -31,7 +33,8 @@ class FeedScreenByReviewIdViewModel @Inject constructor(
     deleteLikeUseCase,
     addFavoriteUseCase,
     deleteFavoriteUseCase,
-    getFeedFlowUseCase
+    getFeedFlowUseCase,
+    isLoginFlowUseCase
 ) {
     fun getFeedByReviewId(reviewId: Int) {
         Log.d("__FeedScreenByReviewIdViewModel", "load feed by reviewId : ${reviewId}")

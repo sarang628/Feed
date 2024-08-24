@@ -1,6 +1,7 @@
 package com.sarang.torang
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -29,6 +30,7 @@ import com.sarang.torang.di.feed_di.shimmerBrush
 import com.sarang.torang.di.feed_di.toReview
 import com.sarang.torang.di.image.provideTorangAsyncImage
 import com.sarang.torang.repository.FeedRepository
+import com.sarang.torang.repository.FeedRepositoryTest
 import com.sarang.torang.repository.LoginRepository
 import com.sarang.torang.repository.ProfileRepository
 import com.sryang.library.pullrefresh.PullToRefreshLayout
@@ -88,9 +90,9 @@ class MainActivity : ComponentActivity() {
                             })
                         }*/
                         Box(modifier = Modifier.height((LocalConfiguration.current.screenHeightDp - 30).dp)) {
-//                            FeedScreenForMain()
+                            FeedScreenForMain()
 //                            MyFeedScreen(reviewId)
-                            FeedScreenByReviewId(reviewId)
+//                            FeedScreenByReviewId(reviewId)
 //                            FeedScreenByRestaurantId(restaurantId = 0)
                         }
 //                            LoginRepositoryTest(loginRepository = loginRepository)
@@ -102,180 +104,5 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @Composable
-    private fun FeedScreenByRestaurantId(restaurantId: Int) {
-        val state = rememberPullToRefreshState()
-        com.sarang.torang.compose.feed.FeedScreenByRestaurantId(
-            restaurantId = restaurantId,
-            shimmerBrush = { shimmerBrush(it) },
-            feed = { it, onLike, onFavorite ->
-                Feed(
-                    review = it.toReview(),
-                    imageLoadCompose = provideTorangAsyncImage(),
-                    onMenu = {},
-                    onLike = { onLike.invoke(it.reviewId) },
-                    onFavorite = { onFavorite.invoke(it.reviewId) },
-                    onComment = {},
-                    onShare = {},
-                    onProfile = {},
-                    isZooming = {},
-                    onName = {},
-                    onImage = {},
-                    onRestaurant = {},
-                    onLikes = {}
-                )
-            },
-            pullToRefreshLayout = { isRefreshing, onRefresh, contents ->
 
-                if (isRefreshing) {
-                    state.updateState(RefreshIndicatorState.Refreshing)
-                } else {
-                    state.updateState(RefreshIndicatorState.Default)
-                }
-
-                PullToRefreshLayout(
-                    pullRefreshLayoutState = state,
-                    refreshThreshold = 80,
-                    onRefresh = onRefresh
-                ) {
-                    contents.invoke()
-                }
-            }
-        )
-    }
-
-    @Composable
-    private fun FeedScreenByReviewId(reviewId: String) {
-        val state = rememberPullToRefreshState()
-        com.sarang.torang.compose.feed.FeedScreenByReviewId(
-            reviewId = Integer.parseInt(reviewId),
-            shimmerBrush = { shimmerBrush(it) },
-            feed = { it, onLike, onFavorite ->
-                Feed(
-                    review = it.toReview(),
-                    imageLoadCompose = provideTorangAsyncImage(),
-                    onMenu = {},
-                    onLike = { onLike.invoke(it.reviewId) },
-                    onFavorite = { onFavorite.invoke(it.reviewId) },
-                    onComment = {},
-                    onShare = {},
-                    onProfile = {},
-                    isZooming = {},
-                    onName = {},
-                    onImage = {},
-                    onRestaurant = {},
-                    onLikes = {}
-                )
-            },
-            pullToRefreshLayout = { isRefreshing, onRefresh, contents ->
-
-                if (isRefreshing) {
-                    state.updateState(RefreshIndicatorState.Refreshing)
-                } else {
-                    state.updateState(RefreshIndicatorState.Default)
-                }
-
-                PullToRefreshLayout(
-                    pullRefreshLayoutState = state,
-                    refreshThreshold = 80,
-                    onRefresh = onRefresh
-                ) {
-                    contents.invoke()
-                }
-            }
-        )
-    }
-
-    @Composable
-    private fun MyFeedScreen(reviewId: String) {
-        val state = rememberPullToRefreshState()
-        MyFeedScreen(
-            reviewId = try {
-                Integer.parseInt(reviewId)
-            } catch (e: Exception) {
-                0
-            },
-            shimmerBrush = { shimmerBrush(it) },
-            feed = { it, onLike, onFavorite ->
-                Feed(
-                    review = it.toReview(),
-                    imageLoadCompose = provideTorangAsyncImage(),
-                    onMenu = {},
-                    onLike = { onLike.invoke(it.reviewId) },
-                    onFavorite = { onFavorite.invoke(it.reviewId) },
-                    onComment = {},
-                    onShare = {},
-                    onProfile = {},
-                    isZooming = {},
-                    onName = {},
-                    onImage = {},
-                    onRestaurant = {},
-                    onLikes = {}
-                )
-            },
-            onBack = { finish() },
-            listState = rememberLazyListState(),
-            pullToRefreshLayout = { isRefreshing, onRefresh, contents ->
-
-                if (isRefreshing) {
-                    state.updateState(RefreshIndicatorState.Refreshing)
-                } else {
-                    state.updateState(RefreshIndicatorState.Default)
-                }
-
-                PullToRefreshLayout(
-                    pullRefreshLayoutState = state,
-                    refreshThreshold = 80,
-                    onRefresh = onRefresh
-                ) {
-                    contents.invoke()
-                }
-            }
-        )
-    }
-
-    @Composable
-    private fun FeedScreenForMain() {
-        val state = rememberPullToRefreshState()
-        var onTop by remember { mutableStateOf(false) }
-        FeedScreenForMain(
-            onAddReview = {},
-            onTop = onTop,
-            shimmerBrush = { shimmerBrush(it) },
-            consumeOnTop = { onTop = false },
-            feed = { it, onLike, onFavorite ->
-                Feed(
-                    review = it.toReview(),
-                    imageLoadCompose = provideTorangAsyncImage(),
-                    onMenu = {},
-                    onLike = { onLike.invoke(it.reviewId) },
-                    onFavorite = { onFavorite.invoke(it.reviewId) },
-                    onComment = {},
-                    onShare = {},
-                    onProfile = {},
-                    isZooming = {},
-                    onName = {},
-                    onImage = {},
-                    onRestaurant = {},
-                    onLikes = {}
-                )
-            },
-            pullToRefreshLayout = { isRefreshing, onRefresh, contents ->
-
-                if (isRefreshing) {
-                    state.updateState(RefreshIndicatorState.Refreshing)
-                } else {
-                    state.updateState(RefreshIndicatorState.Default)
-                }
-
-                PullToRefreshLayout(
-                    pullRefreshLayoutState = state,
-                    refreshThreshold = 80,
-                    onRefresh = onRefresh
-                ) {
-                    contents.invoke()
-                }
-            }
-        )
-    }
 }

@@ -36,9 +36,7 @@ internal fun FeedScreen(
     consumeErrorMessage: () -> Unit, /* consume error message */
     topAppBar: @Composable () -> Unit,
     feed: @Composable ((
-        feed: Feed,
-        onLike: (Int) -> Unit,
-        onFavorite: (Int) -> Unit,
+        feed: Feed
     ) -> Unit),
     onBottom: () -> Unit,
     isRefreshing: Boolean,

@@ -45,6 +45,7 @@ fun FeedScreenForMain(
         feed: Feed,
         onLike: (Int) -> Unit,
         onFavorite: (Int) -> Unit,
+        isLogin: Boolean,
     ) -> Unit
     ),
     onAddReview: (() -> Unit),
@@ -52,9 +53,11 @@ fun FeedScreenForMain(
     consumeOnTop: () -> Unit,
     shimmerBrush: @Composable (Boolean) -> Brush,
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
+    onLogin: () -> Unit,
 ) {
     val uiState: FeedUiState = feedsViewModel.uiState
     val isRefreshing: Boolean = feedsViewModel.isRefreshing
+    val isLogin by feedsViewModel.isLogin.collectAsState(initial = false)
 
     feedsViewModel.initialize()
 
@@ -67,11 +70,12 @@ fun FeedScreenForMain(
         consumeErrorMessage = {
             feedsViewModel.clearErrorMsg()
         },
-        feed = { it, _, _ ->
+        feed = { it ->
             feed(
                 it,
-                { feedsViewModel.onLike(it) },
-                { feedsViewModel.onFavorite(it) },
+                { if (isLogin) feedsViewModel.onLike(it) else onLogin.invoke() },
+                { if (isLogin) feedsViewModel.onFavorite(it) else onLogin.invoke() },
+                isLogin
             )
         },
         onTop = onTop,
@@ -90,8 +94,6 @@ internal fun MainFeed(
     onBottom: () -> Unit,
     feed: @Composable ((
         feed: Feed,
-        onLike: (Int) -> Unit,
-        onFavorite: (Int) -> Unit,
     ) -> Unit),
     onRefresh: (() -> Unit),
     isRefreshing: Boolean,
@@ -148,7 +150,7 @@ fun PreviewMainFeedScreen() {
         isRefreshing = false,
         onTop = false,
         consumeOnTop = {},
-        feed = { _, _, _ -> },
+        feed = { _ -> },
         shimmerBrush = { it -> linearGradient() }
     )
 }
