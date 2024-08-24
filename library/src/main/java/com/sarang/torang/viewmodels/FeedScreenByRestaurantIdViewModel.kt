@@ -62,4 +62,12 @@ class FeedScreenByRestaurantIdViewModel @Inject constructor(
         }
         return 0
     }
+
+    override fun refreshFeed() {
+        Log.d("__FeedScreenByRestaurantIdViewModel", "refreshFeed called but nothing to do")
+    }
+
+    override fun onBottom() {
+        Log.d("__FeedScreenByRestaurantIdViewModel", "onBottom called but nothing to do")
+    }
 }

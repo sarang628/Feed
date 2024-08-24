@@ -29,7 +29,7 @@ fun FeedScreenByRestaurantId(
 ) {
 
     val uiState: FeedUiState = feedsViewModel.uiState
-    val isRefreshing: Boolean by feedsViewModel.isRefreshing.collectAsState()
+    val isRefreshing: Boolean = feedsViewModel.isRefreshing
 
     LaunchedEffect(key1 = restaurantId) {
         feedsViewModel.getFeedByRestaurantId(restaurantId)

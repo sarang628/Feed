@@ -24,7 +24,7 @@ class FeedScreenByReviewIdViewModel @Inject constructor(
     deleteFavoriteUseCase: DeleteFavoriteUseCase,
     getFeedFlowUseCase: GetFeedFlowUseCase,
     feedWithPageUseCase: FeedWithPageUseCase,
-    private val getFeedByReviewIdUseCase: GetFeedByReviewIdUseCase
+    private val getFeedByReviewIdUseCase: GetFeedByReviewIdUseCase,
 ) : FeedsViewModel(
     feedWithPageUseCase,
     addLikeUseCase,
@@ -40,7 +40,7 @@ class FeedScreenByReviewIdViewModel @Inject constructor(
 
             try {
                 val result = getFeedByReviewIdUseCase.invoke(reviewId)
-
+                Log.d("__FeedScreenByReviewIdViewModel", "load feed by reviewId result : ${result}")
                 uiState = FeedUiState.Success(
                     list = listOf(result.copy(
                         onLike = { onLike(reviewId) },
@@ -58,5 +58,13 @@ class FeedScreenByReviewIdViewModel @Inject constructor(
             return state.list.indexOf(state.list.find { it.reviewId == reviewId })
         }
         return 0
+    }
+
+    override fun refreshFeed() {
+        Log.d("__FeedScreenByReviewIdViewModel", "refreshFeed called but nothing to do")
+    }
+
+    override fun onBottom() {
+        Log.d("__FeedScreenByReviewIdViewModel", "onBottom called but nothing to do")
     }
 }

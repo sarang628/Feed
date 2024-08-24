@@ -54,7 +54,7 @@ fun FeedScreenForMain(
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
 ) {
     val uiState: FeedUiState = feedsViewModel.uiState
-    val isRefreshing: Boolean by feedsViewModel.isRefreshing.collectAsState()
+    val isRefreshing: Boolean = feedsViewModel.isRefreshing
 
     feedsViewModel.initialize()
 

@@ -35,8 +35,8 @@ open class FeedsViewModel @Inject constructor(
     private var initializeCalled = false
     private var page = 0
 
-    private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing = _isRefreshing.asStateFlow()
+    var isRefreshing by mutableStateOf(false)
+        private set
 
     @MainThread
     fun initialize() {
@@ -67,7 +67,7 @@ open class FeedsViewModel @Inject constructor(
     // 피드 리스트 갱신
     open fun refreshFeed() {
         viewModelScope.launch {
-            _isRefreshing.update { true }
+            isRefreshing = true
             try {
                 page = 0
                 feedWithPageUseCase.invoke(page)
@@ -75,7 +75,7 @@ open class FeedsViewModel @Inject constructor(
             } catch (e: Exception) {
                 handleErrorMsg(e)
             } finally {
-                _isRefreshing.update { false }
+                isRefreshing = false
             }
         }
     }

@@ -59,11 +59,11 @@ class MyFeedsViewModel @Inject constructor(
     }
 
     override fun refreshFeed() {
-
+        Log.d("__MyFeedsViewModel", "refreshFeed called but nothing to do")
     }
 
     override fun onBottom() {
-
+        Log.d("__MyFeedsViewModel", "onBottom called but nothing to do")
     }
 
 
