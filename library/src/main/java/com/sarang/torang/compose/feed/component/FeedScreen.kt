@@ -15,14 +15,18 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.uistate.FeedsUiState
+import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,6 +54,8 @@ internal fun FeedScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutine = rememberCoroutineScope()
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+    var backPressHandled by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
     // snackbar process
     LaunchedEffect(key1 = uiState, block = {
         if (uiState is FeedUiState.Error) {
@@ -61,13 +67,18 @@ internal fun FeedScreen(
     })
 
     if (onBackToTop) {
-        BackHandler {
+        BackHandler(enabled = !backPressHandled) {
             if (listState.firstVisibleItemIndex != 0) {
                 coroutine.launch {
                     listState.animateScrollToItem(0)
                 }
             } else {
-                onBackPressedDispatcher?.onBackPressed()
+                backPressHandled = true
+                coroutineScope.launch {
+                    awaitFrame()
+                    onBackPressedDispatcher?.onBackPressed()
+                    backPressHandled = false
+                }
             }
         }
     }
