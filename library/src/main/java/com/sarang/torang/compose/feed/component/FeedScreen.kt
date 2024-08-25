@@ -49,6 +49,7 @@ internal fun FeedScreen(
     onBackToTop: Boolean = true,
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
 ) {
+    val TAG = "__FeedScreen"
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutine = rememberCoroutineScope()
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
@@ -57,6 +58,7 @@ internal fun FeedScreen(
     // snackbar process
     LaunchedEffect(key1 = uiState, block = {
         if (uiState is FeedUiState.Error) {
+            Log.d(TAG, "error message : ${uiState.msg}")
             uiState.msg?.let {
                 snackbarHostState.showSnackbar(it, duration = SnackbarDuration.Short)
                 consumeErrorMessage.invoke()

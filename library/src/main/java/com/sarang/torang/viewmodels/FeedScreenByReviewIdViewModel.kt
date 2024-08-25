@@ -48,6 +48,7 @@ class FeedScreenByReviewIdViewModel @Inject constructor(
                         onFavorite = { onFavorite(reviewId) }
                     )))
             } catch (e: Exception) {
+                uiState = FeedUiState.Error(e.message.toString())
                 Log.e("__FeedScreenByReviewIdViewModel", e.message.toString())
             }
         }
