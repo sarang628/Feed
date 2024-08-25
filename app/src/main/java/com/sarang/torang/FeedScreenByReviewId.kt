@@ -10,7 +10,7 @@ import com.sryang.library.pullrefresh.RefreshIndicatorState
 import com.sryang.library.pullrefresh.rememberPullToRefreshState
 
 @Composable
-private fun FeedScreenByReviewId(reviewId: String) {
+fun FeedScreenByReviewId(reviewId: String) {
     val state = rememberPullToRefreshState()
     com.sarang.torang.compose.feed.FeedScreenByReviewId(
         reviewId = Integer.parseInt(reviewId),

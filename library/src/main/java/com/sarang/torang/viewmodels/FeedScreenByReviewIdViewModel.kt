@@ -35,7 +35,7 @@ class FeedScreenByReviewIdViewModel @Inject constructor(
     isLoginFlowUseCase
 ) {
     fun getFeedByReviewId(reviewId: Int) {
-        Log.d("__FeedScreenByReviewIdViewModel", "load feed by reviewId : ${reviewId}")
+        Log.d("__FeedScreenByReviewIdViewModel", "load feed by reviewId : $reviewId")
         uiState = FeedUiState.Loading
         viewModelScope.launch {
 

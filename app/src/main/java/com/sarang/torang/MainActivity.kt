@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.sunflower.ui.TorangTheme
 import com.sarang.torang.compose.feed.Feed
+import com.sarang.torang.compose.feed.FeedScreenByReviewId
 import com.sarang.torang.compose.feed.FeedScreenForMain
 import com.sarang.torang.compose.feed.MyFeedScreen
 import com.sarang.torang.di.feed_di.shimmerBrush
@@ -90,9 +91,9 @@ class MainActivity : ComponentActivity() {
                             })
                         }*/
                         Box(modifier = Modifier.height((LocalConfiguration.current.screenHeightDp - 30).dp)) {
-                            FeedScreenForMain()
+//                            FeedScreenForMain()
 //                            MyFeedScreen(reviewId)
-//                            FeedScreenByReviewId(reviewId)
+                            FeedScreenByReviewId(reviewId)
 //                            FeedScreenByRestaurantId(restaurantId = 0)
                         }
 //                            LoginRepositoryTest(loginRepository = loginRepository)
