@@ -1,6 +1,12 @@
 package com.sarang.torang.compose.feed
 
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,6 +38,7 @@ fun FeedScreenByReviewId(
     val uiState: FeedUiState = feedsViewModel.uiState
     val isRefreshing: Boolean = feedsViewModel.isRefreshing
     val isLogin: Boolean by feedsViewModel.isLogin.collectAsState(initial = false)
+    val backPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
 
     LaunchedEffect(key1 = reviewId) {
         feedsViewModel.getFeedByReviewId(reviewId)
@@ -39,7 +46,16 @@ fun FeedScreenByReviewId(
 
     FeedScreen(
         uiState = uiState,
-        topAppBar = { /*TODO*/ },
+        topAppBar = {
+            TopAppBar(title = { /*TODO*/ }, navigationIcon = {
+                IconButton(onClick = { backPressedDispatcher?.onBackPressed() }) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                        contentDescription = ""
+                    )
+                }
+            })
+        },
         consumeErrorMessage = { feedsViewModel.clearErrorMsg() },
         onRefresh = { feedsViewModel.refreshFeed() },
         onBottom = { feedsViewModel.onBottom() },
