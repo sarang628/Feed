@@ -77,9 +77,9 @@ class MainActivity : ComponentActivity() {
                             })
                         }*/
                         Box(modifier = Modifier.height((LocalConfiguration.current.screenHeightDp - 30).dp)) {
-//                            FeedScreenForMain()
+                            FeedScreenForMain()
 //                            MyFeedScreen(reviewId)
-                            FeedScreenByReviewId(reviewId)
+//                            FeedScreenByReviewId(reviewId)
 //                            FeedScreenByRestaurantId(restaurantId = 0)
                         }
 //                            LoginRepositoryTest(loginRepository = loginRepository)

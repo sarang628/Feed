@@ -37,10 +37,14 @@ open class FeedsViewModel @Inject constructor(
     var isRefreshing by mutableStateOf(false)
         private set
 
+    val TAG = "__FeedsViewModel"
+
     @MainThread
     fun initialize() {
         if (initializeCalled) return
         initializeCalled = true
+
+        Log.d("__FeedsViewModel", "initialize")
         viewModelScope.launch {
             try {
                 feedWithPageUseCase.invoke(page)
@@ -52,7 +56,7 @@ open class FeedsViewModel @Inject constructor(
             getFeedFlowUseCase
                 .invoke()
                 .collect { list ->
-                    Log.d("__FeedsViewModel", "received list : ${list.size}")
+                    Log.d("__FeedsViewModel", "received feed list : ${list.size}")
                     uiState = FeedUiState.Success(list = list.map { review ->
                         review.copy(
                             onLike = { onLike(review.reviewId) },
@@ -65,6 +69,7 @@ open class FeedsViewModel @Inject constructor(
 
     // 피드 리스트 갱신
     open fun refreshFeed() {
+        Log.d(TAG, "refreshFeed")
         viewModelScope.launch {
             isRefreshing = true
             try {
@@ -139,6 +144,7 @@ open class FeedsViewModel @Inject constructor(
     open fun onBottom() {
         viewModelScope.launch {
             try {
+                Log.d(TAG, "called onBottom. request $page pages.")
                 feedWithPageUseCase.invoke(page)
                 page++
             } catch (e: Exception) {
