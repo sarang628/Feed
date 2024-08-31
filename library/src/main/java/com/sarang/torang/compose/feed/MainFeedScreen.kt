@@ -46,6 +46,7 @@ fun FeedScreenForMain(
         onLike: (Int) -> Unit,
         onFavorite: (Int) -> Unit,
         isLogin: Boolean,
+        onVideoClick: () -> Unit,
     ) -> Unit
     ),
     onAddReview: (() -> Unit),
@@ -74,7 +75,8 @@ fun FeedScreenForMain(
                 it,
                 { if (isLogin) feedsViewModel.onLike(it) },
                 { if (isLogin) feedsViewModel.onFavorite(it) },
-                isLogin
+                isLogin,
+                { feedsViewModel.onVideoClick(it.reviewId) }
             )
         },
         onTop = onTop,

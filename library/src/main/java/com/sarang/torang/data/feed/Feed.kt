@@ -24,6 +24,7 @@ data class Feed(
     val onName: (() -> Unit)? = null,
     val onRestaurant: (() -> Unit)? = null,
     val onImage: ((Int) -> Unit)? = null,
+    val isPlaying : Boolean = false
 )
 
 val Feed.visibleLike: Boolean get() = this.likeAmount > 0

@@ -1,5 +1,6 @@
 package com.sarang.torang
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import com.sarang.torang.compose.feed.Feed
 import com.sarang.torang.data.feed.Feed
@@ -12,13 +13,14 @@ fun provideFeed(): @Composable (
     onLike: (Int) -> Unit,
     onFavorite: (Int) -> Unit,
     isLogin: Boolean,
-) -> Unit) = { it, onLike, onFavorite, isLogin ->
+    onVideoClick: () -> Unit,
+) -> Unit) = { feed, onLike, onFavorite, isLogin, onVideoClick ->
     Feed(
-        review = it.toReview(),
+        review = feed.toReview(),
         imageLoadCompose = provideTorangAsyncImage(),
         onMenu = {},
-        onLike = { onLike.invoke(it.reviewId) },
-        onFavorite = { onFavorite.invoke(it.reviewId) },
+        onLike = { onLike.invoke(feed.reviewId) },
+        onFavorite = { onFavorite.invoke(feed.reviewId) },
         onComment = {},
         onShare = {},
         onProfile = {},
@@ -28,6 +30,14 @@ fun provideFeed(): @Composable (
         onRestaurant = {},
         onLikes = {},
         isLogin = isLogin,
-        expandableText = provideExpandableText()
+        expandableText = provideExpandableText(),
+        videoPlayer = {
+                VideoPlayerScreen(
+                    videoUrl = it,
+                    isPlaying = feed.isPlaying,
+                    onClick = onVideoClick,
+                    onPlay = {}
+                )
+        }
     )
 }

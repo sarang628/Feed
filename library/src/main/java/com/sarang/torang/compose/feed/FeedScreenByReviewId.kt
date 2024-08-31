@@ -31,6 +31,7 @@ fun FeedScreenByReviewId(
         onLike: (Int) -> Unit,
         onFavorite: (Int) -> Unit,
         isLogin: Boolean,
+        onVideoClick: () -> Unit,
     ) -> Unit),
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
 ) {
@@ -66,7 +67,8 @@ fun FeedScreenByReviewId(
                 it,
                 { feedsViewModel.onLike(it) },
                 { feedsViewModel.onFavorite(it) },
-                isLogin
+                isLogin,
+                { feedsViewModel.onVideoClick(it.reviewId) }
             )
         },
         consumeOnTop = { consumeOnTop?.invoke() },

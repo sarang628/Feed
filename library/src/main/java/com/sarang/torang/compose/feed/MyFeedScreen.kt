@@ -39,6 +39,7 @@ fun MyFeedScreen(
         onLike: (Int) -> Unit,
         onFavorite: (Int) -> Unit,
         isLogin: Boolean,
+        onVideoClick: () -> Unit,
     ) -> Unit),
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
 ) {
@@ -69,8 +70,11 @@ fun MyFeedScreen(
             }, {
                 feedsViewModel.onFavorite(it)
             },
-                isLogin
+                isLogin, {
+                    feedsViewModel.onVideoClick(it.reviewId)
+                }
             )
+
         },
         listState = listState,
         shimmerBrush = shimmerBrush,

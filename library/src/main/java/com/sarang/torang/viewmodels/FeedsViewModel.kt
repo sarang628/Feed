@@ -153,4 +153,19 @@ open class FeedsViewModel @Inject constructor(
             }
         }
     }
+
+    fun onVideoClick(reviewId: Int) {
+        if (uiState is FeedUiState.Success) {
+            (uiState as FeedUiState.Success).let {
+                uiState = it.copy(
+                    list = it.list.map {
+                        if (it.reviewId == reviewId)
+                            it.copy(isPlaying = !it.isPlaying)
+                        else
+                            it
+                    }
+                )
+            }
+        }
+    }
 }
