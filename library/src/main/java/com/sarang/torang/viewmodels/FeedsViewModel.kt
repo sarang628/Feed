@@ -168,4 +168,12 @@ open class FeedsViewModel @Inject constructor(
             }
         }
     }
+
+    fun onFocusItemIndex(index: Int) {
+        if (uiState is FeedUiState.Success) {
+            (uiState as FeedUiState.Success).let {
+                uiState = it.copy(focusedIndex = index)
+            }
+        }
+    }
 }

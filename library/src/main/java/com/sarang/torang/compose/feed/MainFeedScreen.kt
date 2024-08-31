@@ -72,7 +72,12 @@ fun FeedScreenForMain(
         },
         feed = { it ->
             feed(
-                it,
+                it.copy(
+                    isPlaying = it.isPlaying
+                            && if (uiState is FeedUiState.Success) {
+                        uiState.focusedIndex == uiState.list.indexOf(it)
+                    } else false
+                ),
                 { if (isLogin) feedsViewModel.onLike(it) },
                 { if (isLogin) feedsViewModel.onFavorite(it) },
                 isLogin,
@@ -82,7 +87,10 @@ fun FeedScreenForMain(
         onTop = onTop,
         consumeOnTop = consumeOnTop,
         shimmerBrush = shimmerBrush,
-        pullToRefreshLayout = pullToRefreshLayout
+        pullToRefreshLayout = pullToRefreshLayout,
+        onFocusItemIndex = {
+            feedsViewModel.onFocusItemIndex(it)
+        }
     )
 }
 
@@ -102,6 +110,7 @@ internal fun MainFeed(
     consumeOnTop: () -> Unit,
     shimmerBrush: @Composable (Boolean) -> Brush,
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
+    onFocusItemIndex: (Int) -> Unit = {},
 ) {
     val scrollBehavior =
         TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
@@ -135,8 +144,10 @@ internal fun MainFeed(
             )
         },
         shimmerBrush = shimmerBrush,
-        pullToRefreshLayout = pullToRefreshLayout
+        pullToRefreshLayout = pullToRefreshLayout,
+        onFocusItemIndex = onFocusItemIndex
     )
+
 }
 
 @Preview

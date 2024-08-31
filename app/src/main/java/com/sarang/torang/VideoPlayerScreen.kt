@@ -61,7 +61,6 @@ fun VideoPlayerScreen(
                 setMediaItem(mediaItem)
                 prepare()
                 playWhenReady = isPlaying
-                Log.d(TAG, "addListener")
                 addListener(object : Player.Listener {
                     override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
                         Log.d(

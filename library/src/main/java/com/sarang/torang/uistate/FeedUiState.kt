@@ -5,6 +5,8 @@ import java.util.Objects
 
 sealed interface FeedUiState {
     data class Error(val msg: String?) : FeedUiState
-    data class Success(val list: List<Feed>, val msg: String? = null) : FeedUiState
+    data class Success(val list: List<Feed>, val msg: String? = null, val focusedIndex: Int = 0) :
+        FeedUiState
+
     object Loading : FeedUiState
 }

@@ -31,7 +31,6 @@ fun Feeds(
 
         is FeedsUiState.Empty -> {
             RefreshAndBottomDetectionLazyColunm(
-                // pull to refresh와 하단 감지 적용 LazyColunm
                 count = 0,
                 onBottom = {},
                 itemCompose = {},
@@ -46,12 +45,10 @@ fun Feeds(
 
         is FeedsUiState.Success -> {
             RefreshAndBottomDetectionLazyColunm(
-                // pull to refresh와 하단 감지 적용 LazyColunm
                 count = feedsUiState.reviews.size,
                 onBottom = onBottom,
                 itemCompose = {
                     feed.invoke(feedsUiState.reviews[it])
-
                 },
                 userScrollEnabled = scrollEnabled,
                 listState = listState,
