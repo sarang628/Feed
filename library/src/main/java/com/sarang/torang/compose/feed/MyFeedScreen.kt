@@ -14,12 +14,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.compose.feed.component.FeedScreen
 import com.sarang.torang.data.feed.Feed
+import com.sarang.torang.data.feed.adjustHeight
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.MyFeedsViewModel
 import kotlinx.coroutines.delay
@@ -47,6 +50,9 @@ fun MyFeedScreen(
     val uiState: FeedUiState = feedsViewModel.uiState
     val isRefreshing: Boolean = feedsViewModel.isRefreshing
     val isLogin by feedsViewModel.isLogin.collectAsState(false)
+    val screenHeightDp = LocalConfiguration.current.screenHeightDp
+    val screenWidthDp = LocalConfiguration.current.screenWidthDp
+    val density = LocalDensity.current
 
     LaunchedEffect(key1 = reviewId) {
         feedsViewModel.getUserFeedByReviewId(reviewId)
@@ -74,7 +80,7 @@ fun MyFeedScreen(
                 isLogin, {
                     feedsViewModel.onVideoClick(it.reviewId)
                 },
-                it.reviewImages.get(0).height
+                it.reviewImages[0].adjustHeight(density, screenWidthDp, screenHeightDp)
             )
 
         },
