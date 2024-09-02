@@ -32,7 +32,6 @@ import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
 
 private val TAG = "__FeedScreen"
-
 /**
  * @param onFocusItemIndex 비디오 재생을 위해 항목이 중앙에 있을때 호출되는 콜백
  */

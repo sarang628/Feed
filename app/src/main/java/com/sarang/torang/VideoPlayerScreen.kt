@@ -63,10 +63,6 @@ fun VideoPlayerScreen(
                 playWhenReady = isPlaying
                 addListener(object : Player.Listener {
                     override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
-                        Log.d(
-                            TAG,
-                            "onPlayWhenReadyChanged: playWhenReady: $playWhenReady, reason: $reason"
-                        )
                         onPlay.invoke(playWhenReady)
                         super.onPlayWhenReadyChanged(playWhenReady, reason)
                     }

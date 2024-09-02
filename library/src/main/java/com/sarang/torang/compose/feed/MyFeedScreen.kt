@@ -40,6 +40,7 @@ fun MyFeedScreen(
         onFavorite: (Int) -> Unit,
         isLogin: Boolean,
         onVideoClick: () -> Unit,
+        imageHeight: Int,
     ) -> Unit),
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
 ) {
@@ -72,7 +73,8 @@ fun MyFeedScreen(
             },
                 isLogin, {
                     feedsViewModel.onVideoClick(it.reviewId)
-                }
+                },
+                it.reviewImages.get(0).height
             )
 
         },

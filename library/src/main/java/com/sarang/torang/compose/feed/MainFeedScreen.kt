@@ -18,6 +18,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Brush.Companion.linearGradient
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.compose.feed.component.FeedScreen
 import com.sarang.torang.data.feed.Feed
+import com.sarang.torang.data.feed.adjustHeight
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.FeedsViewModel
 
@@ -47,6 +50,7 @@ fun FeedScreenForMain(
         onFavorite: (Int) -> Unit,
         isLogin: Boolean,
         onVideoClick: () -> Unit,
+        imageHeight: Int,
     ) -> Unit
     ),
     onAddReview: (() -> Unit),
@@ -58,6 +62,9 @@ fun FeedScreenForMain(
     val uiState: FeedUiState = feedsViewModel.uiState
     val isRefreshing: Boolean = feedsViewModel.isRefreshing
     val isLogin by feedsViewModel.isLogin.collectAsState(initial = false)
+    val screenHeightDp = LocalConfiguration.current.screenHeightDp
+    val screenWidthDp = LocalConfiguration.current.screenWidthDp
+    val density = LocalDensity.current
 
     feedsViewModel.initialize()
 
@@ -81,7 +88,8 @@ fun FeedScreenForMain(
                 { if (isLogin) feedsViewModel.onLike(it) },
                 { if (isLogin) feedsViewModel.onFavorite(it) },
                 isLogin,
-                { feedsViewModel.onVideoClick(it.reviewId) }
+                { feedsViewModel.onVideoClick(it.reviewId) },
+                it.reviewImages.get(0).adjustHeight(density, screenWidthDp, screenHeightDp)
             )
         },
         onTop = onTop,

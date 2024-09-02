@@ -6,9 +6,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.compose.feed.component.FeedScreen
 import com.sarang.torang.data.feed.Feed
+import com.sarang.torang.data.feed.adjustHeight
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.FeedScreenByRestaurantIdViewModel
 
@@ -26,6 +29,7 @@ fun FeedScreenByRestaurantId(
         onFavorite: (Int) -> Unit,
         isLogin: Boolean,
         onVideoClick: () -> Unit,
+        imageHeight: Int,
     ) -> Unit),
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
 ) {
@@ -33,6 +37,9 @@ fun FeedScreenByRestaurantId(
     val uiState: FeedUiState = feedsViewModel.uiState
     val isRefreshing: Boolean = feedsViewModel.isRefreshing
     val isLogin by feedsViewModel.isLogin.collectAsState(initial = false)
+    val screenHeightDp = LocalConfiguration.current.screenHeightDp
+    val screenWidthDp = LocalConfiguration.current.screenWidthDp
+    val density = LocalDensity.current
 
     LaunchedEffect(key1 = restaurantId) {
         feedsViewModel.getFeedByRestaurantId(restaurantId)
@@ -52,7 +59,8 @@ fun FeedScreenByRestaurantId(
                 { feedsViewModel.onLike(it) },
                 { feedsViewModel.onFavorite(it) },
                 isLogin,
-                { feedsViewModel.onVideoClick(it.reviewId) }
+                { feedsViewModel.onVideoClick(it.reviewId) },
+                it.reviewImages.get(0).adjustHeight(density, screenWidthDp, screenHeightDp)
             )
         },
         consumeOnTop = { consumeOnTop?.invoke() }, shimmerBrush = shimmerBrush,
