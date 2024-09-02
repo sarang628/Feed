@@ -16,8 +16,12 @@ data class FeedImage(
 fun FeedImage.adjustHeight(density: Density, screenWidthDp: Int, screenHeightDp: Int): Int {
     var newHeight = 0
     with(density) {
-        val widthDp = width.toDp().value.toInt()
-        val heightDp = height.toDp().value.toInt()
+        val widthDp = width.toDp().value.toInt() // 이미지 가로 크기
+        val heightDp = height.toDp().value.toInt() // 이미지 세로 크기
+
+        val imageAspectRatio = widthDp.toFloat() / heightDp.toFloat()
+        val screenAspectRatio = screenWidthDp.toFloat() / screenHeightDp.toFloat()
+
         Log.d(tag, "screen resolution : $screenWidthDp * $screenHeightDp")
         Log.d(tag, "picture resolution : $widthDp * $heightDp")
 
@@ -25,15 +29,16 @@ fun FeedImage.adjustHeight(density: Density, screenWidthDp: Int, screenHeightDp:
 
 
         if (width > 0 && height > 0) {
-            if (width > height) {
-                // 가로가 더 클 때, 가로 기준으로 크기를 조정
-                newHeight = (heightDp * screenWidthDp) / widthDp
-                Log.d("__FeedImage", "$heightDp * $screenWidthDp / $widthDp = $newHeight")
+            if (imageAspectRatio > screenAspectRatio) {
+                // 이미지가 화면보다 더 넓은 경우: 가로를 기준으로 크기를 맞춤
+                //newWidth = screenWidthDp
+                newHeight = (screenWidthDp / imageAspectRatio).toInt()
             } else {
-                // 세로가 더 클 때, 세로 기준으로 크기를 조정
-                newHeight = (widthDp * screenHeightDp) / heightDp
-                Log.d("__FeedImage", "$widthDp * $screenHeightDp / $heightDp = $newHeight")
+                // 이미지가 화면보다 더 높은 경우: 세로를 기준으로 크기를 맞춤
+                newHeight = screenHeightDp
+                //newWidth = (screenHeightDp * imageAspectRatio).toInt()
             }
+
         }
 
         Log.d(tag, "new height : $newHeight")

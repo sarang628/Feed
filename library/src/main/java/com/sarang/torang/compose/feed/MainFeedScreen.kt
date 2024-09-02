@@ -89,7 +89,7 @@ fun FeedScreenForMain(
                 { if (isLogin) feedsViewModel.onFavorite(it) },
                 isLogin,
                 { feedsViewModel.onVideoClick(it.reviewId) },
-                it.reviewImages.get(0).adjustHeight(density, screenWidthDp, screenHeightDp)
+                it.reviewImages[0].adjustHeight(density, screenWidthDp, screenHeightDp)
             )
         },
         onTop = onTop,
