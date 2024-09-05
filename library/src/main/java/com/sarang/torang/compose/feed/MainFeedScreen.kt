@@ -10,6 +10,7 @@ import androidx.compose.material.icons.outlined.AddCircle
 import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -123,7 +124,7 @@ internal fun MainFeed(
     shimmerBrush: @Composable (Boolean) -> Brush,
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
     onFocusItemIndex: (Int) -> Unit = {},
-    topAppIcon : ImageVector = Icons.AutoMirrored.Default.Send
+    topAppIcon: ImageVector = Icons.AutoMirrored.Default.Send,
 ) {
     val scrollBehavior =
         TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
@@ -142,16 +143,13 @@ internal fun MainFeed(
             TopAppBar(
                 title = { Text(text = "Torang", fontSize = 21.sp, fontWeight = FontWeight.Bold) },
                 actions = {
-                    Icon(imageVector = topAppIcon,
-                        contentDescription = "",
-                        modifier = Modifier
-                            .size(32.dp)
-                            .clickable(
-                                indication = null,
-                                interactionSource = interactionSource
-                            ) {
-                                onAddReview.invoke()
-                            })
+                    IconButton(onClick = { onAddReview.invoke() }) {
+                        Icon(
+                            imageVector = topAppIcon,
+                            contentDescription = "",
+                            modifier = Modifier.size(28.dp)
+                        )
+                    }
                 },
                 scrollBehavior = scrollBehavior
             )
