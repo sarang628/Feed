@@ -1,10 +1,13 @@
 package com.sarang.torang.compose.feed
 
+import android.graphics.drawable.Icon
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.outlined.AddCircle
+import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -18,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Brush.Companion.linearGradient
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -119,6 +123,7 @@ internal fun MainFeed(
     shimmerBrush: @Composable (Boolean) -> Brush,
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
     onFocusItemIndex: (Int) -> Unit = {},
+    topAppIcon : ImageVector = Icons.AutoMirrored.Default.Send
 ) {
     val scrollBehavior =
         TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
@@ -137,7 +142,7 @@ internal fun MainFeed(
             TopAppBar(
                 title = { Text(text = "Torang", fontSize = 21.sp, fontWeight = FontWeight.Bold) },
                 actions = {
-                    Icon(imageVector = Icons.Outlined.AddCircle,
+                    Icon(imageVector = topAppIcon,
                         contentDescription = "",
                         modifier = Modifier
                             .size(32.dp)
