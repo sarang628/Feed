@@ -1,13 +1,9 @@
 package com.sarang.torang.compose.feed
 
-import android.graphics.drawable.Icon
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
-import androidx.compose.material.icons.outlined.AddCircle
-import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,8 +39,8 @@ import com.sarang.torang.viewmodels.FeedsViewModel
  * @param feedsViewModel 피드 뷰모델
  * @param feed 피드 컴포저블 (제공받아야 함)
  * @param onAddReview 피드 추가 리뷰
- * @param onTop 피드 스크롤 탑
- * @param consumeOnTop 스크롤 탑 컨슈머
+ * @param scrollToTop 피드 스크롤 탑
+ * @param onScrollToTop 스크롤 탑 콜백 (이 콜백을 받으면 scrollToTop을 false로 바꿔줘야 함.)
  */
 @Composable
 fun FeedScreenForMain(
@@ -59,8 +55,8 @@ fun FeedScreenForMain(
     ) -> Unit
     ),
     onAddReview: (() -> Unit),
-    onTop: Boolean,
-    consumeOnTop: () -> Unit,
+    scrollToTop: Boolean,
+    onScrollToTop: () -> Unit,
     shimmerBrush: @Composable (Boolean) -> Brush,
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
 ) {
@@ -97,8 +93,8 @@ fun FeedScreenForMain(
                 it.reviewImages[0].adjustHeight(density, screenWidthDp, screenHeightDp)
             )
         },
-        onTop = onTop,
-        consumeOnTop = consumeOnTop,
+        onTop = scrollToTop,
+        consumeOnTop = onScrollToTop,
         shimmerBrush = shimmerBrush,
         pullToRefreshLayout = pullToRefreshLayout,
         onFocusItemIndex = {
