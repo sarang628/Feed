@@ -32,7 +32,7 @@ fun FeedTopAppBar(
     TopAppBar(
         title = { Text(text = "Torang", fontSize = 21.sp, fontWeight = FontWeight.Bold) },
         actions = {
-            IconButton(onClick = { onAddReview.invoke() }) {
+            IconButton(onClick = { onAlarm.invoke() }) {
                 Icon(
                     imageVector = Icons.Default.FavoriteBorder,
                     contentDescription = "",
