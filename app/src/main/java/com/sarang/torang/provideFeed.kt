@@ -1,6 +1,5 @@
 package com.sarang.torang
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import com.sarang.torang.compose.feed.Feed

@@ -12,6 +12,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,13 +26,13 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.tooling.preview.Preview
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.uistate.FeedsUiState
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
 
-private val TAG = "__FeedScreen"
 /**
  * @param onFocusItemIndex 비디오 재생을 위해 항목이 중앙에 있을때 호출되는 콜백
  */
@@ -41,9 +42,7 @@ internal fun FeedScreen(
     uiState: FeedUiState, /* ui state */
     consumeErrorMessage: () -> Unit, /* consume error message */
     topAppBar: @Composable () -> Unit,
-    feed: @Composable ((
-        feed: Feed,
-    ) -> Unit),
+    feed: @Composable ((feed: Feed) -> Unit),
     onBottom: () -> Unit,
     isRefreshing: Boolean,
     onRefresh: (() -> Unit),
@@ -56,6 +55,7 @@ internal fun FeedScreen(
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
     onFocusItemIndex: (Int) -> Unit = {},
 ) {
+    val TAG = "__FeedScreen"
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutine = rememberCoroutineScope()
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
@@ -155,4 +155,49 @@ internal fun FeedScreen(
             )
         }
     }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
+fun PreviewFeedScreen() {
+    FeedScreen(
+        uiState = FeedUiState.Success(
+            list = listOf(
+                Feed(
+                    reviewId = 0,
+                    restaurantId = 0,
+                    userId = 0,
+                    name = "1",
+                    restaurantName = "2",
+                    rating = 0f,
+                    profilePictureUrl = "",
+                    likeAmount = 0,
+                    commentAmount = 0,
+                    isLike = false,
+                    isFavorite = false,
+                    contents = "3",
+                    createDate = "4",
+                    reviewImages = listOf()
+                )
+            ),
+            msg = "",
+            focusedIndex = 0
+        ),
+        consumeErrorMessage = {},
+        topAppBar = {},
+        feed = {
+            Text("피드가 있어야 보임")
+        },
+        onBottom = {},
+        isRefreshing = false,
+        onRefresh = {},
+        onTop = false,
+        consumeOnTop = {},
+        shimmerBrush = { it -> Brush.linearGradient() },
+        pullToRefreshLayout = { _, _, contents ->
+            contents.invoke()
+        }
+    )
 }

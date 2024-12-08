@@ -1,7 +1,9 @@
 package com.sarang.torang.compose.feed.component
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -67,14 +69,35 @@ fun Feeds(
 @Composable
 fun PreviewFeeds() {
     Feeds(/* Preview */
+        modifier = Modifier.fillMaxSize(),
         onRefresh = {},
         onBottom = { /*TODO*/ },
         isRefreshing = false,
-        feed = { _-> },
+        feed = { _ -> Text("피드가 있어야 보임") },
         listState = rememberLazyListState(),
-        //feedsUiState = FeedsUiState.Loading
-        feedsUiState = FeedsUiState.Success(ArrayList<Feed>().apply {
-        }),
+        pullToRefreshLayout = { _, _, contents ->
+            contents.invoke()
+        },
+        feedsUiState = FeedsUiState.Success(
+            listOf(
+                Feed(
+                    reviewId = 0,
+                    restaurantId = 0,
+                    userId = 0,
+                    name = "1",
+                    restaurantName = "2",
+                    rating = 0f,
+                    profilePictureUrl = "",
+                    likeAmount = 0,
+                    commentAmount = 0,
+                    isLike = false,
+                    isFavorite = false,
+                    contents = "3",
+                    createDate = "4",
+                    reviewImages = listOf()
+                )
+            )
+        ),
         shimmerBrush = { it -> Brush.linearGradient() }
     )
 }

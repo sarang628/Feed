@@ -1,5 +1,6 @@
 package com.sarang.torang.compose.feed
 
+import android.util.Log
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.compose.feed.component.FeedScreen
+import com.sarang.torang.compose.feed.component.FeedTopAppBar
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.data.feed.adjustHeight
 import com.sarang.torang.uistate.FeedUiState
@@ -54,7 +56,13 @@ fun FeedScreenForMain(
         imageHeight: Int,
     ) -> Unit
     ),
-    onAddReview: (() -> Unit),
+    onAddReview: (() -> Unit) = {
+        Log.w(
+            "__FeedScreenForMain",
+            "onAddReview is not implemented"
+        )
+    },
+    onAlarm: () -> Unit = { Log.w("__FeedScreenForMain", "onAlarm is not implemented") },
     scrollToTop: Boolean,
     onScrollToTop: () -> Unit,
     shimmerBrush: @Composable (Boolean) -> Brush,
@@ -72,6 +80,7 @@ fun FeedScreenForMain(
     MainFeed(
         uiState = uiState,
         onAddReview = onAddReview,
+        onAlarm = onAlarm,
         isRefreshing = isRefreshing,
         onBottom = { feedsViewModel.onBottom() },
         onRefresh = { feedsViewModel.refreshFeed() },
@@ -107,7 +116,14 @@ fun FeedScreenForMain(
 @Composable
 internal fun MainFeed(
     uiState: FeedUiState, /* ui state */
-    onAddReview: (() -> Unit), /* click add review */
+    onAddReview: (() -> Unit) = {
+        Log.w(
+            "__MainFeedScreen",
+            "onAddReview is not implemented"
+        )
+    },
+    /* click add review */
+    onAlarm: () -> Unit = { Log.w("__MainFeedScreen", "onAlarm is not implemented") },
     consumeErrorMessage: () -> Unit, /* consume error message */
     onBottom: () -> Unit,
     feed: @Composable ((
@@ -136,18 +152,11 @@ internal fun MainFeed(
         scrollBehavior = scrollBehavior,
         consumeOnTop = consumeOnTop,
         topAppBar = {
-            TopAppBar(
-                title = { Text(text = "Torang", fontSize = 21.sp, fontWeight = FontWeight.Bold) },
-                actions = {
-                    IconButton(onClick = { onAddReview.invoke() }) {
-                        Icon(
-                            imageVector = topAppIcon,
-                            contentDescription = "",
-                            modifier = Modifier.size(28.dp)
-                        )
-                    }
-                },
-                scrollBehavior = scrollBehavior
+            FeedTopAppBar(
+                onAddReview = onAddReview,
+                topAppIcon = topAppIcon,
+                scrollBehavior = scrollBehavior,
+                onAlarm = onAlarm
             )
         },
         shimmerBrush = shimmerBrush,
@@ -161,15 +170,37 @@ internal fun MainFeed(
 @Composable
 fun PreviewMainFeedScreen() {
     MainFeed(/*Preview*/
-        uiState = FeedUiState.Loading,
+        uiState = FeedUiState.Success(
+            list = listOf(
+                Feed(
+                    reviewId = 0,
+                    restaurantId = 0,
+                    userId = 0,
+                    name = "1",
+                    restaurantName = "2",
+                    rating = 0f,
+                    profilePictureUrl = "",
+                    likeAmount = 0,
+                    commentAmount = 0,
+                    isLike = false,
+                    isFavorite = false,
+                    contents = "3",
+                    createDate = "4",
+                    reviewImages = listOf()
+                )
+            ),
+        ),
         onAddReview = { /*TODO*/ },
         consumeErrorMessage = {},
         onRefresh = {},
         onBottom = {},
+        pullToRefreshLayout = { _, _, contents ->
+            contents.invoke()
+        },
         isRefreshing = false,
         onTop = false,
         consumeOnTop = {},
-        feed = { _ -> },
+        feed = { _ -> Text("피드가 있어야 보임") },
         shimmerBrush = { it -> linearGradient() }
     )
 }
