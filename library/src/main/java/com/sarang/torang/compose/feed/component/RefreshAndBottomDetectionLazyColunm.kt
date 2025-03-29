@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sryang.library.BottomDetectingLazyColumn
 
 @Composable
 internal fun RefreshAndBottomDetectionLazyColunm(
@@ -23,6 +22,16 @@ internal fun RefreshAndBottomDetectionLazyColunm(
     listState: LazyListState = rememberLazyListState(),
     itemCompose: @Composable (Int) -> Unit,
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
+    bottomDetectingLazyColumn: @Composable (
+        Modifier,
+        Int,
+        () -> Unit,
+        @Composable (Int) -> Unit,
+        Boolean,
+        Arrangement.Vertical,
+        LazyListState,
+        @Composable (() -> Unit)?
+    ) -> Unit,
     contents: @Composable (() -> Unit)? = null,
 ) {
     if (pullToRefreshLayout == null) {
@@ -30,16 +39,16 @@ internal fun RefreshAndBottomDetectionLazyColunm(
     }
 
     pullToRefreshLayout?.invoke(isRefreshing = isRefreshing, onRefresh = onRefresh) {
-        BottomDetectingLazyColumn(
-            modifier = modifier,
-            items = count,
-            onBottom = { onBottom.invoke() },
-            composable = { itemCompose.invoke(it) },
-            userScrollEnabled = userScrollEnabled,
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            listState = listState
+        bottomDetectingLazyColumn.invoke(
+            modifier,
+            count,
+            onBottom,
+            itemCompose,
+            userScrollEnabled,
+            Arrangement.spacedBy(10.dp),
+            listState,
+            contents
         )
-        contents?.invoke()
     }
 }
 
@@ -58,19 +67,7 @@ fun PreviewRefreshAndBottomDetectionLazyColunm() {
         pullToRefreshLayout = { _, _, contents ->
             contents.invoke()
         },
-        listState = rememberLazyListState()
-    )
-}
-
-
-@Preview
-@Composable
-fun PreviewBottomDetectingLazyColumn() {
-    BottomDetectingLazyColumn(
-        onBottom = {},
-        composable = {
-            Text("111")
-        },
-        items = 5,
+        listState = rememberLazyListState(),
+        bottomDetectingLazyColumn = { _, _, _, _, _, _, _, _ -> }
     )
 }

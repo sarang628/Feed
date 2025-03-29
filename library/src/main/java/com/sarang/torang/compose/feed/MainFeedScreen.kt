@@ -2,7 +2,9 @@ package com.sarang.torang.compose.feed
 
 import android.util.Log
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -67,6 +69,16 @@ fun FeedScreenForMain(
     onScrollToTop: () -> Unit,
     shimmerBrush: @Composable (Boolean) -> Brush,
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
+    bottomDetectingLazyColumn: @Composable (
+        Modifier,
+        Int,
+        () -> Unit,
+        @Composable (Int) -> Unit,
+        Boolean,
+        Arrangement.Vertical,
+        LazyListState,
+        @Composable (() -> Unit)?
+    ) -> Unit
 ) {
     val uiState: FeedUiState = feedsViewModel.uiState
     val isRefreshing: Boolean = feedsViewModel.isRefreshing
@@ -108,7 +120,8 @@ fun FeedScreenForMain(
         pullToRefreshLayout = pullToRefreshLayout,
         onFocusItemIndex = {
             feedsViewModel.onFocusItemIndex(it)
-        }
+        },
+        bottomDetectingLazyColumn = bottomDetectingLazyColumn
     )
 }
 
@@ -137,6 +150,16 @@ internal fun MainFeed(
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
     onFocusItemIndex: (Int) -> Unit = {},
     topAppIcon: ImageVector = Icons.AutoMirrored.Default.Send,
+    bottomDetectingLazyColumn: @Composable (
+        Modifier,
+        Int,
+        () -> Unit,
+        @Composable (Int) -> Unit,
+        Boolean,
+        Arrangement.Vertical,
+        LazyListState,
+        @Composable (() -> Unit)?
+    ) -> Unit
 ) {
     val scrollBehavior =
         TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
@@ -161,7 +184,8 @@ internal fun MainFeed(
         },
         shimmerBrush = shimmerBrush,
         pullToRefreshLayout = pullToRefreshLayout,
-        onFocusItemIndex = onFocusItemIndex
+        onFocusItemIndex = onFocusItemIndex,
+        bottomDetectingLazyColumn = bottomDetectingLazyColumn
     )
 
 }
@@ -201,6 +225,8 @@ fun PreviewMainFeedScreen() {
         onTop = false,
         consumeOnTop = {},
         feed = { _ -> Text("피드가 있어야 보임") },
-        shimmerBrush = { it -> linearGradient() }
+        shimmerBrush = { it -> linearGradient() },
+        bottomDetectingLazyColumn = { _, _, _, _, _, _, _, _ ->
+        }
     )
 }

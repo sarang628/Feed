@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.sarang.torang.data.feed.Feed
+import com.sarang.torang.di.feed_di.provideBottonDetectingLazyColumn
 import com.sarang.torang.di.feed_di.shimmerBrush
 import com.sryang.library.pullrefresh.PullToRefreshLayoutState
 import com.sryang.library.pullrefresh.rememberPullToRefreshState
@@ -41,6 +42,7 @@ fun FeedScreenForMain(
         shimmerBrush = { shimmerBrush(it) },
         onScrollToTop = { onTop = false },
         feed = feed,
-        pullToRefreshLayout = pullToRefreshLayout
+        pullToRefreshLayout = pullToRefreshLayout,
+        bottomDetectingLazyColumn = provideBottonDetectingLazyColumn()
     )
 }

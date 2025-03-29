@@ -1,5 +1,6 @@
 package com.sarang.torang.compose.feed.component
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -25,6 +26,16 @@ fun Feeds(
     ) -> Unit),
     shimmerBrush: @Composable (Boolean) -> Brush,
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
+    bottomDetectingLazyColumn: @Composable (
+        Modifier,
+        Int,
+        () -> Unit,
+        @Composable (Int) -> Unit,
+        Boolean,
+        Arrangement.Vertical,
+        LazyListState,
+        @Composable (() -> Unit)?
+    ) -> Unit
 ) {
     when (feedsUiState) {
         is FeedsUiState.Loading -> {
@@ -39,7 +50,8 @@ fun Feeds(
                 isRefreshing = isRefreshing,
                 listState = listState,
                 userScrollEnabled = scrollEnabled,
-                onRefresh = onRefresh
+                onRefresh = onRefresh,
+                bottomDetectingLazyColumn = bottomDetectingLazyColumn
             ) {
                 EmptyFeed()
             }
@@ -57,7 +69,8 @@ fun Feeds(
                 modifier = modifier,
                 pullToRefreshLayout = pullToRefreshLayout,
                 isRefreshing = isRefreshing,
-                onRefresh = onRefresh
+                onRefresh = onRefresh,
+                bottomDetectingLazyColumn = bottomDetectingLazyColumn
             )
         }
 
@@ -98,6 +111,8 @@ fun PreviewFeeds() {
                 )
             )
         ),
-        shimmerBrush = { it -> Brush.linearGradient() }
+        shimmerBrush = { it -> Brush.linearGradient() },
+        bottomDetectingLazyColumn = { _, _, _, _, _, _, _, _ ->
+        }
     )
 }

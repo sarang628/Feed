@@ -3,6 +3,7 @@ package com.sarang.torang.compose.feed.component
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
@@ -33,6 +34,7 @@ import com.sarang.torang.uistate.FeedsUiState
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
 
+
 /**
  * @param onFocusItemIndex 비디오 재생을 위해 항목이 중앙에 있을때 호출되는 콜백
  */
@@ -54,6 +56,16 @@ internal fun FeedScreen(
     onBackToTop: Boolean = true,
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
     onFocusItemIndex: (Int) -> Unit = {},
+    bottomDetectingLazyColumn: @Composable (
+        Modifier,
+        Int,
+        () -> Unit,
+        @Composable (Int) -> Unit,
+        Boolean,
+        Arrangement.Vertical,
+        LazyListState,
+        @Composable (() -> Unit)?
+    ) -> Unit
 ) {
     val TAG = "__FeedScreen"
     val snackbarHostState = remember { SnackbarHostState() }
@@ -151,7 +163,8 @@ internal fun FeedScreen(
                 shimmerBrush = shimmerBrush,
                 pullToRefreshLayout = pullToRefreshLayout,
                 isRefreshing = isRefreshing,
-                onRefresh = onRefresh
+                onRefresh = onRefresh,
+                bottomDetectingLazyColumn = bottomDetectingLazyColumn
             )
         }
     }
@@ -198,6 +211,7 @@ fun PreviewFeedScreen() {
         shimmerBrush = { it -> Brush.linearGradient() },
         pullToRefreshLayout = { _, _, contents ->
             contents.invoke()
-        }
+        },
+        bottomDetectingLazyColumn = { _, _, _, _, _, _, _, _ -> }
     )
 }
