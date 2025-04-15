@@ -6,9 +6,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.Dp
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.di.feed_di.provideBottonDetectingLazyColumn
 import com.sarang.torang.di.feed_di.shimmerBrush
+import com.sarang.torang.di.image.provideZoomableTorangAsyncImage
 import com.sryang.library.pullrefresh.PullToRefreshLayoutState
 import com.sryang.library.pullrefresh.rememberPullToRefreshState
 
@@ -25,6 +29,7 @@ fun FeedScreenForMain(
         )
     },
     onAlarm: () -> Unit = { Log.w("__FeedScreenForMain", "onAlarm is not implemented") },
+    imageLoadCompose: @Composable (Modifier, String, Dp?, Dp?, ContentScale?) -> Unit = provideZoomableTorangAsyncImage(),
     feed: @Composable ((
         feed: Feed,
         onLike: (Int) -> Unit,
@@ -32,7 +37,7 @@ fun FeedScreenForMain(
         isLogin: Boolean,
         onVideoClick: () -> Unit,
         imageHeight: Int,
-    ) -> Unit) = provideFeed()
+    ) -> Unit) = provideFeed(imageLoadCompose = imageLoadCompose),
 ) {
     var onTop by remember { mutableStateOf(false) }
     com.sarang.torang.compose.feed.FeedScreenForMain(

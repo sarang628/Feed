@@ -1,13 +1,16 @@
 package com.sarang.torang
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.sarang.torang.compose.feed.Feed
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.di.feed_di.toReview
-import com.sarang.torang.di.image.provideTorangAsyncImage
+import com.sarang.torang.di.image.provideZoomableTorangAsyncImage
 
-fun provideFeed(): @Composable (
+fun provideFeed(imageLoadCompose: @Composable (Modifier, String, Dp?, Dp?, ContentScale?) -> Unit = provideZoomableTorangAsyncImage()): @Composable (
     (
     feed: Feed,
     onLike: (Int) -> Unit,
@@ -18,7 +21,7 @@ fun provideFeed(): @Composable (
 ) -> Unit) = { feed, onLike, onFavorite, isLogin, onVideoClick, imageHeight ->
     Feed(
         review = feed.toReview(),
-        imageLoadCompose = provideTorangAsyncImage(),
+        imageLoadCompose = imageLoadCompose,
         onMenu = {},
         onLike = { onLike.invoke(feed.reviewId) },
         onFavorite = { onFavorite.invoke(feed.reviewId) },
