@@ -13,3 +13,6 @@
 [submodule "gradle/TorangToml"]
 	path = gradle/TorangToml
 	url = https://github.com/sarang628/TorangToml.git
+[submodule "app/src/main/java/com/sarang/torang/di/repository"]
+	path = app/src/main/java/com/sarang/torang/di/image
+	url = https://github.com/sarang628/image.git
