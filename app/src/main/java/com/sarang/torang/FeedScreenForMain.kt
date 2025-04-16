@@ -29,7 +29,7 @@ fun FeedScreenForMain(
         )
     },
     onAlarm: () -> Unit = { Log.w("__FeedScreenForMain", "onAlarm is not implemented") },
-    imageLoadCompose: @Composable (Modifier, String, Dp?, Dp?, ContentScale?) -> Unit = provideZoomableTorangAsyncImage(),
+    imageLoadCompose: @Composable (Modifier, String, Dp?, Dp?, ContentScale?, Dp?) -> Unit = provideZoomableTorangAsyncImage(),
     feed: @Composable ((
         feed: Feed,
         onLike: (Int) -> Unit,

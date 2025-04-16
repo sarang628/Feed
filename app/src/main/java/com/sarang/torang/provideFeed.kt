@@ -10,7 +10,7 @@ import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.di.feed_di.toReview
 import com.sarang.torang.di.image.provideZoomableTorangAsyncImage
 
-fun provideFeed(imageLoadCompose: @Composable (Modifier, String, Dp?, Dp?, ContentScale?) -> Unit = provideZoomableTorangAsyncImage()): @Composable (
+fun provideFeed(imageLoadCompose: @Composable (Modifier, String, Dp?, Dp?, ContentScale?, Dp?) -> Unit = provideZoomableTorangAsyncImage()): @Composable (
     (
     feed: Feed,
     onLike: (Int) -> Unit,
