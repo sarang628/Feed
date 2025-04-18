@@ -1,6 +1,5 @@
 package com.sarang.torang.compose.feed.component
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -9,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.tooling.preview.Preview
+import com.sarang.torang.compose.feed.pullToRefreshLayoutType
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedsUiState
 
@@ -21,21 +21,10 @@ fun Feeds(
     feedsUiState: FeedsUiState,
     listState: LazyListState,
     scrollEnabled: Boolean = true,
-    feed: @Composable ((
-        feed: Feed,
-    ) -> Unit),
+    feed: @Composable ((feed: Feed) -> Unit),
     shimmerBrush: @Composable (Boolean) -> Brush,
-    pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
-    bottomDetectingLazyColumn: @Composable (
-        Modifier,
-        Int,
-        () -> Unit,
-        @Composable (Int) -> Unit,
-        Boolean,
-        Arrangement.Vertical,
-        LazyListState,
-        @Composable (() -> Unit)?
-    ) -> Unit
+    pullToRefreshLayout: pullToRefreshLayoutType,
+    bottomDetectingLazyColumn: bottomDetectingLazyColumnType
 ) {
     when (feedsUiState) {
         is FeedsUiState.Loading -> {
@@ -43,7 +32,7 @@ fun Feeds(
         }
 
         is FeedsUiState.Empty -> {
-            RefreshAndBottomDetectionLazyColunm(
+            RefreshAndBottomDetectionLazyColumn(
                 count = 0,
                 onBottom = {},
                 itemCompose = {},
@@ -58,12 +47,10 @@ fun Feeds(
         }
 
         is FeedsUiState.Success -> {
-            RefreshAndBottomDetectionLazyColunm(
+            RefreshAndBottomDetectionLazyColumn(
                 count = feedsUiState.reviews.size,
                 onBottom = onBottom,
-                itemCompose = {
-                    feed.invoke(feedsUiState.reviews[it])
-                },
+                itemCompose = { feed.invoke(feedsUiState.reviews[it]) },
                 userScrollEnabled = scrollEnabled,
                 listState = listState,
                 modifier = modifier,

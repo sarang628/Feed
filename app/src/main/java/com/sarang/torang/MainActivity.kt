@@ -3,16 +3,11 @@ package com.sarang.torang
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,7 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sarang.torang.di.image.PinchZoomImageBox
+import com.sarang.torang.di.image.provideImageLoader
+import com.sarang.torang.di.pinchzoom.PinchZoomImageBox
 import com.sarang.torang.repository.FeedRepository
 import com.sarang.torang.repository.LoginRepository
 import com.sarang.torang.repository.ProfileRepository
@@ -82,8 +78,10 @@ class MainActivity : ComponentActivity() {
                         }*/
                     Box(modifier = Modifier.height((LocalConfiguration.current.screenHeightDp - 30).dp)) {
 
-                        PinchZoomImageBox {
-                            FeedScreenForMain(imageLoadCompose = it)
+                        PinchZoomImageBox(provideImageLoader()) { imageLoader, zoomState ->
+                            FeedScreenForMain(imageLoadCompose = { modifier, url, width, height, contentScale, originHeight ->
+                                imageLoader.invoke(modifier, url, contentScale, originHeight)
+                            })
                         }
 
                         //MyFeedScreen(reviewId)

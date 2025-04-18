@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.compose.feed.component.FeedScreen
 import com.sarang.torang.compose.feed.component.FeedTopAppBar
+import com.sarang.torang.compose.feed.component.bottomDetectingLazyColumnType
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.data.feed.adjustHeight
 import com.sarang.torang.uistate.FeedUiState
@@ -48,37 +49,17 @@ import com.sarang.torang.viewmodels.FeedsViewModel
  */
 @Composable
 fun FeedScreenForMain(
+    tag: String = "__FeedScreenForMain",
     feedsViewModel: FeedsViewModel = hiltViewModel(),
-    feed: @Composable ((
-        feed: Feed,
-        onLike: (Int) -> Unit,
-        onFavorite: (Int) -> Unit,
-        isLogin: Boolean,
-        onVideoClick: () -> Unit,
-        imageHeight: Int,
-    ) -> Unit
-    ),
-    onAddReview: (() -> Unit) = {
-        Log.w(
-            "__FeedScreenForMain",
-            "onAddReview is not implemented"
-        )
-    },
+    feed: feedType,
+    onAddReview: (() -> Unit) = { Log.w(tag, "onAddReview is not implemented") },
     onAlarm: () -> Unit = { Log.w("__FeedScreenForMain", "onAlarm is not implemented") },
     scrollToTop: Boolean,
     onScrollToTop: () -> Unit,
     shimmerBrush: @Composable (Boolean) -> Brush,
-    pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
-    bottomDetectingLazyColumn: @Composable (
-        Modifier,
-        Int,
-        () -> Unit,
-        @Composable (Int) -> Unit,
-        Boolean,
-        Arrangement.Vertical,
-        LazyListState,
-        @Composable (() -> Unit)?
-    ) -> Unit
+    pullToRefreshLayout: pullToRefreshLayoutType = null,
+    bottomDetectingLazyColumn: bottomDetectingLazyColumnType,
+    scrollEnabled: Boolean = true
 ) {
     val uiState: FeedUiState = feedsViewModel.uiState
     val isRefreshing: Boolean = feedsViewModel.isRefreshing
@@ -96,9 +77,7 @@ fun FeedScreenForMain(
         isRefreshing = isRefreshing,
         onBottom = { feedsViewModel.onBottom() },
         onRefresh = { feedsViewModel.refreshFeed() },
-        consumeErrorMessage = {
-            feedsViewModel.clearErrorMsg()
-        },
+        consumeErrorMessage = { feedsViewModel.clearErrorMsg() },
         feed = { it ->
             feed(
                 it.copy(
@@ -118,52 +97,34 @@ fun FeedScreenForMain(
         consumeOnTop = onScrollToTop,
         shimmerBrush = shimmerBrush,
         pullToRefreshLayout = pullToRefreshLayout,
-        onFocusItemIndex = {
-            feedsViewModel.onFocusItemIndex(it)
-        },
-        bottomDetectingLazyColumn = bottomDetectingLazyColumn
+        onFocusItemIndex = { feedsViewModel.onFocusItemIndex(it) },
+        bottomDetectingLazyColumn = bottomDetectingLazyColumn,
+        scrollEnabled = scrollEnabled
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MainFeed(
+    tag: String = "__MainFeed",
     uiState: FeedUiState, /* ui state */
-    onAddReview: (() -> Unit) = {
-        Log.w(
-            "__MainFeedScreen",
-            "onAddReview is not implemented"
-        )
-    },
-    /* click add review */
-    onAlarm: () -> Unit = { Log.w("__MainFeedScreen", "onAlarm is not implemented") },
+    onAddReview: (() -> Unit) = { Log.w(tag, "onAddReview is not implemented") },
+    onAlarm: () -> Unit = { Log.w(tag, "onAlarm is not implemented") },
     consumeErrorMessage: () -> Unit, /* consume error message */
     onBottom: () -> Unit,
-    feed: @Composable ((
-        feed: Feed,
-    ) -> Unit),
+    feed: @Composable ((feed: Feed) -> Unit),
     onRefresh: (() -> Unit),
     isRefreshing: Boolean,
     onTop: Boolean,
     consumeOnTop: () -> Unit,
     shimmerBrush: @Composable (Boolean) -> Brush,
-    pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
+    pullToRefreshLayout: pullToRefreshLayoutType,
     onFocusItemIndex: (Int) -> Unit = {},
     topAppIcon: ImageVector = Icons.AutoMirrored.Default.Send,
-    bottomDetectingLazyColumn: @Composable (
-        Modifier,
-        Int,
-        () -> Unit,
-        @Composable (Int) -> Unit,
-        Boolean,
-        Arrangement.Vertical,
-        LazyListState,
-        @Composable (() -> Unit)?
-    ) -> Unit
+    bottomDetectingLazyColumn: bottomDetectingLazyColumnType,
+    scrollEnabled: Boolean = true
 ) {
-    val scrollBehavior =
-        TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
-    val interactionSource = remember { MutableInteractionSource() }
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     FeedScreen(
         uiState = uiState,
         consumeErrorMessage = consumeErrorMessage,
@@ -185,7 +146,8 @@ internal fun MainFeed(
         shimmerBrush = shimmerBrush,
         pullToRefreshLayout = pullToRefreshLayout,
         onFocusItemIndex = onFocusItemIndex,
-        bottomDetectingLazyColumn = bottomDetectingLazyColumn
+        bottomDetectingLazyColumn = bottomDetectingLazyColumn,
+        scrollEnabled = scrollEnabled
     )
 
 }

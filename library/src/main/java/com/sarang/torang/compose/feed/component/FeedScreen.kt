@@ -3,7 +3,6 @@ package com.sarang.torang.compose.feed.component
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
@@ -28,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
+import com.sarang.torang.compose.feed.pullToRefreshLayoutType
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.uistate.FeedsUiState
@@ -54,20 +54,12 @@ internal fun FeedScreen(
     scrollBehavior: TopAppBarScrollBehavior? = null,
     shimmerBrush: @Composable (Boolean) -> Brush,
     onBackToTop: Boolean = true,
-    pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
+    pullToRefreshLayout: pullToRefreshLayoutType,
     onFocusItemIndex: (Int) -> Unit = {},
-    bottomDetectingLazyColumn: @Composable (
-        Modifier,
-        Int,
-        () -> Unit,
-        @Composable (Int) -> Unit,
-        Boolean,
-        Arrangement.Vertical,
-        LazyListState,
-        @Composable (() -> Unit)?
-    ) -> Unit
+    bottomDetectingLazyColumn: bottomDetectingLazyColumnType,
+    scrollEnabled: Boolean = true
 ) {
-    val TAG = "__FeedScreen"
+    val tag = "__FeedScreen"
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutine = rememberCoroutineScope()
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
@@ -77,7 +69,7 @@ internal fun FeedScreen(
     // snackbar process
     LaunchedEffect(key1 = uiState, block = {
         if (uiState is FeedUiState.Error) {
-            Log.d(TAG, "error message : ${uiState.msg}")
+            Log.d(tag, "error message : ${uiState.msg}")
             uiState.msg?.let {
                 snackbarHostState.showSnackbar(it, duration = SnackbarDuration.Short)
                 consumeErrorMessage.invoke()
@@ -90,11 +82,9 @@ internal fun FeedScreen(
             listState.firstVisibleItemScrollOffset
         }.collect {
             if (listState.firstVisibleItemIndex == 0 && it < 500 && currentFocusItem != 0) {
-                Log.d(TAG, "currentFocusItem : ${listState.firstVisibleItemIndex} ")
                 currentFocusItem = 0
                 onFocusItemIndex.invoke(currentFocusItem)
             } else if (it > 500 && (currentFocusItem != listState.firstVisibleItemIndex + 1)) {
-                Log.d(TAG, "currentFocusItem : ${listState.firstVisibleItemIndex + 1} ")
                 currentFocusItem = listState.firstVisibleItemIndex + 1
                 onFocusItemIndex.invoke(currentFocusItem)
             }
@@ -119,26 +109,17 @@ internal fun FeedScreen(
     }
 
     LaunchedEffect(key1 = onTop) {
-        if (onTop)
-            Log.d("__FeedScreen", "received onTop:${onTop}")
-
         if (onTop) {
             consumeOnTop.invoke()
-            coroutine.launch {
-                listState.animateScrollToItem(0)
-            }
-            //listState.scrollToItem(0)
+            coroutine.launch { listState.animateScrollToItem(0) }
         }
     }
 
-    // snackbar + topAppBar + feedList
-    Scaffold(
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState)
-        },
+    Scaffold( // snackbar + topAppBar + feedList
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = topAppBar
-    ) { paddingValues ->
-        Box(modifier = Modifier.padding(paddingValues))
+    ) {
+        Box(modifier = Modifier.padding(it))
         {
             Feeds(
                 modifier = if (scrollBehavior != null) {
@@ -164,7 +145,8 @@ internal fun FeedScreen(
                 pullToRefreshLayout = pullToRefreshLayout,
                 isRefreshing = isRefreshing,
                 onRefresh = onRefresh,
-                bottomDetectingLazyColumn = bottomDetectingLazyColumn
+                bottomDetectingLazyColumn = bottomDetectingLazyColumn,
+                scrollEnabled = scrollEnabled
             )
         }
     }

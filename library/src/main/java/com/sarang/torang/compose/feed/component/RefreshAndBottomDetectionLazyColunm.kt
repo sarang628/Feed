@@ -10,9 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sarang.torang.compose.feed.pullToRefreshLayoutType
 
 @Composable
-internal fun RefreshAndBottomDetectionLazyColunm(
+internal fun RefreshAndBottomDetectionLazyColumn(
     modifier: Modifier = Modifier,
     count: Int,
     isRefreshing: Boolean,
@@ -21,17 +22,8 @@ internal fun RefreshAndBottomDetectionLazyColunm(
     userScrollEnabled: Boolean = true,
     listState: LazyListState = rememberLazyListState(),
     itemCompose: @Composable (Int) -> Unit,
-    pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
-    bottomDetectingLazyColumn: @Composable (
-        Modifier,
-        Int,
-        () -> Unit,
-        @Composable (Int) -> Unit,
-        Boolean,
-        Arrangement.Vertical,
-        LazyListState,
-        @Composable (() -> Unit)?
-    ) -> Unit,
+    pullToRefreshLayout: pullToRefreshLayoutType = null,
+    bottomDetectingLazyColumn: bottomDetectingLazyColumnType,
     contents: @Composable (() -> Unit)? = null,
 ) {
     if (pullToRefreshLayout == null) {
@@ -55,7 +47,7 @@ internal fun RefreshAndBottomDetectionLazyColunm(
 @Preview
 @Composable
 fun PreviewRefreshAndBottomDetectionLazyColunm() {
-    RefreshAndBottomDetectionLazyColunm(
+    RefreshAndBottomDetectionLazyColumn(
         modifier = Modifier.fillMaxSize(),
         count = 10,
         onBottom = {},

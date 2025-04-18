@@ -1,7 +1,7 @@
 package com.sarang.torang
 
 import androidx.compose.runtime.Composable
-import com.sarang.torang.di.feed_di.provideBottonDetectingLazyColumn
+import com.sarang.torang.di.feed_di.provideBottomDetectingLazyColumn
 import com.sarang.torang.di.feed_di.shimmerBrush
 import com.sryang.library.pullrefresh.rememberPullToRefreshState
 
@@ -13,6 +13,6 @@ fun FeedScreenByReviewId(reviewId: String) {
         shimmerBrush = { shimmerBrush(it) },
         feed = provideFeed(),
         pullToRefreshLayout = providePullToRefresh(state),
-        bottomDetectingLazyColumn = provideBottonDetectingLazyColumn()
+        bottomDetectingLazyColumn = provideBottomDetectingLazyColumn()
     )
 }
