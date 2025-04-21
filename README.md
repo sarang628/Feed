@@ -1,29 +1,38 @@
 # Feed Module
 
-피드 화면은 사용자가 작성한 리뷰를 리스트로 보여주는 화면.
-<br>
-좋아요, 즐겨찾기, 공유, 코멘트, 신고 등 다양한 이벤트 이용 가능.
+## Feature
+- 피드 화면은 사용자가 작성한 리뷰를 리스트로 표시
+- 핀치줌 이벤트 적용
+- 리뷰ID로 사용자가 업로드한 피드들을 불러온 후 해당 리뷰ID의 피드에 위치 맞추기
+- 리뷰ID에 해당하는 피드 하나만 보여주기
 
 <img src="screenshots/screen.png"/>
 
 ## Convention
 
-### package
+### package 구조
 
 <img src="screenshots/package.png" width="40%" height="40%"/>
 
-### Function
+### Function 명
 
 - Feed + Screen
 - Feed + ViewModel
 - GetFeed + UseCase
 
-## Case
+## UseCase
 
-- 피드를 로드 후 피드가 없으면 비어있음 표시
-- 좋아요 추가하기
-- 즐겨찾기 추가하기
-- 피드 불러오기
+- 즐겨찾기 추가 AddFavoriteUseCase
+- 좋아요 추가 AddLikeUseCase
+- 즐겨찾기 삭제 DeleteFavoriteUseCase
+- 좋아요 삭제 DeleteLikeUseCase
+- 피드 갱신 FeedRefreshUseCase
+- 피드 페이징 FeedWithPageUseCase
+- 식당 ID에 해당 모든 피드 GetFeedByRestaurantIdFlowUseCase
+- 리뷰 ID의 사용자 모든 피드 GetFeedByReviewIdUseCase
+- 피드 불러오기 GetFeedFlowUseCase
+- 내 피드 가져오기 GetMyFeedFlowUseCase
+- 
 
 ## Architecture
 

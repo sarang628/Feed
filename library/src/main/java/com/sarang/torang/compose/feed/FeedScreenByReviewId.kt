@@ -28,7 +28,7 @@ import com.sarang.torang.viewmodels.FeedScreenByReviewIdViewModel
 @Composable
 fun FeedScreenByReviewId(
     feedsViewModel: FeedScreenByReviewIdViewModel = hiltViewModel(),
-    reviewId: Int,
+    reviewId: Int = 245,
     ontop: Boolean = false,
     consumeOnTop: (() -> Unit)? = null,
     shimmerBrush: @Composable (Boolean) -> Brush,

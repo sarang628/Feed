@@ -37,14 +37,13 @@ open class FeedsViewModel @Inject constructor(
     var isRefreshing by mutableStateOf(false)
         private set
 
-    val TAG = "__FeedsViewModel"
+    val tag = "__FeedsViewModel"
 
     @MainThread
     fun initialize() {
         if (initializeCalled) return
         initializeCalled = true
 
-        Log.d("__FeedsViewModel", "initialize")
         viewModelScope.launch {
             try {
                 feedWithPageUseCase.invoke(page)
@@ -69,7 +68,6 @@ open class FeedsViewModel @Inject constructor(
 
     // 피드 리스트 갱신
     open fun refreshFeed() {
-        Log.d(TAG, "refreshFeed")
         viewModelScope.launch {
             isRefreshing = true
             try {
@@ -144,7 +142,7 @@ open class FeedsViewModel @Inject constructor(
     open fun onBottom() {
         viewModelScope.launch {
             try {
-                Log.d(TAG, "called onBottom. request $page pages.")
+                Log.d(tag, "called onBottom. request $page pages.")
                 feedWithPageUseCase.invoke(page)
                 page++
             } catch (e: Exception) {

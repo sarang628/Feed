@@ -1,33 +1,21 @@
 package com.sarang.torang.compose.feed
 
 import android.util.Log
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Brush.Companion.linearGradient
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.compose.feed.component.FeedScreen
 import com.sarang.torang.compose.feed.component.FeedTopAppBar
@@ -48,7 +36,7 @@ import com.sarang.torang.viewmodels.FeedsViewModel
  * @param onScrollToTop 스크롤 탑 콜백 (이 콜백을 받으면 scrollToTop을 false로 바꿔줘야 함.)
  */
 @Composable
-fun FeedScreenForMain(
+fun FeedScreenInMain(
     tag: String = "__FeedScreenForMain",
     feedsViewModel: FeedsViewModel = hiltViewModel(),
     feed: feedType,
@@ -70,7 +58,7 @@ fun FeedScreenForMain(
 
     feedsViewModel.initialize()
 
-    MainFeed(
+    FeedInMain(
         uiState = uiState,
         onAddReview = onAddReview,
         onAlarm = onAlarm,
@@ -105,7 +93,7 @@ fun FeedScreenForMain(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun MainFeed(
+internal fun FeedInMain(
     tag: String = "__MainFeed",
     uiState: FeedUiState, /* ui state */
     onAddReview: (() -> Unit) = { Log.w(tag, "onAddReview is not implemented") },
@@ -155,7 +143,7 @@ internal fun MainFeed(
 @Preview
 @Composable
 fun PreviewMainFeedScreen() {
-    MainFeed(/*Preview*/
+    FeedInMain(/*Preview*/
         uiState = FeedUiState.Success(
             list = listOf(
                 Feed(

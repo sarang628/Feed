@@ -37,7 +37,6 @@ class MyFeedsViewModel @Inject constructor(
     isLoginFlowUseCase
 ) {
     fun getUserFeedByReviewId(reviewId: Int) {
-        Log.d("__MyFeedsViewModel", "get user feed by reviewId : $reviewId")
         uiState = FeedUiState.Loading
         viewModelScope.launch {
             getMyAllFeedByReviewIdUseCase.invoke(reviewId)

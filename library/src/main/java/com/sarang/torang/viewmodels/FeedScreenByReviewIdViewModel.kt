@@ -35,21 +35,19 @@ class FeedScreenByReviewIdViewModel @Inject constructor(
     isLoginFlowUseCase
 ) {
     fun getFeedByReviewId(reviewId: Int) {
-        Log.d("__FeedScreenByReviewIdViewModel", "load feed by reviewId : $reviewId")
         uiState = FeedUiState.Loading
         viewModelScope.launch {
 
             try {
                 val result = getFeedByReviewIdUseCase.invoke(reviewId)
-                Log.d("__FeedScreenByReviewIdViewModel", "load feed by reviewId result : ${result}")
                 uiState = FeedUiState.Success(
-                    list = listOf(result.copy(
-                        onLike = { onLike(reviewId) },
-                        onFavorite = { onFavorite(reviewId) }
-                    )))
+                    list = listOf(
+                        result.copy(
+                            onLike = { onLike(reviewId) },
+                            onFavorite = { onFavorite(reviewId) }
+                        )))
             } catch (e: Exception) {
                 uiState = FeedUiState.Error(e.message.toString())
-                Log.e("__FeedScreenByReviewIdViewModel", e.message.toString())
             }
         }
     }

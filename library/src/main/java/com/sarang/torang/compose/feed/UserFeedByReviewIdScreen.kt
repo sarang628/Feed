@@ -29,35 +29,21 @@ import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.MyFeedsViewModel
 import kotlinx.coroutines.delay
 
+// formatter : off
 /**
+ * ### 리뷰ID의 해당 사용자 Feed 리스트 화면
  * @param listState - feeds 항목에 같은 listState를 넣어줘야 프로필에서 피드 클릭 시 해당 항목으로 이동함.
  */
 @Composable
-fun MyFeedScreen(
+fun UserFeedByReviewIdScreen(
     feedsViewModel: MyFeedsViewModel = hiltViewModel(),
     reviewId: Int,
     onBack: (() -> Unit)? = null,
     listState: LazyListState,
     shimmerBrush: @Composable (Boolean) -> Brush,
-    feed: @Composable ((
-        feed: Feed,
-        onLike: (Int) -> Unit,
-        onFavorite: (Int) -> Unit,
-        isLogin: Boolean,
-        onVideoClick: () -> Unit,
-        imageHeight: Int,
-    ) -> Unit),
+    feed: @Composable ((feed: Feed, onLike: (Int) -> Unit, onFavorite: (Int) -> Unit, isLogin: Boolean, onVideoClick: () -> Unit, imageHeight: Int) -> Unit),
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
-    bottomDetectingLazyColumn: @Composable (
-        Modifier,
-        Int,
-        () -> Unit,
-        @Composable (Int) -> Unit,
-        Boolean,
-        Arrangement.Vertical,
-        LazyListState,
-        @Composable (() -> Unit)?
-    ) -> Unit
+    bottomDetectingLazyColumn: @Composable (Modifier, Int, () -> Unit, @Composable (Int) -> Unit, Boolean, Arrangement.Vertical, LazyListState, @Composable (() -> Unit)?) -> Unit
 ) {
     val uiState: FeedUiState = feedsViewModel.uiState
     val isRefreshing: Boolean = feedsViewModel.isRefreshing
@@ -66,11 +52,11 @@ fun MyFeedScreen(
     val screenWidthDp = LocalConfiguration.current.screenWidthDp
     val density = LocalDensity.current
 
-    LaunchedEffect(key1 = reviewId) {
+    LaunchedEffect(key1 = reviewId) { // reviewID가 변경되면 피드 로드 요청
         feedsViewModel.getUserFeedByReviewId(reviewId)
     }
 
-    LaunchedEffect(key1 = uiState is FeedUiState.Success) {
+    LaunchedEffect(key1 = uiState is FeedUiState.Success) { // 피드 리스트에서 reviewId에 해당 피드로 이동
         val position = feedsViewModel.findIndexByReviewId(reviewId)
         delay(10)
         listState.scrollToItem(position)
@@ -84,17 +70,13 @@ fun MyFeedScreen(
         onRefresh = { feedsViewModel.refreshFeed() },
         onBottom = { feedsViewModel.onBottom() },
         feed = { it ->
-            feed.invoke(it, {
-                feedsViewModel.onLike(it)
-            }, {
-                feedsViewModel.onFavorite(it)
-            },
-                isLogin, {
-                    feedsViewModel.onVideoClick(it.reviewId)
-                },
+            feed.invoke(
+                it,
+                { feedsViewModel.onLike(it) },
+                { feedsViewModel.onFavorite(it) },
+                isLogin, { feedsViewModel.onVideoClick(it.reviewId) },
                 it.reviewImages[0].adjustHeight(density, screenWidthDp, screenHeightDp)
             )
-
         },
         listState = listState,
         shimmerBrush = shimmerBrush,
@@ -102,6 +84,8 @@ fun MyFeedScreen(
         bottomDetectingLazyColumn = bottomDetectingLazyColumn
     )
 }
+
+// formatter : on
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -114,20 +98,9 @@ internal fun MyFeed(
     consumeErrorMessage: () -> Unit,
     listState: LazyListState,
     shimmerBrush: @Composable (Boolean) -> Brush,
-    feed: @Composable ((
-        feed: Feed,
-    ) -> Unit),
+    feed: @Composable ((feed: Feed) -> Unit),
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
-    bottomDetectingLazyColumn: @Composable (
-        Modifier,
-        Int,
-        () -> Unit,
-        @Composable (Int) -> Unit,
-        Boolean,
-        Arrangement.Vertical,
-        LazyListState,
-        @Composable (() -> Unit)?
-    ) -> Unit
+    bottomDetectingLazyColumn: @Composable (Modifier, Int, () -> Unit, @Composable (Int) -> Unit, Boolean, Arrangement.Vertical, LazyListState, @Composable (() -> Unit)?) -> Unit
 ) {
     FeedScreen(
         uiState = uiState,
