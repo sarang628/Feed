@@ -69,7 +69,6 @@ internal fun FeedScreen(
     // snackbar process
     LaunchedEffect(key1 = uiState, block = {
         if (uiState is FeedUiState.Error) {
-            Log.d(tag, "error message : ${uiState.msg}")
             uiState.msg?.let {
                 snackbarHostState.showSnackbar(it, duration = SnackbarDuration.Short)
                 consumeErrorMessage.invoke()

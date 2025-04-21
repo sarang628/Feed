@@ -34,6 +34,7 @@ class FeedScreenByReviewIdViewModel @Inject constructor(
     getFeedFlowUseCase,
     isLoginFlowUseCase
 ) {
+    override val tag: String = "__FeedScreenByReviewIdViewModel"
     fun getFeedByReviewId(reviewId: Int) {
         uiState = FeedUiState.Loading
         viewModelScope.launch {
@@ -47,6 +48,7 @@ class FeedScreenByReviewIdViewModel @Inject constructor(
                             onFavorite = { onFavorite(reviewId) }
                         )))
             } catch (e: Exception) {
+                Log.e(tag, "getFeedByReviewId 실패 reviewId : $reviewId, error msg: ${e.message}")
                 uiState = FeedUiState.Error(e.message.toString())
             }
         }

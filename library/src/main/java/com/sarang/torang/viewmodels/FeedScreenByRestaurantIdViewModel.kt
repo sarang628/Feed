@@ -35,18 +35,33 @@ class FeedScreenByRestaurantIdViewModel @Inject constructor(
     isLoginFlowUseCase
 ) {
     fun getFeedByRestaurantId(restaurantId: Int) {
-        Log.d("__FeedScreenByRestaurantIdViewModel", "load feed by restaurantId : ${restaurantId}")
         uiState = FeedUiState.Loading
         viewModelScope.launch {
-            getFeedByRestaurantIdFlowUseCase.invoke(restaurantId).collect { list ->
-                list.map { review ->
-                    review.copy(
-                        onLike = { onLike(review.reviewId) },
-                        onFavorite = { onFavorite(review.reviewId) }
-                    )
-                }.let { list ->
-                    if (list.isNotEmpty()) {
-                        uiState = FeedUiState.Success(list = list)
+            try {
+                getFeedByRestaurantIdFlowUseCase.invoke(restaurantId).collect { list ->
+                    list.map { review ->
+                        review.copy(
+                            onLike = { onLike(review.reviewId) },
+                            onFavorite = { onFavorite(review.reviewId) }
+                        )
+                    }.let { list ->
+                        if (list.isNotEmpty()) {
+                            uiState = FeedUiState.Success(list = list)
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                when (uiState) {
+                    is FeedUiState.Error -> {
+                        Log.e(tag, "TODO:: $uiState, ${e.message}")
+                    }
+
+                    FeedUiState.Loading -> {
+                        uiState = FeedUiState.Error(e.message)
+                    }
+
+                    is FeedUiState.Success -> {
+                        Log.e(tag, "TODO:: $uiState, ${e.message}")
                     }
                 }
             }

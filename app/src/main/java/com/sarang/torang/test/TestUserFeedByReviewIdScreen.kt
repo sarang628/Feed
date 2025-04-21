@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.sarang.torang.SetReviewIdAssistChip
 import com.sarang.torang.compose.feed.UserFeedByReviewIdScreen
 import com.sarang.torang.di.feed_di.provideBottomDetectingLazyColumn
 import com.sarang.torang.di.feed_di.shimmerBrush
@@ -37,18 +38,8 @@ internal fun TestUserFeedByReviewIdScreen() {
             bottomDetectingLazyColumn = provideBottomDetectingLazyColumn()
         )
 
-        AssistChip(
-            modifier = Modifier.align(Alignment.TopEnd),
-            onClick = { },
-            label = {
-                Text(text = "MyFeed reviewId:")
-                BasicTextField(value = reviewId.toString(), onValueChange = {
-                    try {
-                        reviewId = it.toInt()
-                    } catch (e: Exception) {
-
-                    }
-                })
-            })
+        SetReviewIdAssistChip(modifier = Modifier.align(Alignment.TopEnd), reviewId) {
+            reviewId = it
+        }
     }
 }

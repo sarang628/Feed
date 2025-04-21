@@ -22,15 +22,21 @@ internal fun RefreshAndBottomDetectionLazyColumn(
     userScrollEnabled: Boolean = true,
     listState: LazyListState = rememberLazyListState(),
     itemCompose: @Composable (Int) -> Unit,
-    pullToRefreshLayout: pullToRefreshLayoutType = null,
+    pullToRefreshLayout: pullToRefreshLayoutType = { _, _, _ ->
+
+    },
     bottomDetectingLazyColumn: bottomDetectingLazyColumnType,
     contents: @Composable (() -> Unit)? = null,
 ) {
     if (pullToRefreshLayout == null) {
-        Log.e("_RefreshAndBottomDetectionLazyColunm", "pullToRefreshLayout is null")
+        Log.e(
+            "__RefreshAndBottomDetectionLazyColunm",
+            "it does not show feed.(pullToRefreshLayout is null)"
+        )
+        return
     }
 
-    pullToRefreshLayout?.invoke(isRefreshing = isRefreshing, onRefresh = onRefresh) {
+    pullToRefreshLayout.invoke(isRefreshing, onRefresh) {
         bottomDetectingLazyColumn.invoke(
             modifier,
             count,

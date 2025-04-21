@@ -37,7 +37,7 @@ open class FeedsViewModel @Inject constructor(
     var isRefreshing by mutableStateOf(false)
         private set
 
-    val tag = "__FeedsViewModel"
+    open val tag = "__FeedsViewModel"
 
     @MainThread
     fun initialize() {
