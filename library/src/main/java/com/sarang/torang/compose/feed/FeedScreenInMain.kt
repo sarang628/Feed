@@ -47,7 +47,8 @@ fun FeedScreenInMain(
     shimmerBrush: @Composable (Boolean) -> Brush,
     pullToRefreshLayout: pullToRefreshLayoutType = null,
     bottomDetectingLazyColumn: bottomDetectingLazyColumnType,
-    scrollEnabled: Boolean = true
+    scrollEnabled: Boolean = true,
+    pageScrollable : Boolean = true
 ) {
     val uiState: FeedUiState = feedsViewModel.uiState
     val isRefreshing: Boolean = feedsViewModel.isRefreshing
@@ -78,7 +79,8 @@ fun FeedScreenInMain(
                 { if (isLogin) feedsViewModel.onFavorite(it) },
                 isLogin,
                 { feedsViewModel.onVideoClick(it.reviewId) },
-                it.reviewImages[0].adjustHeight(density, screenWidthDp, screenHeightDp)
+                it.reviewImages[0].adjustHeight(density, screenWidthDp, screenHeightDp),
+                pageScrollable
             )
         },
         onTop = scrollToTop,

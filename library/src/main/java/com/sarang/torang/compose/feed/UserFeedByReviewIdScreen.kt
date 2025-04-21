@@ -41,9 +41,10 @@ fun UserFeedByReviewIdScreen(
     onBack: (() -> Unit)? = null,
     listState: LazyListState,
     shimmerBrush: @Composable (Boolean) -> Brush,
-    feed: @Composable ((feed: Feed, onLike: (Int) -> Unit, onFavorite: (Int) -> Unit, isLogin: Boolean, onVideoClick: () -> Unit, imageHeight: Int) -> Unit),
+    feed: feedType,
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
-    bottomDetectingLazyColumn: @Composable (Modifier, Int, () -> Unit, @Composable (Int) -> Unit, Boolean, Arrangement.Vertical, LazyListState, @Composable (() -> Unit)?) -> Unit
+    bottomDetectingLazyColumn: @Composable (Modifier, Int, () -> Unit, @Composable (Int) -> Unit, Boolean, Arrangement.Vertical, LazyListState, @Composable (() -> Unit)?) -> Unit,
+    pageScrollable : Boolean = true
 ) {
     val uiState: FeedUiState = feedsViewModel.uiState
     val isRefreshing: Boolean = feedsViewModel.isRefreshing
@@ -75,7 +76,8 @@ fun UserFeedByReviewIdScreen(
                 { feedsViewModel.onLike(it) },
                 { feedsViewModel.onFavorite(it) },
                 isLogin, { feedsViewModel.onVideoClick(it.reviewId) },
-                it.reviewImages[0].adjustHeight(density, screenWidthDp, screenHeightDp)
+                it.reviewImages[0].adjustHeight(density, screenWidthDp, screenHeightDp),
+                pageScrollable
             )
         },
         listState = listState,

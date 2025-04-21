@@ -199,7 +199,7 @@ fun TestPinchZoom() {
 fun PreviewFeedScreenForMain() {
     TestFeedScreenForMain(
         pullToRefreshLayout = { _, _, contents -> contents.invoke() },
-        feed = { _, _, _, _, _, _ ->
+        feed = { _, _, _, _, _, _, _ ->
         }
     )
 }

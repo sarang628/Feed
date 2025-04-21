@@ -26,9 +26,10 @@ fun FeedScreenByRestaurantId(
     ontop: Boolean = false,
     consumeOnTop: (() -> Unit)? = null,
     shimmerBrush: @Composable (Boolean) -> Brush,
-    feed: @Composable ((feed: Feed, onLike: (Int) -> Unit, onFavorite: (Int) -> Unit, isLogin: Boolean, onVideoClick: () -> Unit, imageHeight: Int) -> Unit),
+    feed: feedType,
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
-    bottomDetectingLazyColumn: @Composable (Modifier, Int, () -> Unit, @Composable (Int) -> Unit, Boolean, Arrangement.Vertical, LazyListState, @Composable (() -> Unit)?) -> Unit
+    bottomDetectingLazyColumn: @Composable (Modifier, Int, () -> Unit, @Composable (Int) -> Unit, Boolean, Arrangement.Vertical, LazyListState, @Composable (() -> Unit)?) -> Unit,
+    pageScrollable : Boolean = true
 ) {
     val tag = "FeedScreenByRestaurantId"
     val uiState: FeedUiState = feedsViewModel.uiState
@@ -57,7 +58,8 @@ fun FeedScreenByRestaurantId(
                 { feedsViewModel.onFavorite(it) },
                 isLogin,
                 { feedsViewModel.onVideoClick(it.reviewId) },
-                it.reviewImages.get(0).adjustHeight(density, screenWidthDp, screenHeightDp)
+                it.reviewImages.get(0).adjustHeight(density, screenWidthDp, screenHeightDp),
+                pageScrollable
             )
         },
         consumeOnTop = { consumeOnTop?.invoke() }, shimmerBrush = shimmerBrush,

@@ -18,7 +18,8 @@ fun provideFeed(imageLoadCompose: @Composable (Modifier, String, Dp?, Dp?, Conte
     isLogin: Boolean,
     onVideoClick: () -> Unit,
     imageHeight: Int,
-) -> Unit) = { feed, onLike, onFavorite, isLogin, onVideoClick, imageHeight ->
+    pageScrollAble : Boolean
+) -> Unit) = { feed, onLike, onFavorite, isLogin, onVideoClick, imageHeight, pageScrollAble ->
     Feed(
         review = feed.toReview(),
         imageLoadCompose = imageLoadCompose,
@@ -43,6 +44,7 @@ fun provideFeed(imageLoadCompose: @Composable (Modifier, String, Dp?, Dp?, Conte
                 onPlay = {}
             )
         },
-        imageHeight = if (imageHeight != 0) imageHeight.dp else 400.dp
+        imageHeight = if (imageHeight != 0) imageHeight.dp else 400.dp,
+        pageScrollAble = pageScrollAble
     )
 }
