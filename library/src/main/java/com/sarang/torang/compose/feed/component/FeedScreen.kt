@@ -54,13 +54,13 @@ import kotlinx.coroutines.launch
  * @param onRefresh 피드 갱신 요청
  * @param listState 리스트 상태 library
  * @param consumeOnTop 최상단 이벤트 소비
- * @param scrollBehavior
- * @param shimmerBrush
- * @param onBackToTop
- * @param pullToRefreshLayout
+ * @param scrollBehavior list와 topBar와 상호작용을 위한 behavior
+ * @param shimmerBrush loading 상태 피드 shimmer
+ * @param onBackToTop back 이벤트 시 리스트를 최상단으로 올리는 이벤트
+ * @param pullToRefreshLayout 당겨서 새로고침 layout UI
  * @param onFocusItemIndex 비디오 재생을 위해 항목이 중앙에 있을때 호출되는 콜백
- * @param bottomDetectingLazyColumn
- * @param scrollEnabled
+ * @param bottomDetectingLazyColumn 하단 감지 Column
+ * @param scrollEnabled 리스트 스크롤 가능 여부
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -91,47 +91,47 @@ fun FeedScreen(
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
         topBar = topAppBar
     ) {
-        Box(modifier = Modifier.padding(it))
-        {
-            when (uiState) {
-                is FeedUiState.Loading -> {
-                    FeedShimmer(shimmerBrush)
-                }
-
-                is FeedUiState.Empty -> {
-                    RefreshAndBottomDetectionLazyColumn(
-                        count = 0,
-                        onBottom = {},
-                        itemCompose = {},
-                        isRefreshing = isRefreshing,
-                        listState = listState,
-                        userScrollEnabled = scrollEnabled,
-                        onRefresh = onRefresh,
-                        bottomDetectingLazyColumn = bottomDetectingLazyColumn
-                    ) {
-                        EmptyFeed()
-                    }
-                }
-
-                is FeedUiState.Success -> {
-                    RefreshAndBottomDetectionLazyColumn(
-                        count = uiState.list.size,
-                        onBottom = onBottom,
-                        itemCompose = { feed.invoke(uiState.list[it]) },
-                        userScrollEnabled = scrollEnabled,
-                        listState = listState,
-                        modifier = if (scrollBehavior != null) {
-                            Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                        } else Modifier,
-                        pullToRefreshLayout = pullToRefreshLayout,
-                        isRefreshing = isRefreshing,
-                        onRefresh = onRefresh,
-                        bottomDetectingLazyColumn = bottomDetectingLazyColumn
-                    )
-                }
-
-                is FeedUiState.Error -> {}
+        when (uiState) {
+            is FeedUiState.Loading -> {
+                FeedShimmer(Modifier.padding(it), shimmerBrush)
             }
+
+            is FeedUiState.Empty -> {
+                RefreshAndBottomDetectionLazyColumn(
+                    modifier = Modifier.padding(it),
+                    count = 0,
+                    onBottom = {},
+                    itemCompose = {},
+                    isRefreshing = isRefreshing,
+                    listState = listState,
+                    userScrollEnabled = scrollEnabled,
+                    onRefresh = onRefresh,
+                    bottomDetectingLazyColumn = bottomDetectingLazyColumn
+                ) {
+                    EmptyFeed()
+                }
+            }
+
+            is FeedUiState.Success -> {
+                RefreshAndBottomDetectionLazyColumn(
+                    modifier = if (scrollBehavior != null) {
+                        Modifier
+                            .nestedScroll(scrollBehavior.nestedScrollConnection)
+                            .padding(it)
+                    } else Modifier.padding(it),
+                    count = uiState.list.size,
+                    onBottom = onBottom,
+                    itemCompose = { feed.invoke(uiState.list[it]) },
+                    userScrollEnabled = scrollEnabled,
+                    listState = listState,
+                    pullToRefreshLayout = pullToRefreshLayout,
+                    isRefreshing = isRefreshing,
+                    onRefresh = onRefresh,
+                    bottomDetectingLazyColumn = bottomDetectingLazyColumn
+                )
+            }
+
+            is FeedUiState.Error -> {}
         }
     }
 
