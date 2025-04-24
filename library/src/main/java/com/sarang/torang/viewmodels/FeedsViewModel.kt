@@ -55,7 +55,7 @@ open class FeedsViewModel @Inject constructor(
             getFeedFlowUseCase
                 .invoke()
                 .collect { list ->
-                    Log.d("__FeedsViewModel", "received feed list : ${list.size}")
+                    Log.d(tag, "received feed list : ${list.size}")
                     uiState = FeedUiState.Success(list = list.map { review ->
                         review.copy(
                             onLike = { onLike(review.reviewId) },
@@ -105,32 +105,35 @@ open class FeedsViewModel @Inject constructor(
 
     // 좋아여 클릭
     internal fun onLike(reviewId: Int) {
-        if (uiState is FeedUiState.Success) {
+        if (uiState !is FeedUiState.Success) return
 
-            viewModelScope.launch {
-                val review =
-                    (uiState as FeedUiState.Success).list.find { it.reviewId == reviewId }
-                review?.let {
-                    try {
-                        if (it.isLike) {
-                            deleteLikeUseCase.invoke(reviewId)
-                        } else {
-                            addLikeUseCase.invoke(reviewId)
-                        }
-                    } catch (e: Exception) {
-                        handleErrorMsg(e)
-                    }
+        onLike(uiState as FeedUiState.Success, reviewId)
+    }
+
+    // 좋아여 클릭
+    internal fun onLike(uiState: FeedUiState.Success, reviewId: Int) {
+        uiState.list.find { it.reviewId == reviewId }?.let {
+            try {
+                if (it.isLike) {
+                    viewModelScope.launch { deleteLikeUseCase.invoke(reviewId) }
+                } else {
+                    viewModelScope.launch { addLikeUseCase.invoke(reviewId) }
                 }
+            } catch (e: Exception) {
+                handleErrorMsg(e)
             }
         }
     }
 
     private fun handleErrorMsg(e: Exception) {
-        if (uiState is FeedUiState.Success) {
-            uiState = (uiState as FeedUiState.Success).copy(msg = e.message)
-        }
+        showError(e.message)
     }
 
+    private fun showError(msg: String?) {
+        if (uiState is FeedUiState.Success) {
+            uiState = (uiState as FeedUiState.Success).copy(msg = msg)
+        }
+    }
 
     // 에러메시지 삭제
     fun clearErrorMsg() {

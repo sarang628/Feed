@@ -18,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun FeedShimmer(shimmerBrush: @Composable (Boolean) -> Brush,) {
+internal fun FeedShimmer(shimmerBrush: @Composable (Boolean) -> Brush) {
     val showShimmer by remember { mutableStateOf(true) }
     Column {
         Box(

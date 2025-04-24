@@ -6,12 +6,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 typealias bottomDetectingLazyColumnType = @Composable (
-    Modifier,
-    Int,
-    () -> Unit,
-    @Composable (Int) -> Unit,
-    Boolean,
+    modifier: Modifier,
+    count: Int,
+    onBottom: () -> Unit,
+    itemCompose: @Composable (Int) -> Unit,
+    userScrollEnabled: Boolean,
     Arrangement.Vertical,
-    LazyListState,
-    @Composable (() -> Unit)?
+    listState: LazyListState,
+    contents: @Composable (() -> Unit)?
 ) -> Unit

@@ -19,7 +19,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.compose.feed.component.FeedScreen
-import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.data.feed.adjustHeight
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.FeedScreenByReviewIdViewModel
@@ -28,14 +27,14 @@ import com.sarang.torang.viewmodels.FeedScreenByReviewIdViewModel
 @Composable
 fun FeedScreenByReviewId(
     feedsViewModel: FeedScreenByReviewIdViewModel = hiltViewModel(),
-    reviewId: Int = 245,
-    ontop: Boolean = false,
+    reviewId: Int,
+    onTop: Boolean = false,
     consumeOnTop: (() -> Unit)? = null,
     shimmerBrush: @Composable (Boolean) -> Brush,
     feed: feedType,
     pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
     bottomDetectingLazyColumn: @Composable (Modifier, Int, () -> Unit, @Composable (Int) -> Unit, Boolean, Arrangement.Vertical, LazyListState, @Composable (() -> Unit)?) -> Unit,
-    pageScrollable : Boolean = true
+    pageScrollable: Boolean = true
 ) {
     val uiState: FeedUiState = feedsViewModel.uiState
     val isRefreshing: Boolean = feedsViewModel.isRefreshing
@@ -65,7 +64,7 @@ fun FeedScreenByReviewId(
         onRefresh = { feedsViewModel.refreshFeed() },
         onBottom = { feedsViewModel.onBottom() },
         isRefreshing = isRefreshing,
-        onTop = ontop,
+        onTop = onTop,
         feed = { it ->
             feed(
                 it,
@@ -73,7 +72,7 @@ fun FeedScreenByReviewId(
                 { feedsViewModel.onFavorite(it) },
                 isLogin,
                 { feedsViewModel.onVideoClick(it.reviewId) },
-                it.reviewImages.get(0).adjustHeight(density, screenWidthDp, screenHeightDp),
+                it.reviewImages[0].adjustHeight(density, screenWidthDp, screenHeightDp),
                 pageScrollable
             )
         },

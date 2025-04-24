@@ -3,6 +3,7 @@ package com.sarang.torang.viewmodels
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.sarang.torang.uistate.FeedUiState
+import com.sarang.torang.uistate.FeedUiState.*
 import com.sarang.torang.usecase.AddFavoriteUseCase
 import com.sarang.torang.usecase.AddLikeUseCase
 import com.sarang.torang.usecase.DeleteFavoriteUseCase
@@ -57,12 +58,14 @@ class FeedScreenByRestaurantIdViewModel @Inject constructor(
                     }
 
                     FeedUiState.Loading -> {
-                        uiState = FeedUiState.Error(e.message)
+                        uiState = Error(e.message)
                     }
 
                     is FeedUiState.Success -> {
                         Log.e(tag, "TODO:: $uiState, ${e.message}")
                     }
+
+                    FeedUiState.Empty -> TODO()
                 }
             }
         }

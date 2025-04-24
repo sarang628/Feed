@@ -3,11 +3,15 @@ package com.sarang.torang.compose.feed.component
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -24,58 +28,139 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.google.android.material.color.MaterialColors
 import com.sarang.torang.compose.feed.pullToRefreshLayoutType
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedUiState
-import com.sarang.torang.uistate.FeedsUiState
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
 
 
 /**
+ * 피드 화면
+ * @param uiState
+ * @param consumeErrorMessage snackBar에서 메세지 소비
+ * @param topAppBar 상단 앱 바
+ * @param feed 피드 항목 UI
+ * @param onBottom 하단 터치 이벤트
+ * @param isRefreshing 피드 갱신중 여부
+ * @param onRefresh 피드 갱신 요청
+ * @param listState 리스트 상태 library
+ * @param consumeOnTop 최상단 이벤트 소비
+ * @param scrollBehavior
+ * @param shimmerBrush
+ * @param onBackToTop
+ * @param pullToRefreshLayout
  * @param onFocusItemIndex 비디오 재생을 위해 항목이 중앙에 있을때 호출되는 콜백
+ * @param bottomDetectingLazyColumn
+ * @param scrollEnabled
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun FeedScreen(
-    uiState: FeedUiState, /* ui state */
-    consumeErrorMessage: () -> Unit, /* consume error message */
-    topAppBar: @Composable () -> Unit,
-    feed: @Composable ((feed: Feed) -> Unit),
-    onBottom: () -> Unit,
-    isRefreshing: Boolean,
-    onRefresh: (() -> Unit),
-    listState: LazyListState = rememberLazyListState(),
-    onTop: Boolean,
-    consumeOnTop: () -> Unit,
-    scrollBehavior: TopAppBarScrollBehavior? = null,
-    shimmerBrush: @Composable (Boolean) -> Brush,
-    onBackToTop: Boolean = true,
-    pullToRefreshLayout: pullToRefreshLayoutType,
-    onFocusItemIndex: (Int) -> Unit = {},
-    bottomDetectingLazyColumn: bottomDetectingLazyColumnType,
-    scrollEnabled: Boolean = true
+fun FeedScreen(
+    // @formatter:off
+    tag:                        String                              = "__FeedScreen",
+    uiState:                    FeedUiState                         = FeedUiState.Loading,
+    listState:                  LazyListState                       = rememberLazyListState(),
+    feed:                       @Composable (feed: Feed) -> Unit    = { feed ->  Log.e(tag, "feed is not set"); Text(modifier = Modifier.padding(5.dp).background(Color(0x55DDDDDD)), text = feed.contents) },
+    topAppBar:                  @Composable () -> Unit              = { Log.i(tag, "topAppBar is not set") },
+    shimmerBrush:               @Composable (Boolean) -> Brush      = { SolidColor(Color(0xFFEEEEEE)) },
+    pullToRefreshLayout:        pullToRefreshLayoutType             = {_,_,contents-> Log.w(tag, "pullToRefreshLayout is not set"); contents.invoke() },
+    bottomDetectingLazyColumn:  bottomDetectingLazyColumnType       = {_,count,_,itemCompose,_,_,_,contents-> Log.e(tag, "bottomDetectingLazyColumn is not set"); LazyColumn { items(count){itemCompose.invoke(it)} } },
+    isRefreshing:               Boolean                             = true,
+    onTop:                      Boolean                             = false,
+    scrollBehavior:             TopAppBarScrollBehavior?            = null,
+    onBackToTop:                Boolean                             = true,
+    scrollEnabled:              Boolean                             = true,
+    consumeErrorMessage:        () -> Unit                          = { Log.w(tag, "consumeErrorMessage is not set") },
+    onBottom:                   () -> Unit                          = { Log.i(tag, "onBottom is not set") },
+    onRefresh:                  () -> Unit                          = { Log.i(tag, "onRefresh is not set") },
+    consumeOnTop:               () -> Unit                          = { Log.i(tag, "consumeOnTop is not set") },
+    onFocusItemIndex:           (Int) -> Unit                       = { Log.i(tag, "onFocusItemIndex is not set") },
+    snackBarHostState:          SnackbarHostState                   = remember { SnackbarHostState() }
+    // @formatter:on
 ) {
-    val tag = "__FeedScreen"
-    val snackbarHostState = remember { SnackbarHostState() }
-    val coroutine = rememberCoroutineScope()
-    val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
-    var backPressHandled by remember { mutableStateOf(false) }
-    val coroutineScope = rememberCoroutineScope()
-    var currentFocusItem by remember { mutableIntStateOf(-1) }
-    // snackbar process
+    Scaffold( // snackbar + topAppBar + feedList
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
+        topBar = topAppBar
+    ) {
+        Box(modifier = Modifier.padding(it))
+        {
+            when (uiState) {
+                is FeedUiState.Loading -> {
+                    FeedShimmer(shimmerBrush)
+                }
+
+                is FeedUiState.Empty -> {
+                    RefreshAndBottomDetectionLazyColumn(
+                        count = 0,
+                        onBottom = {},
+                        itemCompose = {},
+                        isRefreshing = isRefreshing,
+                        listState = listState,
+                        userScrollEnabled = scrollEnabled,
+                        onRefresh = onRefresh,
+                        bottomDetectingLazyColumn = bottomDetectingLazyColumn
+                    ) {
+                        EmptyFeed()
+                    }
+                }
+
+                is FeedUiState.Success -> {
+                    RefreshAndBottomDetectionLazyColumn(
+                        count = uiState.list.size,
+                        onBottom = onBottom,
+                        itemCompose = { feed.invoke(uiState.list[it]) },
+                        userScrollEnabled = scrollEnabled,
+                        listState = listState,
+                        modifier = if (scrollBehavior != null) {
+                            Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                        } else Modifier,
+                        pullToRefreshLayout = pullToRefreshLayout,
+                        isRefreshing = isRefreshing,
+                        onRefresh = onRefresh,
+                        bottomDetectingLazyColumn = bottomDetectingLazyColumn
+                    )
+                }
+
+                is FeedUiState.Error -> {}
+            }
+        }
+    }
+
+    HandleSnackBar(uiState, snackBarHostState, consumeErrorMessage)
+    HandleOnFocusIndex(listState, onFocusItemIndex)
+    HandleBack(listState, onBackToTop)
+    HandleOnTop(listState, onTop, consumeOnTop)
+}
+
+@Composable
+private fun HandleSnackBar(
+    uiState: FeedUiState,
+    snackBarHostState: SnackbarHostState,
+    consumeErrorMessage: () -> Unit
+) {
+// snackbar process
     LaunchedEffect(key1 = uiState, block = {
         if (uiState is FeedUiState.Error) {
-            uiState.msg?.let {
-                snackbarHostState.showSnackbar(it, duration = SnackbarDuration.Short)
+            if (!uiState.msg.isNullOrEmpty()) {
+                snackBarHostState.showSnackbar(uiState.msg, duration = SnackbarDuration.Short)
                 consumeErrorMessage.invoke()
             }
         }
     })
+}
 
+@Composable
+private fun HandleOnFocusIndex(listState: LazyListState, onFocusItemIndex: (Int) -> Unit) {
+    var currentFocusItem by remember { mutableIntStateOf(-1) }
     LaunchedEffect(key1 = listState) {
         snapshotFlow {
             listState.firstVisibleItemScrollOffset
@@ -89,11 +174,17 @@ internal fun FeedScreen(
             }
         }
     }
+}
 
+@Composable
+private fun HandleBack(listState: LazyListState, onBackToTop: Boolean) {
+    var backPressHandled by remember { mutableStateOf(false) }
+    val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+    val coroutineScope = rememberCoroutineScope()
     if (onBackToTop) {
         BackHandler(enabled = !backPressHandled) {
             if (listState.firstVisibleItemIndex != 0) {
-                coroutine.launch {
+                coroutineScope.launch {
                     listState.animateScrollToItem(0)
                 }
             } else {
@@ -106,47 +197,15 @@ internal fun FeedScreen(
             }
         }
     }
+}
 
+@Composable
+private fun HandleOnTop(listState: LazyListState, onTop: Boolean, consumeOnTop: () -> Unit) {
+    val coroutine = rememberCoroutineScope()
     LaunchedEffect(key1 = onTop) {
         if (onTop) {
             consumeOnTop.invoke()
             coroutine.launch { listState.animateScrollToItem(0) }
-        }
-    }
-
-    Scaffold( // snackbar + topAppBar + feedList
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-        topBar = topAppBar
-    ) {
-        Box(modifier = Modifier.padding(it))
-        {
-            Feeds(
-                modifier = if (scrollBehavior != null) {
-                    Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                } else Modifier,
-                onBottom = onBottom,
-                feed = feed,
-                listState = listState,
-                feedsUiState = when (uiState) {
-                    is FeedUiState.Loading -> {
-                        FeedsUiState.Loading
-                    }
-
-                    is FeedUiState.Error -> {
-                        FeedsUiState.Error("")
-                    }
-
-                    is FeedUiState.Success -> {
-                        FeedsUiState.Success(uiState.list)
-                    }
-                },
-                shimmerBrush = shimmerBrush,
-                pullToRefreshLayout = pullToRefreshLayout,
-                isRefreshing = isRefreshing,
-                onRefresh = onRefresh,
-                bottomDetectingLazyColumn = bottomDetectingLazyColumn,
-                scrollEnabled = scrollEnabled
-            )
         }
     }
 }

@@ -13,7 +13,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.compose.feed.component.FeedScreen
-import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.data.feed.adjustHeight
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.FeedScreenByRestaurantIdViewModel
@@ -23,7 +22,7 @@ import com.sarang.torang.viewmodels.FeedScreenByRestaurantIdViewModel
 fun FeedScreenByRestaurantId(
     feedsViewModel: FeedScreenByRestaurantIdViewModel = hiltViewModel(),
     restaurantId: Int,
-    ontop: Boolean = false,
+    onTop: Boolean = false,
     consumeOnTop: (() -> Unit)? = null,
     shimmerBrush: @Composable (Boolean) -> Brush,
     feed: feedType,
@@ -31,7 +30,6 @@ fun FeedScreenByRestaurantId(
     bottomDetectingLazyColumn: @Composable (Modifier, Int, () -> Unit, @Composable (Int) -> Unit, Boolean, Arrangement.Vertical, LazyListState, @Composable (() -> Unit)?) -> Unit,
     pageScrollable : Boolean = true
 ) {
-    val tag = "FeedScreenByRestaurantId"
     val uiState: FeedUiState = feedsViewModel.uiState
     val isRefreshing: Boolean = feedsViewModel.isRefreshing
     val isLogin by feedsViewModel.isLogin.collectAsState(initial = false)
@@ -45,12 +43,11 @@ fun FeedScreenByRestaurantId(
 
     FeedScreen(
         uiState = uiState,
-        topAppBar = { /*TODO*/ },
         consumeErrorMessage = { feedsViewModel.clearErrorMsg() },
         onRefresh = { feedsViewModel.refreshFeed() },
         onBottom = { feedsViewModel.onBottom() },
         isRefreshing = isRefreshing,
-        onTop = ontop,
+        onTop = onTop,
         feed = { it ->
             feed(
                 it,
@@ -58,11 +55,12 @@ fun FeedScreenByRestaurantId(
                 { feedsViewModel.onFavorite(it) },
                 isLogin,
                 { feedsViewModel.onVideoClick(it.reviewId) },
-                it.reviewImages.get(0).adjustHeight(density, screenWidthDp, screenHeightDp),
+                it.reviewImages[0].adjustHeight(density, screenWidthDp, screenHeightDp),
                 pageScrollable
             )
         },
-        consumeOnTop = { consumeOnTop?.invoke() }, shimmerBrush = shimmerBrush,
+        consumeOnTop = { consumeOnTop?.invoke() },
+        shimmerBrush = shimmerBrush,
         pullToRefreshLayout = pullToRefreshLayout,
         bottomDetectingLazyColumn = bottomDetectingLazyColumn
     )
