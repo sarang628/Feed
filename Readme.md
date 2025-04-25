@@ -3,17 +3,17 @@
 <div style="display: flex; justify-content: center; gap: 10px;">
 
   <figure style="text-align: center;">
-    <img src="screenshots/preview2.png" width="300">
+    <img src="screenshots/preview2.png" width="250">
     <figcaption>Empty</figcaption>
   </figure>
 
   <figure style="text-align: center;">
-    <img src="screenshots/preview3.gif" width="300">
+    <img src="screenshots/preview3.gif" width="250">
     <figcaption>Loading</figcaption>
   </figure>
 
   <figure style="text-align: center;">
-    <img src="screenshots/preview4.gif" width="300">
+    <img src="screenshots/preview4.gif" width="250">
     <figcaption>Success</figcaption>
   </figure>
 
