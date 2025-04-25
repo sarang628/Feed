@@ -25,6 +25,24 @@ data class Feed(
     val onRestaurant: (() -> Unit)? = null,
     val onImage: ((Int) -> Unit)? = null,
     val isPlaying: Boolean = true,
-)
+) {
+    companion object {
+        val Empty = Feed(
+            reviewId = 0,
+            restaurantId = 0,
+            userId = 0,
+            name = "",
+            restaurantName = "",
+            rating = 0f,
+            profilePictureUrl = "",
+            likeAmount = 0,
+            commentAmount = 0,
+            isLike = false,
+            isFavorite = false,
+            contents = "",
+            createDate = ""
+        )
+    }
+}
 
 val Feed.visibleLike: Boolean get() = this.likeAmount > 0
