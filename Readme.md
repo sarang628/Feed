@@ -1,6 +1,23 @@
 # Feed Module
 
-<img src="screenshots/preview1.png" width="1000">
+<div style="display: flex; justify-content: center; gap: 10px;">
+
+  <figure style="text-align: center;">
+    <img src="screenshots/preview2.png" width="300">
+    <figcaption>Empty</figcaption>
+  </figure>
+
+  <figure style="text-align: center;">
+    <img src="screenshots/preview3.gif" width="300">
+    <figcaption>Loading</figcaption>
+  </figure>
+
+  <figure style="text-align: center;">
+    <img src="screenshots/preview4.gif" width="300">
+    <figcaption>Success</figcaption>
+  </figure>
+
+</div>
 
 피드(feed): 스크롤해서 볼 수 있는 콘텐츠 스트림
 
