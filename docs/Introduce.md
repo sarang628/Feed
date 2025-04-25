@@ -6,13 +6,13 @@
 - 리뷰ID로 사용자가 업로드한 피드들을 불러온 후 해당 리뷰ID의 피드에 위치 맞추기
 - 리뷰ID에 해당하는 피드 하나만 보여주기
 
-<img src="screenshots/screen.png"/>
+<img src="../screenshots/screen.png"/>
 
 ## Convention
 
 ### package 구조
 
-<img src="screenshots/package.png" width="40%" height="40%"/>
+<img src="../screenshots/package.png" width="40%" height="40%"/>
 
 ### Function 명
 
@@ -149,7 +149,7 @@ class FeedsViewModel @Inject constructor(
 
 ## Illustrating cycle of event
 
-<img src="screenshots/event_cycle.jpg">
+<img src="../screenshots/event_cycle.jpg">
 
 ## UnitTest
 
@@ -169,4 +169,4 @@ comment가 1개 이상이면 코멘트 갯수를 표시 한다.
 
 ## Preview
 
-<img src="screenshots/preview.gif" />
+<img src="../screenshots/preview.gif" />

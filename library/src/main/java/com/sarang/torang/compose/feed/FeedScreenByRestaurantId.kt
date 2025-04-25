@@ -26,7 +26,7 @@ fun FeedScreenByRestaurantId(
     consumeOnTop: (() -> Unit)? = null,
     shimmerBrush: @Composable (Boolean) -> Brush,
     feed: feedType,
-    pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
+    pullToRefreshLayout: pullToRefreshLayoutType,
     bottomDetectingLazyColumn: @Composable (Modifier, Int, () -> Unit, @Composable (Int) -> Unit, Boolean, Arrangement.Vertical, LazyListState, @Composable (() -> Unit)?) -> Unit,
     pageScrollable : Boolean = true
 ) {

@@ -6,6 +6,7 @@ import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -71,9 +72,9 @@ fun FeedScreen(
     listState:                  LazyListState                       = rememberLazyListState(),
     feed:                       @Composable (feed: Feed) -> Unit    = { feed ->  Log.e(tag, "feed is not set"); Text(modifier = Modifier.padding(5.dp).background(Color(0x55DDDDDD)), text = feed.contents) },
     topAppBar:                  @Composable () -> Unit              = { Log.i(tag, "topAppBar is not set") },
-    shimmerBrush:               @Composable (Boolean) -> Brush      = { SolidColor(Color(0xFFEEEEEE)) },
+    shimmerBrush:               @Composable (Boolean) -> Brush      = { defaultShimmerBrush() },
     pullToRefreshLayout:        pullToRefreshLayoutType             = {_,_,contents-> Log.w(tag, "pullToRefreshLayout is not set"); contents.invoke() },
-    bottomDetectingLazyColumn:  bottomDetectingLazyColumnType       = {_,count,_,itemCompose,_,_,_,contents-> Log.e(tag, "bottomDetectingLazyColumn is not set"); LazyColumn { items(count){itemCompose.invoke(it)} } },
+    bottomDetectingLazyColumn:  bottomDetectingLazyColumnType       = {_,count,_,itemCompose,_,_,_,contents-> Log.e(tag, "bottomDetectingLazyColumn is not set"); LazyColumn { items(count){itemCompose.invoke(it)} }; contents?.invoke();},
     isRefreshing:               Boolean                             = true,
     onTop:                      Boolean                             = false,
     scrollBehavior:             TopAppBarScrollBehavior?            = null,
@@ -93,7 +94,12 @@ fun FeedScreen(
     ) {
         when (uiState) {
             is FeedUiState.Loading -> {
-                FeedShimmer(Modifier.padding(it), shimmerBrush)
+                FeedShimmer(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(it),
+                    shimmerBrush = shimmerBrush
+                )
             }
 
             is FeedUiState.Empty -> {
@@ -106,7 +112,8 @@ fun FeedScreen(
                     listState = listState,
                     userScrollEnabled = scrollEnabled,
                     onRefresh = onRefresh,
-                    bottomDetectingLazyColumn = bottomDetectingLazyColumn
+                    bottomDetectingLazyColumn = bottomDetectingLazyColumn,
+                    pullToRefreshLayout = pullToRefreshLayout
                 ) {
                     EmptyFeed()
                 }
@@ -215,29 +222,11 @@ private fun HandleOnTop(listState: LazyListState, onTop: Boolean, consumeOnTop: 
 @Preview
 @Composable
 fun PreviewFeedScreen() {
+    // @formatter:off
     FeedScreen(
-        uiState = FeedUiState.Success(
-            list = listOf(
-                Feed(
-                    reviewId = 0,
-                    restaurantId = 0,
-                    userId = 0,
-                    name = "1",
-                    restaurantName = "2",
-                    rating = 0f,
-                    profilePictureUrl = "",
-                    likeAmount = 0,
-                    commentAmount = 0,
-                    isLike = false,
-                    isFavorite = false,
-                    contents = "3",
-                    createDate = "4",
-                    reviewImages = listOf()
-                )
-            ),
-            msg = "",
-            focusedIndex = 0
-        ),
+        //uiState = FeedUiState.Success(list = listOf(Feed(reviewId = 0, restaurantId = 0, userId = 0, name = "1", restaurantName = "2", rating = 0f, profilePictureUrl = "", likeAmount = 0, commentAmount = 0, isLike = false, isFavorite = false, contents = "3", createDate = "4", reviewImages = listOf())), msg = "", focusedIndex = 0),
+        //uiState = FeedUiState.Empty ,
+        uiState = FeedUiState.Loading ,
         consumeErrorMessage = {},
         topAppBar = {},
         feed = {
@@ -247,11 +236,7 @@ fun PreviewFeedScreen() {
         isRefreshing = false,
         onRefresh = {},
         onTop = false,
-        consumeOnTop = {},
-        shimmerBrush = { it -> Brush.linearGradient() },
-        pullToRefreshLayout = { _, _, contents ->
-            contents.invoke()
-        },
-        bottomDetectingLazyColumn = { _, _, _, _, _, _, _, _ -> }
+        consumeOnTop = {}
+        //@formatter:on
     )
 }

@@ -2,6 +2,7 @@ package com.sarang.torang.compose.feed.component
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -22,20 +23,15 @@ internal fun RefreshAndBottomDetectionLazyColumn(
     userScrollEnabled: Boolean = true,
     listState: LazyListState = rememberLazyListState(),
     itemCompose: @Composable (Int) -> Unit,
-    pullToRefreshLayout: pullToRefreshLayoutType = { _, _, _ ->
-
+    pullToRefreshLayout: pullToRefreshLayoutType = { _, _, contents ->
+        Log.e(
+            "__RefreshAndBottomDetectionLazyColunm",
+            "it does not show feed.(pullToRefreshLayout is null)"
+        ); contents.invoke()
     },
     bottomDetectingLazyColumn: bottomDetectingLazyColumnType,
     contents: @Composable (() -> Unit)? = null,
 ) {
-    if (pullToRefreshLayout == null) {
-        Log.e(
-            "__RefreshAndBottomDetectionLazyColunm",
-            "it does not show feed.(pullToRefreshLayout is null)"
-        )
-        return
-    }
-
     pullToRefreshLayout.invoke(isRefreshing, onRefresh) {
         bottomDetectingLazyColumn.invoke(
             modifier,
@@ -57,15 +53,15 @@ fun PreviewRefreshAndBottomDetectionLazyColunm() {
         modifier = Modifier.fillMaxSize(),
         count = 10,
         onBottom = {},
-        itemCompose = {
-            Text("111")
-        },
+        itemCompose = { Text("111") },
         isRefreshing = false,
         onRefresh = {},
-        pullToRefreshLayout = { _, _, contents ->
-            contents.invoke()
-        },
+        pullToRefreshLayout = { _, _, contents -> contents.invoke() },
         listState = rememberLazyListState(),
-        bottomDetectingLazyColumn = { _, _, _, _, _, _, _, _ -> }
-    )
+        bottomDetectingLazyColumn = { _, _, _, _, _, _, _, contents -> contents?.invoke() }
+    ){
+        Box(modifier = Modifier.fillMaxSize()) {
+            Text("PreviewRefreshAndBottomDetectionLazyColunm")
+        }
+    }
 }

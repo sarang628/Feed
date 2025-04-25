@@ -1,5 +1,6 @@
 package com.sarang.torang.compose.feed
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -42,9 +43,9 @@ fun UserFeedByReviewIdScreen(
     listState: LazyListState,
     shimmerBrush: @Composable (Boolean) -> Brush,
     feed: feedType,
-    pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
+    pullToRefreshLayout: pullToRefreshLayoutType,
     bottomDetectingLazyColumn: @Composable (Modifier, Int, () -> Unit, @Composable (Int) -> Unit, Boolean, Arrangement.Vertical, LazyListState, @Composable (() -> Unit)?) -> Unit,
-    pageScrollable : Boolean = true
+    pageScrollable: Boolean = true
 ) {
     val uiState: FeedUiState = feedsViewModel.uiState
     val isRefreshing: Boolean = feedsViewModel.isRefreshing
@@ -101,7 +102,7 @@ internal fun MyFeed(
     listState: LazyListState,
     shimmerBrush: @Composable (Boolean) -> Brush,
     feed: @Composable ((feed: Feed) -> Unit),
-    pullToRefreshLayout: @Composable ((isRefreshing: Boolean, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit)? = null,
+    pullToRefreshLayout: pullToRefreshLayoutType = { _, _, _ -> Log.w("__MyFeed", "pullToRefreshLayout is not set") },
     bottomDetectingLazyColumn: @Composable (Modifier, Int, () -> Unit, @Composable (Int) -> Unit, Boolean, Arrangement.Vertical, LazyListState, @Composable (() -> Unit)?) -> Unit
 ) {
     FeedScreen(

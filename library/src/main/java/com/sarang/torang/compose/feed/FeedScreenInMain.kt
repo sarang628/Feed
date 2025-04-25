@@ -45,10 +45,10 @@ fun FeedScreenInMain(
     scrollToTop: Boolean,
     onScrollToTop: () -> Unit,
     shimmerBrush: @Composable (Boolean) -> Brush,
-    pullToRefreshLayout: pullToRefreshLayoutType = null,
+    pullToRefreshLayout: pullToRefreshLayoutType = { _, _, _ -> Log.w("__FeedScreenForMain", "pullToRefreshLayout is not implemented")},
     bottomDetectingLazyColumn: bottomDetectingLazyColumnType,
     scrollEnabled: Boolean = true,
-    pageScrollable : Boolean = true
+    pageScrollable: Boolean = true
 ) {
     val uiState: FeedUiState = feedsViewModel.uiState
     val isRefreshing: Boolean = feedsViewModel.isRefreshing
