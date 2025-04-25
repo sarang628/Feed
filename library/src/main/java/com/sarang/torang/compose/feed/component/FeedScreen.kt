@@ -62,6 +62,42 @@ import kotlinx.coroutines.launch
  * @param onFocusItemIndex 비디오 재생을 위해 항목이 중앙에 있을때 호출되는 콜백
  * @param bottomDetectingLazyColumn 하단 감지 Column
  * @param scrollEnabled 리스트 스크롤 가능 여부
+ *
+ * ```
+ * @OptIn(ExperimentalMaterial3Api::class)
+ * @Preview(showBackground = true)
+ * @Composable
+ * fun FeedScreenEmptyPreview() {
+ *     FeedScreen(uiState = FeedUiState.Empty)
+ * }
+ *
+ * @OptIn(ExperimentalMaterial3Api::class)
+ * @Preview(showBackground = true)
+ * @Composable
+ * fun FeedScreenLoadingPreview() {
+ *     FeedScreen(uiState = FeedUiState.Loading)
+ * }
+ *
+ * @OptIn(ExperimentalMaterial3Api::class)
+ * @Preview(showBackground = true)
+ * @Composable
+ * fun FeedScreenSuccessPreview() {
+ *     FeedScreen(
+ *         //@formatter:off
+ *         uiState = FeedUiState.Success(list = listOf(Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty)),
+ *         //@formatter:on
+ *         feed = {
+ *             Box(
+ *                 Modifier
+ *                     .fillMaxWidth()
+ *                     .padding(vertical = 5.dp)
+ *                     .background(Color(0xAAEEEEEE))
+ *                     .height(80.dp)
+ *             ) { Text("feed") }
+ *         }
+ *     )
+ * }
+ * ```
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
