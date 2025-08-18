@@ -127,6 +127,8 @@ dependencies {
     implementation(project(":library"))
 
     implementation(libs.torangRepository)
+    implementation(libs.torangdatabase)
+    implementation(libs.torangnetwork)
     implementation(libs.theme)
     implementation(libs.basefeed)
     implementation(libs.commonImageLoader)
