@@ -43,7 +43,6 @@ fun FeedScreenInMain(
     onAlarm: () -> Unit = { Log.w("__FeedScreenForMain", "onAlarm is not implemented") },
     scrollToTop: Boolean,
     onScrollToTop: () -> Unit,
-    shimmerBrush: @Composable (Boolean) -> Brush,
     pullToRefreshLayout: pullToRefreshLayoutType = { _, _, _ -> Log.w("__FeedScreenForMain", "pullToRefreshLayout is not implemented")},
     scrollEnabled: Boolean = true,
     pageScrollable: Boolean = true
@@ -78,7 +77,6 @@ fun FeedScreenInMain(
         },
         onTop = scrollToTop,
         consumeOnTop = onScrollToTop,
-        shimmerBrush = shimmerBrush,
         pullToRefreshLayout = pullToRefreshLayout,
         onFocusItemIndex = { feedsViewModel.onFocusItemIndex(it) },
         scrollEnabled = scrollEnabled
@@ -99,7 +97,6 @@ internal fun FeedInMain(
     isRefreshing: Boolean,
     onTop: Boolean,
     consumeOnTop: () -> Unit,
-    shimmerBrush: @Composable (Boolean) -> Brush,
     pullToRefreshLayout: pullToRefreshLayoutType,
     onFocusItemIndex: (Int) -> Unit = {},
     topAppIcon: ImageVector = Icons.AutoMirrored.Default.Send,
@@ -124,7 +121,6 @@ internal fun FeedInMain(
                 onAlarm = onAlarm
             )
         },
-        shimmerBrush = shimmerBrush,
         pullToRefreshLayout = pullToRefreshLayout,
         onFocusItemIndex = onFocusItemIndex,
         scrollEnabled = scrollEnabled
@@ -167,6 +163,5 @@ fun PreviewMainFeedScreen() {
         onTop = false,
         consumeOnTop = {},
         feed = { _ -> Text("피드가 있어야 보임") },
-        shimmerBrush = { it -> linearGradient() }
     )
 }

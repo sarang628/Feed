@@ -78,7 +78,6 @@ fun FeedScreen(
     listState:                  LazyListState                       = rememberLazyListState(),
     feed:                       @Composable (feed: Feed) -> Unit    = { feed ->  Log.e(tag, "feed is not set"); Text(modifier = Modifier.padding(5.dp).background(Color(0x55DDDDDD)), text = feed.contents) },
     topAppBar:                  @Composable () -> Unit              = { Log.i(tag, "topAppBar is not set") },
-    shimmerBrush:               @Composable (Boolean) -> Brush      = { defaultShimmerBrush() },
     pullToRefreshLayout:        pullToRefreshLayoutType             = {_,_,contents-> Log.w(tag, "pullToRefreshLayout is not set"); contents.invoke() },
     isRefreshing:               Boolean                             = true,
     onTop:                      Boolean                             = false,
@@ -98,7 +97,7 @@ fun FeedScreen(
         topBar = topAppBar
     ) {
         when (uiState) {
-            is FeedUiState.Loading -> { FeedShimmer(modifier = Modifier.fillMaxSize().padding(it), shimmerBrush = shimmerBrush) }
+            is FeedUiState.Loading -> { FeedShimmer(modifier = Modifier.fillMaxSize().padding(it)) }
             is FeedUiState.Empty -> {
                 RefreshAndBottomDetectionLazyColumn(
                     modifier = Modifier.padding(it),

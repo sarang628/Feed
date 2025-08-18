@@ -42,7 +42,6 @@ fun UserFeedByReviewIdScreen(
     reviewId: Int,
     onBack: (() -> Unit)? = null,
     listState: LazyListState,
-    shimmerBrush: @Composable (Boolean) -> Brush,
     pullToRefreshLayout: pullToRefreshLayoutType,
     pageScrollable: Boolean = true
 ) {
@@ -81,7 +80,6 @@ fun UserFeedByReviewIdScreen(
             )
         },
         listState = listState,
-        shimmerBrush = shimmerBrush,
         pullToRefreshLayout = pullToRefreshLayout,
     )
 }
@@ -98,7 +96,6 @@ internal fun MyFeed(
     onBottom: (() -> Unit),/*base feed 에서 제공*/
     consumeErrorMessage: () -> Unit,
     listState: LazyListState,
-    shimmerBrush: @Composable (Boolean) -> Brush,
     feed: @Composable ((feed: Feed) -> Unit),
     pullToRefreshLayout: pullToRefreshLayoutType = { _, _, _ -> Log.w("__MyFeed", "pullToRefreshLayout is not set") },
 ) {
@@ -124,7 +121,6 @@ internal fun MyFeed(
         isRefreshing = isRefreshing,
         onTop = false,
         consumeOnTop = { },
-        shimmerBrush = shimmerBrush,
         pullToRefreshLayout = pullToRefreshLayout,
     )
 }
@@ -141,6 +137,5 @@ fun PreviewMyFeedScreen() {
         consumeErrorMessage = { /*TODO*/ },
         listState = rememberLazyListState(),
         feed = { _ -> },
-        shimmerBrush = { it -> Brush.linearGradient() },
     )
 }

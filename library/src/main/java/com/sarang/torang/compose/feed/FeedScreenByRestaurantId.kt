@@ -25,7 +25,6 @@ fun FeedScreenByRestaurantId(
     restaurantId: Int,
     onTop: Boolean = false,
     consumeOnTop: (() -> Unit)? = null,
-    shimmerBrush: @Composable (Boolean) -> Brush,
     pullToRefreshLayout: pullToRefreshLayoutType,
     pageScrollable : Boolean = true
 ) {
@@ -59,7 +58,6 @@ fun FeedScreenByRestaurantId(
             )
         },
         consumeOnTop = { consumeOnTop?.invoke() },
-        shimmerBrush = shimmerBrush,
         pullToRefreshLayout = pullToRefreshLayout,
     )
 }

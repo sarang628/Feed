@@ -15,7 +15,6 @@ import com.sarang.torang.compose.feed.component.LocalBottomDetectingLazyColumnTy
 import com.sarang.torang.compose.feed.component.LocalFeedCompose
 import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
 import com.sarang.torang.di.feed_di.CustomFeedCompose
-import com.sarang.torang.di.feed_di.shimmerBrush
 import com.sarang.torang.di.pulltorefresh.providePullToRefresh
 import com.sryang.library.pullrefresh.rememberPullToRefreshState
 
@@ -28,7 +27,6 @@ fun TestFeedScreenByReviewId(reviewId: String) {
         Box(Modifier.fillMaxSize()) {
             FeedScreenByReviewId(
                 reviewId = reviewId,
-                shimmerBrush = { shimmerBrush(it) },
                 pullToRefreshLayout = providePullToRefresh(rememberPullToRefreshState())
             )
             SetReviewIdAssistChip(modifier = Modifier.align(Alignment.TopEnd), reviewId) {
