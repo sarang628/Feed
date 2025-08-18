@@ -129,9 +129,9 @@ fun PreviewMyFeedScreen() {
         /*Preview*/
         uiState = FeedUiState.Loading,
         isRefreshing = false,
-        onRefresh = { /*TODO*/ },
-        onBottom = { /*TODO*/ },
-        consumeErrorMessage = { /*TODO*/ },
+        onRefresh = {},
+        onBottom = {},
+        consumeErrorMessage = {},
         listState = rememberLazyListState(),
         feed = { _ -> },
     )
