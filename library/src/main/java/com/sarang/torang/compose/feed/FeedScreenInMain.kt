@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.compose.feed.component.FeedScreen
 import com.sarang.torang.compose.feed.component.FeedTopAppBar
+import com.sarang.torang.compose.feed.component.LocalFeedCompose
 import com.sarang.torang.compose.feed.component.bottomDetectingLazyColumnType
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.data.feed.adjustHeight
@@ -30,7 +31,6 @@ import com.sarang.torang.viewmodels.FeedsViewModel
  * 피드 가져오기, 리프레시, 좋아요, 즐겨찾기 기능 담당
  * 피드 프로필, 코멘트, 메뉴 등은 피드 컴포저블을 통해 상위 컴포저블에서 처리
  * @param feedsViewModel 피드 뷰모델
- * @param feed 피드 컴포저블 (제공받아야 함)
  * @param onAddReview 피드 추가 리뷰
  * @param scrollToTop 피드 스크롤 탑
  * @param onScrollToTop 스크롤 탑 콜백 (이 콜백을 받으면 scrollToTop을 false로 바꿔줘야 함.)
@@ -39,7 +39,6 @@ import com.sarang.torang.viewmodels.FeedsViewModel
 fun FeedScreenInMain(
     tag: String = "__FeedScreenForMain",
     feedsViewModel: FeedsViewModel = hiltViewModel(),
-    feed: feedType,
     onAddReview: (() -> Unit) = { Log.w(tag, "onAddReview is not implemented") },
     onAlarm: () -> Unit = { Log.w("__FeedScreenForMain", "onAlarm is not implemented") },
     scrollToTop: Boolean,
@@ -68,13 +67,8 @@ fun FeedScreenInMain(
         onRefresh = { feedsViewModel.refreshFeed() },
         consumeErrorMessage = { feedsViewModel.clearErrorMsg() },
         feed = { it ->
-            feed(
-                it.copy(
-                    isPlaying = it.isPlaying
-                            && if (uiState is FeedUiState.Success) {
-                        uiState.focusedIndex == uiState.list.indexOf(it)
-                    } else false
-                ),
+            LocalFeedCompose.current.invoke(
+                it.copy(isPlaying = it.isPlaying && if (uiState is FeedUiState.Success) { uiState.focusedIndex == uiState.list.indexOf(it) } else false),
                 { if (isLogin) feedsViewModel.onLike(it) },
                 { if (isLogin) feedsViewModel.onFavorite(it) },
                 isLogin,

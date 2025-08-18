@@ -79,8 +79,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun PreviewFeedScreenForMain() {
     TestFeedScreenForMain(
-        pullToRefreshLayout = { _, _, contents -> contents.invoke() },
-        feed = { _, _, _, _, _, _, _ ->
-        }
+        pullToRefreshLayout = { _, _, contents -> contents.invoke() }
     )
 }
