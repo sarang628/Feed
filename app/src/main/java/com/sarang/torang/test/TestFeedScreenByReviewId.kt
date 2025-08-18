@@ -17,8 +17,6 @@ import com.sarang.torang.compose.feed.component.LocalFeedCompose
 import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
 import com.sarang.torang.di.feed_di.CustomFeedCompose
 import com.sarang.torang.di.feed_di.CustomLocalPullToRefreshType
-import com.sarang.torang.di.pulltorefresh.providePullToRefresh
-import com.sryang.library.pullrefresh.rememberPullToRefreshState
 
 @Composable
 fun TestFeedScreenByReviewId(reviewId: String) {
