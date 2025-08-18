@@ -146,7 +146,7 @@ fun PreviewMainFeedScreen() {
                 )
             ),
         ),
-        onAddReview = { /*TODO*/ },
+        onAddReview = {},
         consumeErrorMessage = {},
         onRefresh = {},
         onBottom = {},
