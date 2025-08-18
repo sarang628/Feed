@@ -1,8 +1,6 @@
 package com.sarang.torang.compose.feed
 
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -13,8 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -35,8 +31,8 @@ fun FeedScreenByReviewId(
     pageScrollable: Boolean = true
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
-    val isRefreshing: Boolean = feedsViewModel.isRefreshing
-    val isLogin: Boolean by feedsViewModel.isLogin.collectAsState(initial = false)
+    val isRefreshing: Boolean = feedsViewModel.isRefreshingState
+    val isLogin: Boolean by feedsViewModel.isLoginState.collectAsState(initial = false)
     val backPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val screenHeightDp = LocalConfiguration.current.screenHeightDp
     val screenWidthDp = LocalConfiguration.current.screenWidthDp

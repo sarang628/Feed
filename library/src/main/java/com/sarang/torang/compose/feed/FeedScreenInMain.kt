@@ -10,8 +10,6 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Brush.Companion.linearGradient
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
@@ -21,7 +19,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarang.torang.compose.feed.component.FeedScreen
 import com.sarang.torang.compose.feed.component.FeedTopAppBar
 import com.sarang.torang.compose.feed.component.LocalFeedCompose
-import com.sarang.torang.compose.feed.component.bottomDetectingLazyColumnType
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.data.feed.adjustHeight
 import com.sarang.torang.uistate.FeedUiState
@@ -48,8 +45,8 @@ fun FeedScreenInMain(
     pageScrollable: Boolean = true
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
-    val isRefreshing: Boolean = feedsViewModel.isRefreshing
-    val isLogin by feedsViewModel.isLogin.collectAsState(initial = false)
+    val isRefreshing: Boolean = feedsViewModel.isRefreshingState
+    val isLogin by feedsViewModel.isLoginState.collectAsState(initial = false)
     val screenHeightDp = LocalConfiguration.current.screenHeightDp
     val screenWidthDp = LocalConfiguration.current.screenWidthDp
     val density = LocalDensity.current

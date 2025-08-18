@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.usecase.AddFavoriteUseCase
 import com.sarang.torang.usecase.AddLikeUseCase
+import com.sarang.torang.usecase.ClickFavorityUseCase
+import com.sarang.torang.usecase.ClickLikeUseCase
 import com.sarang.torang.usecase.DeleteFavoriteUseCase
 import com.sarang.torang.usecase.DeleteLikeUseCase
 import com.sarang.torang.usecase.FeedWithPageUseCase
@@ -17,24 +19,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FeedScreenByReviewIdViewModel @Inject constructor(
-    addLikeUseCase: AddLikeUseCase,
-    deleteLikeUseCase: DeleteLikeUseCase,
-    addFavoriteUseCase: AddFavoriteUseCase,
-    deleteFavoriteUseCase: DeleteFavoriteUseCase,
+    clickLikeUseCase: ClickLikeUseCase,
+    clickFavorityUseCase: ClickFavorityUseCase,
     getFeedFlowUseCase: GetFeedFlowUseCase,
     feedWithPageUseCase: FeedWithPageUseCase,
     isLoginFlowUseCase: IsLoginFlowForFeedUseCase,
     private val getFeedByReviewIdUseCase: GetFeedByReviewIdUseCase,
 ) : FeedsViewModel(
     feedWithPageUseCase,
-    addLikeUseCase,
-    deleteLikeUseCase,
-    addFavoriteUseCase,
-    deleteFavoriteUseCase,
+    clickLikeUseCase,
+    clickFavorityUseCase,
     getFeedFlowUseCase,
     isLoginFlowUseCase
 ) {
-    override val tag: String = "__FeedScreenByReviewIdViewModel"
+    val tag: String = "__FeedScreenByReviewIdViewModel"
     fun getFeedByReviewId(reviewId: Int) {
         //uiState = FeedUiState.Loading TODO:: 설정하기
         viewModelScope.launch {
