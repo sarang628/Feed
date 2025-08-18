@@ -7,6 +7,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -63,41 +65,9 @@ import kotlinx.coroutines.launch
  * @param bottomDetectingLazyColumn 하단 감지 Column
  * @param scrollEnabled 리스트 스크롤 가능 여부
  *
- * ```
- * @OptIn(ExperimentalMaterial3Api::class)
- * @Preview(showBackground = true)
- * @Composable
- * fun FeedScreenEmptyPreview() {
- *     FeedScreen(uiState = FeedUiState.Empty)
- * }
- *
- * @OptIn(ExperimentalMaterial3Api::class)
- * @Preview(showBackground = true)
- * @Composable
- * fun FeedScreenLoadingPreview() {
- *     FeedScreen(uiState = FeedUiState.Loading)
- * }
- *
- * @OptIn(ExperimentalMaterial3Api::class)
- * @Preview(showBackground = true)
- * @Composable
- * fun FeedScreenSuccessPreview() {
- *     FeedScreen(
- *         //@formatter:off
- *         uiState = FeedUiState.Success(list = listOf(Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty)),
- *         //@formatter:on
- *         feed = {
- *             Box(
- *                 Modifier
- *                     .fillMaxWidth()
- *                     .padding(vertical = 5.dp)
- *                     .background(Color(0xAAEEEEEE))
- *                     .height(80.dp)
- *             ) { Text("feed") }
- *         }
- *     )
- * }
- * ```
+ * @sample FeedScreenEmptyPreview
+ * @sample FeedScreenLoadingPreview
+ * @sample FeedScreenSuccessPreview
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -129,15 +99,7 @@ fun FeedScreen(
         topBar = topAppBar
     ) {
         when (uiState) {
-            is FeedUiState.Loading -> {
-                FeedShimmer(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(it),
-                    shimmerBrush = shimmerBrush
-                )
-            }
-
+            is FeedUiState.Loading -> { FeedShimmer(modifier = Modifier.fillMaxSize().padding(it), shimmerBrush = shimmerBrush) }
             is FeedUiState.Empty -> {
                 RefreshAndBottomDetectionLazyColumn(
                     modifier = Modifier.padding(it),
@@ -150,18 +112,12 @@ fun FeedScreen(
                     onRefresh = onRefresh,
                     bottomDetectingLazyColumn = bottomDetectingLazyColumn,
                     pullToRefreshLayout = pullToRefreshLayout
-                ) {
-                    EmptyFeed()
-                }
+                ) { EmptyFeed() }
             }
 
             is FeedUiState.Success -> {
                 RefreshAndBottomDetectionLazyColumn(
-                    modifier = if (scrollBehavior != null) {
-                        Modifier
-                            .nestedScroll(scrollBehavior.nestedScrollConnection)
-                            .padding(it)
-                    } else Modifier.padding(it),
+                    modifier = if (scrollBehavior != null) { Modifier.nestedScroll(scrollBehavior.nestedScrollConnection).padding(it) } else Modifier.padding(it),
                     count = uiState.list.size,
                     onBottom = onBottom,
                     itemCompose = { feed.invoke(uiState.list[it]) },
@@ -274,5 +230,35 @@ fun PreviewFeedScreen() {
         onTop = false,
         consumeOnTop = {}
         //@formatter:on
+    )
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
+@Composable
+fun FeedScreenEmptyPreview() {
+    FeedScreen(uiState = FeedUiState.Empty)
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
+@Composable
+fun FeedScreenLoadingPreview() {
+    FeedScreen(uiState = FeedUiState.Loading)
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
+@Composable
+fun FeedScreenSuccessPreview() {
+    FeedScreen(
+        uiState = FeedUiState.Success(
+            list = listOf(Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty)
+        ),
+        feed = {
+            Box(Modifier.fillMaxWidth().padding(vertical = 5.dp).background(Color(0xAAEEEEEE)).height(80.dp)) {
+                Text("feed") }
+        }
     )
 }
