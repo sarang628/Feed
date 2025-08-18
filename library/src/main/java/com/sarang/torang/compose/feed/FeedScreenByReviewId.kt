@@ -49,7 +49,7 @@ fun FeedScreenByReviewId(
     FeedScreen(
         uiState = uiState,
         topAppBar = {
-            TopAppBar(title = { /*TODO*/ }, navigationIcon = {
+            TopAppBar(title = { }, navigationIcon = {
                 IconButton(onClick = { backPressedDispatcher?.onBackPressed() }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Default.ArrowBack,
