@@ -31,7 +31,6 @@ internal fun TestUserFeedByReviewIdScreen() {
                 reviewId = reviewId,
                 onBack = { },
                 listState = rememberLazyListState(),
-                pullToRefreshLayout = providePullToRefresh(rememberPullToRefreshState()),
             )
 
             SetReviewIdAssistChip(modifier = Modifier.align(Alignment.TopEnd), reviewId) {

@@ -42,7 +42,6 @@ fun UserFeedByReviewIdScreen(
     reviewId: Int,
     onBack: (() -> Unit)? = null,
     listState: LazyListState,
-    pullToRefreshLayout: pullToRefreshLayoutType,
     pageScrollable: Boolean = true
 ) {
     val uiState: FeedUiState = feedsViewModel.uiState
@@ -80,7 +79,6 @@ fun UserFeedByReviewIdScreen(
             )
         },
         listState = listState,
-        pullToRefreshLayout = pullToRefreshLayout,
     )
 }
 
@@ -97,7 +95,6 @@ internal fun MyFeed(
     consumeErrorMessage: () -> Unit,
     listState: LazyListState,
     feed: @Composable ((feed: Feed) -> Unit),
-    pullToRefreshLayout: pullToRefreshLayoutType = { _, _, _ -> Log.w("__MyFeed", "pullToRefreshLayout is not set") },
 ) {
     FeedScreen(
         uiState = uiState,
@@ -120,8 +117,7 @@ internal fun MyFeed(
         onBottom = onBottom,
         isRefreshing = isRefreshing,
         onTop = false,
-        consumeOnTop = { },
-        pullToRefreshLayout = pullToRefreshLayout,
+        consumeOnTop = { }
     )
 }
 

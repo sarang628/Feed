@@ -43,7 +43,6 @@ fun FeedScreenInMain(
     onAlarm: () -> Unit = { Log.w("__FeedScreenForMain", "onAlarm is not implemented") },
     scrollToTop: Boolean,
     onScrollToTop: () -> Unit,
-    pullToRefreshLayout: pullToRefreshLayoutType = { _, _, _ -> Log.w("__FeedScreenForMain", "pullToRefreshLayout is not implemented")},
     scrollEnabled: Boolean = true,
     pageScrollable: Boolean = true
 ) {
@@ -77,7 +76,6 @@ fun FeedScreenInMain(
         },
         onTop = scrollToTop,
         consumeOnTop = onScrollToTop,
-        pullToRefreshLayout = pullToRefreshLayout,
         onFocusItemIndex = { feedsViewModel.onFocusItemIndex(it) },
         scrollEnabled = scrollEnabled
     )
@@ -97,7 +95,6 @@ internal fun FeedInMain(
     isRefreshing: Boolean,
     onTop: Boolean,
     consumeOnTop: () -> Unit,
-    pullToRefreshLayout: pullToRefreshLayoutType,
     onFocusItemIndex: (Int) -> Unit = {},
     topAppIcon: ImageVector = Icons.AutoMirrored.Default.Send,
     scrollEnabled: Boolean = true
@@ -121,7 +118,6 @@ internal fun FeedInMain(
                 onAlarm = onAlarm
             )
         },
-        pullToRefreshLayout = pullToRefreshLayout,
         onFocusItemIndex = onFocusItemIndex,
         scrollEnabled = scrollEnabled
     )
@@ -156,9 +152,6 @@ fun PreviewMainFeedScreen() {
         consumeErrorMessage = {},
         onRefresh = {},
         onBottom = {},
-        pullToRefreshLayout = { _, _, contents ->
-            contents.invoke()
-        },
         isRefreshing = false,
         onTop = false,
         consumeOnTop = {},

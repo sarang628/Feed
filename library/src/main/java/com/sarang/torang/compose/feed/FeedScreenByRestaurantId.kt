@@ -25,7 +25,6 @@ fun FeedScreenByRestaurantId(
     restaurantId: Int,
     onTop: Boolean = false,
     consumeOnTop: (() -> Unit)? = null,
-    pullToRefreshLayout: pullToRefreshLayoutType,
     pageScrollable : Boolean = true
 ) {
     val uiState: FeedUiState = feedsViewModel.uiState
@@ -58,6 +57,5 @@ fun FeedScreenByRestaurantId(
             )
         },
         consumeOnTop = { consumeOnTop?.invoke() },
-        pullToRefreshLayout = pullToRefreshLayout,
     )
 }

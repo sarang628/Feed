@@ -7,8 +7,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.sarang.torang.compose.feed.LocalPullToRefreshLayoutType
+import com.sarang.torang.di.feed_di.CustomLocalPullToRefreshType
 import com.sarang.torang.repository.FeedRepository
 import com.sarang.torang.repository.FeedRepositoryTest
 import com.sarang.torang.repository.LoginRepository
@@ -77,7 +80,8 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 fun PreviewFeedScreenForMain() {
-    TestFeedScreenForMain(
-        pullToRefreshLayout = { _, _, contents -> contents.invoke() }
-    )
+    CompositionLocalProvider(LocalPullToRefreshLayoutType provides CustomLocalPullToRefreshType) {
+        TestFeedScreenForMain(
+        )
+    }
 }

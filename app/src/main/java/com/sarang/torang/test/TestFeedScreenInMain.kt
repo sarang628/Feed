@@ -10,10 +10,8 @@ import androidx.compose.runtime.setValue
 import com.sarang.torang.compose.feed.FeedScreenInMain
 import com.sarang.torang.compose.feed.component.LocalBottomDetectingLazyColumnType
 import com.sarang.torang.compose.feed.component.LocalFeedCompose
-import com.sarang.torang.compose.feed.pullToRefreshLayoutType
 import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
 import com.sarang.torang.di.feed_di.CustomFeedCompose
-import com.sarang.torang.di.pulltorefresh.providePullToRefresh
 import com.sryang.library.pullrefresh.PullToRefreshLayoutState
 import com.sryang.library.pullrefresh.rememberPullToRefreshState
 
@@ -21,7 +19,6 @@ import com.sryang.library.pullrefresh.rememberPullToRefreshState
 fun TestFeedScreenForMain(
     tag: String = "__FeedScreenForMain",
     state: PullToRefreshLayoutState = rememberPullToRefreshState(),
-    pullToRefreshLayout: pullToRefreshLayoutType = providePullToRefresh(state),
     onAddReview: () -> Unit = { Log.w(tag, "onAddReview is not implemented") },
     onAlarm: () -> Unit = { Log.w("__FeedScreenForMain", "onAlarm is not implemented") },
 ) {
@@ -34,7 +31,6 @@ fun TestFeedScreenForMain(
             onAlarm = onAlarm,
             onAddReview = onAddReview,
             onScrollToTop = { onTop = false },
-            pullToRefreshLayout = pullToRefreshLayout,
         )
     }
 }

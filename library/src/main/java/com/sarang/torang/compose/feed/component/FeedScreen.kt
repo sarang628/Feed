@@ -39,6 +39,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.android.material.color.MaterialColors
+import com.sarang.torang.compose.feed.LocalPullToRefreshLayoutType
 import com.sarang.torang.compose.feed.pullToRefreshLayoutType
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedUiState
@@ -78,7 +79,6 @@ fun FeedScreen(
     listState:                  LazyListState                       = rememberLazyListState(),
     feed:                       @Composable (feed: Feed) -> Unit    = { feed ->  Log.e(tag, "feed is not set"); Text(modifier = Modifier.padding(5.dp).background(Color(0x55DDDDDD)), text = feed.contents) },
     topAppBar:                  @Composable () -> Unit              = { Log.i(tag, "topAppBar is not set") },
-    pullToRefreshLayout:        pullToRefreshLayoutType             = {_,_,contents-> Log.w(tag, "pullToRefreshLayout is not set"); contents.invoke() },
     isRefreshing:               Boolean                             = true,
     onTop:                      Boolean                             = false,
     scrollBehavior:             TopAppBarScrollBehavior?            = null,
@@ -109,7 +109,7 @@ fun FeedScreen(
                     userScrollEnabled = scrollEnabled,
                     onRefresh = onRefresh,
                     bottomDetectingLazyColumn = LocalBottomDetectingLazyColumnType.current,
-                    pullToRefreshLayout = pullToRefreshLayout
+                    pullToRefreshLayout = LocalPullToRefreshLayoutType.current
                 ) { EmptyFeed() }
             }
 
@@ -121,7 +121,7 @@ fun FeedScreen(
                     itemCompose = { feed.invoke(uiState.list[it]) },
                     userScrollEnabled = scrollEnabled,
                     listState = listState,
-                    pullToRefreshLayout = pullToRefreshLayout,
+                    pullToRefreshLayout = LocalPullToRefreshLayoutType.current,
                     isRefreshing = isRefreshing,
                     onRefresh = onRefresh,
                     bottomDetectingLazyColumn = LocalBottomDetectingLazyColumnType.current
