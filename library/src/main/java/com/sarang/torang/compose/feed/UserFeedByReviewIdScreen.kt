@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarang.torang.compose.feed.component.FeedScreen
 import com.sarang.torang.compose.feed.component.LocalFeedCompose
 import com.sarang.torang.data.feed.Feed
@@ -44,7 +45,7 @@ fun UserFeedByReviewIdScreen(
     listState: LazyListState,
     pageScrollable: Boolean = true
 ) {
-    val uiState: FeedUiState = feedsViewModel.uiState
+    val uiState: FeedUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
     val isRefreshing: Boolean = feedsViewModel.isRefreshing
     val isLogin by feedsViewModel.isLogin.collectAsState(false)
     val screenHeightDp = LocalConfiguration.current.screenHeightDp

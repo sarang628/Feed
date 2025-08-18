@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarang.torang.compose.feed.component.FeedScreen
 import com.sarang.torang.compose.feed.component.FeedTopAppBar
 import com.sarang.torang.compose.feed.component.LocalFeedCompose
@@ -46,14 +47,12 @@ fun FeedScreenInMain(
     scrollEnabled: Boolean = true,
     pageScrollable: Boolean = true
 ) {
-    val uiState: FeedUiState = feedsViewModel.uiState
+    val uiState: FeedUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
     val isRefreshing: Boolean = feedsViewModel.isRefreshing
     val isLogin by feedsViewModel.isLogin.collectAsState(initial = false)
     val screenHeightDp = LocalConfiguration.current.screenHeightDp
     val screenWidthDp = LocalConfiguration.current.screenWidthDp
     val density = LocalDensity.current
-
-    feedsViewModel.initialize()
 
     FeedInMain(
         uiState = uiState,
@@ -64,15 +63,14 @@ fun FeedScreenInMain(
         onRefresh = { feedsViewModel.refreshFeed() },
         consumeErrorMessage = { feedsViewModel.clearErrorMsg() },
         feed = { it ->
-            LocalFeedCompose.current.invoke(
-                it.copy(isPlaying = it.isPlaying && if (uiState is FeedUiState.Success) { uiState.focusedIndex == uiState.list.indexOf(it) } else false),
-                { if (isLogin) feedsViewModel.onLike(it) },
-                { if (isLogin) feedsViewModel.onFavorite(it) },
-                isLogin,
-                { feedsViewModel.onVideoClick(it.reviewId) },
-                it.reviewImages[0].adjustHeight(density, screenWidthDp, screenHeightDp),
-                pageScrollable
+            val feed = it.copy(
+                //isPlaying = it.isPlaying && if (uiState is FeedUiState.Success) { (uiState as FeedUiState.Success).focusedIndex == (uiState as FeedUiState.Success).list.indexOf(it) } else false
             )
+            val onLike : (Int) -> Unit = { if (isLogin) feedsViewModel.onLike(it) }
+            val onFavorite: (Int) -> Unit = { if (isLogin) feedsViewModel.onFavorite(it) }
+            val onVideoClick: () -> Unit = { feedsViewModel.onVideoClick(it.reviewId) }
+            val imageHeight = it.reviewImages[0].adjustHeight(density, screenWidthDp, screenHeightDp)
+            LocalFeedCompose.current.invoke(feed, onLike, onFavorite, isLogin, onVideoClick, imageHeight, pageScrollable)
         },
         onTop = scrollToTop,
         consumeOnTop = onScrollToTop,

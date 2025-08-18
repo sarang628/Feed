@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarang.torang.compose.feed.component.FeedScreen
 import com.sarang.torang.compose.feed.component.LocalFeedCompose
 import com.sarang.torang.data.feed.adjustHeight
@@ -27,7 +28,7 @@ fun FeedScreenByRestaurantId(
     consumeOnTop: (() -> Unit)? = null,
     pageScrollable : Boolean = true
 ) {
-    val uiState: FeedUiState = feedsViewModel.uiState
+    val uiState: FeedUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
     val isRefreshing: Boolean = feedsViewModel.isRefreshing
     val isLogin by feedsViewModel.isLogin.collectAsState(initial = false)
     val screenHeightDp = LocalConfiguration.current.screenHeightDp

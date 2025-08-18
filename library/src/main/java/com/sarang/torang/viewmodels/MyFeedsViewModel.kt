@@ -37,20 +37,15 @@ class MyFeedsViewModel @Inject constructor(
     isLoginFlowUseCase
 ) {
     fun getUserFeedByReviewId(reviewId: Int) {
-        uiState = FeedUiState.Loading
+        //uiState = FeedUiState.Loading TODO:: 설정하기
         viewModelScope.launch {
             getMyAllFeedByReviewIdUseCase.invoke(reviewId)
             getMyFeedFlowUseCase.invoke(reviewId).collect { list ->
-                list.map { review ->
-                    review.copy(
-                        onLike = { onLike(review.reviewId) },
-                        onFavorite = { onFavorite(review.reviewId) }
-                    )
-                }.let { list ->
+                list.let { list ->
                     if (list.isNotEmpty()) {
-                        uiState = FeedUiState.Success(list = list)
+                        //uiState = FeedUiState.Success(list = list) TODO:: 설정하기
                     } else {
-                        uiState = FeedUiState.Error("피드가 없습니다.")
+                        //uiState = FeedUiState.Error("피드가 없습니다.") TODO:: 설정하기
                     }
                 }
             }
@@ -67,10 +62,10 @@ class MyFeedsViewModel @Inject constructor(
 
 
     fun findIndexByReviewId(reviewId: Int): Int {
-        val state = uiState
-        if (state is FeedUiState.Success) {
-            return state.list.indexOf(state.list.find { it.reviewId == reviewId })
-        }
+//        val state = uiState
+//        if (state is FeedUiState.Success) {
+//            return state.list.indexOf(state.list.find { it.reviewId == reviewId })
+//        } TODO:: 설정하기
         return 0
     }
 }

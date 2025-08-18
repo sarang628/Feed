@@ -36,29 +36,24 @@ class FeedScreenByReviewIdViewModel @Inject constructor(
 ) {
     override val tag: String = "__FeedScreenByReviewIdViewModel"
     fun getFeedByReviewId(reviewId: Int) {
-        uiState = FeedUiState.Loading
+        //uiState = FeedUiState.Loading TODO:: 설정하기
         viewModelScope.launch {
 
             try {
                 val result = getFeedByReviewIdUseCase.invoke(reviewId)
-                uiState = FeedUiState.Success(
-                    list = listOf(
-                        result.copy(
-                            onLike = { onLike(reviewId) },
-                            onFavorite = { onFavorite(reviewId) }
-                        )))
+                //uiState = FeedUiState.Success(list = listOf(result)) TODO:: 설정하기
             } catch (e: Exception) {
                 Log.e(tag, "getFeedByReviewId 실패 reviewId : $reviewId, error msg: ${e.message}")
-                uiState = FeedUiState.Error(e.message.toString())
+                //uiState = FeedUiState.Error(e.message.toString()) TODO:: 설정하기
             }
         }
     }
 
     fun findIndexByReviewId(reviewId: Int): Int {
-        val state = uiState
-        if (state is FeedUiState.Success) {
-            return state.list.indexOf(state.list.find { it.reviewId == reviewId })
-        }
+//        val state = uiState
+//        if (state is FeedUiState.Success) {
+//            return state.list.indexOf(state.list.find { it.reviewId == reviewId })
+//        } TODO:: 설정하기
         return 0
     }
 

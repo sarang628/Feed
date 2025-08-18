@@ -36,46 +36,33 @@ class FeedScreenByRestaurantIdViewModel @Inject constructor(
     isLoginFlowUseCase
 ) {
     fun getFeedByRestaurantId(restaurantId: Int) {
-        uiState = FeedUiState.Loading
+        //uiState = Loading TODO::로딩 설정하기
         viewModelScope.launch {
             try {
                 getFeedByRestaurantIdFlowUseCase.invoke(restaurantId).collect { list ->
-                    list.map { review ->
-                        review.copy(
-                            onLike = { onLike(review.reviewId) },
-                            onFavorite = { onFavorite(review.reviewId) }
-                        )
-                    }.let { list ->
+                    list.let { list ->
                         if (list.isNotEmpty()) {
-                            uiState = FeedUiState.Success(list = list)
+                            //uiState = Success(list = list) TODO:: 데이터 설정하기
                         }
                     }
                 }
             } catch (e: Exception) {
                 when (uiState) {
-                    is FeedUiState.Error -> {
-                        Log.e(tag, "TODO:: $uiState, ${e.message}")
-                    }
-
-                    FeedUiState.Loading -> {
-                        uiState = Error(e.message)
-                    }
-
-                    is FeedUiState.Success -> {
-                        Log.e(tag, "TODO:: $uiState, ${e.message}")
-                    }
-
-                    FeedUiState.Empty -> TODO()
+//                    is Error -> { Log.e(tag, "TODO:: $uiState, ${e.message}") }
+//                    is Loading -> { uiState = Error(e.message) }
+//                    is Success -> { Log.e(tag, "TODO:: $uiState, ${e.message}") }
+//                    Empty -> TODO()
                 }
             }
         }
     }
 
     fun findIndexByReviewId(reviewId: Int): Int {
-        val state = uiState
-        if (state is FeedUiState.Success) {
-            return state.list.indexOf(state.list.find { it.reviewId == reviewId })
-        }
+        //TODO:: 설정하기
+//        val state = uiState
+//        if (state is FeedUiState.Success) {
+//            return state.list.indexOf(state.list.find { it.reviewId == reviewId })
+//        }
         return 0
     }
 

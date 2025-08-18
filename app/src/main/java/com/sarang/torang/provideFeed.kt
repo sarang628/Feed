@@ -7,7 +7,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.sarang.torang.compose.feed.Feed
 import com.sarang.torang.compose.feed.feedType
-import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.di.feed_di.toReview
 import com.sarang.torang.di.image.provideZoomableTorangAsyncImage
 

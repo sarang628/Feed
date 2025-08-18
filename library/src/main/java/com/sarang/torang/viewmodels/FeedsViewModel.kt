@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.usecase.AddFavoriteUseCase
 import com.sarang.torang.usecase.AddLikeUseCase
@@ -16,6 +17,11 @@ import com.sarang.torang.usecase.FeedWithPageUseCase
 import com.sarang.torang.usecase.GetFeedFlowUseCase
 import com.sarang.torang.usecase.IsLoginFlowForFeedUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,42 +35,20 @@ open class FeedsViewModel @Inject constructor(
     private val getFeedFlowUseCase: GetFeedFlowUseCase,
     private val isLoginFlowUseCase: IsLoginFlowForFeedUseCase,
 ) : ViewModel() {
-    var uiState: FeedUiState by mutableStateOf(FeedUiState.Loading)
-    private var initializeCalled = false
+    var uiState: StateFlow<FeedUiState> = getFeedFlowUseCase.invoke()
+        .map<List<Feed>, FeedUiState>(FeedUiState::Success)
+        .onStart { emit(FeedUiState.Loading) }
+        .stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(5_000), initialValue = FeedUiState.Loading)
     private var page = 0
     val isLogin = isLoginFlowUseCase.isLogin
+
+    val msg: String? = null
+    val focusedIndex: Int = 0
 
     var isRefreshing by mutableStateOf(false)
         private set
 
     open val tag = "__FeedsViewModel"
-
-    @MainThread
-    fun initialize() {
-        if (initializeCalled) return
-        initializeCalled = true
-
-        viewModelScope.launch {
-            try {
-                feedWithPageUseCase.invoke(page)
-                page++
-            } catch (e: Exception) {
-                uiState = FeedUiState.Error(e.message)
-            }
-
-            getFeedFlowUseCase
-                .invoke()
-                .collect { list ->
-                    Log.d(tag, "received feed list : ${list.size}")
-                    uiState = FeedUiState.Success(list = list.map { review ->
-                        review.copy(
-                            onLike = { onLike(review.reviewId) },
-                            onFavorite = { onFavorite(review.reviewId) }
-                        )
-                    })
-                }
-        }
-    }
 
     // 피드 리스트 갱신
     open fun refreshFeed() {
@@ -84,20 +68,17 @@ open class FeedsViewModel @Inject constructor(
 
     // 즐겨찾기 클릭
     internal fun onFavorite(reviewId: Int) {
-        if (uiState is FeedUiState.Success) {
-            viewModelScope.launch {
-                val review =
-                    (uiState as FeedUiState.Success).list.find { it.reviewId == reviewId }
-                review?.let {
-                    try {
-                        if (it.isFavorite) {
-                            deleteFavoriteUseCase.invoke(reviewId)
-                        } else {
-                            addFavoriteUseCase.invoke(reviewId)
-                        }
-                    } catch (e: Exception) {
-                        handleErrorMsg(e)
+        viewModelScope.launch {
+            val review = (uiState as FeedUiState.Success).list.find { it.reviewId == reviewId }
+            review?.let {
+                try {
+                    if (it.isFavorite) {
+                        deleteFavoriteUseCase.invoke(reviewId)
+                    } else {
+                        addFavoriteUseCase.invoke(reviewId)
                     }
+                } catch (e: Exception) {
+                    handleErrorMsg(e)
                 }
             }
         }
@@ -105,8 +86,6 @@ open class FeedsViewModel @Inject constructor(
 
     // 좋아여 클릭
     internal fun onLike(reviewId: Int) {
-        if (uiState !is FeedUiState.Success) return
-
         onLike(uiState as FeedUiState.Success, reviewId)
     }
 
@@ -130,16 +109,12 @@ open class FeedsViewModel @Inject constructor(
     }
 
     private fun showError(msg: String?) {
-        if (uiState is FeedUiState.Success) {
-            uiState = (uiState as FeedUiState.Success).copy(msg = msg)
-        }
+        //uiState = (uiState as FeedUiState.Success).copy(msg = msg)
     }
 
     // 에러메시지 삭제
     fun clearErrorMsg() {
-        if (uiState is FeedUiState.Success) {
-            uiState = (uiState as FeedUiState.Success).copy(msg = null)
-        }
+        //uiState = (uiState as FeedUiState.Success).copy(msg = null)
     }
 
     open fun onBottom() {
@@ -156,25 +131,14 @@ open class FeedsViewModel @Inject constructor(
     }
 
     fun onVideoClick(reviewId: Int) {
-        if (uiState is FeedUiState.Success) {
-            (uiState as FeedUiState.Success).let {
-                uiState = it.copy(
-                    list = it.list.map {
-                        if (it.reviewId == reviewId)
-                            it.copy(isPlaying = !it.isPlaying)
-                        else
-                            it
-                    }
-                )
-            }
-        }
+        //(uiState as FeedUiState.Success).let {
+            //uiState = it.copy(list = it.list.map { if (it.reviewId == reviewId) it.copy(isPlaying = !it.isPlaying) else it })
+        //} TODO:: 설정하기
     }
 
     fun onFocusItemIndex(index: Int) {
-        if (uiState is FeedUiState.Success) {
-            (uiState as FeedUiState.Success).let {
-                uiState = it.copy(focusedIndex = index)
-            }
-        }
+        //(uiState as FeedUiState.Success).let {
+            //uiState = it.copy(focusedIndex = index)
+        //} TODO:: 설정하기
     }
 }
