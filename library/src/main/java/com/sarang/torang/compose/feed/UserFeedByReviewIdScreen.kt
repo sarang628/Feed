@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.compose.feed.component.FeedScreen
+import com.sarang.torang.compose.feed.component.LocalFeedCompose
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.data.feed.adjustHeight
 import com.sarang.torang.uistate.FeedUiState
@@ -42,9 +43,7 @@ fun UserFeedByReviewIdScreen(
     onBack: (() -> Unit)? = null,
     listState: LazyListState,
     shimmerBrush: @Composable (Boolean) -> Brush,
-    feed: feedType,
     pullToRefreshLayout: pullToRefreshLayoutType,
-    bottomDetectingLazyColumn: @Composable (Modifier, Int, () -> Unit, @Composable (Int) -> Unit, Boolean, Arrangement.Vertical, LazyListState, @Composable (() -> Unit)?) -> Unit,
     pageScrollable: Boolean = true
 ) {
     val uiState: FeedUiState = feedsViewModel.uiState
@@ -72,7 +71,7 @@ fun UserFeedByReviewIdScreen(
         onRefresh = { feedsViewModel.refreshFeed() },
         onBottom = { feedsViewModel.onBottom() },
         feed = { it ->
-            feed.invoke(
+            LocalFeedCompose.current.invoke(
                 it,
                 { feedsViewModel.onLike(it) },
                 { feedsViewModel.onFavorite(it) },
@@ -84,7 +83,6 @@ fun UserFeedByReviewIdScreen(
         listState = listState,
         shimmerBrush = shimmerBrush,
         pullToRefreshLayout = pullToRefreshLayout,
-        bottomDetectingLazyColumn = bottomDetectingLazyColumn
     )
 }
 
@@ -103,7 +101,6 @@ internal fun MyFeed(
     shimmerBrush: @Composable (Boolean) -> Brush,
     feed: @Composable ((feed: Feed) -> Unit),
     pullToRefreshLayout: pullToRefreshLayoutType = { _, _, _ -> Log.w("__MyFeed", "pullToRefreshLayout is not set") },
-    bottomDetectingLazyColumn: @Composable (Modifier, Int, () -> Unit, @Composable (Int) -> Unit, Boolean, Arrangement.Vertical, LazyListState, @Composable (() -> Unit)?) -> Unit
 ) {
     FeedScreen(
         uiState = uiState,
@@ -129,7 +126,6 @@ internal fun MyFeed(
         consumeOnTop = { },
         shimmerBrush = shimmerBrush,
         pullToRefreshLayout = pullToRefreshLayout,
-        bottomDetectingLazyColumn = bottomDetectingLazyColumn
     )
 }
 
@@ -146,6 +142,5 @@ fun PreviewMyFeedScreen() {
         listState = rememberLazyListState(),
         feed = { _ -> },
         shimmerBrush = { it -> Brush.linearGradient() },
-        bottomDetectingLazyColumn = { _, _, _, _, _, _, _, _ -> }
     )
 }

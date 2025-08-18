@@ -45,7 +45,6 @@ fun FeedScreenInMain(
     onScrollToTop: () -> Unit,
     shimmerBrush: @Composable (Boolean) -> Brush,
     pullToRefreshLayout: pullToRefreshLayoutType = { _, _, _ -> Log.w("__FeedScreenForMain", "pullToRefreshLayout is not implemented")},
-    bottomDetectingLazyColumn: bottomDetectingLazyColumnType,
     scrollEnabled: Boolean = true,
     pageScrollable: Boolean = true
 ) {
@@ -82,7 +81,6 @@ fun FeedScreenInMain(
         shimmerBrush = shimmerBrush,
         pullToRefreshLayout = pullToRefreshLayout,
         onFocusItemIndex = { feedsViewModel.onFocusItemIndex(it) },
-        bottomDetectingLazyColumn = bottomDetectingLazyColumn,
         scrollEnabled = scrollEnabled
     )
 }
@@ -105,7 +103,6 @@ internal fun FeedInMain(
     pullToRefreshLayout: pullToRefreshLayoutType,
     onFocusItemIndex: (Int) -> Unit = {},
     topAppIcon: ImageVector = Icons.AutoMirrored.Default.Send,
-    bottomDetectingLazyColumn: bottomDetectingLazyColumnType,
     scrollEnabled: Boolean = true
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
@@ -130,7 +127,6 @@ internal fun FeedInMain(
         shimmerBrush = shimmerBrush,
         pullToRefreshLayout = pullToRefreshLayout,
         onFocusItemIndex = onFocusItemIndex,
-        bottomDetectingLazyColumn = bottomDetectingLazyColumn,
         scrollEnabled = scrollEnabled
     )
 
@@ -171,8 +167,6 @@ fun PreviewMainFeedScreen() {
         onTop = false,
         consumeOnTop = {},
         feed = { _ -> Text("피드가 있어야 보임") },
-        shimmerBrush = { it -> linearGradient() },
-        bottomDetectingLazyColumn = { _, _, _, _, _, _, _, _ ->
-        }
+        shimmerBrush = { it -> linearGradient() }
     )
 }

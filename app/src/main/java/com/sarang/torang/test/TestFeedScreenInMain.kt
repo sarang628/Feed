@@ -7,19 +7,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.unit.Dp
 import com.sarang.torang.compose.feed.FeedScreenInMain
+import com.sarang.torang.compose.feed.component.LocalBottomDetectingLazyColumnType
 import com.sarang.torang.compose.feed.component.LocalFeedCompose
-import com.sarang.torang.compose.feed.feedType
 import com.sarang.torang.compose.feed.pullToRefreshLayoutType
+import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
 import com.sarang.torang.di.feed_di.CustomFeedCompose
-import com.sarang.torang.di.feed_di.provideBottomDetectingLazyColumn
 import com.sarang.torang.di.feed_di.shimmerBrush
-import com.sarang.torang.di.image.provideZoomableTorangAsyncImage
 import com.sarang.torang.di.pulltorefresh.providePullToRefresh
-import com.sarang.torang.provideFeed
 import com.sryang.library.pullrefresh.PullToRefreshLayoutState
 import com.sryang.library.pullrefresh.rememberPullToRefreshState
 
@@ -32,7 +27,9 @@ fun TestFeedScreenForMain(
     onAlarm: () -> Unit = { Log.w("__FeedScreenForMain", "onAlarm is not implemented") },
 ) {
     var onTop by remember { mutableStateOf(false) }
-    CompositionLocalProvider(LocalFeedCompose provides CustomFeedCompose) {
+    CompositionLocalProvider(LocalFeedCompose provides CustomFeedCompose,
+        LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType
+    ) {
         FeedScreenInMain(
             scrollToTop = onTop,
             onAlarm = onAlarm,
@@ -40,7 +37,6 @@ fun TestFeedScreenForMain(
             shimmerBrush = { shimmerBrush(it) },
             onScrollToTop = { onTop = false },
             pullToRefreshLayout = pullToRefreshLayout,
-            bottomDetectingLazyColumn = provideBottomDetectingLazyColumn()
         )
     }
 }

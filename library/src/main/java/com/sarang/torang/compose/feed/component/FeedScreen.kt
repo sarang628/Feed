@@ -80,7 +80,6 @@ fun FeedScreen(
     topAppBar:                  @Composable () -> Unit              = { Log.i(tag, "topAppBar is not set") },
     shimmerBrush:               @Composable (Boolean) -> Brush      = { defaultShimmerBrush() },
     pullToRefreshLayout:        pullToRefreshLayoutType             = {_,_,contents-> Log.w(tag, "pullToRefreshLayout is not set"); contents.invoke() },
-    bottomDetectingLazyColumn:  bottomDetectingLazyColumnType       = {_,count,_,itemCompose,_,_,_,contents-> Log.e(tag, "bottomDetectingLazyColumn is not set"); LazyColumn { items(count){itemCompose.invoke(it)} }; contents?.invoke();},
     isRefreshing:               Boolean                             = true,
     onTop:                      Boolean                             = false,
     scrollBehavior:             TopAppBarScrollBehavior?            = null,
@@ -110,7 +109,7 @@ fun FeedScreen(
                     listState = listState,
                     userScrollEnabled = scrollEnabled,
                     onRefresh = onRefresh,
-                    bottomDetectingLazyColumn = bottomDetectingLazyColumn,
+                    bottomDetectingLazyColumn = LocalBottomDetectingLazyColumnType.current,
                     pullToRefreshLayout = pullToRefreshLayout
                 ) { EmptyFeed() }
             }
@@ -126,7 +125,7 @@ fun FeedScreen(
                     pullToRefreshLayout = pullToRefreshLayout,
                     isRefreshing = isRefreshing,
                     onRefresh = onRefresh,
-                    bottomDetectingLazyColumn = bottomDetectingLazyColumn
+                    bottomDetectingLazyColumn = LocalBottomDetectingLazyColumnType.current
                 )
             }
 

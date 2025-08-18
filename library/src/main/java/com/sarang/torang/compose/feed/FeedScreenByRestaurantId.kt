@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.compose.feed.component.FeedScreen
+import com.sarang.torang.compose.feed.component.LocalFeedCompose
 import com.sarang.torang.data.feed.adjustHeight
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.FeedScreenByRestaurantIdViewModel
@@ -25,9 +26,7 @@ fun FeedScreenByRestaurantId(
     onTop: Boolean = false,
     consumeOnTop: (() -> Unit)? = null,
     shimmerBrush: @Composable (Boolean) -> Brush,
-    feed: feedType,
     pullToRefreshLayout: pullToRefreshLayoutType,
-    bottomDetectingLazyColumn: @Composable (Modifier, Int, () -> Unit, @Composable (Int) -> Unit, Boolean, Arrangement.Vertical, LazyListState, @Composable (() -> Unit)?) -> Unit,
     pageScrollable : Boolean = true
 ) {
     val uiState: FeedUiState = feedsViewModel.uiState
@@ -49,7 +48,7 @@ fun FeedScreenByRestaurantId(
         isRefreshing = isRefreshing,
         onTop = onTop,
         feed = { it ->
-            feed(
+            LocalFeedCompose.current(
                 it,
                 { feedsViewModel.onLike(it) },
                 { feedsViewModel.onFavorite(it) },
@@ -62,6 +61,5 @@ fun FeedScreenByRestaurantId(
         consumeOnTop = { consumeOnTop?.invoke() },
         shimmerBrush = shimmerBrush,
         pullToRefreshLayout = pullToRefreshLayout,
-        bottomDetectingLazyColumn = bottomDetectingLazyColumn
     )
 }

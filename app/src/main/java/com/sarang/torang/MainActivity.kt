@@ -16,7 +16,6 @@ import com.sarang.torang.repository.LoginRepositoryTest
 import com.sarang.torang.repository.ProfileRepository
 import com.sarang.torang.repository.ProfileRepositoryTest
 import com.sarang.torang.test.TestBasic
-import com.sarang.torang.test.TestFeedScreenAndSnackBar
 import com.sarang.torang.test.TestFeedScreenByRestaurantId
 import com.sarang.torang.test.TestFeedScreenForMain
 import com.sarang.torang.test.TestPinchZoom
@@ -52,8 +51,8 @@ class MainActivity : ComponentActivity() {
                     //TestPinchZoom()
                     //TestUserFeedByReviewIdScreen_()
                     //TestFeedScreenByReviewId_()
-                    //TestFeedScreenByRestaurantId_()
-                    TestFeedScreenForMain_()
+                    TestFeedScreenByRestaurantId_()
+                    //TestFeedScreenForMain_()
                     //LoginRepositoryTest_(loginRepository)
                     //ProfileRepositoryTest(profileRepository = profileRepository)
                     //FeedRepositoryTest_(feedRepository = feedRepository)
