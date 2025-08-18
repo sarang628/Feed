@@ -14,16 +14,7 @@ data class Feed(
     val isFavorite: Boolean,
     val contents: String,
     val createDate: String,
-    val reviewImages: List<FeedImage> = ArrayList(),
-    val onProfile: (() -> Unit)? = null,
-    val onLike: (() -> Unit)? = null,
-    val onComment: (() -> Unit)? = null,
-    val onShare: (() -> Unit)? = null,
-    val onFavorite: (() -> Unit)? = null,
-    val onMenu: (() -> Unit)? = null,
-    val onName: (() -> Unit)? = null,
-    val onRestaurant: (() -> Unit)? = null,
-    val onImage: ((Int) -> Unit)? = null,
+    val reviewImages: List<FeedImage> = listOf(),
     val isPlaying: Boolean = true,
 ) {
     companion object {
