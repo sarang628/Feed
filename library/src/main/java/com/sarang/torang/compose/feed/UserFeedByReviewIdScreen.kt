@@ -1,5 +1,6 @@
 package com.sarang.torang.compose.feed
 
+import android.util.Log
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -49,14 +50,15 @@ fun UserFeedByReviewIdScreen(
     val density = LocalDensity.current
 
     LaunchedEffect(key1 = reviewId) { // reviewID가 변경되면 피드 로드 요청
+        Log.d("__UserFeedByReviewIdScreen", "load review : ${reviewId}");
         feedsViewModel.getUserFeedByReviewId(reviewId)
     }
 
-    LaunchedEffect(key1 = uiState is FeedUiState.Success) { // 피드 리스트에서 reviewId에 해당 피드로 이동
+    /*LaunchedEffect(key1 = uiState is FeedUiState.Success) { // 피드 리스트에서 reviewId에 해당 피드로 이동
         val position = feedsViewModel.findIndexByReviewId(reviewId)
         delay(10)
         listState.scrollToItem(position)
-    }
+    }*/
 
     MyFeed(
         uiState = uiState,
