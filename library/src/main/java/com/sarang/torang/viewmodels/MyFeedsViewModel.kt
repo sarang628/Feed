@@ -1,7 +1,11 @@
 package com.sarang.torang.viewmodels
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
+import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.usecase.AddFavoriteUseCase
 import com.sarang.torang.usecase.AddLikeUseCase
@@ -15,6 +19,14 @@ import com.sarang.torang.usecase.GetMyAllFeedByReviewIdUseCase
 import com.sarang.torang.usecase.GetMyFeedFlowUseCase
 import com.sarang.torang.usecase.IsLoginFlowForFeedUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,20 +46,21 @@ class MyFeedsViewModel @Inject constructor(
     getFeedFlowUseCase,
     isLoginFlowUseCase
 ) {
-    fun getUserFeedByReviewId(reviewId: Int) {
-        //uiState = FeedUiState.Loading TODO:: 설정하기
-        viewModelScope.launch {
-            getMyAllFeedByReviewIdUseCase.invoke(reviewId)
-            getMyFeedFlowUseCase.invoke(reviewId).collect { list ->
-                list.let { list ->
-                    if (list.isNotEmpty()) {
-                        //uiState = FeedUiState.Success(list = list) TODO:: 설정하기
-                    } else {
-                        //uiState = FeedUiState.Error("피드가 없습니다.") TODO:: 설정하기
-                    }
-                }
+
+    private val _reviewIdState = MutableStateFlow<Int?>(null)
+
+    override val uiState: StateFlow<FeedUiState> =
+        _reviewIdState
+            .flatMapLatest { reviewId ->
+                getMyFeedFlowUseCase.invoke(reviewId)
             }
-        }
+            .map<List<Feed>, FeedUiState>(FeedUiState::Success)
+            .onStart { emit(FeedUiState.Loading) }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), FeedUiState.Loading)
+
+    fun getUserFeedByReviewId(reviewId: Int) {
+        Log.d("__MyFeedsViewModel", "getUserFeedByReviewId : $reviewId")
+        _reviewIdState.value = reviewId
     }
 
     override fun refreshFeed() {
@@ -58,12 +71,7 @@ class MyFeedsViewModel @Inject constructor(
         Log.d("__MyFeedsViewModel", "onBottom called but nothing to do")
     }
 
-
-    fun findIndexByReviewId(reviewId: Int): Int {
-//        val state = uiState
-//        if (state is FeedUiState.Success) {
-//            return state.list.indexOf(state.list.find { it.reviewId == reviewId })
-//        } TODO:: 설정하기
-        return 0
+    fun findIndexByReviewId(list: List<Feed>, reviewId: Int): Int {
+        return list.indexOf(list.find { it.reviewId == reviewId })
     }
 }
