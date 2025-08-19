@@ -26,9 +26,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 open class FeedsViewModel @Inject constructor(
-    private val feedWithPageUseCase: FeedWithPageUseCase,
-    private val clickLikeUseCase: ClickLikeUseCase,
-    private val clickFavoriteUseCase: ClickFavorityUseCase,
+    val feedWithPageUseCase: FeedWithPageUseCase,
+    val clickLikeUseCase: ClickLikeUseCase,
+    val clickFavoriteUseCase: ClickFavorityUseCase,
     getFeedFlowUseCase: GetFeedFlowUseCase,
     isLoginFlowUseCase: IsLoginFlowForFeedUseCase,
 ) : ViewModel() {
