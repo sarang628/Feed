@@ -9,7 +9,9 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -42,7 +44,6 @@ fun FeedScreenInMain(
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
     val isRefreshing: Boolean = feedsViewModel.isRefreshingState
     val isLogin by feedsViewModel.isLoginState.collectAsState(initial = false)
-
 
     FeedInMain(
         uiState = uiState,
@@ -88,13 +89,13 @@ internal fun FeedInMain(
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     FeedScreen(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         uiState = uiState,
         consumeErrorMessage = consumeErrorMessage,
         onBottom = onBottom,
         isRefreshing = isRefreshing,
         onRefresh = onRefresh,
         onTop = onTop,
-        scrollBehavior = scrollBehavior,
         consumeOnTop = consumeOnTop,
         topAppBar = { FeedTopAppBar(onAddReview = onAddReview, topAppIcon = topAppIcon, scrollBehavior = scrollBehavior, onAlarm = onAlarm) },
         onFocusItemIndex = onFocusItemIndex,
@@ -111,26 +112,7 @@ internal fun FeedInMain(
 @Composable
 fun PreviewMainFeedScreen() {
     FeedInMain(/*Preview*/
-        uiState = FeedUiState.Success(
-            list = listOf(
-                Feed(
-                    reviewId = 0,
-                    restaurantId = 0,
-                    userId = 0,
-                    name = "1",
-                    restaurantName = "2",
-                    rating = 0f,
-                    profilePictureUrl = "",
-                    likeAmount = 0,
-                    commentAmount = 0,
-                    isLike = false,
-                    isFavorite = false,
-                    contents = "3",
-                    createDate = "4",
-                    reviewImages = listOf()
-                )
-            ),
-        ),
+        uiState = FeedUiState.Success(list = listOf(Feed.Sample),),
         onAddReview = {},
         consumeErrorMessage = {},
         onRefresh = {},
