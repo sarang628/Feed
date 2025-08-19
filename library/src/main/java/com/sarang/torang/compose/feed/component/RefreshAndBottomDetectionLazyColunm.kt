@@ -24,7 +24,7 @@ internal fun RefreshAndBottomDetectionLazyColumn(
     contents: @Composable (() -> Unit)? = null,
     itemCompose: @Composable (Int) -> Unit,
 ) {
-    LocalPullToRefreshLayoutType.current.invoke(isRefreshing, onRefresh) {
+    LocalPullToRefreshLayoutType.current.invoke(modifier, isRefreshing, onRefresh) {
         LocalBottomDetectingLazyColumnType.current.invoke(modifier, count, onBottom, itemCompose, userScrollEnabled, Arrangement.spacedBy(10.dp), listState, contents)
     }
 }
