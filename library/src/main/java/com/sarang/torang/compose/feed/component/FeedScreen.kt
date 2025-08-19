@@ -3,11 +3,7 @@ package com.sarang.torang.compose.feed.component
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -16,8 +12,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -28,13 +22,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.sarang.torang.compose.feed.LocalPullToRefreshLayoutType
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.data.feed.adjustHeight
 import com.sarang.torang.uistate.FeedUiState
@@ -53,7 +43,6 @@ import kotlinx.coroutines.launch
  * @param onRefresh 피드 갱신 요청
  * @param listState 리스트 상태 library
  * @param consumeOnTop 최상단 이벤트 소비
- * @param scrollBehavior list와 topBar와 상호작용을 위한 behavior
  * @param onBackToTop back 이벤트 시 리스트를 최상단으로 올리는 이벤트
  * @param onFocusItemIndex 비디오 재생을 위해 항목이 중앙에 있을때 호출되는 콜백
  * @param scrollEnabled 리스트 스크롤 가능 여부
@@ -66,13 +55,13 @@ import kotlinx.coroutines.launch
 @Composable
 fun FeedScreen(
     // @formatter:off
+    modifier:                   Modifier                            = Modifier,
     tag:                        String                              = "__FeedScreen",
     uiState:                    FeedUiState                         = FeedUiState.Loading,
     listState:                  LazyListState                       = rememberLazyListState(),
     topAppBar:                  @Composable () -> Unit              = { Log.i(tag, "topAppBar is not set") },
     isRefreshing:               Boolean                             = true,
     onTop:                      Boolean                             = false,
-    scrollBehavior:             TopAppBarScrollBehavior?            = null,
     onBackToTop:                Boolean                             = true,
     scrollEnabled:              Boolean                             = true,
     consumeErrorMessage:        () -> Unit                          = { Log.w(tag, "consumeErrorMessage is not set") },
@@ -104,9 +93,8 @@ fun FeedScreen(
                 RefreshAndBottomDetectionLazyColumn(modifier = Modifier.padding(it), count = 0, onBottom = {}, isRefreshing = isRefreshing, listState = listState, userScrollEnabled = scrollEnabled, onRefresh = onRefresh, contents = {EmptyFeed()}) {  }
             }
             is FeedUiState.Success -> {
-                RefreshAndBottomDetectionLazyColumn(modifier = if (scrollBehavior != null) { Modifier
-                    .nestedScroll(scrollBehavior.nestedScrollConnection)
-                    .padding(it) } else Modifier.padding(it), count = uiState.list.size, onBottom = onBottom, userScrollEnabled = scrollEnabled, listState = listState, isRefreshing = isRefreshing, onRefresh = onRefresh)
+                RefreshAndBottomDetectionLazyColumn(
+                    modifier = modifier.padding(it), count = uiState.list.size, onBottom = onBottom, userScrollEnabled = scrollEnabled, listState = listState, isRefreshing = isRefreshing, onRefresh = onRefresh)
                 {
                     val feed = uiState.list[it].copy(
                         //isPlaying = it.isPlaying && if (uiState is FeedUiState.Success) { (uiState as FeedUiState.Success).focusedIndex == (uiState as FeedUiState.Success).list.indexOf(it) } else false
