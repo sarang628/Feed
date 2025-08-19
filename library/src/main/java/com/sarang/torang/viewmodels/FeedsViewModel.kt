@@ -35,7 +35,7 @@ open class FeedsViewModel @Inject constructor(
     private var page = 0
 
     val isLoginState = isLoginFlowUseCase.isLogin
-    val uiState: StateFlow<FeedUiState> = getFeedFlowUseCase.invoke()
+    open val uiState: StateFlow<FeedUiState> = getFeedFlowUseCase.invoke()
         .map<List<Feed>, FeedUiState>(FeedUiState::Success)
         .onStart { emit(FeedUiState.Loading) }
         .stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(5_000), initialValue = FeedUiState.Loading)
