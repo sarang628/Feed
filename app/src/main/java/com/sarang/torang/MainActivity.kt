@@ -52,10 +52,10 @@ class MainActivity : ComponentActivity() {
                 ) {
                     //TestBasic()
                     //TestPinchZoom()
-                    //TestUserFeedByReviewIdScreen_()
+                    TestUserFeedByReviewIdScreen_()
                     //TestFeedScreenByReviewId_()
                     //TestFeedScreenByRestaurantId_()
-                    TestFeedScreenForMain_()
+                    //TestFeedScreenForMain_()
                     //LoginRepositoryTest_(loginRepository)
                     //ProfileRepositoryTest(profileRepository = profileRepository)
                     //FeedRepositoryTest_(feedRepository = feedRepository)
@@ -81,7 +81,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun PreviewFeedScreenForMain() {
     CompositionLocalProvider(LocalPullToRefreshLayoutType provides CustomLocalPullToRefreshType) {
-        TestFeedScreenForMain(
-        )
+        TestFeedScreenForMain()
     }
 }
