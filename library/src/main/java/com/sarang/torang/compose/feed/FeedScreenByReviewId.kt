@@ -34,9 +34,6 @@ fun FeedScreenByReviewId(
     val isRefreshing: Boolean = feedsViewModel.isRefreshingState
     val isLogin: Boolean by feedsViewModel.isLoginState.collectAsState(initial = false)
     val backPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
-    val screenHeightDp = LocalConfiguration.current.screenHeightDp
-    val screenWidthDp = LocalConfiguration.current.screenWidthDp
-    val density = LocalDensity.current
 
     LaunchedEffect(key1 = reviewId) {
         feedsViewModel.getFeedByReviewId(reviewId)
@@ -47,10 +44,7 @@ fun FeedScreenByReviewId(
         topAppBar = {
             TopAppBar(title = { }, navigationIcon = {
                 IconButton(onClick = { backPressedDispatcher?.onBackPressed() }) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                        contentDescription = ""
-                    )
+                    Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack, contentDescription = "")
                 }
             })
         },
@@ -59,17 +53,11 @@ fun FeedScreenByReviewId(
         onBottom = { feedsViewModel.onBottom() },
         isRefreshing = isRefreshing,
         onTop = onTop,
-        feed = { it ->
-            LocalFeedCompose.current(
-                it,
-                { feedsViewModel.onLike(it) },
-                { feedsViewModel.onFavorite(it) },
-                isLogin,
-                { feedsViewModel.onVideoClick(it.reviewId) },
-                it.reviewImages[0].adjustHeight(density, screenWidthDp, screenHeightDp),
-                pageScrollable
-            )
-        },
         consumeOnTop = { consumeOnTop?.invoke() },
+        isLogin = isLogin,
+        onFavorite = { feedsViewModel.onFavorite(it) },
+        onLike = { feedsViewModel.onLike(it) },
+        onVideoClick = {feedsViewModel.onVideoClick(it)},
+        pageScrollable = pageScrollable
     )
 }

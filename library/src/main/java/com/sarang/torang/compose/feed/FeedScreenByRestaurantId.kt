@@ -27,9 +27,6 @@ fun FeedScreenByRestaurantId(
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
     val isRefreshing: Boolean = feedsViewModel.isRefreshingState
     val isLogin by feedsViewModel.isLoginState.collectAsState(initial = false)
-    val screenHeightDp = LocalConfiguration.current.screenHeightDp
-    val screenWidthDp = LocalConfiguration.current.screenWidthDp
-    val density = LocalDensity.current
 
     LaunchedEffect(key1 = restaurantId) {
         feedsViewModel.getFeedByRestaurantId(restaurantId)
@@ -42,17 +39,11 @@ fun FeedScreenByRestaurantId(
         onBottom = { feedsViewModel.onBottom() },
         isRefreshing = isRefreshing,
         onTop = onTop,
-        feed = { it ->
-            LocalFeedCompose.current(
-                it,
-                { feedsViewModel.onLike(it) },
-                { feedsViewModel.onFavorite(it) },
-                isLogin,
-                { feedsViewModel.onVideoClick(it.reviewId) },
-                it.reviewImages[0].adjustHeight(density, screenWidthDp, screenHeightDp),
-                pageScrollable
-            )
-        },
         consumeOnTop = { consumeOnTop?.invoke() },
+        isLogin = isLogin,
+        onLike = { feedsViewModel.onLike(it) },
+        onFavorite = { feedsViewModel.onFavorite(it) },
+        onVideoClick = { feedsViewModel.onVideoClick(it) },
+        pageScrollable = pageScrollable
     )
 }

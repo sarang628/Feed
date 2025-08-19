@@ -1,6 +1,7 @@
 package com.sarang.torang.viewmodels
 
 import android.util.Log
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -63,7 +64,10 @@ open class FeedsViewModel @Inject constructor(
     // 즐겨찾기 클릭
     internal fun onFavorite(reviewId: Int) {
         viewModelScope.launch {
-            try { clickFavoriteUseCase.invoke(reviewId) }
+            try {
+                if (isLoginState.stateIn(viewModelScope).value)
+                    clickFavoriteUseCase.invoke(reviewId)
+            }
             catch (e: Exception) { handleErrorMsg(e) }
         }
     }
@@ -71,7 +75,10 @@ open class FeedsViewModel @Inject constructor(
     // 좋아여 클릭
     internal fun onLike(reviewId: Int) {
         viewModelScope.launch {
-            try { clickLikeUseCase.invoke(reviewId) }
+            try {
+                if (isLoginState.stateIn(viewModelScope).value)
+                    clickLikeUseCase.invoke(reviewId)
+            }
             catch (e: Exception) { handleErrorMsg(e) }
         }
     }

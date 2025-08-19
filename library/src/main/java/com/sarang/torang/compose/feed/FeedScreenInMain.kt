@@ -4,29 +4,24 @@ import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarang.torang.compose.feed.component.FeedScreen
 import com.sarang.torang.compose.feed.component.FeedTopAppBar
-import com.sarang.torang.compose.feed.component.LocalFeedCompose
 import com.sarang.torang.data.feed.Feed
-import com.sarang.torang.data.feed.adjustHeight
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.FeedsViewModel
 
 /**
  * 메인화면용 FeedScreen
- * 피드 가져오기, 리프레시, 좋아요, 즐겨찾기 기능 담당
+ * 피드 가져오기, 리프레시, 좋아요, 즐겨찾기 기능
  * 피드 프로필, 코멘트, 메뉴 등은 피드 컴포저블을 통해 상위 컴포저블에서 처리
  * @param feedsViewModel 피드 뷰모델
  * @param onAddReview 피드 추가 리뷰
@@ -47,52 +42,49 @@ fun FeedScreenInMain(
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
     val isRefreshing: Boolean = feedsViewModel.isRefreshingState
     val isLogin by feedsViewModel.isLoginState.collectAsState(initial = false)
-    val screenHeightDp = LocalConfiguration.current.screenHeightDp
-    val screenWidthDp = LocalConfiguration.current.screenWidthDp
-    val density = LocalDensity.current
+
 
     FeedInMain(
         uiState = uiState,
+        isLogin = isLogin,
         onAddReview = onAddReview,
         onAlarm = onAlarm,
         isRefreshing = isRefreshing,
+        onTop = scrollToTop,
+        consumeOnTop = onScrollToTop,
+        scrollEnabled = scrollEnabled,
         onBottom = { feedsViewModel.onBottom() },
         onRefresh = { feedsViewModel.refreshFeed() },
         consumeErrorMessage = { feedsViewModel.clearErrorMsg() },
-        feed = { it ->
-            val feed = it.copy(
-                //isPlaying = it.isPlaying && if (uiState is FeedUiState.Success) { (uiState as FeedUiState.Success).focusedIndex == (uiState as FeedUiState.Success).list.indexOf(it) } else false
-            )
-            val onLike : (Int) -> Unit = { if (isLogin) feedsViewModel.onLike(it) }
-            val onFavorite: (Int) -> Unit = { if (isLogin) feedsViewModel.onFavorite(it) }
-            val onVideoClick: () -> Unit = { feedsViewModel.onVideoClick(it.reviewId) }
-            val imageHeight = it.reviewImages[0].adjustHeight(density, screenWidthDp, screenHeightDp)
-            LocalFeedCompose.current.invoke(feed, onLike, onFavorite, isLogin, onVideoClick, imageHeight, pageScrollable)
-        },
-        onTop = scrollToTop,
-        consumeOnTop = onScrollToTop,
         onFocusItemIndex = { feedsViewModel.onFocusItemIndex(it) },
-        scrollEnabled = scrollEnabled
+        onLike = { feedsViewModel.onLike(it) },
+        onFavorite = { feedsViewModel.onFavorite(it) },
+        onVideoClick = { feedsViewModel.onVideoClick(it) },
+        pageScrollable = pageScrollable
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun FeedInMain(
-    tag: String = "__MainFeed",
-    uiState: FeedUiState, /* ui state */
-    onAddReview: (() -> Unit) = { Log.w(tag, "onAddReview is not implemented") },
-    onAlarm: () -> Unit = { Log.w(tag, "onAlarm is not implemented") },
-    consumeErrorMessage: () -> Unit, /* consume error message */
-    onBottom: () -> Unit,
-    feed: @Composable ((feed: Feed) -> Unit),
-    onRefresh: (() -> Unit),
-    isRefreshing: Boolean,
-    onTop: Boolean,
-    consumeOnTop: () -> Unit,
-    onFocusItemIndex: (Int) -> Unit = {},
-    topAppIcon: ImageVector = Icons.AutoMirrored.Default.Send,
-    scrollEnabled: Boolean = true
+    tag:                    String = "__MainFeed",
+    uiState:                FeedUiState,
+    isLogin:                Boolean = false,
+    pageScrollable:         Boolean = true,
+    isRefreshing:           Boolean,
+    onTop:                  Boolean,
+    topAppIcon:             ImageVector   = Icons.AutoMirrored.Default.Send,
+    scrollEnabled:          Boolean       = true,
+    onFocusItemIndex:       (Int) -> Unit = {},
+    consumeErrorMessage:    () -> Unit    = {},
+    onAlarm:                () -> Unit    = { Log.w(tag, "onAlarm is not implemented") },
+    onBottom:               () -> Unit    = {},
+    onRefresh:              () -> Unit    = {},
+    consumeOnTop:           () -> Unit    = {},
+    onAddReview:            () -> Unit    = { Log.w(tag, "onAddReview is not implemented") },
+    onLike :                (Int) -> Unit = {},
+    onFavorite:             (Int) -> Unit = {},
+    onVideoClick :          (Int) -> Unit = {}
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     FeedScreen(
@@ -100,23 +92,19 @@ internal fun FeedInMain(
         consumeErrorMessage = consumeErrorMessage,
         onBottom = onBottom,
         isRefreshing = isRefreshing,
-        feed = feed,
         onRefresh = onRefresh,
         onTop = onTop,
         scrollBehavior = scrollBehavior,
         consumeOnTop = consumeOnTop,
-        topAppBar = {
-            FeedTopAppBar(
-                onAddReview = onAddReview,
-                topAppIcon = topAppIcon,
-                scrollBehavior = scrollBehavior,
-                onAlarm = onAlarm
-            )
-        },
+        topAppBar = { FeedTopAppBar(onAddReview = onAddReview, topAppIcon = topAppIcon, scrollBehavior = scrollBehavior, onAlarm = onAlarm) },
         onFocusItemIndex = onFocusItemIndex,
-        scrollEnabled = scrollEnabled
+        scrollEnabled = scrollEnabled,
+        onLike = onLike,
+        onFavorite = onFavorite,
+        onVideoClick = onVideoClick,
+        pageScrollable = pageScrollable,
+        isLogin = isLogin
     )
-
 }
 
 @Preview
@@ -149,7 +137,6 @@ fun PreviewMainFeedScreen() {
         onBottom = {},
         isRefreshing = false,
         onTop = false,
-        consumeOnTop = {},
-        feed = { _ -> Text("피드가 있어야 보임") },
+        consumeOnTop = {}
     )
 }

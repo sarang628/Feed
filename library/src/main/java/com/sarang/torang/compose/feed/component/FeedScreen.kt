@@ -30,10 +30,13 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sarang.torang.compose.feed.LocalPullToRefreshLayoutType
 import com.sarang.torang.data.feed.Feed
+import com.sarang.torang.data.feed.adjustHeight
 import com.sarang.torang.uistate.FeedUiState
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
@@ -51,11 +54,8 @@ import kotlinx.coroutines.launch
  * @param listState 리스트 상태 library
  * @param consumeOnTop 최상단 이벤트 소비
  * @param scrollBehavior list와 topBar와 상호작용을 위한 behavior
- * @param shimmerBrush loading 상태 피드 shimmer
  * @param onBackToTop back 이벤트 시 리스트를 최상단으로 올리는 이벤트
- * @param pullToRefreshLayout 당겨서 새로고침 layout UI
  * @param onFocusItemIndex 비디오 재생을 위해 항목이 중앙에 있을때 호출되는 콜백
- * @param bottomDetectingLazyColumn 하단 감지 Column
  * @param scrollEnabled 리스트 스크롤 가능 여부
  *
  * @sample FeedScreenEmptyPreview
@@ -69,7 +69,6 @@ fun FeedScreen(
     tag:                        String                              = "__FeedScreen",
     uiState:                    FeedUiState                         = FeedUiState.Loading,
     listState:                  LazyListState                       = rememberLazyListState(),
-    feed:                       @Composable (feed: Feed) -> Unit    = { feed ->  Log.e(tag, "feed is not set"); Text(modifier = Modifier.padding(5.dp).background(Color(0x55DDDDDD)), text = feed.contents) },
     topAppBar:                  @Composable () -> Unit              = { Log.i(tag, "topAppBar is not set") },
     isRefreshing:               Boolean                             = true,
     onTop:                      Boolean                             = false,
@@ -81,45 +80,44 @@ fun FeedScreen(
     onRefresh:                  () -> Unit                          = { Log.i(tag, "onRefresh is not set") },
     consumeOnTop:               () -> Unit                          = { Log.i(tag, "consumeOnTop is not set") },
     onFocusItemIndex:           (Int) -> Unit                       = { Log.i(tag, "onFocusItemIndex is not set") },
-    snackBarHostState:          SnackbarHostState                   = remember { SnackbarHostState() }
+    snackBarHostState:          SnackbarHostState                   = remember { SnackbarHostState() },
+    onLike :                    (Int) -> Unit                       = {},
+    onFavorite:                 (Int) -> Unit                       = {},
+    onVideoClick :              (Int) -> Unit                       = {},
+    pageScrollable:             Boolean                             = true,
+    isLogin:                    Boolean                             = false
     // @formatter:on
 ) {
+    val screenHeightDp = LocalConfiguration.current.screenHeightDp
+    val screenWidthDp = LocalConfiguration.current.screenWidthDp
+    val density = LocalDensity.current
+
     Scaffold( // snackbar + topAppBar + feedList
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
         topBar = topAppBar
     ) {
         when (uiState) {
-            is FeedUiState.Loading -> { FeedShimmer(modifier = Modifier.fillMaxSize().padding(it)) }
+            is FeedUiState.Loading -> { FeedShimmer(modifier = Modifier
+                .fillMaxSize()
+                .padding(it)) }
             is FeedUiState.Empty -> {
-                RefreshAndBottomDetectionLazyColumn(
-                    modifier = Modifier.padding(it),
-                    count = 0,
-                    onBottom = {},
-                    itemCompose = {},
-                    isRefreshing = isRefreshing,
-                    listState = listState,
-                    userScrollEnabled = scrollEnabled,
-                    onRefresh = onRefresh,
-                    bottomDetectingLazyColumn = LocalBottomDetectingLazyColumnType.current,
-                    pullToRefreshLayout = LocalPullToRefreshLayoutType.current
-                ) { EmptyFeed() }
+                RefreshAndBottomDetectionLazyColumn(modifier = Modifier.padding(it), count = 0, onBottom = {}, isRefreshing = isRefreshing, listState = listState, userScrollEnabled = scrollEnabled, onRefresh = onRefresh, contents = {EmptyFeed()}) {  }
             }
-
             is FeedUiState.Success -> {
-                RefreshAndBottomDetectionLazyColumn(
-                    modifier = if (scrollBehavior != null) { Modifier.nestedScroll(scrollBehavior.nestedScrollConnection).padding(it) } else Modifier.padding(it),
-                    count = uiState.list.size,
-                    onBottom = onBottom,
-                    itemCompose = { feed.invoke(uiState.list[it]) },
-                    userScrollEnabled = scrollEnabled,
-                    listState = listState,
-                    pullToRefreshLayout = LocalPullToRefreshLayoutType.current,
-                    isRefreshing = isRefreshing,
-                    onRefresh = onRefresh,
-                    bottomDetectingLazyColumn = LocalBottomDetectingLazyColumnType.current
-                )
+                RefreshAndBottomDetectionLazyColumn(modifier = if (scrollBehavior != null) { Modifier
+                    .nestedScroll(scrollBehavior.nestedScrollConnection)
+                    .padding(it) } else Modifier.padding(it), count = uiState.list.size, onBottom = onBottom, userScrollEnabled = scrollEnabled, listState = listState, isRefreshing = isRefreshing, onRefresh = onRefresh)
+                {
+                    val feed = uiState.list[it].copy(
+                        //isPlaying = it.isPlaying && if (uiState is FeedUiState.Success) { (uiState as FeedUiState.Success).focusedIndex == (uiState as FeedUiState.Success).list.indexOf(it) } else false
+                    )
+                    var imageHeight = 0
+                    if(uiState.list[it].reviewImages.isNotEmpty()) {
+                        imageHeight = uiState.list[it].reviewImages[0].adjustHeight(density, screenWidthDp, screenHeightDp)
+                    }
+                    LocalFeedCompose.current.invoke(feed, onLike, onFavorite, isLogin, { onVideoClick.invoke(uiState.list[it].reviewId) }, imageHeight, pageScrollable)
+                }
             }
-
             is FeedUiState.Error -> {}
         }
     }
@@ -211,9 +209,6 @@ fun PreviewFeedScreen() {
         uiState = FeedUiState.Loading ,
         consumeErrorMessage = {},
         topAppBar = {},
-        feed = {
-            Text("피드가 있어야 보임")
-        },
         onBottom = {},
         isRefreshing = false,
         onRefresh = {},
@@ -244,11 +239,9 @@ fun FeedScreenLoadingPreview() {
 fun FeedScreenSuccessPreview() {
     FeedScreen(
         uiState = FeedUiState.Success(
-            list = listOf(Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty)
-        ),
-        feed = {
-            Box(Modifier.fillMaxWidth().padding(vertical = 5.dp).background(Color(0xAAEEEEEE)).height(80.dp)) {
-                Text("feed") }
-        }
+            list = listOf(
+                Feed.Sample, Feed.Sample, Feed.Sample, Feed.Sample, Feed.Sample, Feed.Sample, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty
+            )
+        )
     )
 }

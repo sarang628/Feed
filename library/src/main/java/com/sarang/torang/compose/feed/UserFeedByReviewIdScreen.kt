@@ -97,18 +97,13 @@ internal fun MyFeed(
 ) {
     FeedScreen(
         uiState = uiState,
-        feed = feed,
         listState = listState,
         topAppBar = {
             TopAppBar(
                 title = { Text(text = "Post", fontSize = 21.sp, fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = { onBack?.invoke() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = ""
-                        )
-                    }
+                        Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack, contentDescription = "") }
                 })
         },
         consumeErrorMessage = consumeErrorMessage,

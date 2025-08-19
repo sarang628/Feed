@@ -33,6 +33,22 @@ data class Feed(
             contents = "",
             createDate = ""
         )
+
+        val Sample = Feed(
+            reviewId = 0,
+            restaurantId = 0,
+            userId = 0,
+            name = "name",
+            restaurantName = "restaurantName",
+            rating = 0f,
+            profilePictureUrl = "",
+            likeAmount = 0,
+            commentAmount = 0,
+            isLike = false,
+            isFavorite = false,
+            contents = "",
+            createDate = ""
+        )
     }
 }
 
