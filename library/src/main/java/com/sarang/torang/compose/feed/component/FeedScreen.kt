@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.data.feed.adjustHeight
 import com.sarang.torang.uistate.FeedUiState
+import com.sarang.torang.uistate.imageHeight
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
 
@@ -86,23 +87,14 @@ fun FeedScreen(
         topBar = topAppBar
     ) {
         when (uiState) {
-            is FeedUiState.Loading -> { FeedShimmer(modifier = Modifier
-                .fillMaxSize()
-                .padding(it)) }
+            is FeedUiState.Loading -> { FeedShimmer(modifier = Modifier.fillMaxSize().padding(it)) }
             is FeedUiState.Empty -> {
                 RefreshAndBottomDetectionLazyColumn(modifier = Modifier.padding(it), count = 0, onBottom = {}, isRefreshing = isRefreshing, listState = listState, userScrollEnabled = scrollEnabled, onRefresh = onRefresh, contents = {EmptyFeed()}) {  }
             }
             is FeedUiState.Success -> {
-                RefreshAndBottomDetectionLazyColumn(
-                    modifier = modifier.padding(it), count = uiState.list.size, onBottom = onBottom, userScrollEnabled = scrollEnabled, listState = listState, isRefreshing = isRefreshing, onRefresh = onRefresh)
-                {
-                    val feed = uiState.list[it].copy(
-                        //isPlaying = it.isPlaying && if (uiState is FeedUiState.Success) { (uiState as FeedUiState.Success).focusedIndex == (uiState as FeedUiState.Success).list.indexOf(it) } else false
-                    )
-                    var imageHeight = 0
-                    if(uiState.list[it].reviewImages.isNotEmpty()) {
-                        imageHeight = uiState.list[it].reviewImages[0].adjustHeight(density, screenWidthDp, screenHeightDp)
-                    }
+                RefreshAndBottomDetectionLazyColumn(modifier = modifier.padding(it), count = uiState.list.size, onBottom = onBottom, userScrollEnabled = scrollEnabled, listState = listState, isRefreshing = isRefreshing, onRefresh = onRefresh) {
+                    val feed = uiState.list[it].copy(/*isPlaying = it.isPlaying && if (uiState is FeedUiState.Success) { (uiState as FeedUiState.Success).focusedIndex == (uiState as FeedUiState.Success).list.indexOf(it) } else false*/)
+                    var imageHeight = uiState.imageHeight(density, screenWidthDp, screenHeightDp)
                     LocalFeedCompose.current.invoke(feed, onLike, onFavorite, isLogin, { onVideoClick.invoke(uiState.list[it].reviewId) }, imageHeight, pageScrollable)
                 }
             }
@@ -185,40 +177,18 @@ private fun HandleOnTop(listState: LazyListState, onTop: Boolean, consumeOnTop: 
     }
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
+@Preview(showBackground = true)
 @Composable
-fun PreviewFeedScreen() {
-    // @formatter:off
-    FeedScreen(
-        //uiState = FeedUiState.Success(list = listOf(Feed(reviewId = 0, restaurantId = 0, userId = 0, name = "1", restaurantName = "2", rating = 0f, profilePictureUrl = "", likeAmount = 0, commentAmount = 0, isLike = false, isFavorite = false, contents = "3", createDate = "4", reviewImages = listOf())), msg = "", focusedIndex = 0),
-        //uiState = FeedUiState.Empty ,
-        uiState = FeedUiState.Loading ,
-        consumeErrorMessage = {},
-        topAppBar = {},
-        onBottom = {},
-        isRefreshing = false,
-        onRefresh = {},
-        onTop = false,
-        consumeOnTop = {}
-        //@formatter:on
-    )
+fun FeedScreenLoadingPreview() {
+    FeedScreen(uiState = FeedUiState.Loading)
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun FeedScreenEmptyPreview() {
     FeedScreen(uiState = FeedUiState.Empty)
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
-@Composable
-fun FeedScreenLoadingPreview() {
-    FeedScreen(uiState = FeedUiState.Loading)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
