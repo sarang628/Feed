@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.net.ConnectException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -41,22 +42,24 @@ open class FeedsViewModel @Inject constructor(
         .onStart { emit(FeedUiState.Loading) }
         .stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(5_000), initialValue = FeedUiState.Loading)
 
-    var msgState : String? by mutableStateOf(null); private set
+    var msgState : String by mutableStateOf(""); private set
+    var showReConnect : Boolean by mutableStateOf(false); private set
     var focusedIndexState by mutableIntStateOf(0); private set
     var isRefreshingState by mutableStateOf(false);  private set
     var videoPlayListState : List<Int> by mutableStateOf(listOf())
 
-    private fun handleErrorMsg(e: Exception) { showError(e.message) }
-    private fun showError(msg: String?) { this.msgState = msg }
-    fun clearErrorMsg() { msgState = null } // 에러메시지 삭제
+    private fun handleErrorMsg(e: Exception) { showError(e.message ?: "") }
+    private fun showError(msg: String) { this.msgState = msg }
+    fun clearErrorMsg() { msgState = "" } // 에러메시지 삭제
     fun onFocusItemIndex(index: Int) { focusedIndexState = index }
 
     // 피드 리스트 갱신
     open fun refreshFeed() {
         viewModelScope.launch {
             isRefreshingState = true
-            try { page = 0; feedWithPageUseCase.invoke(page); page++ }
-            catch (e: Exception) { handleErrorMsg(e) }
+            try { showReConnect = false; page = 0; feedWithPageUseCase.invoke(page); page++ }
+            catch (e: ConnectException) { if(page == 0) showReConnect = true; handleErrorMsg(e) }
+            catch (e: Exception) { if(page == 0) showReConnect = true; handleErrorMsg(e) }
             finally { isRefreshingState = false }
         }
     }
@@ -89,7 +92,9 @@ open class FeedsViewModel @Inject constructor(
                 Log.d(tag, "called onBottom. request $page pages.")
                 feedWithPageUseCase.invoke(page)
                 page++
-            } catch (e: Exception) { handleErrorMsg(e) }
+            }
+            catch (e: ConnectException) { if(page == 0) showReConnect = true; handleErrorMsg(e) }
+            catch (e: Exception) { if(page == 0) showReConnect = true; handleErrorMsg(e) }
         }
     }
 

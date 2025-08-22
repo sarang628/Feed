@@ -3,15 +3,19 @@ package com.sarang.torang.compose.feed.component
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -21,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
@@ -59,6 +64,7 @@ fun FeedScreen(
     modifier:                   Modifier                            = Modifier,
     tag:                        String                              = "__FeedScreen",
     uiState:                    FeedUiState                         = FeedUiState.Loading,
+    errorMsg:                   String                              = "",
     listState:                  LazyListState                       = rememberLazyListState(),
     topAppBar:                  @Composable () -> Unit              = { Log.i(tag, "topAppBar is not set") },
     isRefreshing:               Boolean                             = true,
@@ -74,8 +80,10 @@ fun FeedScreen(
     onLike :                    (Int) -> Unit                       = {},
     onFavorite:                 (Int) -> Unit                       = {},
     onVideoClick :              (Int) -> Unit                       = {},
+    onConnect :                 () -> Unit                          = {},
     pageScrollable:             Boolean                             = true,
-    isLogin:                    Boolean                             = false
+    isLogin:                    Boolean                             = false,
+    showReConnect:              Boolean                             = false
     // @formatter:on
 ) {
     val screenHeightDp = LocalConfiguration.current.screenHeightDp
@@ -86,23 +94,30 @@ fun FeedScreen(
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
         topBar = topAppBar
     ) {
-        when (uiState) {
-            is FeedUiState.Loading -> { FeedShimmer(modifier = Modifier.fillMaxSize().padding(it)) }
-            is FeedUiState.Empty -> {
-                RefreshAndBottomDetectionLazyColumn(modifier = Modifier.padding(it), count = 0, onBottom = {}, isRefreshing = isRefreshing, listState = listState, userScrollEnabled = scrollEnabled, onRefresh = onRefresh, contents = {EmptyFeed()}) {  }
+        Box(Modifier.fillMaxWidth()){
+            when (uiState) {
+                is FeedUiState.Loading -> { FeedShimmer(modifier = Modifier.fillMaxSize().padding(it)) }
+                is FeedUiState.Empty -> {
+                    RefreshAndBottomDetectionLazyColumn(modifier = Modifier.padding(it), count = 0, onBottom = {}, isRefreshing = isRefreshing, listState = listState, userScrollEnabled = scrollEnabled, onRefresh = onRefresh, contents = {EmptyFeed()}) {  }
+                }
+                is FeedUiState.Success -> {
+                    RefreshAndBottomDetectionLazyColumn(modifier = modifier.padding(it), count = uiState.list.size, onBottom = onBottom, userScrollEnabled = scrollEnabled, listState = listState, isRefreshing = isRefreshing, onRefresh = onRefresh) {
+                        val feed = uiState.list[it].copy(/*isPlaying = it.isPlaying && if (uiState is FeedUiState.Success) { (uiState as FeedUiState.Success).focusedIndex == (uiState as FeedUiState.Success).list.indexOf(it) } else false*/)
+                        var imageHeight = uiState.imageHeight(density, screenWidthDp, screenHeightDp)
+                        LocalFeedCompose.current.invoke(feed, onLike, onFavorite, isLogin, { onVideoClick.invoke(uiState.list[it].reviewId) }, imageHeight, pageScrollable)
+                    }
+                }
+                is FeedUiState.Error -> {}
             }
-            is FeedUiState.Success -> {
-                RefreshAndBottomDetectionLazyColumn(modifier = modifier.padding(it), count = uiState.list.size, onBottom = onBottom, userScrollEnabled = scrollEnabled, listState = listState, isRefreshing = isRefreshing, onRefresh = onRefresh) {
-                    val feed = uiState.list[it].copy(/*isPlaying = it.isPlaying && if (uiState is FeedUiState.Success) { (uiState as FeedUiState.Success).focusedIndex == (uiState as FeedUiState.Success).list.indexOf(it) } else false*/)
-                    var imageHeight = uiState.imageHeight(density, screenWidthDp, screenHeightDp)
-                    LocalFeedCompose.current.invoke(feed, onLike, onFavorite, isLogin, { onVideoClick.invoke(uiState.list[it].reviewId) }, imageHeight, pageScrollable)
+            if(showReConnect) {
+                Button(modifier = Modifier.align(Alignment.Center), onClick = onConnect) {
+                    Text("connect")
                 }
             }
-            is FeedUiState.Error -> {}
         }
     }
 
-    HandleSnackBar(uiState, snackBarHostState, consumeErrorMessage)
+    HandleSnackBar(errorMsg, snackBarHostState, consumeErrorMessage)
     HandleOnFocusIndex(listState, onFocusItemIndex)
     HandleBack(listState, onBackToTop)
     HandleOnTop(listState, onTop, consumeOnTop)
@@ -110,17 +125,15 @@ fun FeedScreen(
 
 @Composable
 private fun HandleSnackBar(
-    uiState: FeedUiState,
+    msg: String,
     snackBarHostState: SnackbarHostState,
     consumeErrorMessage: () -> Unit
 ) {
 // snackbar process
-    LaunchedEffect(key1 = uiState, block = {
-        if (uiState is FeedUiState.Error) {
-            if (!uiState.msg.isNullOrEmpty()) {
-                snackBarHostState.showSnackbar(uiState.msg, duration = SnackbarDuration.Short)
-                consumeErrorMessage.invoke()
-            }
+    LaunchedEffect(key1 = msg, block = {
+        if (msg.isNotEmpty()) {
+            snackBarHostState.showSnackbar(msg, duration = SnackbarDuration.Short)
+            consumeErrorMessage.invoke()
         }
     })
 }

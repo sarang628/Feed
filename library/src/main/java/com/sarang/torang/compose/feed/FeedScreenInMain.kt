@@ -44,9 +44,11 @@ fun FeedScreenInMain(
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
     val isRefreshing: Boolean = feedsViewModel.isRefreshingState
     val isLogin by feedsViewModel.isLoginState.collectAsState(initial = false)
+    val showReConnect = feedsViewModel.showReConnect
 
     FeedInMain(
         uiState = uiState,
+        errorMsg = feedsViewModel.msgState,
         isLogin = isLogin,
         onAddReview = onAddReview,
         onAlarm = onAlarm,
@@ -61,7 +63,9 @@ fun FeedScreenInMain(
         onLike = { feedsViewModel.onLike(it) },
         onFavorite = { feedsViewModel.onFavorite(it) },
         onVideoClick = { feedsViewModel.onVideoClick(it) },
-        pageScrollable = pageScrollable
+        pageScrollable = pageScrollable,
+        showReConnect = showReConnect,
+        onConnect = { feedsViewModel.refreshFeed() }
     )
 }
 
@@ -70,12 +74,14 @@ fun FeedScreenInMain(
 internal fun FeedInMain(
     tag:                    String = "__MainFeed",
     uiState:                FeedUiState,
+    errorMsg:               String = "",
     isLogin:                Boolean = false,
     pageScrollable:         Boolean = true,
     isRefreshing:           Boolean,
     onTop:                  Boolean,
     topAppIcon:             ImageVector   = Icons.AutoMirrored.Default.Send,
     scrollEnabled:          Boolean       = true,
+    showReConnect:          Boolean       = false,
     onFocusItemIndex:       (Int) -> Unit = {},
     consumeErrorMessage:    () -> Unit    = {},
     onAlarm:                () -> Unit    = { Log.w(tag, "onAlarm is not implemented") },
@@ -85,12 +91,14 @@ internal fun FeedInMain(
     onAddReview:            () -> Unit    = { Log.w(tag, "onAddReview is not implemented") },
     onLike :                (Int) -> Unit = {},
     onFavorite:             (Int) -> Unit = {},
-    onVideoClick :          (Int) -> Unit = {}
+    onVideoClick :          (Int) -> Unit = {},
+    onConnect :             () -> Unit    = {},
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     FeedScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         uiState = uiState,
+        errorMsg = errorMsg,
         consumeErrorMessage = consumeErrorMessage,
         onBottom = onBottom,
         isRefreshing = isRefreshing,
@@ -104,7 +112,9 @@ internal fun FeedInMain(
         onFavorite = onFavorite,
         onVideoClick = onVideoClick,
         pageScrollable = pageScrollable,
-        isLogin = isLogin
+        isLogin = isLogin,
+        showReConnect = showReConnect,
+        onConnect = onConnect
     )
 }
 
