@@ -11,7 +11,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.sarang.torang.compose.feed.LocalPullToRefreshLayoutType
-import com.sarang.torang.di.feed_di.CustomLocalPullToRefreshType
+import com.sarang.torang.di.feed_di.CustomPullToRefreshType
 import com.sarang.torang.repository.FeedRepository
 import com.sarang.torang.repository.FeedRepositoryTest
 import com.sarang.torang.repository.LoginRepository
@@ -80,7 +80,7 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 fun PreviewFeedScreenForMain() {
-    CompositionLocalProvider(LocalPullToRefreshLayoutType provides CustomLocalPullToRefreshType) {
+    CompositionLocalProvider(LocalPullToRefreshLayoutType provides CustomPullToRefreshType) {
         TestFeedScreenForMain()
     }
 }
