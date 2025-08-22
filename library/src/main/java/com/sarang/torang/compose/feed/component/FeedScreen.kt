@@ -16,6 +16,7 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -96,7 +97,9 @@ fun FeedScreen(
     ) {
         Box(Modifier.fillMaxWidth()){
             when (uiState) {
-                is FeedUiState.Loading -> { FeedShimmer(modifier = Modifier.fillMaxSize().padding(it)) }
+                is FeedUiState.Loading -> { FeedShimmer(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(it)) }
                 is FeedUiState.Empty -> {
                     RefreshAndBottomDetectionLazyColumn(modifier = Modifier.padding(it), count = 0, onBottom = {}, isRefreshing = isRefreshing, listState = listState, userScrollEnabled = scrollEnabled, onRefresh = onRefresh, contents = {EmptyFeed()}) {  }
                 }
@@ -213,6 +216,7 @@ fun FeedScreenSuccessPreview() {
             list = listOf(
                 Feed.Sample, Feed.Sample, Feed.Sample, Feed.Sample, Feed.Sample, Feed.Sample, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty
             )
-        )
+        ),
+        topAppBar = { FeedTopAppBar() }
     )
 }
