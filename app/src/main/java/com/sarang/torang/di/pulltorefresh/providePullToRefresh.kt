@@ -16,7 +16,7 @@ fun providePullToRefresh(state: PullToRefreshLayoutState): @Composable ((modifie
         }
 
         PullToRefreshLayout(
-            modifier = Modifier, pullRefreshLayoutState = state, refreshThreshold = 80, onRefresh = onRefresh
+            modifier = modifier, pullRefreshLayoutState = state, refreshThreshold = 80, onRefresh = onRefresh
         ) {
             contents.invoke()
         }
