@@ -77,8 +77,8 @@ internal fun FeedInMain(
     errorMsg:               String = "",
     isLogin:                Boolean = false,
     pageScrollable:         Boolean = true,
-    isRefreshing:           Boolean,
-    onTop:                  Boolean,
+    isRefreshing:           Boolean = false,
+    onTop:                  Boolean = false,
     topAppIcon:             ImageVector   = Icons.AutoMirrored.Default.Send,
     scrollEnabled:          Boolean       = true,
     showReConnect:          Boolean       = false,
@@ -122,13 +122,6 @@ internal fun FeedInMain(
 @Composable
 fun PreviewMainFeedScreen() {
     FeedInMain(/*Preview*/
-        uiState = FeedUiState.Success(list = listOf(Feed.Sample),),
-        onAddReview = {},
-        consumeErrorMessage = {},
-        onRefresh = {},
-        onBottom = {},
-        isRefreshing = false,
-        onTop = false,
-        consumeOnTop = {}
+        uiState = FeedUiState.Success(list = listOf(Feed.Sample,Feed.Sample,Feed.Sample,Feed.Sample,Feed.Sample,Feed.Sample))
     )
 }
