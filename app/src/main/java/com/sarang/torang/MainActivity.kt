@@ -88,12 +88,5 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 fun PreviewFeedScreenForMain() {
-    CompositionLocalProvider(LocalFeedCompose provides CustomFeedCompose,
-        LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType,
-        LocalPullToRefreshLayoutType provides CustomPullToRefreshType,
-        LocalFeedImageLoader provides CustomFeedImageLoader,
-        LocalExpandableTextType provides CustomExpandableTextType
-    ) {
-        TestFeedScreenForMain()
-    }
+    TestFeedScreenForMain()
 }

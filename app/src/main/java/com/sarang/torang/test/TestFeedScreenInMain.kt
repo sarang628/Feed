@@ -30,11 +30,19 @@ fun TestFeedScreenForMain(
     pageScrollable: Boolean = true
 ) {
     var onTop by remember { mutableStateOf(false) }
-    FeedScreenInMain(
-        scrollToTop = onTop,
-        onAlarm = onAlarm,
-        onAddReview = onAddReview,
-        onScrollToTop = { onTop = false },
-        pageScrollable = pageScrollable
-    )
+    CompositionLocalProvider(
+        LocalFeedCompose provides CustomFeedCompose,
+        LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType,
+        LocalPullToRefreshLayoutType provides CustomPullToRefreshType,
+        LocalFeedImageLoader provides CustomFeedImageLoader,
+        LocalExpandableTextType provides CustomExpandableTextType
+    ) {
+        FeedScreenInMain(
+            scrollToTop = onTop,
+            onAlarm = onAlarm,
+            onAddReview = onAddReview,
+            onScrollToTop = { onTop = false },
+            pageScrollable = pageScrollable
+        )
+    }
 }
