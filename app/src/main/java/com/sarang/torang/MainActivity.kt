@@ -11,6 +11,14 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.sarang.torang.compose.feed.LocalPullToRefreshLayoutType
+import com.sarang.torang.compose.feed.component.LocalBottomDetectingLazyColumnType
+import com.sarang.torang.compose.feed.component.LocalFeedCompose
+import com.sarang.torang.compose.feed.internal.components.LocalExpandableTextType
+import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
+import com.sarang.torang.di.basefeed_di.CustomExpandableTextType
+import com.sarang.torang.di.basefeed_di.CustomFeedImageLoader
+import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
+import com.sarang.torang.di.feed_di.CustomFeedCompose
 import com.sarang.torang.di.feed_di.CustomPullToRefreshType
 import com.sarang.torang.repository.FeedRepository
 import com.sarang.torang.repository.FeedRepositoryTest
@@ -51,11 +59,11 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     //TestBasic()
-                    //TestPinchZoom()
+                    TestPinchZoom()
                     //TestUserFeedByReviewIdScreen_()
                     //TestFeedScreenByReviewId_()
                     //TestFeedScreenByRestaurantId_()
-                    TestFeedScreenForMain_()
+                    //TestFeedScreenForMain_()
                     //LoginRepositoryTest_(loginRepository)
                     //ProfileRepositoryTest(profileRepository = profileRepository)
                     //FeedRepositoryTest_(feedRepository = feedRepository)
@@ -80,7 +88,12 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 fun PreviewFeedScreenForMain() {
-    CompositionLocalProvider(LocalPullToRefreshLayoutType provides CustomPullToRefreshType) {
+    CompositionLocalProvider(LocalFeedCompose provides CustomFeedCompose,
+        LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType,
+        LocalPullToRefreshLayoutType provides CustomPullToRefreshType,
+        LocalFeedImageLoader provides CustomFeedImageLoader,
+        LocalExpandableTextType provides CustomExpandableTextType
+    ) {
         TestFeedScreenForMain()
     }
 }

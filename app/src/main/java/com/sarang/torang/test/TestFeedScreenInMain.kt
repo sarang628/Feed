@@ -27,19 +27,14 @@ fun TestFeedScreenForMain(
     state: PullToRefreshLayoutState = rememberPullToRefreshState(),
     onAddReview: () -> Unit = { Log.w(tag, "onAddReview is not implemented") },
     onAlarm: () -> Unit = { Log.w("__FeedScreenForMain", "onAlarm is not implemented") },
+    pageScrollable: Boolean = true
 ) {
     var onTop by remember { mutableStateOf(false) }
-    CompositionLocalProvider(LocalFeedCompose provides CustomFeedCompose,
-        LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType,
-        LocalPullToRefreshLayoutType provides CustomPullToRefreshType,
-        LocalFeedImageLoader provides CustomFeedImageLoader,
-        LocalExpandableTextType provides CustomExpandableTextType
-    ) {
-        FeedScreenInMain(
-            scrollToTop = onTop,
-            onAlarm = onAlarm,
-            onAddReview = onAddReview,
-            onScrollToTop = { onTop = false },
-        )
-    }
+    FeedScreenInMain(
+        scrollToTop = onTop,
+        onAlarm = onAlarm,
+        onAddReview = onAddReview,
+        onScrollToTop = { onTop = false },
+        pageScrollable = pageScrollable
+    )
 }
