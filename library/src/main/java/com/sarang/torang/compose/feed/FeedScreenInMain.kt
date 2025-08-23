@@ -36,8 +36,8 @@ fun FeedScreenInMain(
     feedsViewModel: FeedsViewModel = hiltViewModel(),
     onAddReview: (() -> Unit) = { Log.w(tag, "onAddReview is not implemented") },
     onAlarm: () -> Unit = { Log.w("__FeedScreenForMain", "onAlarm is not implemented") },
-    scrollToTop: Boolean,
-    onScrollToTop: () -> Unit,
+    scrollToTop: Boolean = false,
+    onScrollToTop: () -> Unit = {},
     scrollEnabled: Boolean = true,
     pageScrollable: Boolean = true
 ) {
