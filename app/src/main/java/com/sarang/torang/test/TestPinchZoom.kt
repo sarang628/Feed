@@ -2,6 +2,7 @@ package com.sarang.torang.test
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import com.sarang.torang.compose.feed.FeedScreenInMain
 import com.sarang.torang.compose.feed.LocalPullToRefreshLayoutType
 import com.sarang.torang.compose.feed.component.LocalBottomDetectingLazyColumnType
 import com.sarang.torang.compose.feed.component.LocalFeedCompose
@@ -26,7 +27,7 @@ fun TestPinchZoom() {
             LocalPullToRefreshLayoutType provides CustomPullToRefreshType,
             LocalExpandableTextType provides CustomExpandableTextType
         ) {
-            TestFeedScreenForMain(pageScrollable = !zoomState.isZooming)
+            FeedScreenInMain(pageScrollable = !zoomState.isZooming, scrollEnabled = !zoomState.isZooming)
         }
     }
 }
