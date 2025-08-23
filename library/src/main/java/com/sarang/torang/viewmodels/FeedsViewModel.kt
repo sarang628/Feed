@@ -68,8 +68,8 @@ open class FeedsViewModel @Inject constructor(
     internal fun onFavorite(reviewId: Int) {
         viewModelScope.launch {
             try {
-                if (isLoginState.stateIn(viewModelScope).value)
-                    clickFavoriteUseCase.invoke(reviewId)
+                if (isLoginState.stateIn(viewModelScope).value) { clickFavoriteUseCase.invoke(reviewId) }
+                else{ throw Exception("로그인을 해주세요.") }
             }
             catch (e: Exception) { handleErrorMsg(e) }
         }
@@ -79,8 +79,8 @@ open class FeedsViewModel @Inject constructor(
     internal fun onLike(reviewId: Int) {
         viewModelScope.launch {
             try {
-                if (isLoginState.stateIn(viewModelScope).value)
-                    clickLikeUseCase.invoke(reviewId)
+                if (isLoginState.stateIn(viewModelScope).value) { clickLikeUseCase.invoke(reviewId) }
+                else{ throw Exception("로그인을 해주세요.") }
             }
             catch (e: Exception) { handleErrorMsg(e) }
         }
