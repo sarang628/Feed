@@ -38,16 +38,17 @@ data class Feed(
             reviewId = 0,
             restaurantId = 0,
             userId = 0,
-            name = "name",
+            name = "userName",
             restaurantName = "restaurantName",
-            rating = 0f,
-            profilePictureUrl = "",
-            likeAmount = 0,
-            commentAmount = 0,
+            rating = 3.5f,
+            profilePictureUrl = "http://sarang628.iptime.org:89/profile_images/4/2024-08-15/11_16_37_583.jpeg",
+            likeAmount = 100,
+            commentAmount = 150,
             isLike = false,
             isFavorite = false,
-            contents = "",
-            createDate = ""
+            contents = "contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents",
+            createDate = "createDate",
+            reviewImages = listOf(FeedImage.Sample)
         )
     }
 }
