@@ -68,7 +68,7 @@ fun FeedScreen(
     errorMsg:                   String                              = "",
     listState:                  LazyListState                       = rememberLazyListState(),
     topAppBar:                  @Composable () -> Unit              = { Log.i(tag, "topAppBar is not set") },
-    isRefreshing:               Boolean                             = true,
+    isRefreshing:               Boolean                             = false,
     onTop:                      Boolean                             = false,
     onBackToTop:                Boolean                             = true,
     scrollEnabled:              Boolean                             = true,
