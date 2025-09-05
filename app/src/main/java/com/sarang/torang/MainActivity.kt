@@ -11,6 +11,10 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.sarang.torang.compose.feed.LocalPullToRefreshLayoutType
+import com.sarang.torang.compose.feed.component.FeedScreen
+import com.sarang.torang.compose.feed.component.FeedScreenEmptyPreview
+import com.sarang.torang.compose.feed.component.FeedScreenLoadingPreview
+import com.sarang.torang.compose.feed.component.FeedScreenSuccessPreview
 import com.sarang.torang.compose.feed.component.LocalBottomDetectingLazyColumnType
 import com.sarang.torang.compose.feed.component.LocalFeedCompose
 import com.sarang.torang.compose.feed.internal.components.LocalExpandableTextType
@@ -59,7 +63,10 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     //TestBasic()
-                    TestPinchZoom()
+                    FeedScreenSuccessPreview1()
+                    //TestPinchZoom()
+                    //FeedScreenEmptyPreview()
+                    //FeedScreenLoadingPreview()
                     //TestUserFeedByReviewIdScreen_()
                     //TestFeedScreenByReviewId_()
                     //TestFeedScreenByRestaurantId_()
@@ -85,8 +92,16 @@ class MainActivity : ComponentActivity() {
 @Composable fun TestFeedScreenForMain_() { TestFeedScreenForMain() }
 // @formatter:on
 
+
 @Preview
 @Composable
-fun PreviewFeedScreenForMain() {
-    TestFeedScreenForMain()
+fun FeedScreenSuccessPreview1(){
+    CompositionLocalProvider(
+        LocalFeedCompose provides CustomFeedCompose,
+        LocalPullToRefreshLayoutType provides CustomPullToRefreshType,
+        LocalExpandableTextType provides CustomExpandableTextType,
+        LocalFeedImageLoader provides CustomFeedImageLoader
+    ) {
+        FeedScreenSuccessPreview()
+    }
 }
