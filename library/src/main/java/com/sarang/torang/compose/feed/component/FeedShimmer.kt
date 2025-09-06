@@ -21,80 +21,22 @@ import androidx.compose.ui.unit.dp
 internal fun FeedShimmer(modifier: Modifier = Modifier) {
     val showShimmer by remember { mutableStateOf(true) }
     Column(modifier = modifier) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(
-                    LocalShimmerBrush.current.invoke(showShimmer)
-                )
-        )
+        Box(modifier = Modifier.fillMaxWidth().height(50.dp).clip(RoundedCornerShape(8.dp)).background(LocalShimmerBrush.current.invoke(showShimmer)))
         Spacer(modifier = Modifier.height(10.dp))
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(250.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(
-                    LocalShimmerBrush.current.invoke(showShimmer)
-                )
-        )
+        Box(modifier = Modifier.fillMaxWidth().height(250.dp).clip(RoundedCornerShape(8.dp)).background(LocalShimmerBrush.current.invoke(showShimmer)))
         Spacer(modifier = Modifier.height(10.dp))
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(
-                    LocalShimmerBrush.current.invoke(showShimmer)
-                )
-        )
+        Box(modifier = Modifier.fillMaxWidth().height(50.dp).clip(RoundedCornerShape(8.dp)).background(LocalShimmerBrush.current.invoke(showShimmer)))
         Spacer(modifier = Modifier.height(10.dp))
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(
-                    LocalShimmerBrush.current.invoke(showShimmer)
-                )
-        )
+        Box(modifier = Modifier.fillMaxWidth().height(50.dp).clip(RoundedCornerShape(8.dp)).background(LocalShimmerBrush.current.invoke(showShimmer)))
         Spacer(modifier = Modifier.height(10.dp))
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(250.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(
-                    LocalShimmerBrush.current.invoke(showShimmer)
-                )
-        )
+        Box(modifier = Modifier.fillMaxWidth().height(250.dp).clip(RoundedCornerShape(8.dp)).background(LocalShimmerBrush.current.invoke(showShimmer)))
         Spacer(modifier = Modifier.height(10.dp))
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(
-                    LocalShimmerBrush.current.invoke(showShimmer)
-                )
-        )
+        Box(modifier = Modifier.fillMaxWidth().height(50.dp).clip(RoundedCornerShape(8.dp)).background(LocalShimmerBrush.current.invoke(showShimmer)))
         Spacer(modifier = Modifier.height(10.dp))
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(250.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(
-                    LocalShimmerBrush.current.invoke(showShimmer)
-                )
-        )
+        Box(modifier = Modifier.fillMaxWidth().height(250.dp).clip(RoundedCornerShape(8.dp)).background(LocalShimmerBrush.current.invoke(showShimmer)))
     }
 }
 
 @Preview
 @Composable
-fun PreviewFeedShimmer() {
-    FeedShimmer(modifier = Modifier.fillMaxSize())
-}
+fun PreviewFeedShimmer() { FeedShimmer(modifier = Modifier.fillMaxSize()) }
