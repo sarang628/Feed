@@ -5,13 +5,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarang.torang.compose.feed.component.FeedScreen
-import com.sarang.torang.compose.feed.component.LocalFeedCompose
-import com.sarang.torang.data.feed.adjustHeight
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.FeedScreenByRestaurantIdViewModel
 

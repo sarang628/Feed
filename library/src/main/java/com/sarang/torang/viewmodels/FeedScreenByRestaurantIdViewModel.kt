@@ -7,6 +7,7 @@ import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.usecase.ClickFavorityUseCase
 import com.sarang.torang.usecase.ClickLikeUseCase
 import com.sarang.torang.usecase.FeedWithPageUseCase
+import com.sarang.torang.usecase.FindFeedByRestaurantIdFlowUseCase
 import com.sarang.torang.usecase.GetFeedByRestaurantIdFlowUseCase
 import com.sarang.torang.usecase.GetFeedFlowUseCase
 import com.sarang.torang.usecase.IsLoginFlowForFeedUseCase
@@ -28,6 +29,7 @@ class FeedScreenByRestaurantIdViewModel @Inject constructor(
     feedWithPageUseCase: FeedWithPageUseCase,
     isLoginFlowUseCase: IsLoginFlowForFeedUseCase,
     private val getFeedByRestaurantIdFlowUseCase: GetFeedByRestaurantIdFlowUseCase,
+    private val findFeedByRestaurantIdFlowUseCase: FindFeedByRestaurantIdFlowUseCase
 ) : FeedsViewModel(
     feedWithPageUseCase,
     clickLikeUseCase,
