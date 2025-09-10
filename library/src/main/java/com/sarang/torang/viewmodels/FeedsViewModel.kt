@@ -45,7 +45,7 @@ open class FeedsViewModel @Inject constructor(
     var msgState : String by mutableStateOf(""); private set
     var showReConnect : Boolean by mutableStateOf(false); private set
     var focusedIndexState by mutableIntStateOf(0); private set
-    var isRefreshingState by mutableStateOf(false);  private set
+    var isRefreshingState by mutableStateOf(false);
     var videoPlayListState : List<Int> by mutableStateOf(listOf())
 
     private fun handleErrorMsg(e: Exception) { showError(e.message ?: "") }

@@ -67,7 +67,13 @@ class FeedScreenByRestaurantIdViewModel @Inject constructor(
     }
 
     override fun refreshFeed() {
-        Log.d("__FeedScreenByRestaurantIdViewModel", "refreshFeed called but nothing to do")
+        isRefreshingState = true
+        viewModelScope.launch {
+            _restaurantIdState.value?.let {
+                findFeedByRestaurantIdFlowUseCase.invoke(it)
+            }
+            isRefreshingState = false
+        }
     }
 
     override fun onBottom() {
