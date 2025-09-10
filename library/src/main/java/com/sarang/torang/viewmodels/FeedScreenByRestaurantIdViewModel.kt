@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,6 +30,12 @@ class FeedScreenByRestaurantIdViewModel @Inject constructor(
     feedWithPageUseCase: FeedWithPageUseCase,
     isLoginFlowUseCase: IsLoginFlowForFeedUseCase,
     private val getFeedByRestaurantIdFlowUseCase: GetFeedByRestaurantIdFlowUseCase,
+    /**
+     * 기존 GetFeedByRestaurantIdFlowUseCase 만 있어서
+     * 로컬 DB에서만 피드를 불러와 리뷰를 제대로 못 가져옴.
+     * 서버에서 불러오는 로직 추가
+     */
+    private val findFeedByRestaurantIdFlowUseCase: FindFeedByRestaurantIdFlowUseCase
 ) : FeedsViewModel(
     feedWithPageUseCase,
     clickLikeUseCase,
@@ -50,6 +57,9 @@ class FeedScreenByRestaurantIdViewModel @Inject constructor(
 
     fun getFeedByRestaurantId(restaurantId: Int) {
         _restaurantIdState.value = restaurantId
+        viewModelScope.launch {
+            findFeedByRestaurantIdFlowUseCase.invoke(restaurantId)
+        }
     }
 
     fun findIndexByReviewId(list: List<Feed>, reviewId: Int): Int {

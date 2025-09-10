@@ -57,19 +57,26 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    //TestBasic()
-                    FeedScreenSuccessPreview1()
-                    //TestPinchZoom()
-                    //FeedScreenEmptyPreview()
-                    //FeedScreenLoadingPreview()
-                    //TestUserFeedByReviewIdScreen_()
-                    //TestFeedScreenByReviewId_()
-                    //TestFeedScreenByRestaurantId_()
-                    //TestFeedScreenForMain_()
-                    //LoginRepositoryTest_(loginRepository)
-                    //ProfileRepositoryTest(profileRepository = profileRepository)
-                    //FeedRepositoryTest_(feedRepository = feedRepository)
-                    //TestFeedScreenAndSnackBar()
+                    CompositionLocalProvider(
+                        LocalFeedCompose provides CustomFeedCompose,
+                        LocalPullToRefreshLayoutType provides CustomPullToRefreshType,
+                        LocalExpandableTextType provides CustomExpandableTextType,
+                        LocalFeedImageLoader provides CustomFeedImageLoader
+                    ){
+                        //TestBasic()
+                        //FeedScreenSuccessPreview1()
+                        //TestPinchZoom()
+                        //FeedScreenEmptyPreview()
+                        //FeedScreenLoadingPreview()
+                        //TestUserFeedByReviewIdScreen_()
+                        //TestFeedScreenByReviewId_()
+                        TestFeedScreenByRestaurantId_()
+                        //TestFeedScreenForMain_()
+                        //LoginRepositoryTest_(loginRepository)
+                        //ProfileRepositoryTest(profileRepository = profileRepository)
+                        //FeedRepositoryTest_(feedRepository = feedRepository)
+                        //TestFeedScreenAndSnackBar()
+                    }
                 }
             }
         }
@@ -81,7 +88,7 @@ class MainActivity : ComponentActivity() {
 @Composable fun LoginRepositoryTest_(loginRepository: LoginRepository) { LoginRepositoryTest(loginRepository = loginRepository) }
 @Composable fun ProfileRepositoryTest_(profileRepository: ProfileRepository) { ProfileRepositoryTest(profileRepository) }
 @Composable fun FeedRepositoryTest_(feedRepository: FeedRepository) { FeedRepositoryTest(feedRepository) }
-@Composable fun TestFeedScreenByRestaurantId_() { TestFeedScreenByRestaurantId(206) }
+@Composable fun TestFeedScreenByRestaurantId_() { TestFeedScreenByRestaurantId(234) }
 @Composable fun TestBasic_() { TestBasic() }
 @Composable fun TestPinchZoom_() { TestPinchZoom() }
 @Composable fun TestFeedScreenForMain_() { TestFeedScreenForMain() }
