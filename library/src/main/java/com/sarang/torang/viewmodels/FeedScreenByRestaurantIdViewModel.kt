@@ -29,7 +29,6 @@ class FeedScreenByRestaurantIdViewModel @Inject constructor(
     feedWithPageUseCase: FeedWithPageUseCase,
     isLoginFlowUseCase: IsLoginFlowForFeedUseCase,
     private val getFeedByRestaurantIdFlowUseCase: GetFeedByRestaurantIdFlowUseCase,
-    private val findFeedByRestaurantIdFlowUseCase: FindFeedByRestaurantIdFlowUseCase
 ) : FeedsViewModel(
     feedWithPageUseCase,
     clickLikeUseCase,
