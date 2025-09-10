@@ -37,14 +37,9 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    @Inject
-    lateinit var loginRepository: LoginRepository
-
-    @Inject
-    lateinit var profileRepository: ProfileRepository
-
-    @Inject
-    lateinit var feedRepository: FeedRepository
+    @Inject lateinit var loginRepository: LoginRepository
+    @Inject lateinit var profileRepository: ProfileRepository
+    @Inject lateinit var feedRepository: FeedRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
