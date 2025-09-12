@@ -16,8 +16,11 @@ import com.sarang.torang.usecase.FeedWithPageUseCase
 import com.sarang.torang.usecase.GetFeedFlowUseCase
 import com.sarang.torang.usecase.IsLoginFlowForFeedUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
@@ -36,11 +39,16 @@ open class FeedsViewModel @Inject constructor(
     private val tag = "__FeedsViewModel"
     private var page = 0
 
-    val isLoginState = isLoginFlowUseCase.isLogin
-    open val uiState: StateFlow<FeedUiState> = getFeedFlowUseCase.invoke()
+    private val initLoading : MutableStateFlow<Boolean> = MutableStateFlow(false);
+    open val uiState: StateFlow<FeedUiState> = combine (getFeedFlowUseCase.invoke()
         .map<List<Feed>, FeedUiState>(FeedUiState::Success)
-        .onStart { emit(FeedUiState.Loading) }
-        .stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(5_000), initialValue = FeedUiState.Loading)
+        .onStart { emit(FeedUiState.Loading) }, initLoading){feedUiState, initLoading ->
+        when {
+            initLoading == false -> FeedUiState.Loading
+            else -> feedUiState
+        }
+    }.stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(5_000), initialValue = FeedUiState.Loading)
+    val isLoginState = isLoginFlowUseCase.isLogin
 
     var msgState : String by mutableStateOf(""); private set
     var showReConnect : Boolean by mutableStateOf(false); private set
@@ -52,6 +60,16 @@ open class FeedsViewModel @Inject constructor(
     private fun showError(msg: String) { this.msgState = msg }
     fun clearErrorMsg() { msgState = "" } // 에러메시지 삭제
     fun onFocusItemIndex(index: Int) { focusedIndexState = index }
+
+    init {
+        if(initLoading.value == false){
+            viewModelScope.launch {
+                feedWithPageUseCase.invoke(0)
+                page = 1
+                initLoading.emit(true)
+            }
+        }
+    }
 
     // 피드 리스트 갱신
     open fun refreshFeed() {
