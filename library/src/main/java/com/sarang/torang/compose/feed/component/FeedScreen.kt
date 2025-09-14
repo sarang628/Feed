@@ -90,10 +90,6 @@ fun FeedScreen(
     showReConnect:              Boolean                             = false
     // @formatter:on
 ) {
-    val screenHeightDp = LocalConfiguration.current.screenHeightDp
-    val screenWidthDp = LocalConfiguration.current.screenWidthDp
-    val density = LocalDensity.current
-
     Scaffold( // snackbar + topAppBar + feedList
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
         topBar = topAppBar
@@ -104,15 +100,28 @@ fun FeedScreen(
             }
 
             AnimatedVisibility(uiState == FeedUiState.Empty, enter = fadeIn(tween(durationMillis = 1000))) {
-                RefreshAndBottomDetectionLazyColumn(modifier = Modifier.padding(it), count = 0, onBottom = {}, isRefreshing = isRefreshing, listState = listState, userScrollEnabled = scrollEnabled, onRefresh = onRefresh, contents = {EmptyFeed()}) {  }
+                RefreshAndBottomDetectionLazyColumn(modifier = Modifier.padding(it),
+                    count = 0,
+                    onBottom = {},
+                    isRefreshing = isRefreshing,
+                    listState = listState,
+                    userScrollEnabled = scrollEnabled,
+                    onRefresh = onRefresh,
+                    contents = {EmptyFeed()}) {  }
             }
 
             AnimatedVisibility(uiState is FeedUiState.Success, enter = fadeIn(tween(durationMillis = 1000))) {
-                uiState as FeedUiState.Success
-                RefreshAndBottomDetectionLazyColumn(modifier = modifier.padding(it), count = uiState.list.size, onBottom = onBottom, userScrollEnabled = scrollEnabled, listState = listState, isRefreshing = isRefreshing, onRefresh = onRefresh) {
-                    val feed = uiState.list[it].copy(/*isPlaying = it.isPlaying && if (uiState is FeedUiState.Success) { (uiState as FeedUiState.Success).focusedIndex == (uiState as FeedUiState.Success).list.indexOf(it) } else false*/)
-                    var imageHeight = uiState.imageHeight(density, screenWidthDp, screenHeightDp)
-                    LocalFeedCompose.current.invoke(feed, onLike, onFavorite, isLogin, { onVideoClick.invoke(uiState.list[it].reviewId) }, imageHeight, pageScrollable)
+                if(uiState is FeedUiState.Success) {
+                    FeedSuccess(modifier = modifier.padding(it),
+                        listState = listState,
+                        scrollEnabled = scrollEnabled,
+                        isRefreshing = isRefreshing,
+                        uiState = uiState,
+                        onLike = onLike,
+                        onFavorite = onFavorite,
+                        onVideoClick = onVideoClick,
+                        pageScrollable = pageScrollable,
+                        isLogin = isLogin)
                 }
             }
 
@@ -131,12 +140,42 @@ fun FeedScreen(
 }
 
 @Composable
+private fun FeedSuccess(modifier : Modifier = Modifier,
+                        tag: String                              = "__FeedSuccess",
+                        uiState: FeedUiState.Success = FeedUiState.Success(listOf()),
+                        onBottom:                   () -> Unit                          = { Log.i(tag, "onBottom is not set") },
+                        scrollEnabled:              Boolean                             = true,
+                        listState:                  LazyListState                       = rememberLazyListState(),
+                        isRefreshing:               Boolean                             = false,
+                        onRefresh:                  () -> Unit                          = { Log.i(tag, "onRefresh is not set") },
+                        onLike :                    (Int) -> Unit                       = {},
+                        onFavorite:                 (Int) -> Unit                       = {},
+                        onVideoClick :              (Int) -> Unit                       = {},
+                        pageScrollable:             Boolean                             = true,
+                        isLogin:                    Boolean                             = false,
+                        ){
+    val screenHeightDp = LocalConfiguration.current.screenHeightDp
+    val screenWidthDp = LocalConfiguration.current.screenWidthDp
+    val density = LocalDensity.current
+    RefreshAndBottomDetectionLazyColumn(modifier = modifier,
+        count = uiState.list.size,
+        onBottom = onBottom,
+        userScrollEnabled = scrollEnabled,
+        listState = listState,
+        isRefreshing = isRefreshing,
+        onRefresh = onRefresh) {
+        val feed = uiState.list[it].copy(/*isPlaying = it.isPlaying && if (uiState is FeedUiState.Success) { (uiState as FeedUiState.Success).focusedIndex == (uiState as FeedUiState.Success).list.indexOf(it) } else false*/)
+        var imageHeight = uiState.imageHeight(density, screenWidthDp, screenHeightDp)
+        LocalFeedCompose.current.invoke(feed, onLike, onFavorite, isLogin, { onVideoClick.invoke(uiState.list[it].reviewId) }, imageHeight, pageScrollable)
+    }
+}
+
+@Composable
 private fun HandleSnackBar(
     msg: String,
     snackBarHostState: SnackbarHostState,
     consumeErrorMessage: () -> Unit
 ) {
-// snackbar process
     LaunchedEffect(key1 = msg, block = {
         if (msg.isNotEmpty()) {
             snackBarHostState.showSnackbar(msg, duration = SnackbarDuration.Short)
