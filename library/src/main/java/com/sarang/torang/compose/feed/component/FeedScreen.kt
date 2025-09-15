@@ -128,18 +128,18 @@ fun FeedScreen(
 
 @Composable
 private fun FeedSuccess(modifier : Modifier = Modifier,
-                        tag: String                              = "__FeedSuccess",
-                        uiState: FeedUiState.Success = FeedUiState.Success(listOf()),
-                        onBottom:                   () -> Unit                          = { Log.i(tag, "onBottom is not set") },
-                        scrollEnabled:              Boolean                             = true,
-                        listState:                  LazyListState                       = rememberLazyListState(),
-                        isRefreshing:               Boolean                             = false,
-                        onRefresh:                  () -> Unit                          = { Log.i(tag, "onRefresh is not set") },
-                        onLike :                    (Int) -> Unit                       = {},
-                        onFavorite:                 (Int) -> Unit                       = {},
-                        onVideoClick :              (Int) -> Unit                       = {},
-                        pageScrollable:             Boolean                             = true,
-                        isLogin:                    Boolean                             = false,
+                        tag             :String                 = "__FeedSuccess",
+                        uiState         :FeedUiState.Success    = FeedUiState.Success(listOf()),
+                        onBottom        :() -> Unit             = { Log.i(tag, "onBottom is not set") },
+                        scrollEnabled   :Boolean                = true,
+                        listState       :LazyListState          = rememberLazyListState(),
+                        isRefreshing    :Boolean                = false,
+                        onRefresh       :() -> Unit             = { Log.i(tag, "onRefresh is not set") },
+                        onLike          :(Int) -> Unit          = {},
+                        onFavorite      :(Int) -> Unit          = {},
+                        onVideoClick    :(Int) -> Unit          = {},
+                        pageScrollable  :Boolean                = true,
+                        isLogin         :Boolean                = false,
                         ){
     val screenHeightDp = LocalConfiguration.current.screenHeightDp
     val screenWidthDp = LocalConfiguration.current.screenWidthDp

@@ -31,7 +31,6 @@ fun TestFeedScreenForMain(
     onAlarm: () -> Unit = { Log.w("__FeedScreenForMain", "onAlarm is not implemented") },
     pageScrollable: Boolean = true
 ) {
-    var onTop by remember { mutableStateOf(false) }
     CompositionLocalProvider(
         LocalFeedCompose provides CustomFeedCompose,
         LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType,
@@ -40,11 +39,9 @@ fun TestFeedScreenForMain(
         LocalExpandableTextType provides CustomExpandableTextType
     ) {
         FeedScreenInMain(
-            scrollToTop = onTop,
             onAlarm = onAlarm,
             feedScreenState = feedScreenState,
             onAddReview = onAddReview,
-            onScrollToTop = { onTop = false },
             pageScrollable = pageScrollable
         )
     }
