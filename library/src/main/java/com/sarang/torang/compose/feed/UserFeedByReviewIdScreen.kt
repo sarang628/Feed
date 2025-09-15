@@ -22,7 +22,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarang.torang.compose.feed.component.FeedScreen
+import com.sarang.torang.compose.feed.component.FeedScreenState
 import com.sarang.torang.compose.feed.component.LocalFeedCompose
+import com.sarang.torang.compose.feed.component.rememberFeedScreenState
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.data.feed.adjustHeight
 import com.sarang.torang.uistate.FeedUiState
@@ -37,9 +39,9 @@ import kotlinx.coroutines.delay
 @Composable
 fun UserFeedByReviewIdScreen(
     feedsViewModel: MyFeedsViewModel = hiltViewModel(),
+    feedScreenState: FeedScreenState = rememberFeedScreenState(),
     reviewId: Int,
     onBack: (() -> Unit)? = null,
-    listState: LazyListState,
     pageScrollable: Boolean = true
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
@@ -54,17 +56,14 @@ fun UserFeedByReviewIdScreen(
         feedsViewModel.getUserFeedByReviewId(reviewId)
     }
 
-    /*LaunchedEffect(key1 = uiState is FeedUiState.Success) { // 피드 리스트에서 reviewId에 해당 피드로 이동
-        val position = feedsViewModel.findIndexByReviewId(reviewId)
-        delay(10)
-        listState.scrollToItem(position)
-    }*/
+    LaunchedEffect(feedsViewModel.msgState) {
+        feedScreenState.showSnackBar(feedsViewModel.msgState)
+    }
 
     MyFeed(
         uiState = uiState,
         isRefreshing = isRefreshing,
         onBack = onBack,
-        consumeErrorMessage = { feedsViewModel.clearErrorMsg() },
         onRefresh = { feedsViewModel.refreshFeed() },
         onBottom = { feedsViewModel.onBottom() },
         feed = { it ->
@@ -77,7 +76,7 @@ fun UserFeedByReviewIdScreen(
                 pageScrollable
             )
         },
-        listState = listState,
+        feedScreenState = feedScreenState,
     )
 }
 
@@ -91,13 +90,12 @@ internal fun MyFeed(
     onBack: (() -> Unit)? = null,
     onRefresh: (() -> Unit),/*base feed 에서 제공*/
     onBottom: (() -> Unit),/*base feed 에서 제공*/
-    consumeErrorMessage: () -> Unit,
-    listState: LazyListState,
+    feedScreenState: FeedScreenState = rememberFeedScreenState(),
     feed: @Composable ((feed: Feed) -> Unit),
 ) {
     FeedScreen(
         uiState = uiState,
-        listState = listState,
+        feedScreenState = feedScreenState,
         topAppBar = {
             TopAppBar(
                 title = { Text(text = "Post", fontSize = 21.sp, fontWeight = FontWeight.Bold) },
@@ -106,12 +104,9 @@ internal fun MyFeed(
                         Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack, contentDescription = "") }
                 })
         },
-        consumeErrorMessage = consumeErrorMessage,
         onRefresh = onRefresh,
         onBottom = onBottom,
         isRefreshing = isRefreshing,
-        onTop = false,
-        consumeOnTop = { }
     )
 }
 
@@ -124,8 +119,6 @@ fun PreviewMyFeedScreen() {
         isRefreshing = false,
         onRefresh = {},
         onBottom = {},
-        consumeErrorMessage = {},
-        listState = rememberLazyListState(),
         feed = { _ -> },
     )
 }

@@ -28,7 +28,6 @@ internal fun TestUserFeedByReviewIdScreen() {
             UserFeedByReviewIdScreen(
                 reviewId = reviewId,
                 onBack = { },
-                listState = rememberLazyListState(),
             )
 
             SetReviewIdAssistChip(modifier = Modifier.align(Alignment.TopEnd), reviewId) {

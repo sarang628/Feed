@@ -16,9 +16,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -51,12 +49,9 @@ import kotlinx.coroutines.launch
  * @param onBottom 하단 터치 이벤트
  * @param isRefreshing 피드 갱신중 여부
  * @param onRefresh 피드 갱신 요청
- * @param listState 리스트 상태 library
- * @param consumeOnTop 최상단 이벤트 소비
  * @param onBackToTop back 이벤트 시 리스트를 최상단으로 올리는 이벤트
  * @param onFocusItemIndex 비디오 재생을 위해 항목이 중앙에 있을때 호출되는 콜백
  * @param scrollEnabled 리스트 스크롤 가능 여부
- *
  * @sample FeedScreenEmptyPreview
  * @sample FeedScreenLoadingPreview
  * @sample FeedScreenSuccessPreview
@@ -65,33 +60,28 @@ import kotlinx.coroutines.launch
 @Composable
 fun FeedScreen(
     // @formatter:off
-    modifier:                   Modifier                            = Modifier,
-    tag:                        String                              = "__FeedScreen",
-    uiState:                    FeedUiState                         = FeedUiState.Loading,
-    errorMsg:                   String                              = "",
-    listState:                  LazyListState                       = rememberLazyListState(),
-    topAppBar:                  @Composable () -> Unit              = { Log.i(tag, "topAppBar is not set") },
-    isRefreshing:               Boolean                             = false,
-    onTop:                      Boolean                             = false,
-    onBackToTop:                Boolean                             = true,
-    scrollEnabled:              Boolean                             = true,
-    consumeErrorMessage:        () -> Unit                          = { Log.w(tag, "consumeErrorMessage is not set") },
-    onBottom:                   () -> Unit                          = { Log.i(tag, "onBottom is not set") },
-    onRefresh:                  () -> Unit                          = { Log.i(tag, "onRefresh is not set") },
-    consumeOnTop:               () -> Unit                          = { Log.i(tag, "consumeOnTop is not set") },
-    onFocusItemIndex:           (Int) -> Unit                       = { Log.i(tag, "onFocusItemIndex is not set") },
-    snackBarHostState:          SnackbarHostState                   = remember { SnackbarHostState() },
-    onLike :                    (Int) -> Unit                       = {},
-    onFavorite:                 (Int) -> Unit                       = {},
-    onVideoClick :              (Int) -> Unit                       = {},
-    onConnect :                 () -> Unit                          = {},
-    pageScrollable:             Boolean                             = true,
-    isLogin:                    Boolean                             = false,
-    showReConnect:              Boolean                             = false
+    modifier            :Modifier               = Modifier,
+    feedScreenState     :FeedScreenState        = rememberFeedScreenState(),
+    tag                 :String                 = "__FeedScreen",
+    uiState             :FeedUiState            = FeedUiState.Loading,
+    topAppBar           :@Composable () -> Unit = { Log.i(tag, "topAppBar is not set") },
+    isRefreshing        :Boolean                = false,
+    onBackToTop         :Boolean                = true,
+    scrollEnabled       :Boolean                = true,
+    onBottom            :() -> Unit             = { Log.i(tag, "onBottom is not set") },
+    onRefresh           :() -> Unit             = { Log.i(tag, "onRefresh is not set") },
+    onFocusItemIndex    :(Int) -> Unit          = { Log.i(tag, "onFocusItemIndex is not set") },
+    onLike              :(Int) -> Unit          = {},
+    onFavorite          :(Int) -> Unit          = {},
+    onVideoClick        :(Int) -> Unit          = {},
+    onConnect           :() -> Unit             = {},
+    pageScrollable      :Boolean                = true,
+    isLogin             :Boolean                = false,
+    showReConnect       :Boolean                = false
     // @formatter:on
 ) {
     Scaffold( // snackbar + topAppBar + feedList
-        snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
+        snackbarHost = { SnackbarHost(hostState = feedScreenState.snackbarState) },
         topBar = topAppBar
     ) {
         Box(Modifier.fillMaxWidth()){
@@ -104,7 +94,7 @@ fun FeedScreen(
                     count = 0,
                     onBottom = {},
                     isRefreshing = isRefreshing,
-                    listState = listState,
+                    listState = feedScreenState.listState,
                     userScrollEnabled = scrollEnabled,
                     onRefresh = onRefresh,
                     contents = {EmptyFeed()}) {  }
@@ -113,7 +103,7 @@ fun FeedScreen(
             AnimatedVisibility(uiState is FeedUiState.Success, enter = fadeIn(tween(durationMillis = 1000))) {
                 if(uiState is FeedUiState.Success) {
                     FeedSuccess(modifier = modifier.padding(it),
-                        listState = listState,
+                        listState = feedScreenState.listState,
                         scrollEnabled = scrollEnabled,
                         isRefreshing = isRefreshing,
                         uiState = uiState,
@@ -132,11 +122,8 @@ fun FeedScreen(
             }
         }
     }
-
-    HandleSnackBar(errorMsg, snackBarHostState, consumeErrorMessage)
-    HandleOnFocusIndex(listState, onFocusItemIndex)
-    HandleBack(listState, onBackToTop)
-    HandleOnTop(listState, onTop, consumeOnTop)
+    HandleOnFocusIndex(feedScreenState.listState, onFocusItemIndex)
+    HandleBack(feedScreenState.listState, onBackToTop)
 }
 
 @Composable
@@ -168,20 +155,6 @@ private fun FeedSuccess(modifier : Modifier = Modifier,
         var imageHeight = uiState.imageHeight(density, screenWidthDp, screenHeightDp)
         LocalFeedCompose.current.invoke(feed, onLike, onFavorite, isLogin, { onVideoClick.invoke(uiState.list[it].reviewId) }, imageHeight, pageScrollable)
     }
-}
-
-@Composable
-private fun HandleSnackBar(
-    msg: String,
-    snackBarHostState: SnackbarHostState,
-    consumeErrorMessage: () -> Unit
-) {
-    LaunchedEffect(key1 = msg, block = {
-        if (msg.isNotEmpty()) {
-            snackBarHostState.showSnackbar(msg, duration = SnackbarDuration.Short)
-            consumeErrorMessage.invoke()
-        }
-    })
 }
 
 @Composable
@@ -221,17 +194,6 @@ private fun HandleBack(listState: LazyListState, onBackToTop: Boolean) {
                     backPressHandled = false
                 }
             }
-        }
-    }
-}
-
-@Composable
-private fun HandleOnTop(listState: LazyListState, onTop: Boolean, consumeOnTop: () -> Unit) {
-    val coroutine = rememberCoroutineScope()
-    LaunchedEffect(key1 = onTop) {
-        if (onTop) {
-            consumeOnTop.invoke()
-            coroutine.launch { listState.animateScrollToItem(0) }
         }
     }
 }

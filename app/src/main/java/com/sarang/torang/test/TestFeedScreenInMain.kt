@@ -9,8 +9,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.sarang.torang.compose.feed.FeedScreenInMain
 import com.sarang.torang.compose.feed.LocalPullToRefreshLayoutType
+import com.sarang.torang.compose.feed.component.FeedScreenState
 import com.sarang.torang.compose.feed.component.LocalBottomDetectingLazyColumnType
 import com.sarang.torang.compose.feed.component.LocalFeedCompose
+import com.sarang.torang.compose.feed.component.rememberFeedScreenState
 import com.sarang.torang.compose.feed.internal.components.LocalExpandableTextType
 import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
 import com.sarang.torang.di.basefeed_di.CustomExpandableTextType
@@ -24,7 +26,7 @@ import com.sryang.library.pullrefresh.rememberPullToRefreshState
 @Composable
 fun TestFeedScreenForMain(
     tag: String = "__FeedScreenForMain",
-    state: PullToRefreshLayoutState = rememberPullToRefreshState(),
+    feedScreenState         :FeedScreenState        = rememberFeedScreenState(),
     onAddReview: () -> Unit = { Log.w(tag, "onAddReview is not implemented") },
     onAlarm: () -> Unit = { Log.w("__FeedScreenForMain", "onAlarm is not implemented") },
     pageScrollable: Boolean = true
@@ -40,6 +42,7 @@ fun TestFeedScreenForMain(
         FeedScreenInMain(
             scrollToTop = onTop,
             onAlarm = onAlarm,
+            feedScreenState = feedScreenState,
             onAddReview = onAddReview,
             onScrollToTop = { onTop = false },
             pageScrollable = pageScrollable

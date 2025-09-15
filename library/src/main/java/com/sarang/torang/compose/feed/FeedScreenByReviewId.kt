@@ -16,7 +16,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarang.torang.compose.feed.component.FeedScreen
+import com.sarang.torang.compose.feed.component.FeedScreenState
 import com.sarang.torang.compose.feed.component.LocalFeedCompose
+import com.sarang.torang.compose.feed.component.rememberFeedScreenState
 import com.sarang.torang.data.feed.adjustHeight
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.FeedScreenByReviewIdViewModel
@@ -25,6 +27,7 @@ import com.sarang.torang.viewmodels.FeedScreenByReviewIdViewModel
 @Composable
 fun FeedScreenByReviewId(
     feedsViewModel: FeedScreenByReviewIdViewModel = hiltViewModel(),
+    feedScreenState     :FeedScreenState        = rememberFeedScreenState(),
     reviewId: Int,
     onTop: Boolean = false,
     consumeOnTop: (() -> Unit)? = null,
@@ -39,6 +42,10 @@ fun FeedScreenByReviewId(
         feedsViewModel.getFeedByReviewId(reviewId)
     }
 
+    LaunchedEffect(key1 = feedsViewModel.msgState) {
+        feedScreenState.showSnackBar(feedsViewModel.msgState)
+    }
+
     FeedScreen(
         uiState = uiState,
         topAppBar = {
@@ -48,12 +55,9 @@ fun FeedScreenByReviewId(
                 }
             })
         },
-        consumeErrorMessage = { feedsViewModel.clearErrorMsg() },
         onRefresh = { feedsViewModel.refreshFeed() },
         onBottom = { feedsViewModel.onBottom() },
         isRefreshing = isRefreshing,
-        onTop = onTop,
-        consumeOnTop = { consumeOnTop?.invoke() },
         isLogin = isLogin,
         onFavorite = { feedsViewModel.onFavorite(it) },
         onLike = { feedsViewModel.onLike(it) },

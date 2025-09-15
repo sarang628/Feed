@@ -7,6 +7,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -16,7 +17,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarang.torang.compose.feed.component.FeedScreen
+import com.sarang.torang.compose.feed.component.FeedScreenState
 import com.sarang.torang.compose.feed.component.FeedTopAppBar
+import com.sarang.torang.compose.feed.component.rememberFeedScreenState
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.FeedsViewModel
@@ -34,21 +37,27 @@ import com.sarang.torang.viewmodels.FeedsViewModel
 fun FeedScreenInMain(
     tag: String = "__FeedScreenForMain",
     feedsViewModel: FeedsViewModel = hiltViewModel(),
+    feedScreenState         :FeedScreenState        = rememberFeedScreenState(),
     onAddReview: (() -> Unit) = { Log.w(tag, "onAddReview is not implemented") },
     onAlarm: () -> Unit = { Log.w("__FeedScreenForMain", "onAlarm is not implemented") },
     scrollToTop: Boolean = false,
     onScrollToTop: () -> Unit = {},
     scrollEnabled: Boolean = true,
-    pageScrollable: Boolean = true
+    pageScrollable: Boolean = true,
+
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
     val isRefreshing: Boolean = feedsViewModel.isRefreshingState
     val isLogin by feedsViewModel.isLoginState.collectAsState(initial = false)
     val showReConnect = feedsViewModel.showReConnect
 
+    LaunchedEffect(feedsViewModel.msgState) {
+        feedScreenState.showSnackBar(feedsViewModel.msgState)
+    }
+
     FeedInMain(
         uiState = uiState,
-        errorMsg = feedsViewModel.msgState,
+        feedScreenState = feedScreenState,
         isLogin = isLogin,
         onAddReview = onAddReview,
         onAlarm = onAlarm,
@@ -58,7 +67,6 @@ fun FeedScreenInMain(
         scrollEnabled = scrollEnabled,
         onBottom = { feedsViewModel.onBottom() },
         onRefresh = { feedsViewModel.refreshFeed() },
-        consumeErrorMessage = { feedsViewModel.clearErrorMsg() },
         onFocusItemIndex = { feedsViewModel.onFocusItemIndex(it) },
         onLike = { feedsViewModel.onLike(it) },
         onFavorite = { feedsViewModel.onFavorite(it) },
@@ -74,7 +82,7 @@ fun FeedScreenInMain(
 internal fun FeedInMain(
     tag:                    String = "__MainFeed",
     uiState:                FeedUiState,
-    errorMsg:               String = "",
+    feedScreenState         :FeedScreenState        = rememberFeedScreenState(),
     isLogin:                Boolean = false,
     pageScrollable:         Boolean = true,
     isRefreshing:           Boolean = false,
@@ -83,7 +91,6 @@ internal fun FeedInMain(
     scrollEnabled:          Boolean       = true,
     showReConnect:          Boolean       = false,
     onFocusItemIndex:       (Int) -> Unit = {},
-    consumeErrorMessage:    () -> Unit    = {},
     onAlarm:                () -> Unit    = { Log.w(tag, "onAlarm is not implemented") },
     onBottom:               () -> Unit    = {},
     onRefresh:              () -> Unit    = {},
@@ -98,13 +105,10 @@ internal fun FeedInMain(
     FeedScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         uiState = uiState,
-        errorMsg = errorMsg,
-        consumeErrorMessage = consumeErrorMessage,
+        feedScreenState = feedScreenState,
         onBottom = onBottom,
         isRefreshing = isRefreshing,
         onRefresh = onRefresh,
-        onTop = onTop,
-        consumeOnTop = consumeOnTop,
         topAppBar = { FeedTopAppBar(onAddReview = onAddReview, topAppIcon = topAppIcon, scrollBehavior = scrollBehavior, onAlarm = onAlarm) },
         onFocusItemIndex = onFocusItemIndex,
         scrollEnabled = scrollEnabled,

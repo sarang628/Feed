@@ -8,6 +8,8 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarang.torang.compose.feed.component.FeedScreen
+import com.sarang.torang.compose.feed.component.FeedScreenState
+import com.sarang.torang.compose.feed.component.rememberFeedScreenState
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.FeedScreenByRestaurantIdViewModel
 
@@ -18,7 +20,8 @@ fun FeedScreenByRestaurantId(
     restaurantId: Int,
     onTop: Boolean = false,
     consumeOnTop: (() -> Unit)? = null,
-    pageScrollable : Boolean = true
+    pageScrollable : Boolean = true,
+    feedScreenState: FeedScreenState = rememberFeedScreenState()
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
     val isRefreshing: Boolean = feedsViewModel.isRefreshingState
@@ -28,14 +31,15 @@ fun FeedScreenByRestaurantId(
         feedsViewModel.getFeedByRestaurantId(restaurantId)
     }
 
+    LaunchedEffect(feedsViewModel.msgState) {
+        feedScreenState.showSnackBar(feedsViewModel.msgState)
+    }
+
     FeedScreen(
         uiState = uiState,
-        consumeErrorMessage = { feedsViewModel.clearErrorMsg() },
         onRefresh = { feedsViewModel.refreshFeed() },
         onBottom = { feedsViewModel.onBottom() },
         isRefreshing = isRefreshing,
-        onTop = onTop,
-        consumeOnTop = { consumeOnTop?.invoke() },
         isLogin = isLogin,
         onLike = { feedsViewModel.onLike(it) },
         onFavorite = { feedsViewModel.onFavorite(it) },
