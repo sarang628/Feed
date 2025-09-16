@@ -7,7 +7,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.sarang.torang.compose.feed.component.FeedScreen
 import com.sarang.torang.compose.feed.component.FeedScreenState
 import com.sarang.torang.compose.feed.component.rememberFeedScreenState
 import com.sarang.torang.uistate.FeedUiState
@@ -39,7 +38,6 @@ fun FeedScreenByRestaurantId(
         uiState = uiState,
         onRefresh = { feedsViewModel.refreshFeed() },
         onBottom = { feedsViewModel.onBottom() },
-        isRefreshing = isRefreshing,
         isLogin = isLogin,
         onLike = { feedsViewModel.onLike(it) },
         onFavorite = { feedsViewModel.onFavorite(it) },

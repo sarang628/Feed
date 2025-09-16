@@ -16,7 +16,7 @@ import com.sarang.torang.compose.feed.LocalPullToRefreshLayoutType
 internal fun RefreshAndBottomDetectionLazyColumn(
     modifier: Modifier = Modifier,
     count: Int,
-    isRefreshing: Boolean,
+    pullToRefreshLayoutState: PullToRefreshLayoutState = rememberPullToRefreshState(),
     onRefresh: (() -> Unit),
     onBottom: () -> Unit,
     userScrollEnabled: Boolean = true,
@@ -24,7 +24,7 @@ internal fun RefreshAndBottomDetectionLazyColumn(
     contents: @Composable (() -> Unit)? = null,
     itemCompose: @Composable (Int) -> Unit,
 ) {
-    LocalPullToRefreshLayoutType.current.invoke(modifier, isRefreshing, onRefresh) {
+    LocalPullToRefreshLayoutType.current.invoke(modifier, pullToRefreshLayoutState, onRefresh) {
         LocalBottomDetectingLazyColumnType.current.invoke(Modifier, count, onBottom, itemCompose, userScrollEnabled, Arrangement.spacedBy(10.dp), listState, contents)
     }
 }
@@ -37,7 +37,6 @@ fun PreviewRefreshAndBottomDetectionLazyColunm() {
         count = 10,
         onBottom = {},
         contents = { Box(modifier = Modifier.fillMaxSize()) { Text("PreviewRefreshAndBottomDetectionLazyColunm") } },
-        isRefreshing = false,
         onRefresh = {},
         listState = rememberLazyListState(),
     ){ Text("111") }

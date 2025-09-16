@@ -11,15 +11,20 @@ import androidx.compose.runtime.remember
 fun rememberFeedScreenState(): FeedScreenState {
     val listState: LazyListState = rememberLazyListState()
     val snackbarState: SnackbarHostState = SnackbarHostState()
-    return remember { FeedScreenState(listState, snackbarState) }
+    val pullToRefreshState = rememberPullToRefreshState()
+    return remember { FeedScreenState(listState, snackbarState, pullToRefreshState) }
 }
 
-class FeedScreenState(val listState: LazyListState, val snackbarState: SnackbarHostState) {
+class FeedScreenState(val listState: LazyListState, val snackbarState: SnackbarHostState, val pullToRefreshLayoutState: PullToRefreshLayoutState) {
     suspend fun onTop() {
         listState.animateScrollToItem(0)
     }
 
     suspend fun showSnackBar(message : String?) {
         message?.let { snackbarState.showSnackbar(it) }
+    }
+
+    fun refresh(refresh : Boolean){
+        pullToRefreshLayoutState.updateState(if(!refresh) RefreshIndicatorState.Default else RefreshIndicatorState.Refreshing)
     }
 }

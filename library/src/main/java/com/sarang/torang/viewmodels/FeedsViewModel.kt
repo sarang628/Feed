@@ -40,18 +40,20 @@ open class FeedsViewModel @Inject constructor(
     private var page = 0
 
     private val initLoading : MutableStateFlow<Boolean> = MutableStateFlow(false);
+    private val showReConnect :MutableStateFlow<Boolean> = MutableStateFlow(false);
+
     open val uiState: StateFlow<FeedUiState> = combine (getFeedFlowUseCase.invoke()
         .map<List<Feed>, FeedUiState>(FeedUiState::Success)
-        .onStart { emit(FeedUiState.Loading) }, initLoading){feedUiState, initLoading ->
+        .onStart { emit(FeedUiState.Loading) }, initLoading, showReConnect){feedUiState, initLoading, showReConnect ->
         when {
             initLoading == false -> FeedUiState.Loading
+            showReConnect == true -> FeedUiState.Reconnect
             else -> feedUiState
         }
     }.stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(5_000), initialValue = FeedUiState.Loading)
     val isLoginState = isLoginFlowUseCase.isLogin
 
     var msgState : String? by mutableStateOf(null); private set
-    var showReConnect : Boolean by mutableStateOf(false); private set
     var focusedIndexState by mutableIntStateOf(0); private set
     var isRefreshingState by mutableStateOf(false);
     var videoPlayListState : List<Int> by mutableStateOf(listOf())
@@ -74,9 +76,9 @@ open class FeedsViewModel @Inject constructor(
     open fun refreshFeed() {
         viewModelScope.launch {
             isRefreshingState = true
-            try { showReConnect = false; page = 0; feedWithPageUseCase.invoke(page); page++ }
-            catch (e: ConnectException) { if(page == 0) showReConnect = true; handleErrorMsg(e) }
-            catch (e: Exception) { if(page == 0) showReConnect = true; handleErrorMsg(e) }
+            try { showReConnect.emit(false); feedWithPageUseCase.invoke(0); page = 1 }
+            catch (e: ConnectException) { if(page == 0) showReConnect.emit(true); handleErrorMsg(e) }
+            catch (e: Exception) { if(page == 0) showReConnect.emit(true); handleErrorMsg(e) }
             finally { isRefreshingState = false }
         }
     }
@@ -110,8 +112,8 @@ open class FeedsViewModel @Inject constructor(
                 feedWithPageUseCase.invoke(page)
                 page++
             }
-            catch (e: ConnectException) { if(page == 0) showReConnect = true; handleErrorMsg(e) }
-            catch (e: Exception) { if(page == 0) showReConnect = true; handleErrorMsg(e) }
+            catch (e: ConnectException) { if(page == 0) showReConnect.emit(true); handleErrorMsg(e) }
+            catch (e: Exception) { if(page == 0) showReConnect.emit(true); handleErrorMsg(e) }
         }
     }
 

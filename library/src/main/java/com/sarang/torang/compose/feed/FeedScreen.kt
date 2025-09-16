@@ -1,4 +1,4 @@
-package com.sarang.torang.compose.feed.component
+package com.sarang.torang.compose.feed
 
 import android.util.Log
 import androidx.activity.compose.BackHandler
@@ -32,6 +32,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
+import com.sarang.torang.compose.feed.component.EmptyFeed
+import com.sarang.torang.compose.feed.component.FeedScreenState
+import com.sarang.torang.compose.feed.component.FeedShimmer
+import com.sarang.torang.compose.feed.component.FeedTopAppBar
+import com.sarang.torang.compose.feed.component.LocalFeedCompose
+import com.sarang.torang.compose.feed.component.PullToRefreshLayoutState
+import com.sarang.torang.compose.feed.component.RefreshAndBottomDetectionLazyColumn
+import com.sarang.torang.compose.feed.component.rememberFeedScreenState
+import com.sarang.torang.compose.feed.component.rememberPullToRefreshState
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.uistate.imageHeight
@@ -65,22 +74,20 @@ fun FeedScreen(
     tag                 :String                 = "__FeedScreen",
     uiState             :FeedUiState            = FeedUiState.Loading,
     topAppBar           :@Composable () -> Unit = { Log.i(tag, "topAppBar is not set") },
-    isRefreshing        :Boolean                = false,
     onBackToTop         :Boolean                = true,
     scrollEnabled       :Boolean                = true,
+    pageScrollable      :Boolean                = true,
+    isLogin             :Boolean                = false,
     onBottom            :() -> Unit             = { Log.i(tag, "onBottom is not set") },
     onRefresh           :() -> Unit             = { Log.i(tag, "onRefresh is not set") },
     onFocusItemIndex    :(Int) -> Unit          = { Log.i(tag, "onFocusItemIndex is not set") },
     onLike              :(Int) -> Unit          = {},
     onFavorite          :(Int) -> Unit          = {},
     onVideoClick        :(Int) -> Unit          = {},
-    onConnect           :() -> Unit             = {},
-    pageScrollable      :Boolean                = true,
-    isLogin             :Boolean                = false,
-    showReConnect       :Boolean                = false
+    onConnect           :() -> Unit             = {}
     // @formatter:on
 ) {
-    Scaffold( // snackbar + topAppBar + feedList
+    Scaffold(
         snackbarHost = { SnackbarHost(hostState = feedScreenState.snackbarState) },
         topBar = topAppBar
     ) {
@@ -90,14 +97,14 @@ fun FeedScreen(
             }
 
             AnimatedVisibility(uiState == FeedUiState.Empty, enter = fadeIn(tween(durationMillis = 1000))) {
-                RefreshAndBottomDetectionLazyColumn(modifier = Modifier.padding(it),
+                RefreshAndBottomDetectionLazyColumn(
+                    modifier = Modifier.padding(it),
                     count = 0,
                     onBottom = {},
-                    isRefreshing = isRefreshing,
                     listState = feedScreenState.listState,
                     userScrollEnabled = scrollEnabled,
                     onRefresh = onRefresh,
-                    contents = {EmptyFeed()}) {  }
+                    contents = { EmptyFeed() }) { }
             }
 
             AnimatedVisibility(uiState is FeedUiState.Success, enter = fadeIn(tween(durationMillis = 1000))) {
@@ -105,8 +112,9 @@ fun FeedScreen(
                     FeedSuccess(modifier = modifier.padding(it),
                         listState = feedScreenState.listState,
                         scrollEnabled = scrollEnabled,
-                        isRefreshing = isRefreshing,
+                        pullToRefreshLayoutState = feedScreenState.pullToRefreshLayoutState,
                         uiState = uiState,
+                        onRefresh = onRefresh,
                         onLike = onLike,
                         onFavorite = onFavorite,
                         onVideoClick = onVideoClick,
@@ -115,7 +123,7 @@ fun FeedScreen(
                 }
             }
 
-            if(showReConnect) {
+            if(uiState == FeedUiState.Reconnect) {
                 Button(modifier = Modifier.align(Alignment.Center), onClick = onConnect) {
                     Text("connect")
                 }
@@ -133,7 +141,7 @@ private fun FeedSuccess(modifier : Modifier = Modifier,
                         onBottom        :() -> Unit             = { Log.i(tag, "onBottom is not set") },
                         scrollEnabled   :Boolean                = true,
                         listState       :LazyListState          = rememberLazyListState(),
-                        isRefreshing    :Boolean                = false,
+                        pullToRefreshLayoutState: PullToRefreshLayoutState = rememberPullToRefreshState(),
                         onRefresh       :() -> Unit             = { Log.i(tag, "onRefresh is not set") },
                         onLike          :(Int) -> Unit          = {},
                         onFavorite      :(Int) -> Unit          = {},
@@ -144,16 +152,27 @@ private fun FeedSuccess(modifier : Modifier = Modifier,
     val screenHeightDp = LocalConfiguration.current.screenHeightDp
     val screenWidthDp = LocalConfiguration.current.screenWidthDp
     val density = LocalDensity.current
-    RefreshAndBottomDetectionLazyColumn(modifier = modifier,
+    RefreshAndBottomDetectionLazyColumn(
+        modifier = modifier,
         count = uiState.list.size,
         onBottom = onBottom,
         userScrollEnabled = scrollEnabled,
+        pullToRefreshLayoutState = pullToRefreshLayoutState,
         listState = listState,
-        isRefreshing = isRefreshing,
-        onRefresh = onRefresh) {
-        val feed = uiState.list[it].copy(/*isPlaying = it.isPlaying && if (uiState is FeedUiState.Success) { (uiState as FeedUiState.Success).focusedIndex == (uiState as FeedUiState.Success).list.indexOf(it) } else false*/)
+        onRefresh = onRefresh
+    ) {
+        val feed =
+            uiState.list[it].copy(/*isPlaying = it.isPlaying && if (uiState is FeedUiState.Success) { (uiState as FeedUiState.Success).focusedIndex == (uiState as FeedUiState.Success).list.indexOf(it) } else false*/)
         var imageHeight = uiState.imageHeight(density, screenWidthDp, screenHeightDp)
-        LocalFeedCompose.current.invoke(feed, onLike, onFavorite, isLogin, { onVideoClick.invoke(uiState.list[it].reviewId) }, imageHeight, pageScrollable)
+        LocalFeedCompose.current.invoke(
+            feed,
+            onLike,
+            onFavorite,
+            isLogin,
+            { onVideoClick.invoke(uiState.list[it].reviewId) },
+            imageHeight,
+            pageScrollable
+        )
     }
 }
 
@@ -202,21 +221,23 @@ private fun HandleBack(listState: LazyListState, onBackToTop: Boolean) {
 @Preview(showBackground = true)
 @Composable
 fun FeedScreenLoadingPreview() {
-    FeedScreen(uiState = FeedUiState.Loading)
+    FeedScreen(/*Preview*/
+        uiState = FeedUiState.Loading)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun FeedScreenEmptyPreview() {
-    FeedScreen(uiState = FeedUiState.Empty)
+    FeedScreen(/*Preview*/
+        uiState = FeedUiState.Empty)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun FeedScreenSuccessPreview() {
-    FeedScreen(
+    FeedScreen(/*Preview*/
         uiState = FeedUiState.Success(
             list = listOf(
                 Feed.Sample, Feed.Sample, Feed.Sample, Feed.Sample, Feed.Sample, Feed.Sample, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty
@@ -236,5 +257,13 @@ fun TransitionPreview(){
         uiState = FeedUiState.Success(listOf(Feed.Sample,Feed.Sample,Feed.Sample))
     }
 
-    FeedScreen(uiState = uiState)
+    FeedScreen(/*Preview*/
+        uiState = uiState)
+}
+
+@Preview
+@Composable
+fun PreviewShowReconnect(){
+    FeedScreen(/*Preview*/
+        uiState = FeedUiState.Reconnect)
 }

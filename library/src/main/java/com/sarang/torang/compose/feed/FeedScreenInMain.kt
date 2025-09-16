@@ -11,12 +11,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.sarang.torang.compose.feed.component.FeedScreen
 import com.sarang.torang.compose.feed.component.FeedScreenState
 import com.sarang.torang.compose.feed.component.FeedTopAppBar
 import com.sarang.torang.compose.feed.component.rememberFeedScreenState
@@ -45,12 +43,14 @@ fun FeedScreenInMain(
 
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
-    val isRefreshing: Boolean = feedsViewModel.isRefreshingState
     val isLogin by feedsViewModel.isLoginState.collectAsState(initial = false)
-    val showReConnect = feedsViewModel.showReConnect
 
     LaunchedEffect(feedsViewModel.msgState) {
         feedScreenState.showSnackBar(feedsViewModel.msgState)
+    }
+
+    LaunchedEffect(feedsViewModel.isRefreshingState) {
+        feedScreenState.refresh(feedsViewModel.isRefreshingState)
     }
 
     FeedInMain(
@@ -59,16 +59,14 @@ fun FeedScreenInMain(
         isLogin = isLogin,
         onAddReview = onAddReview,
         onAlarm = onAlarm,
-        isRefreshing = isRefreshing,
         scrollEnabled = scrollEnabled,
         onBottom = { feedsViewModel.onBottom() },
-        onRefresh = { feedsViewModel.refreshFeed() },
+        onRefresh = { feedsViewModel.refreshFeed(); },
         onFocusItemIndex = { feedsViewModel.onFocusItemIndex(it) },
         onLike = { feedsViewModel.onLike(it) },
         onFavorite = { feedsViewModel.onFavorite(it) },
         onVideoClick = { feedsViewModel.onVideoClick(it) },
         pageScrollable = pageScrollable,
-        showReConnect = showReConnect,
         onConnect = { feedsViewModel.refreshFeed() }
     )
 }
@@ -76,23 +74,21 @@ fun FeedScreenInMain(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun FeedInMain(
-    tag:                    String = "__MainFeed",
-    uiState:                FeedUiState,
-    feedScreenState         :FeedScreenState        = rememberFeedScreenState(),
-    isLogin:                Boolean       = false,
-    pageScrollable:         Boolean       = true,
-    isRefreshing:           Boolean       = false,
-    scrollEnabled:          Boolean       = true,
-    showReConnect:          Boolean       = false,
-    onFocusItemIndex:       (Int) -> Unit = {},
-    onAlarm:                () -> Unit    = { Log.w(tag, "onAlarm is not implemented") },
-    onBottom:               () -> Unit    = {},
-    onRefresh:              () -> Unit    = {},
-    onAddReview:            () -> Unit    = { Log.w(tag, "onAddReview is not implemented") },
-    onLike :                (Int) -> Unit = {},
-    onFavorite:             (Int) -> Unit = {},
-    onVideoClick :          (Int) -> Unit = {},
-    onConnect :             () -> Unit    = {},
+    tag              :String          = "__MainFeed",
+    uiState          :FeedUiState     = FeedUiState.Loading,
+    feedScreenState  :FeedScreenState = rememberFeedScreenState(),
+    isLogin          :Boolean         = false,
+    pageScrollable   :Boolean         = true,
+    scrollEnabled    :Boolean         = true,
+    onFocusItemIndex :(Int) -> Unit   = { Log.i(tag, "onFocusItemIndex isn't set") },
+    onAlarm          :() -> Unit      = { Log.i(tag, "onAlarm isn't set") },
+    onBottom         :() -> Unit      = { Log.i(tag, "onBottom isn't set") },
+    onRefresh        :() -> Unit      = { Log.i(tag, "onRefresh isn't set") },
+    onAddReview      :() -> Unit      = { Log.i(tag, "onAddReview is not implemented") },
+    onLike           :(Int) -> Unit   = { Log.i(tag, "onLike isn't set") },
+    onFavorite       :(Int) -> Unit   = { Log.i(tag, "onFavorite isn't set") },
+    onVideoClick     :(Int) -> Unit   = { Log.i(tag, "onVideoClick isn't set") },
+    onConnect        :() -> Unit      = { Log.i(tag, "onConnect isn't set") },
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     FeedScreen(
@@ -100,7 +96,6 @@ internal fun FeedInMain(
         uiState = uiState,
         feedScreenState = feedScreenState,
         onBottom = onBottom,
-        isRefreshing = isRefreshing,
         onRefresh = onRefresh,
         topAppBar = { FeedTopAppBar(onAddReview = onAddReview, topAppIcon = Icons.AutoMirrored.Default.Send, scrollBehavior = scrollBehavior, onAlarm = onAlarm) },
         onFocusItemIndex = onFocusItemIndex,
@@ -110,7 +105,6 @@ internal fun FeedInMain(
         onVideoClick = onVideoClick,
         pageScrollable = pageScrollable,
         isLogin = isLogin,
-        showReConnect = showReConnect,
         onConnect = onConnect
     )
 }

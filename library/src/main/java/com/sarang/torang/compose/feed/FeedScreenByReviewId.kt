@@ -11,15 +11,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.sarang.torang.compose.feed.component.FeedScreen
 import com.sarang.torang.compose.feed.component.FeedScreenState
-import com.sarang.torang.compose.feed.component.LocalFeedCompose
 import com.sarang.torang.compose.feed.component.rememberFeedScreenState
-import com.sarang.torang.data.feed.adjustHeight
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.FeedScreenByReviewIdViewModel
 
@@ -57,7 +52,6 @@ fun FeedScreenByReviewId(
         },
         onRefresh = { feedsViewModel.refreshFeed() },
         onBottom = { feedsViewModel.onBottom() },
-        isRefreshing = isRefreshing,
         isLogin = isLogin,
         onFavorite = { feedsViewModel.onFavorite(it) },
         onLike = { feedsViewModel.onLike(it) },

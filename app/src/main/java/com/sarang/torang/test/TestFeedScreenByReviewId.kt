@@ -16,14 +16,14 @@ import com.sarang.torang.compose.feed.component.LocalBottomDetectingLazyColumnTy
 import com.sarang.torang.compose.feed.component.LocalFeedCompose
 import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
 import com.sarang.torang.di.feed_di.CustomFeedCompose
-import com.sarang.torang.di.feed_di.CustomPullToRefreshType
+import com.sarang.torang.di.feed_di.customPullToRefresh
 
 @Composable
 fun TestFeedScreenByReviewId(reviewId: String) {
     var reviewId by remember { mutableIntStateOf(0) }
     CompositionLocalProvider(LocalFeedCompose provides CustomFeedCompose,
         LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType,
-        LocalPullToRefreshLayoutType provides CustomPullToRefreshType
+        LocalPullToRefreshLayoutType provides customPullToRefresh
     ) {
         Box(Modifier.fillMaxSize()) {
             FeedScreenByReviewId(

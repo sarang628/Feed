@@ -20,8 +20,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.sarang.torang.compose.feed.FeedScreenInMain
+import com.sarang.torang.compose.feed.FeedScreenSuccessPreview
 import com.sarang.torang.compose.feed.LocalPullToRefreshLayoutType
-import com.sarang.torang.compose.feed.component.FeedScreenSuccessPreview
 import com.sarang.torang.compose.feed.component.LocalFeedCompose
 import com.sarang.torang.compose.feed.component.rememberFeedScreenState
 import com.sarang.torang.compose.feed.internal.components.LocalExpandableTextType
@@ -29,7 +30,7 @@ import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
 import com.sarang.torang.di.basefeed_di.CustomExpandableTextType
 import com.sarang.torang.di.basefeed_di.CustomFeedImageLoader
 import com.sarang.torang.di.feed_di.CustomFeedCompose
-import com.sarang.torang.di.feed_di.CustomPullToRefreshType
+import com.sarang.torang.di.feed_di.customPullToRefresh
 import com.sarang.torang.repository.FeedRepository
 import com.sarang.torang.repository.LoginRepository
 import com.sarang.torang.repository.LoginRepositoryTest
@@ -38,7 +39,6 @@ import com.sarang.torang.repository.ProfileRepositoryTest
 import com.sarang.torang.repository.test.FeedRepositoryTest
 import com.sarang.torang.test.TestBasic
 import com.sarang.torang.test.TestFeedScreenByRestaurantId
-import com.sarang.torang.test.TestFeedScreenForMain
 import com.sarang.torang.test.TestPinchZoom
 import com.sarang.torang.test.TestUserFeedByReviewIdScreen
 import com.sryang.torang.ui.TorangTheme
@@ -81,7 +81,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         CompositionLocalProvider(
                             LocalFeedCompose provides CustomFeedCompose,
-                            LocalPullToRefreshLayoutType provides CustomPullToRefreshType,
+                            LocalPullToRefreshLayoutType provides customPullToRefresh,
                             LocalExpandableTextType provides CustomExpandableTextType,
                             LocalFeedImageLoader provides CustomFeedImageLoader
                         ){
@@ -95,7 +95,7 @@ class MainActivity : ComponentActivity() {
                                 //TestFeedScreenByReviewId_()
                                 //TestFeedScreenByRestaurantId_()
                                 composable("TestFeedScreenForMain") {
-                                    TestFeedScreenForMain(feedScreenState = feedScreenState)
+                                    FeedScreenInMain(feedScreenState = feedScreenState)
                                 }
                                 //LoginRepositoryTest_(loginRepository)
                                 //ProfileRepositoryTest(profileRepository = profileRepository)
@@ -126,7 +126,7 @@ class MainActivity : ComponentActivity() {
 fun FeedScreenSuccessPreview1(){
     CompositionLocalProvider(
         LocalFeedCompose provides CustomFeedCompose,
-        LocalPullToRefreshLayoutType provides CustomPullToRefreshType,
+        LocalPullToRefreshLayoutType provides customPullToRefresh,
         LocalExpandableTextType provides CustomExpandableTextType,
         LocalFeedImageLoader provides CustomFeedImageLoader
     ) {
