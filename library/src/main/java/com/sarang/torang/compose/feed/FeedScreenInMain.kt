@@ -28,19 +28,16 @@ import com.sarang.torang.viewmodels.FeedsViewModel
  * 피드 프로필, 코멘트, 메뉴 등은 피드 컴포저블을 통해 상위 컴포저블에서 처리
  * @param feedsViewModel 피드 뷰모델
  * @param onAddReview 피드 추가 리뷰
- * @param scrollToTop 피드 스크롤 탑
- * @param onScrollToTop 스크롤 탑 콜백 (이 콜백을 받으면 scrollToTop을 false로 바꿔줘야 함.)
  */
 @Composable
 fun FeedScreenInMain(
-    tag: String = "__FeedScreenForMain",
-    feedsViewModel: FeedsViewModel = hiltViewModel(),
-    feedScreenState         :FeedScreenState        = rememberFeedScreenState(),
-    onAddReview: (() -> Unit) = { Log.w(tag, "onAddReview is not implemented") },
-    onAlarm: () -> Unit = { Log.w("__FeedScreenForMain", "onAlarm is not implemented") },
-    scrollEnabled: Boolean = true,
-    pageScrollable: Boolean = true,
-
+    tag             : String            = "__FeedScreenForMain",
+    feedsViewModel  : FeedsViewModel    = hiltViewModel(),
+    feedScreenState : FeedScreenState   = rememberFeedScreenState(),
+    onAddReview     : () -> Unit        = { Log.w(tag, "onAddReview is not implemented") },
+    onAlarm         : () -> Unit        = { Log.w(tag, "onAlarm is not implemented") },
+    scrollEnabled   : Boolean           = true,
+    pageScrollable  : Boolean           = true
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
     val isLogin by feedsViewModel.isLoginState.collectAsState(initial = false)
@@ -74,21 +71,21 @@ fun FeedScreenInMain(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun FeedInMain(
-    tag              :String          = "__MainFeed",
-    uiState          :FeedUiState     = FeedUiState.Loading,
-    feedScreenState  :FeedScreenState = rememberFeedScreenState(),
-    isLogin          :Boolean         = false,
-    pageScrollable   :Boolean         = true,
-    scrollEnabled    :Boolean         = true,
-    onFocusItemIndex :(Int) -> Unit   = { Log.i(tag, "onFocusItemIndex isn't set") },
-    onAlarm          :() -> Unit      = { Log.i(tag, "onAlarm isn't set") },
-    onBottom         :() -> Unit      = { Log.i(tag, "onBottom isn't set") },
-    onRefresh        :() -> Unit      = { Log.i(tag, "onRefresh isn't set") },
-    onAddReview      :() -> Unit      = { Log.i(tag, "onAddReview is not implemented") },
-    onLike           :(Int) -> Unit   = { Log.i(tag, "onLike isn't set") },
-    onFavorite       :(Int) -> Unit   = { Log.i(tag, "onFavorite isn't set") },
-    onVideoClick     :(Int) -> Unit   = { Log.i(tag, "onVideoClick isn't set") },
-    onConnect        :() -> Unit      = { Log.i(tag, "onConnect isn't set") },
+    tag              : String          = "__MainFeed",
+    uiState          : FeedUiState     = FeedUiState.Loading,
+    feedScreenState  : FeedScreenState = rememberFeedScreenState(),
+    isLogin          : Boolean         = false,
+    pageScrollable   : Boolean         = true,
+    scrollEnabled    : Boolean         = true,
+    onFocusItemIndex : (Int) -> Unit   = { Log.i(tag, "onFocusItemIndex isn't set") },
+    onAlarm          : () -> Unit      = { Log.i(tag, "onAlarm isn't set") },
+    onBottom         : () -> Unit      = { Log.i(tag, "onBottom isn't set") },
+    onRefresh        : () -> Unit      = { Log.i(tag, "onRefresh isn't set") },
+    onAddReview      : () -> Unit      = { Log.i(tag, "onAddReview is not implemented") },
+    onLike           : (Int) -> Unit   = { Log.i(tag, "onLike isn't set") },
+    onFavorite       : (Int) -> Unit   = { Log.i(tag, "onFavorite isn't set") },
+    onVideoClick     : (Int) -> Unit   = { Log.i(tag, "onVideoClick isn't set") },
+    onConnect        : () -> Unit      = { Log.i(tag, "onConnect isn't set") },
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     FeedScreen(

@@ -14,6 +14,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -85,7 +86,7 @@ class MainActivity : ComponentActivity() {
                             LocalExpandableTextType provides CustomExpandableTextType,
                             LocalFeedImageLoader provides CustomFeedImageLoader
                         ){
-                            NavHost(modifier = Modifier.padding(it), navController = navController, startDestination = "TestFeedScreenForMain") {
+                            NavHost(modifier = Modifier.padding(it), navController = navController, startDestination = "FeedScreenInMain") {
                                 //TestBasic()
                                 //FeedScreenSuccessPreview1()
                                 //TestPinchZoom()
@@ -94,7 +95,10 @@ class MainActivity : ComponentActivity() {
                                 //TestUserFeedByReviewIdScreen_()
                                 //TestFeedScreenByReviewId_()
                                 //TestFeedScreenByRestaurantId_()
-                                composable("TestFeedScreenForMain") {
+                                composable("FeedScreenInMain") {
+                                    LaunchedEffect("") {
+                                        feedScreenState.showSnackBar("FeedScreenInMain")
+                                    }
                                     FeedScreenInMain(feedScreenState = feedScreenState)
                                 }
                                 //LoginRepositoryTest_(loginRepository)

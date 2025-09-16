@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -51,16 +50,13 @@ import kotlinx.coroutines.launch
 
 /**
  * 피드 화면
- * @param uiState
- * @param consumeErrorMessage snackBar에서 메세지 소비
- * @param topAppBar 상단 앱 바
- * @param feed 피드 항목 UI
- * @param onBottom 하단 터치 이벤트
- * @param isRefreshing 피드 갱신중 여부
- * @param onRefresh 피드 갱신 요청
- * @param onBackToTop back 이벤트 시 리스트를 최상단으로 올리는 이벤트
- * @param onFocusItemIndex 비디오 재생을 위해 항목이 중앙에 있을때 호출되는 콜백
- * @param scrollEnabled 리스트 스크롤 가능 여부
+ * @param uiState               uiState
+ * @param topAppBar             상단 앱 바
+ * @param onBottom              하단 터치 이벤트
+ * @param onRefresh             피드 갱신 요청
+ * @param onBackToTop           back 이벤트 시 리스트를 최상단으로 올리는 이벤트
+ * @param onFocusItemIndex      비디오 재생을 위해 항목이 중앙에 있을때 호출되는 콜백
+ * @param scrollEnabled         리스트 스크롤 가능 여부
  * @sample FeedScreenEmptyPreview
  * @sample FeedScreenLoadingPreview
  * @sample FeedScreenSuccessPreview
@@ -81,12 +77,15 @@ fun FeedScreen(
     onBottom            :() -> Unit             = { Log.i(tag, "onBottom is not set") },
     onRefresh           :() -> Unit             = { Log.i(tag, "onRefresh is not set") },
     onFocusItemIndex    :(Int) -> Unit          = { Log.i(tag, "onFocusItemIndex is not set") },
-    onLike              :(Int) -> Unit          = {},
-    onFavorite          :(Int) -> Unit          = {},
-    onVideoClick        :(Int) -> Unit          = {},
-    onConnect           :() -> Unit             = {}
+    onLike              :(Int) -> Unit          = { Log.i(tag, "onLike is not set") },
+    onFavorite          :(Int) -> Unit          = { Log.i(tag, "onFavorite is not set") },
+    onVideoClick        :(Int) -> Unit          = { Log.i(tag, "onVideoClick is not set") },
+    onConnect           :() -> Unit             = { Log.i(tag, "onConnect is not set") }
     // @formatter:on
 ) {
+    HandleOnFocusIndex(feedScreenState.listState, onFocusItemIndex)
+    HandleBack(feedScreenState.listState, onBackToTop)
+
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = feedScreenState.snackbarState) },
         topBar = topAppBar
@@ -97,22 +96,17 @@ fun FeedScreen(
             }
 
             AnimatedVisibility(uiState == FeedUiState.Empty, enter = fadeIn(tween(durationMillis = 1000))) {
-                RefreshAndBottomDetectionLazyColumn(
-                    modifier = Modifier.padding(it),
-                    count = 0,
-                    onBottom = {},
+                RefreshAndBottomDetectionLazyColumn(modifier = Modifier.padding(it),
                     listState = feedScreenState.listState,
-                    userScrollEnabled = scrollEnabled,
                     onRefresh = onRefresh,
-                    contents = { EmptyFeed() }) { }
+                    contents = { EmptyFeed() })
             }
 
             AnimatedVisibility(uiState is FeedUiState.Success, enter = fadeIn(tween(durationMillis = 1000))) {
                 if(uiState is FeedUiState.Success) {
                     FeedSuccess(modifier = modifier.padding(it),
-                        listState = feedScreenState.listState,
+                        feedScreenState = feedScreenState,
                         scrollEnabled = scrollEnabled,
-                        pullToRefreshLayoutState = feedScreenState.pullToRefreshLayoutState,
                         uiState = uiState,
                         onRefresh = onRefresh,
                         onLike = onLike,
@@ -130,25 +124,23 @@ fun FeedScreen(
             }
         }
     }
-    HandleOnFocusIndex(feedScreenState.listState, onFocusItemIndex)
-    HandleBack(feedScreenState.listState, onBackToTop)
 }
 
 @Composable
-private fun FeedSuccess(modifier : Modifier = Modifier,
-                        tag             :String                 = "__FeedSuccess",
-                        uiState         :FeedUiState.Success    = FeedUiState.Success(listOf()),
-                        onBottom        :() -> Unit             = { Log.i(tag, "onBottom is not set") },
-                        scrollEnabled   :Boolean                = true,
-                        listState       :LazyListState          = rememberLazyListState(),
-                        pullToRefreshLayoutState: PullToRefreshLayoutState = rememberPullToRefreshState(),
-                        onRefresh       :() -> Unit             = { Log.i(tag, "onRefresh is not set") },
-                        onLike          :(Int) -> Unit          = {},
-                        onFavorite      :(Int) -> Unit          = {},
-                        onVideoClick    :(Int) -> Unit          = {},
-                        pageScrollable  :Boolean                = true,
-                        isLogin         :Boolean                = false,
-                        ){
+private fun FeedSuccess(
+    modifier        : Modifier              = Modifier,
+    tag             :String                 = "__FeedSuccess",
+    uiState         :FeedUiState.Success    = FeedUiState.Success(listOf()),
+    onBottom        :() -> Unit             = { Log.i(tag, "onBottom is not set") },
+    scrollEnabled   :Boolean                = true,
+    feedScreenState :FeedScreenState        = rememberFeedScreenState(),
+    onRefresh       :() -> Unit             = { Log.i(tag, "onRefresh is not set") },
+    onLike          :(Int) -> Unit          = { Log.i(tag, "onLike is not set") },
+    onFavorite      :(Int) -> Unit          = { Log.i(tag, "onFavorite is not set") },
+    onVideoClick    :(Int) -> Unit          = { Log.i(tag, "onVideoClick is not set") },
+    pageScrollable  :Boolean                = true,
+    isLogin         :Boolean                = false
+) {
     val screenHeightDp = LocalConfiguration.current.screenHeightDp
     val screenWidthDp = LocalConfiguration.current.screenWidthDp
     val density = LocalDensity.current
@@ -157,12 +149,11 @@ private fun FeedSuccess(modifier : Modifier = Modifier,
         count = uiState.list.size,
         onBottom = onBottom,
         userScrollEnabled = scrollEnabled,
-        pullToRefreshLayoutState = pullToRefreshLayoutState,
-        listState = listState,
+        pullToRefreshLayoutState = feedScreenState.pullToRefreshLayoutState,
+        listState = feedScreenState.listState,
         onRefresh = onRefresh
     ) {
-        val feed =
-            uiState.list[it].copy(/*isPlaying = it.isPlaying && if (uiState is FeedUiState.Success) { (uiState as FeedUiState.Success).focusedIndex == (uiState as FeedUiState.Success).list.indexOf(it) } else false*/)
+        val feed = uiState.list[it].copy(/*isPlaying = it.isPlaying && if (uiState is FeedUiState.Success) { (uiState as FeedUiState.Success).focusedIndex == (uiState as FeedUiState.Success).list.indexOf(it) } else false*/)
         var imageHeight = uiState.imageHeight(density, screenWidthDp, screenHeightDp)
         LocalFeedCompose.current.invoke(
             feed,
