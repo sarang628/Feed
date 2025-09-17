@@ -10,7 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sarang.torang.compose.feed.LocalPullToRefreshLayoutType
+import com.sarang.torang.compose.feed.type.LocalPullToRefreshLayoutType
+import com.sarang.torang.compose.feed.state.PullToRefreshLayoutState
+import com.sarang.torang.compose.feed.state.rememberPullToRefreshState
+import com.sarang.torang.compose.feed.type.LocalBottomDetectingLazyColumnType
 
 @Composable
 internal fun RefreshAndBottomDetectionLazyColumn(

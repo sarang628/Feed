@@ -2,7 +2,6 @@ package com.sarang.torang.test
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -11,9 +10,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.sarang.torang.compose.feed.UserFeedByReviewIdScreen
-import com.sarang.torang.compose.feed.component.LocalBottomDetectingLazyColumnType
-import com.sarang.torang.compose.feed.component.LocalFeedCompose
+import com.sarang.torang.compose.feed.FeedScreenByReviewId
+import com.sarang.torang.compose.feed.type.LocalBottomDetectingLazyColumnType
+import com.sarang.torang.compose.feed.type.LocalFeedCompose
 import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
 import com.sarang.torang.di.feed_di.CustomFeedCompose
 
@@ -25,7 +24,7 @@ internal fun TestUserFeedByReviewIdScreen() {
     ) {
         Box(Modifier.fillMaxSize())
         {
-            UserFeedByReviewIdScreen(
+            FeedScreenByReviewId(
                 reviewId = reviewId,
                 onBack = { },
             )

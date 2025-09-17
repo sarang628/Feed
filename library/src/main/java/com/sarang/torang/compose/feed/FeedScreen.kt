@@ -32,12 +32,13 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import com.sarang.torang.compose.feed.component.EmptyFeed
-import com.sarang.torang.compose.feed.component.FeedScreenState
 import com.sarang.torang.compose.feed.component.FeedShimmer
 import com.sarang.torang.compose.feed.component.FeedTopAppBar
-import com.sarang.torang.compose.feed.component.LocalFeedCompose
 import com.sarang.torang.compose.feed.component.RefreshAndBottomDetectionLazyColumn
-import com.sarang.torang.compose.feed.component.rememberFeedScreenState
+import com.sarang.torang.compose.feed.state.FeedScreenState
+import com.sarang.torang.compose.feed.state.rememberFeedScreenState
+import com.sarang.torang.compose.feed.type.FeedTypeData
+import com.sarang.torang.compose.feed.type.LocalFeedCompose
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.uistate.imageHeight
@@ -82,7 +83,7 @@ fun FeedScreen(
         snackbarHost = { SnackbarHost(hostState = feedScreenState.snackbarState) },
         topBar = topAppBar
     ) {
-        Box(Modifier.fillMaxWidth()){
+        Box(Modifier.fillMaxSize()){
             AnimatedVisibility(uiState == FeedUiState.Loading, enter = fadeIn(tween(durationMillis = 1000)), exit = fadeOut(tween(durationMillis = 1000))) {
                 FeedShimmer(modifier = Modifier.fillMaxSize().padding(it))
             }
@@ -126,9 +127,6 @@ private fun FeedSuccess(
     pageScrollable  : Boolean                = true,
     isLogin         : Boolean                = false
 ) {
-    val screenHeightDp = LocalConfiguration.current.screenHeightDp
-    val screenWidthDp = LocalConfiguration.current.screenWidthDp
-    val density = LocalDensity.current
     RefreshAndBottomDetectionLazyColumn(
         modifier = modifier,
         count = uiState.list.size,
@@ -138,16 +136,18 @@ private fun FeedSuccess(
         listState = feedScreenState.listState,
         onRefresh = feedCallBack.onRefresh
     ) {
-        val feed = uiState.list[it].copy(/*isPlaying = it.isPlaying && if (uiState is FeedUiState.Success) { (uiState as FeedUiState.Success).focusedIndex == (uiState as FeedUiState.Success).list.indexOf(it) } else false*/)
-        var imageHeight = uiState.imageHeight(density, screenWidthDp, screenHeightDp)
-        LocalFeedCompose.current.invoke(
-            feed,
-            feedCallBack.onLike,
-            feedCallBack.onFavorite,
-            isLogin,
-            { feedCallBack.onVideoClick.invoke(uiState.list[it].reviewId) },
-            imageHeight,
-            pageScrollable
+        LocalFeedCompose.current.invoke(FeedTypeData(
+            feed = uiState.list[it],
+            onLike = feedCallBack.onLike,
+            onFavorite = feedCallBack.onFavorite,
+            isLogin = isLogin,
+            onVideoClick = { feedCallBack.onVideoClick.invoke(uiState.list[it].reviewId) },
+            imageHeight = uiState.imageHeight(
+                density = LocalDensity.current,
+                screenWidthDp = LocalConfiguration.current.screenWidthDp,
+                screenHeightDp = LocalConfiguration.current.screenHeightDp
+            ),
+            pageScrollable = pageScrollable)
         )
     }
 }
@@ -250,7 +250,7 @@ fun TransitionPreview(){
 
 @Preview
 @Composable
-fun PreviewShowReconnect(){
+fun PreviewReconnect(){
     FeedScreen(/*Preview*/
         uiState = FeedUiState.Reconnect)
 }

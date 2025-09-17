@@ -7,8 +7,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.sarang.torang.compose.feed.component.FeedScreenState
-import com.sarang.torang.compose.feed.component.rememberFeedScreenState
+import com.sarang.torang.compose.feed.state.FeedScreenState
+import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.FeedScreenByRestaurantIdViewModel
 

@@ -1,13 +1,11 @@
-package com.sarang.torang.compose.feed
+package com.sarang.torang.compose.feed.type
 
 import android.util.Log
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
-import com.sarang.torang.compose.feed.component.PullToRefreshLayoutState
-import com.sarang.torang.compose.feed.component.RefreshIndicatorState
+import com.sarang.torang.compose.feed.state.PullToRefreshLayoutState
 
 typealias pullToRefreshLayoutType = @Composable (modifier : Modifier, pullToRefreshLayoutState: PullToRefreshLayoutState, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit
 

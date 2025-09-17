@@ -1,4 +1,4 @@
-package com.sarang.torang.compose.feed.component
+package com.sarang.torang.compose.feed.type
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement

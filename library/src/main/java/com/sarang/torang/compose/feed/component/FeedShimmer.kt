@@ -16,24 +16,32 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sarang.torang.compose.feed.type.LocalShimmerBrush
 
 @Composable
 internal fun FeedShimmer(modifier: Modifier = Modifier) {
     val showShimmer by remember { mutableStateOf(true) }
     Column(modifier = modifier) {
-        Box(modifier = Modifier.fillMaxWidth().height(50.dp).clip(RoundedCornerShape(8.dp)).background(LocalShimmerBrush.current.invoke(showShimmer)))
+        Box(modifier = Modifier.fillMaxWidth().height(50.dp).clip(RoundedCornerShape(8.dp)).background(
+            LocalShimmerBrush.current.invoke(showShimmer)))
         Spacer(modifier = Modifier.height(10.dp))
-        Box(modifier = Modifier.fillMaxWidth().height(250.dp).clip(RoundedCornerShape(8.dp)).background(LocalShimmerBrush.current.invoke(showShimmer)))
+        Box(modifier = Modifier.fillMaxWidth().height(250.dp).clip(RoundedCornerShape(8.dp)).background(
+            LocalShimmerBrush.current.invoke(showShimmer)))
         Spacer(modifier = Modifier.height(10.dp))
-        Box(modifier = Modifier.fillMaxWidth().height(50.dp).clip(RoundedCornerShape(8.dp)).background(LocalShimmerBrush.current.invoke(showShimmer)))
+        Box(modifier = Modifier.fillMaxWidth().height(50.dp).clip(RoundedCornerShape(8.dp)).background(
+            LocalShimmerBrush.current.invoke(showShimmer)))
         Spacer(modifier = Modifier.height(10.dp))
-        Box(modifier = Modifier.fillMaxWidth().height(50.dp).clip(RoundedCornerShape(8.dp)).background(LocalShimmerBrush.current.invoke(showShimmer)))
+        Box(modifier = Modifier.fillMaxWidth().height(50.dp).clip(RoundedCornerShape(8.dp)).background(
+            LocalShimmerBrush.current.invoke(showShimmer)))
         Spacer(modifier = Modifier.height(10.dp))
-        Box(modifier = Modifier.fillMaxWidth().height(250.dp).clip(RoundedCornerShape(8.dp)).background(LocalShimmerBrush.current.invoke(showShimmer)))
+        Box(modifier = Modifier.fillMaxWidth().height(250.dp).clip(RoundedCornerShape(8.dp)).background(
+            LocalShimmerBrush.current.invoke(showShimmer)))
         Spacer(modifier = Modifier.height(10.dp))
-        Box(modifier = Modifier.fillMaxWidth().height(50.dp).clip(RoundedCornerShape(8.dp)).background(LocalShimmerBrush.current.invoke(showShimmer)))
+        Box(modifier = Modifier.fillMaxWidth().height(50.dp).clip(RoundedCornerShape(8.dp)).background(
+            LocalShimmerBrush.current.invoke(showShimmer)))
         Spacer(modifier = Modifier.height(10.dp))
-        Box(modifier = Modifier.fillMaxWidth().height(250.dp).clip(RoundedCornerShape(8.dp)).background(LocalShimmerBrush.current.invoke(showShimmer)))
+        Box(modifier = Modifier.fillMaxWidth().height(250.dp).clip(RoundedCornerShape(8.dp)).background(
+            LocalShimmerBrush.current.invoke(showShimmer)))
     }
 }
 

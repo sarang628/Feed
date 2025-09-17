@@ -1,9 +1,7 @@
-package com.sarang.torang.compose.feed.component
+package com.sarang.torang.compose.feed.type
 
 import android.util.Log
-import android.widget.RatingBar
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,10 +20,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sarang.torang.R
-import com.sarang.torang.compose.feed.feedType
+import com.sarang.torang.data.feed.Feed
+
+typealias feedType = @Composable (feedTypeData : FeedTypeData) -> Unit
+
+data class FeedTypeData(
+    val feed: Feed,
+    val onLike: (Int) -> Unit,
+    val onFavorite: (Int) -> Unit,
+    val isLogin: Boolean,
+    val onVideoClick: () -> Unit,
+    val imageHeight: Int,
+    val pageScrollable: Boolean
+)
 
 val LocalFeedCompose = compositionLocalOf<feedType> {
-    @Composable { feed, _, _, _, _, _, _ ->
+    @Composable {
         Log.w("__LocalFeedCompose", "feed compose isn't set")
         FeedSample()
     }
