@@ -36,12 +36,14 @@ fun FeedScreenByRestaurantId(
 
     FeedScreen(
         uiState = uiState,
-        onRefresh = { feedsViewModel.refreshFeed() },
-        onBottom = { feedsViewModel.onBottom() },
+        feedCallBack = FeedCallBack(
+            onRefresh = { feedsViewModel.refreshFeed() },
+            onBottom = { feedsViewModel.onBottom() },
+            onFavorite = { feedsViewModel.onFavorite(it) },
+            onVideoClick = { feedsViewModel.onVideoClick(it) },
+            onLike = { feedsViewModel.onLike(it) },
+        ),
         isLogin = isLogin,
-        onLike = { feedsViewModel.onLike(it) },
-        onFavorite = { feedsViewModel.onFavorite(it) },
-        onVideoClick = { feedsViewModel.onVideoClick(it) },
         pageScrollable = pageScrollable
     )
 }

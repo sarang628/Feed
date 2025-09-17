@@ -50,12 +50,14 @@ fun FeedScreenByReviewId(
                 }
             })
         },
-        onRefresh = { feedsViewModel.refreshFeed() },
-        onBottom = { feedsViewModel.onBottom() },
+        feedCallBack = FeedCallBack(
+            onRefresh = { feedsViewModel.refreshFeed() },
+            onBottom = { feedsViewModel.onBottom() },
+            onFavorite = { feedsViewModel.onFavorite(it) },
+            onLike = { feedsViewModel.onLike(it) },
+            onVideoClick = {feedsViewModel.onVideoClick(it)},
+        ),
         isLogin = isLogin,
-        onFavorite = { feedsViewModel.onFavorite(it) },
-        onLike = { feedsViewModel.onLike(it) },
-        onVideoClick = {feedsViewModel.onVideoClick(it)},
         pageScrollable = pageScrollable
     )
 }

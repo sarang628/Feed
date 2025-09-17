@@ -36,10 +36,8 @@ import com.sarang.torang.compose.feed.component.FeedScreenState
 import com.sarang.torang.compose.feed.component.FeedShimmer
 import com.sarang.torang.compose.feed.component.FeedTopAppBar
 import com.sarang.torang.compose.feed.component.LocalFeedCompose
-import com.sarang.torang.compose.feed.component.PullToRefreshLayoutState
 import com.sarang.torang.compose.feed.component.RefreshAndBottomDetectionLazyColumn
 import com.sarang.torang.compose.feed.component.rememberFeedScreenState
-import com.sarang.torang.compose.feed.component.rememberPullToRefreshState
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.uistate.imageHeight
@@ -74,16 +72,10 @@ fun FeedScreen(
     scrollEnabled       :Boolean                = true,
     pageScrollable      :Boolean                = true,
     isLogin             :Boolean                = false,
-    onBottom            :() -> Unit             = { Log.i(tag, "onBottom is not set") },
-    onRefresh           :() -> Unit             = { Log.i(tag, "onRefresh is not set") },
-    onFocusItemIndex    :(Int) -> Unit          = { Log.i(tag, "onFocusItemIndex is not set") },
-    onLike              :(Int) -> Unit          = { Log.i(tag, "onLike is not set") },
-    onFavorite          :(Int) -> Unit          = { Log.i(tag, "onFavorite is not set") },
-    onVideoClick        :(Int) -> Unit          = { Log.i(tag, "onVideoClick is not set") },
-    onConnect           :() -> Unit             = { Log.i(tag, "onConnect is not set") }
+    feedCallBack        :FeedCallBack           = FeedCallBack(tag = tag)
     // @formatter:on
 ) {
-    HandleOnFocusIndex(feedScreenState.listState, onFocusItemIndex)
+    HandleOnFocusIndex(feedScreenState.listState, feedCallBack.onFocusItemIndex)
     HandleBack(feedScreenState.listState, onBackToTop)
 
     Scaffold(
@@ -98,7 +90,7 @@ fun FeedScreen(
             AnimatedVisibility(uiState == FeedUiState.Empty, enter = fadeIn(tween(durationMillis = 1000))) {
                 RefreshAndBottomDetectionLazyColumn(modifier = Modifier.padding(it),
                     listState = feedScreenState.listState,
-                    onRefresh = onRefresh,
+                    onRefresh = feedCallBack.onRefresh,
                     contents = { EmptyFeed() })
             }
 
@@ -108,17 +100,14 @@ fun FeedScreen(
                         feedScreenState = feedScreenState,
                         scrollEnabled = scrollEnabled,
                         uiState = uiState,
-                        onRefresh = onRefresh,
-                        onLike = onLike,
-                        onFavorite = onFavorite,
-                        onVideoClick = onVideoClick,
+                        feedCallBack = feedCallBack,
                         pageScrollable = pageScrollable,
                         isLogin = isLogin)
                 }
             }
 
             if(uiState == FeedUiState.Reconnect) {
-                Button(modifier = Modifier.align(Alignment.Center), onClick = onConnect) {
+                Button(modifier = Modifier.align(Alignment.Center), onClick = feedCallBack.onConnect) {
                     Text("connect")
                 }
             }
@@ -128,18 +117,14 @@ fun FeedScreen(
 
 @Composable
 private fun FeedSuccess(
-    modifier        : Modifier              = Modifier,
-    tag             :String                 = "__FeedSuccess",
-    uiState         :FeedUiState.Success    = FeedUiState.Success(listOf()),
-    onBottom        :() -> Unit             = { Log.i(tag, "onBottom is not set") },
-    scrollEnabled   :Boolean                = true,
-    feedScreenState :FeedScreenState        = rememberFeedScreenState(),
-    onRefresh       :() -> Unit             = { Log.i(tag, "onRefresh is not set") },
-    onLike          :(Int) -> Unit          = { Log.i(tag, "onLike is not set") },
-    onFavorite      :(Int) -> Unit          = { Log.i(tag, "onFavorite is not set") },
-    onVideoClick    :(Int) -> Unit          = { Log.i(tag, "onVideoClick is not set") },
-    pageScrollable  :Boolean                = true,
-    isLogin         :Boolean                = false
+    modifier        : Modifier               = Modifier,
+    tag             : String                 = "__FeedSuccess",
+    uiState         : FeedUiState.Success    = FeedUiState.Success(listOf()),
+    scrollEnabled   : Boolean                = true,
+    feedScreenState : FeedScreenState        = rememberFeedScreenState(),
+    feedCallBack    : FeedCallBack           = FeedCallBack(tag = tag),
+    pageScrollable  : Boolean                = true,
+    isLogin         : Boolean                = false
 ) {
     val screenHeightDp = LocalConfiguration.current.screenHeightDp
     val screenWidthDp = LocalConfiguration.current.screenWidthDp
@@ -147,20 +132,20 @@ private fun FeedSuccess(
     RefreshAndBottomDetectionLazyColumn(
         modifier = modifier,
         count = uiState.list.size,
-        onBottom = onBottom,
+        onBottom = feedCallBack.onBottom,
         userScrollEnabled = scrollEnabled,
         pullToRefreshLayoutState = feedScreenState.pullToRefreshLayoutState,
         listState = feedScreenState.listState,
-        onRefresh = onRefresh
+        onRefresh = feedCallBack.onRefresh
     ) {
         val feed = uiState.list[it].copy(/*isPlaying = it.isPlaying && if (uiState is FeedUiState.Success) { (uiState as FeedUiState.Success).focusedIndex == (uiState as FeedUiState.Success).list.indexOf(it) } else false*/)
         var imageHeight = uiState.imageHeight(density, screenWidthDp, screenHeightDp)
         LocalFeedCompose.current.invoke(
             feed,
-            onLike,
-            onFavorite,
+            feedCallBack.onLike,
+            feedCallBack.onFavorite,
             isLogin,
-            { onVideoClick.invoke(uiState.list[it].reviewId) },
+            { feedCallBack.onVideoClick.invoke(uiState.list[it].reviewId) },
             imageHeight,
             pageScrollable
         )
@@ -207,6 +192,17 @@ private fun HandleBack(listState: LazyListState, onBackToTop: Boolean) {
         }
     }
 }
+
+data class FeedCallBack(
+    val tag             : String                 = "",
+    val onRefresh       : () -> Unit             = { Log.i(tag, "onRefresh is not set") },
+    val onLike          : (Int) -> Unit          = { Log.i(tag, "onLike is not set") },
+    val onFavorite      : (Int) -> Unit          = { Log.i(tag, "onFavorite is not set") },
+    val onVideoClick    : (Int) -> Unit          = { Log.i(tag, "onVideoClick is not set") },
+    val onBottom        : () -> Unit             = { Log.i(tag, "onBottom is not set") },
+    val onFocusItemIndex    :(Int) -> Unit       = { Log.i(tag, "onFocusItemIndex is not set") },
+    val onConnect           :() -> Unit          = { Log.i(tag, "onConnect is not set") }
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)

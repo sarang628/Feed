@@ -100,8 +100,10 @@ internal fun MyFeed(
                         Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack, contentDescription = "") }
                 })
         },
-        onRefresh = onRefresh,
-        onBottom = onBottom,
+        feedCallBack = FeedCallBack(
+            onRefresh = onRefresh,
+            onBottom = onBottom,
+        ),
     )
 }
 

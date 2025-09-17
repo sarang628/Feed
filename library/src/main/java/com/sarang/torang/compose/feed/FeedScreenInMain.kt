@@ -42,16 +42,17 @@ fun FeedScreenInMain(
         feedScreenState = feedScreenState,
         isLogin = isLogin,
         onAddReview = onAddReview,
-        onAlarm = onAlarm,
-        scrollEnabled = scrollEnabled,
+        feedCallBack = FeedCallBack(
         onBottom = { feedsViewModel.onBottom() },
         onRefresh = { feedsViewModel.refreshFeed(); },
         onFocusItemIndex = { feedsViewModel.onFocusItemIndex(it) },
         onLike = { feedsViewModel.onLike(it) },
         onFavorite = { feedsViewModel.onFavorite(it) },
         onVideoClick = { feedsViewModel.onVideoClick(it) },
-        pageScrollable = pageScrollable,
-        onConnect = { feedsViewModel.refreshFeed() }
+        onConnect = { feedsViewModel.refreshFeed() },),
+        onAlarm = onAlarm,
+        scrollEnabled = scrollEnabled,
+        pageScrollable = pageScrollable
     )
 }
 
@@ -68,32 +69,20 @@ internal fun FeedInMain(
     isLogin          : Boolean         = false,
     pageScrollable   : Boolean         = true,
     scrollEnabled    : Boolean         = true,
-    onFocusItemIndex : (Int) -> Unit   = { Log.i(tag, "onFocusItemIndex isn't set") },
-    onAlarm          : () -> Unit      = { Log.i(tag, "onAlarm isn't set") },
-    onBottom         : () -> Unit      = { Log.i(tag, "onBottom isn't set") },
-    onRefresh        : () -> Unit      = { Log.i(tag, "onRefresh isn't set") },
+    feedCallBack     : FeedCallBack    = FeedCallBack(),
     onAddReview      : () -> Unit      = { Log.i(tag, "onAddReview is not implemented") },
-    onLike           : (Int) -> Unit   = { Log.i(tag, "onLike isn't set") },
-    onFavorite       : (Int) -> Unit   = { Log.i(tag, "onFavorite isn't set") },
-    onVideoClick     : (Int) -> Unit   = { Log.i(tag, "onVideoClick isn't set") },
-    onConnect        : () -> Unit      = { Log.i(tag, "onConnect isn't set") },
+    onAlarm          : () -> Unit      = { Log.i(tag, "onAlarm is not implemented") },
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     FeedScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         uiState = uiState,
         feedScreenState = feedScreenState,
-        onBottom = onBottom,
-        onRefresh = onRefresh,
+        feedCallBack = feedCallBack,
         topAppBar = { FeedTopAppBar(onAddReview = onAddReview, topAppIcon = Icons.AutoMirrored.Default.Send, scrollBehavior = scrollBehavior, onAlarm = onAlarm) },
-        onFocusItemIndex = onFocusItemIndex,
         scrollEnabled = scrollEnabled,
-        onLike = onLike,
-        onFavorite = onFavorite,
-        onVideoClick = onVideoClick,
         pageScrollable = pageScrollable,
         isLogin = isLogin,
-        onConnect = onConnect
     )
 }
 
