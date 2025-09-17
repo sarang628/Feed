@@ -22,13 +22,6 @@ import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.FeedsViewModel
 
-/**
- * 메인화면용 FeedScreen
- * 피드 가져오기, 리프레시, 좋아요, 즐겨찾기 기능
- * 피드 프로필, 코멘트, 메뉴 등은 피드 컴포저블을 통해 상위 컴포저블에서 처리
- * @param feedsViewModel 피드 뷰모델
- * @param onAddReview 피드 추가 리뷰
- */
 @Composable
 fun FeedScreenInMain(
     tag             : String            = "__FeedScreenForMain",
@@ -40,15 +33,9 @@ fun FeedScreenInMain(
     pageScrollable  : Boolean           = true
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
-    val isLogin by feedsViewModel.isLoginState.collectAsState(initial = false)
-
-    LaunchedEffect(feedsViewModel.msgState) {
-        feedScreenState.showSnackBar(feedsViewModel.msgState)
-    }
-
-    LaunchedEffect(feedsViewModel.isRefreshingState) {
-        feedScreenState.refresh(feedsViewModel.isRefreshingState)
-    }
+    val isLogin: Boolean by feedsViewModel.isLoginState.collectAsStateWithLifecycle(false)
+    LaunchedEffect(feedsViewModel.msgState) { feedScreenState.showSnackBar(feedsViewModel.msgState) }
+    LaunchedEffect(feedsViewModel.isRefreshingState) { feedScreenState.refresh(feedsViewModel.isRefreshingState) }
 
     FeedInMain(
         uiState = uiState,
@@ -68,6 +55,10 @@ fun FeedScreenInMain(
     )
 }
 
+/**
+ * Main 용 FeedScreen
+ * 상단에 TopAppBar와 스크롤 시 상호작용 하는 기능이 적용 됨.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun FeedInMain(
