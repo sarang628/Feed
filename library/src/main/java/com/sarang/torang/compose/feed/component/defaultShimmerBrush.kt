@@ -18,12 +18,11 @@ import androidx.compose.ui.tooling.preview.Preview
 
 @Preview
 @Composable
-fun defaultShimmerBrush(showShimmer: Boolean = true, targetValue: Float = 1700f): Brush {
-    return if (showShimmer) {
+fun defaultShimmerBrush(targetValue: Float = 1700f): Brush {
         val shimmerColors = listOf(
-            Color.LightGray.copy(alpha = 0.6f),
-            Color.LightGray.copy(alpha = 0.2f),
-            Color.LightGray.copy(alpha = 0.6f),
+            Color.LightGray.copy(alpha = 0.5f),
+            Color.LightGray.copy(alpha = 0.1f),
+            Color.LightGray.copy(alpha = 0.5f),
         )
 
         val transition = rememberInfiniteTransition(label = "")
@@ -31,22 +30,23 @@ fun defaultShimmerBrush(showShimmer: Boolean = true, targetValue: Float = 1700f)
             initialValue = 0f,
             targetValue = targetValue,
             animationSpec = infiniteRepeatable(
-                animation = tween(1400, easing = LinearEasing), repeatMode = RepeatMode.Restart
+                animation = tween(2000, easing = LinearEasing), repeatMode = RepeatMode.Restart
             ), label = ""
         )
-        Brush.linearGradient(
+
+    return Brush.linearGradient(
             colors = shimmerColors,
-            start = Offset(x = translateAnimation.value - 600, y = 0f),
+            start = Offset(
+                y = translateAnimation.value - 200,
+                x = 0f
+            ),
             //end = Offset(x = translateAnimation.value, y = translateAnimation.value)
-            end = Offset(x = translateAnimation.value - 0, y = 0f)
+            end = Offset(
+                y = translateAnimation.value - 0,
+                x = 0f
+            )
         )
-    } else {
-        Brush.linearGradient(
-            colors = listOf(Color.Transparent, Color.Transparent),
-            start = Offset.Zero,
-            end = Offset.Zero
-        )
-    }
+
 }
 
 @Preview
