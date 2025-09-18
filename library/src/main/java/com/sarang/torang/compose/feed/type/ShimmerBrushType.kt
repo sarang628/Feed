@@ -5,10 +5,10 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.Brush
 import com.sarang.torang.compose.feed.component.defaultShimmerBrush
 
-typealias ShimmerBrushType = @Composable (Boolean) -> Brush
+typealias ShimmerBrushType = @Composable () -> Brush
 
 val LocalShimmerBrush = compositionLocalOf<ShimmerBrushType> {
     @Composable {
-        defaultShimmerBrush(it)
+        defaultShimmerBrush()
     }
 }
