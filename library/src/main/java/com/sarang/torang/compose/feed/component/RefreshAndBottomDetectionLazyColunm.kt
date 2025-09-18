@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.sarang.torang.compose.feed.type.LocalPullToRefreshLayoutType
 import com.sarang.torang.compose.feed.state.PullToRefreshLayoutState
 import com.sarang.torang.compose.feed.state.rememberPullToRefreshState
+import com.sarang.torang.compose.feed.type.BottomDetectingLazyColumnData
 import com.sarang.torang.compose.feed.type.LocalBottomDetectingLazyColumnType
 
 @Composable
@@ -28,7 +29,16 @@ internal fun RefreshAndBottomDetectionLazyColumn(
     itemCompose              : @Composable (Int) -> Unit = {},
 ) {
     LocalPullToRefreshLayoutType.current.invoke(modifier, pullToRefreshLayoutState, onRefresh) {
-        LocalBottomDetectingLazyColumnType.current.invoke(Modifier, count, onBottom, itemCompose, userScrollEnabled, Arrangement.spacedBy(10.dp), listState, contents)
+        LocalBottomDetectingLazyColumnType.current.invoke(
+            BottomDetectingLazyColumnData(
+                modifier = Modifier,
+                count = count,
+                onBottom = onBottom,
+                itemCompose = itemCompose,
+                userScrollEnabled = userScrollEnabled,
+                arrangement = Arrangement.spacedBy(10.dp),
+                listState = listState),
+            contents)
     }
 }
 
