@@ -3,10 +3,13 @@ package com.sarang.torang.compose.feed
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.with
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -60,7 +63,7 @@ import kotlinx.coroutines.launch
  * @sample FeedScreenLoadingPreview
  * @sample FeedScreenSuccessPreview
  */
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun FeedScreen(
     // @formatter:off
@@ -83,33 +86,45 @@ fun FeedScreen(
         snackbarHost = { SnackbarHost(hostState = feedScreenState.snackbarState) },
         topBar = topAppBar
     ) {
-        Box(Modifier.fillMaxSize()){
-            AnimatedVisibility(uiState == FeedUiState.Loading, enter = fadeIn(tween(durationMillis = 1000)), exit = fadeOut(tween(durationMillis = 1000))) {
-                FeedShimmer(modifier = Modifier.fillMaxSize().padding(it))
-            }
+        Box {
+            AnimatedContent(
+                targetState = uiState,
+                transitionSpec = { fadeIn(tween(800)) with fadeOut(tween(800)) }
+            ) { state ->
+                when (state) {
+                    FeedUiState.Loading -> FeedShimmer(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(it)
+                    )
 
-            AnimatedVisibility(uiState == FeedUiState.Empty, enter = fadeIn(tween(durationMillis = 1000))) {
-                RefreshAndBottomDetectionLazyColumn(modifier = Modifier.padding(it),
-                    listState = feedScreenState.listState,
-                    onRefresh = feedCallBack.onRefresh,
-                    contents = { EmptyFeed() })
-            }
+                    is FeedUiState.Empty -> RefreshAndBottomDetectionLazyColumn(
+                        modifier = Modifier.padding(it),
+                        listState = feedScreenState.listState,
+                        onRefresh = feedCallBack.onRefresh,
+                        contents = { EmptyFeed() }
+                    )
 
-            AnimatedVisibility(uiState is FeedUiState.Success, enter = fadeIn(tween(durationMillis = 1000))) {
-                if(uiState is FeedUiState.Success) {
-                    FeedSuccess(modifier = modifier.padding(it),
+                    is FeedUiState.Success -> FeedSuccess(
+                        modifier = modifier.padding(it),
                         feedScreenState = feedScreenState,
                         scrollEnabled = scrollEnabled,
-                        uiState = uiState,
+                        uiState = state,
                         feedCallBack = feedCallBack,
                         pageScrollable = pageScrollable,
-                        isLogin = isLogin)
-                }
-            }
+                        isLogin = isLogin
+                    )
 
-            if(uiState == FeedUiState.Reconnect) {
-                Button(modifier = Modifier.align(Alignment.Center), onClick = feedCallBack.onConnect) {
-                    Text("connect")
+                    FeedUiState.Reconnect -> Button(
+                        modifier = Modifier.align(Alignment.Center),
+                        onClick = feedCallBack.onConnect
+                    ) {
+                        Text("connect")
+                    }
+
+                    is FeedUiState.Error -> {
+
+                    }
                 }
             }
         }
@@ -118,14 +133,14 @@ fun FeedScreen(
 
 @Composable
 private fun FeedSuccess(
-    modifier        : Modifier               = Modifier,
-    tag             : String                 = "__FeedSuccess",
-    uiState         : FeedUiState.Success    = FeedUiState.Success(listOf()),
-    scrollEnabled   : Boolean                = true,
-    feedScreenState : FeedScreenState        = rememberFeedScreenState(),
-    feedCallBack    : FeedCallBack           = FeedCallBack(tag = tag),
-    pageScrollable  : Boolean                = true,
-    isLogin         : Boolean                = false
+    modifier: Modifier = Modifier,
+    tag: String = "__FeedSuccess",
+    uiState: FeedUiState.Success = FeedUiState.Success(listOf()),
+    scrollEnabled: Boolean = true,
+    feedScreenState: FeedScreenState = rememberFeedScreenState(),
+    feedCallBack: FeedCallBack = FeedCallBack(tag = tag),
+    pageScrollable: Boolean = true,
+    isLogin: Boolean = false
 ) {
     RefreshAndBottomDetectionLazyColumn(
         modifier = modifier,
@@ -136,18 +151,20 @@ private fun FeedSuccess(
         listState = feedScreenState.listState,
         onRefresh = feedCallBack.onRefresh
     ) {
-        LocalFeedCompose.current.invoke(FeedTypeData(
-            feed = uiState.list[it],
-            onLike = feedCallBack.onLike,
-            onFavorite = feedCallBack.onFavorite,
-            isLogin = isLogin,
-            onVideoClick = { feedCallBack.onVideoClick.invoke(uiState.list[it].reviewId) },
-            imageHeight = uiState.imageHeight(
-                density = LocalDensity.current,
-                screenWidthDp = LocalConfiguration.current.screenWidthDp,
-                screenHeightDp = LocalConfiguration.current.screenHeightDp
-            ),
-            pageScrollable = pageScrollable)
+        LocalFeedCompose.current.invoke(
+            FeedTypeData(
+                feed = uiState.list[it],
+                onLike = feedCallBack.onLike,
+                onFavorite = feedCallBack.onFavorite,
+                isLogin = isLogin,
+                onVideoClick = { feedCallBack.onVideoClick.invoke(uiState.list[it].reviewId) },
+                imageHeight = uiState.imageHeight(
+                    density = LocalDensity.current,
+                    screenWidthDp = LocalConfiguration.current.screenWidthDp,
+                    screenHeightDp = LocalConfiguration.current.screenHeightDp
+                ),
+                pageScrollable = pageScrollable
+            )
         )
     }
 }
@@ -194,14 +211,14 @@ private fun HandleBack(listState: LazyListState, onBackToTop: Boolean) {
 }
 
 data class FeedCallBack(
-    val tag             : String                 = "",
-    val onRefresh       : () -> Unit             = { Log.i(tag, "onRefresh is not set") },
-    val onLike          : (Int) -> Unit          = { Log.i(tag, "onLike is not set") },
-    val onFavorite      : (Int) -> Unit          = { Log.i(tag, "onFavorite is not set") },
-    val onVideoClick    : (Int) -> Unit          = { Log.i(tag, "onVideoClick is not set") },
-    val onBottom        : () -> Unit             = { Log.i(tag, "onBottom is not set") },
-    val onFocusItemIndex    :(Int) -> Unit       = { Log.i(tag, "onFocusItemIndex is not set") },
-    val onConnect           :() -> Unit          = { Log.i(tag, "onConnect is not set") }
+    val tag: String = "",
+    val onRefresh: () -> Unit = { Log.i(tag, "onRefresh is not set") },
+    val onLike: (Int) -> Unit = { Log.i(tag, "onLike is not set") },
+    val onFavorite: (Int) -> Unit = { Log.i(tag, "onFavorite is not set") },
+    val onVideoClick: (Int) -> Unit = { Log.i(tag, "onVideoClick is not set") },
+    val onBottom: () -> Unit = { Log.i(tag, "onBottom is not set") },
+    val onFocusItemIndex: (Int) -> Unit = { Log.i(tag, "onFocusItemIndex is not set") },
+    val onConnect: () -> Unit = { Log.i(tag, "onConnect is not set") }
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
