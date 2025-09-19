@@ -2,10 +2,9 @@
 
 ## 피드 리스트 모듈을 만든 이유
 BaseFeed라는 Feed 항목 UI를 제공하는 모듈이 있음.<br>
-BaseFeed를 필요한 화면에서 리스트로 만들어 사용하려고 했는데,<br>
-리스트에 공통으로 당기면 새로고침, 스크롤 시 새로운 항목 불러오기, 수많은 동일한 이벤트 항목들로<br>
-
-피드를 제공하는 화면마다 위와 같은 기능들을 적용하기 어려움.
+각 화면에서 BaseFeed를 사용해 리스트를 구현하려고 했는데 문제가 발생.<br>
+리스트에 공통으로 당기면 새로고침, 스크롤 시 새로운 항목 불러오기(무한 스크롤), 수많은 동일한 이벤트 항목들로<br>
+화면마다 위 기능들을 적용하기 어려움.
 
 BaseFeed 모듈에 Feed 리스트 까지 추가 하려니 BaseFeed 모듈에 구현할 양이 많아져 분리하기로 결정.
 
@@ -15,17 +14,11 @@ BaseFeed 모듈에 Feed 리스트 까지 추가 하려니 BaseFeed 모듈에 구
 
 <img src="../screenshots/screen.png"/>
 
-## Convention
+[## Convention]()
 
 ### package 구조
 
-<img src="../screenshots/package.png" width="40%" height="40%"/>
-
 ### Function 명
-
-- Feed + Screen
-- Feed + ViewModel
-- GetFeed + UseCase
 
 ## UseCase
 
