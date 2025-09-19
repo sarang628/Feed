@@ -10,7 +10,7 @@ data class FeedImage(
     companion object
 }
 
-val FeedImage.Companion.Sample : FeedImage get() =  FeedImage("http://sarang628.iptime.org:89/review_images/1/214/2024-08-18/01_46_46_801.jpg", 500, 500)
+val FeedImage.Companion.Sample : FeedImage get() =  FeedImage("http://sarang628.iptime.org:89/review_images/1/214/2024-08-18/01_46_46_801.jpg", 1200, 1200)
 
 fun FeedImage.adjustHeight(density: Density, screenWidthDp: Int, screenHeightDp: Int): Int {
     var newHeight = 0
