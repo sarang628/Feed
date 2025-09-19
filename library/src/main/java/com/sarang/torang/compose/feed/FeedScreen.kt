@@ -101,9 +101,12 @@ fun FeedScreen(
                     is FeedUiState.Empty -> RefreshAndBottomDetectionLazyColumn(
                         modifier = Modifier.padding(it),
                         listState = feedScreenState.listState,
+                        pullToRefreshLayoutState = feedScreenState.pullToRefreshLayoutState,
                         onRefresh = feedCallBack.onRefresh,
                         contents = { EmptyFeed() }
                     )
+
+                    /*is FeedUiState.Empty ->  EmptyFeed()*/
 
                     is FeedUiState.Success -> FeedSuccess(
                         modifier = modifier.padding(it),
