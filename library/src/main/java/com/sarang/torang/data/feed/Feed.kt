@@ -47,7 +47,7 @@ data class Feed(
             isLike = false,
             isFavorite = false,
             contents = "contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents",
-            createDate = "createDate",
+            createDate = "2025-09-20 20:20:00",
             reviewImages = listOf(FeedImage.Sample)
         )
     }
