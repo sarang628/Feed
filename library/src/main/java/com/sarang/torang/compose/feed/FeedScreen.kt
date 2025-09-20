@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -13,6 +12,7 @@ import androidx.compose.animation.with
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.Button
@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.sarang.torang.compose.feed.component.EmptyFeed
 import com.sarang.torang.compose.feed.component.FeedShimmer
 import com.sarang.torang.compose.feed.component.FeedTopAppBar
@@ -71,7 +72,7 @@ fun FeedScreen(
     feedScreenState     :FeedScreenState        = rememberFeedScreenState(),
     tag                 :String                 = "__FeedScreen",
     uiState             :FeedUiState            = FeedUiState.Loading,
-    topAppBar           :@Composable () -> Unit = { Log.i(tag, "topAppBar is not set") },
+    topAppBar           :@Composable () -> Unit = {},
     onBackToTop         :Boolean                = true,
     scrollEnabled       :Boolean                = true,
     pageScrollable      :Boolean                = true,
@@ -103,7 +104,9 @@ fun FeedScreen(
                         listState = feedScreenState.listState,
                         pullToRefreshLayoutState = feedScreenState.pullToRefreshLayoutState,
                         onRefresh = feedCallBack.onRefresh,
-                        contents = { EmptyFeed() }
+                        content = { EmptyFeed() },
+                        count = 1,
+                        itemCompose = {Box(Modifier.height(1000.dp).fillMaxWidth()){} }
                     )
 
                     /*is FeedUiState.Empty ->  EmptyFeed()*/
@@ -118,12 +121,22 @@ fun FeedScreen(
                         isLogin = isLogin
                     )
 
-                    FeedUiState.Reconnect -> Button(
-                        modifier = Modifier.align(Alignment.Center),
-                        onClick = feedCallBack.onConnect
-                    ) {
-                        Text("connect")
-                    }
+                    FeedUiState.Reconnect ->
+                        RefreshAndBottomDetectionLazyColumn(
+                            listState = feedScreenState.listState,
+                            pullToRefreshLayoutState = feedScreenState.pullToRefreshLayoutState,
+                            content = {
+                                Box(Modifier.fillMaxSize()){
+
+                                    Button(
+                                        modifier = Modifier.align(Alignment.Center),
+                                        onClick = feedCallBack.onConnect
+                                    ) {
+                                        Text("connect")
+                                    }
+                                }
+                            }
+                        )
 
                     is FeedUiState.Error -> {
 
