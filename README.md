@@ -44,7 +44,7 @@ fun FeedScreenEmptyPreview() {
 
 ## Loading
 
-<img src="screenshots/preview3.gif" width="300">
+<img src="screenshots/loading.gif" width="300">
 
 ```
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,26 +57,19 @@ fun FeedScreenLoadingPreview() {
 
 ## Loading Success
 
-<img src="screenshots/preview4.gif" width="300">
+<img src="screenshots/success.gif" width="300">
 
 ```
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
+@Preview(backgroundColor = 0xFFFDFDF6, showBackground = true)
 @Composable
 fun FeedScreenSuccessPreview() {
-    FeedScreen(
-        //@formatter:off
-        uiState = FeedUiState.Success(list = listOf(Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty)),
-        //@formatter:on
-        feed = {
-            Box(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 5.dp)
-                    .background(Color(0xAAEEEEEE))
-                    .height(80.dp)
-            ) { Text("feed") }
-        }
+    FeedScreen(/*Preview*/
+        uiState = FeedUiState.Success(
+            list = listOf(
+                Feed.Sample, Feed.Sample, Feed.Sample, Feed.Sample, Feed.Sample, Feed.Sample, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty
+            )
+        )
     )
 }
 ```
