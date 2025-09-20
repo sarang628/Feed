@@ -48,7 +48,7 @@ fun FeedScreenInMain(
         onLike = { feedsViewModel.onLike(it) },
         onFavorite = { feedsViewModel.onFavorite(it) },
         onVideoClick = { feedsViewModel.onVideoClick(it) },
-        onConnect = { feedsViewModel.refreshFeed() },),
+        onConnect = { feedsViewModel.refreshFeed() }),
         onAlarm = onAlarm,
         scrollEnabled = scrollEnabled,
         pageScrollable = pageScrollable
