@@ -31,7 +31,7 @@ https://jitpack.io/#sarang628/Feed 에서 최신(커밋 해시) 버전 확인
 
 ## Empty
 
-<img src="screenshots/preview2.png" width="300">
+<img src="screenshots/empty.gif" width="300">
 
 ```
 @OptIn(ExperimentalMaterial3Api::class)
