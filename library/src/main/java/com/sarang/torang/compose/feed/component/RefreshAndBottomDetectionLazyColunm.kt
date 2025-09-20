@@ -25,7 +25,7 @@ internal fun RefreshAndBottomDetectionLazyColumn(
     onBottom                 : () -> Unit = {},
     userScrollEnabled        : Boolean = true,
     listState                : LazyListState = rememberLazyListState(),
-    contents                 : @Composable () -> Unit = {},
+    content                  : @Composable () -> Unit = {},
     itemCompose              : @Composable (Int) -> Unit = {},
 ) {
     LocalPullToRefreshLayoutType.current.invoke(modifier, pullToRefreshLayoutState, onRefresh) {
@@ -37,8 +37,8 @@ internal fun RefreshAndBottomDetectionLazyColumn(
                 itemCompose = itemCompose,
                 userScrollEnabled = userScrollEnabled,
                 arrangement = Arrangement.spacedBy(10.dp),
-                listState = listState),
-            contents)
+                listState = listState,
+                content = content))
     }
 }
 
@@ -48,7 +48,7 @@ fun PreviewRefreshAndBottomDetectionLazyColunm() {
     RefreshAndBottomDetectionLazyColumn(
         modifier = Modifier.fillMaxSize(),
         count = 10,
-        contents = { Box(modifier = Modifier.fillMaxSize()) { Text("PreviewRefreshAndBottomDetectionLazyColunm") } },
+        content = { Box(modifier = Modifier.fillMaxSize()) { Text("PreviewRefreshAndBottomDetectionLazyColunm") } },
         listState = rememberLazyListState(),
     ){ Text("111") }
 }
