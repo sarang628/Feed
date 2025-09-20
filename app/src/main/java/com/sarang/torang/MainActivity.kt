@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.sarang.torang.compose.feed.FeedCallBack
 import com.sarang.torang.compose.feed.FeedScreen
 import com.sarang.torang.compose.feed.FeedScreenInMain
 import com.sarang.torang.compose.feed.FeedScreenSuccessPreview
@@ -41,6 +42,7 @@ import com.sarang.torang.compose.feed.type.LocalPullToRefreshLayoutType
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.compose.feed.internal.components.LocalExpandableTextType
 import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
+import com.sarang.torang.compose.feed.state.RefreshIndicatorState
 import com.sarang.torang.compose.feed.type.LocalBottomDetectingLazyColumnType
 import com.sarang.torang.compose.feed.type.LocalFeedCompose
 import com.sarang.torang.data.feed.Feed
@@ -129,11 +131,20 @@ class MainActivity : ComponentActivity() {
                             onSuccess = { uiState = FeedUiState.Success(listOf(Feed.Sample,Feed.Sample,Feed.Sample,Feed.Sample,Feed.Sample,Feed.Sample)) },
                             onError = { uiState = FeedUiState.Error("error") },
                             onEmpty = { uiState = FeedUiState.Empty },
-                            onReconnect = { uiState = FeedUiState.Reconnect }
+                            onReconnect = { uiState = FeedUiState.Reconnect },
+                            onRefresh = {
+                                when(feedScreenState.pullToRefreshLayoutState.refreshIndicatorState.value){
+                                    RefreshIndicatorState.Default -> feedScreenState.refresh(true)
+                                    else -> feedScreenState.refresh(false)
+                                }
+                            }
 
                         )
                     }) {
-                    FeedScreen(uiState = uiState, feedScreenState = feedScreenState)
+                    FeedScreen(uiState = uiState, feedScreenState = feedScreenState,
+                        feedCallBack = FeedCallBack(
+                            onConnect = {feedScreenState.refresh(true)}
+                        ))
                 }
             }
             //TestPinchZoom()
@@ -165,6 +176,7 @@ fun OperationButtons(
     onEmpty: () -> Unit = {},
     onError: () -> Unit = {},
     onReconnect: () -> Unit = {},
+    onRefresh: () -> Unit = {},
 ){
     FlowRow {
         AssistChip(modifier = Modifier.padding(4.dp), onClick = onTop, label = { Text("top") })
@@ -173,6 +185,7 @@ fun OperationButtons(
         AssistChip(modifier = Modifier.padding(4.dp), onClick = onEmpty, label = { Text("empty") })
         AssistChip(modifier = Modifier.padding(4.dp), onClick = onError, label = { Text("error") })
         AssistChip(modifier = Modifier.padding(4.dp), onClick = onReconnect, label = { Text("reconnect") })
+        AssistChip(modifier = Modifier.padding(4.dp), onClick = onRefresh, label = { Text("refresh") })
     }
 }
 
