@@ -9,8 +9,7 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 
 typealias bottomDetectingLazyColumnType = @Composable (
-    BottomDetectingLazyColumnData,
-    contents: @Composable (() -> Unit)?
+    BottomDetectingLazyColumnData
 ) -> Unit
 
 data class BottomDetectingLazyColumnData(
@@ -21,13 +20,15 @@ data class BottomDetectingLazyColumnData(
     val userScrollEnabled: Boolean = false,
     val arrangement : Arrangement.Vertical,
     val listState: LazyListState,
+    val content: @Composable () -> Unit = {}
 )
 
 val LocalBottomDetectingLazyColumnType = compositionLocalOf<bottomDetectingLazyColumnType> {
-    @Composable { data, contents ->
+    @Composable { data ->
         Log.e(
             "__LocalBottomDetectingLazyColumnType",
             "bottomDetectingLazyColumn is not set"
-        ); LazyColumn { items(data.count) { data.itemCompose.invoke(it) } }; contents?.invoke();
+        ); LazyColumn { items(data.count) { data.itemCompose.invoke(it) } }
+        data.content.invoke()
     }
 }
