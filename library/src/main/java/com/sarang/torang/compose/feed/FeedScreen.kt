@@ -96,7 +96,7 @@ fun FeedScreen(
                     FeedUiState.Loading -> FeedShimmer(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(it)
+                            .padding(8.dp)
                     )
 
                     is FeedUiState.Empty -> RefreshAndBottomDetectionLazyColumn(
@@ -238,7 +238,7 @@ data class FeedCallBack(
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
+@Preview(backgroundColor = 0xFFFDFDF6, showBackground = true)
 @Composable
 fun FeedScreenLoadingPreview() {
     FeedScreen(/*Preview*/
@@ -246,7 +246,7 @@ fun FeedScreenLoadingPreview() {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
+@Preview(backgroundColor = 0xFFFDFDF6, showBackground = true)
 @Composable
 fun FeedScreenEmptyPreview() {
     FeedScreen(/*Preview*/
@@ -254,7 +254,7 @@ fun FeedScreenEmptyPreview() {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
+@Preview(backgroundColor = 0xFFFDFDF6, showBackground = true)
 @Composable
 fun FeedScreenSuccessPreview() {
     FeedScreen(/*Preview*/
@@ -267,7 +267,7 @@ fun FeedScreenSuccessPreview() {
     )
 }
 
-@Preview
+@Preview(backgroundColor = 0xFFFDFDF6, showBackground = true)
 @Composable
 fun TransitionPreview(){
     var uiState : FeedUiState by remember { mutableStateOf(FeedUiState.Loading) }
@@ -281,7 +281,7 @@ fun TransitionPreview(){
         uiState = uiState)
 }
 
-@Preview
+@Preview(backgroundColor = 0xFFFDFDF6, showBackground = true)
 @Composable
 fun PreviewReconnect(){
     FeedScreen(/*Preview*/

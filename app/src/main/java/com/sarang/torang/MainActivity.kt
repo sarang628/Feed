@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
@@ -20,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -29,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
@@ -42,6 +45,7 @@ import com.sarang.torang.compose.feed.type.LocalPullToRefreshLayoutType
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.compose.feed.internal.components.LocalExpandableTextType
 import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
+import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.RefreshIndicatorState
 import com.sarang.torang.compose.feed.type.LocalBottomDetectingLazyColumnType
 import com.sarang.torang.compose.feed.type.LocalFeedCompose
@@ -70,9 +74,14 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    @Inject lateinit var loginRepository: LoginRepository
-    @Inject lateinit var profileRepository: ProfileRepository
-    @Inject lateinit var feedRepository: FeedRepository
+    @Inject
+    lateinit var loginRepository: LoginRepository
+
+    @Inject
+    lateinit var profileRepository: ProfileRepository
+
+    @Inject
+    lateinit var feedRepository: FeedRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,7 +91,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                       TextScreen()
+                    TextScreen()
                 }
             }
         }
@@ -101,7 +110,6 @@ class MainActivity : ComponentActivity() {
 @Composable fun TextScreen(){
     val navController = rememberNavController()
     val feedScreenState = rememberFeedScreenState()
-    val scope = rememberCoroutineScope()
 
     CompositionLocalProvider(
         LocalFeedCompose provides CustomFeedCompose,
@@ -119,33 +127,7 @@ class MainActivity : ComponentActivity() {
             }
             //TestBasic()
             composable("feedScreen") {
-                var uiState : FeedUiState by remember { mutableStateOf(FeedUiState.Loading) }
-                BottomSheetScaffold(
-                    sheetContent = {
-                        OperationButtons(
-                            onTop = {
-                            scope.launch { feedScreenState.onTop() }
-                            scope.launch { feedScreenState.showSnackBar("click on top") }
-                                    },
-                            onLoading = { uiState = FeedUiState.Loading },
-                            onSuccess = { uiState = FeedUiState.Success(listOf(Feed.Sample,Feed.Sample,Feed.Sample,Feed.Sample,Feed.Sample,Feed.Sample)) },
-                            onError = { uiState = FeedUiState.Error("error") },
-                            onEmpty = { uiState = FeedUiState.Empty },
-                            onReconnect = { uiState = FeedUiState.Reconnect },
-                            onRefresh = {
-                                when(feedScreenState.pullToRefreshLayoutState.refreshIndicatorState.value){
-                                    RefreshIndicatorState.Default -> feedScreenState.refresh(true)
-                                    else -> feedScreenState.refresh(false)
-                                }
-                            }
-
-                        )
-                    }) {
-                    FeedScreen(uiState = uiState, feedScreenState = feedScreenState,
-                        feedCallBack = FeedCallBack(
-                            onConnect = {feedScreenState.refresh(true)}
-                        ))
-                }
+                Test1()
             }
             //TestPinchZoom()
             //FeedScreenEmptyPreview()
@@ -167,7 +149,7 @@ class MainActivity : ComponentActivity() {
 // @formatter:on
 
 @OptIn(ExperimentalLayoutApi::class)
-@Preview
+@Preview(backgroundColor = 0xFFFDFDF6, showBackground = true)
 @Composable
 fun OperationButtons(
     onTop: () -> Unit = {},
@@ -177,19 +159,31 @@ fun OperationButtons(
     onError: () -> Unit = {},
     onReconnect: () -> Unit = {},
     onRefresh: () -> Unit = {},
-){
+) {
     FlowRow {
         AssistChip(modifier = Modifier.padding(4.dp), onClick = onTop, label = { Text("top") })
-        AssistChip(modifier = Modifier.padding(4.dp), onClick = onLoading, label = { Text("loading") })
-        AssistChip(modifier = Modifier.padding(4.dp), onClick = onSuccess, label = { Text("success") })
+        AssistChip(
+            modifier = Modifier.padding(4.dp),
+            onClick = onLoading,
+            label = { Text("loading") })
+        AssistChip(
+            modifier = Modifier.padding(4.dp),
+            onClick = onSuccess,
+            label = { Text("success") })
         AssistChip(modifier = Modifier.padding(4.dp), onClick = onEmpty, label = { Text("empty") })
         AssistChip(modifier = Modifier.padding(4.dp), onClick = onError, label = { Text("error") })
-        AssistChip(modifier = Modifier.padding(4.dp), onClick = onReconnect, label = { Text("reconnect") })
-        AssistChip(modifier = Modifier.padding(4.dp), onClick = onRefresh, label = { Text("refresh") })
+        AssistChip(
+            modifier = Modifier.padding(4.dp),
+            onClick = onReconnect,
+            label = { Text("reconnect") })
+        AssistChip(
+            modifier = Modifier.padding(4.dp),
+            onClick = onRefresh,
+            label = { Text("refresh") })
     }
 }
 
-@Preview
+@Preview()
 @Composable
 fun Menu(onFeedScreen: () -> Unit = {}) {
     Button(onFeedScreen) {
@@ -197,7 +191,7 @@ fun Menu(onFeedScreen: () -> Unit = {}) {
     }
 }
 
-@Preview
+@Preview()
 @Composable
 fun FeedScreenSuccessPreview1() {
     CompositionLocalProvider(
@@ -206,6 +200,76 @@ fun FeedScreenSuccessPreview1() {
         LocalExpandableTextType provides CustomExpandableTextType,
         LocalFeedImageLoader provides CustomFeedImageLoader
     ) {
-        FeedScreenSuccessPreview()
+        TorangTheme {
+            FeedScreenSuccessPreview()
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
+fun Test1(feedScreenState: FeedScreenState = rememberFeedScreenState()) {
+    val scope = rememberCoroutineScope()
+    var uiState: FeedUiState by remember { mutableStateOf(FeedUiState.Loading) }
+    val scaffoldState = rememberBottomSheetScaffoldState()
+    CompositionLocalProvider(
+        LocalFeedCompose provides CustomFeedCompose,
+        LocalPullToRefreshLayoutType provides customPullToRefresh,
+        LocalExpandableTextType provides CustomExpandableTextType,
+        LocalFeedImageLoader provides CustomFeedImageLoader
+    ) {
+        TorangTheme {
+            BottomSheetScaffold(
+                scaffoldState = scaffoldState,
+                sheetContent = {
+                    OperationButtons(
+                        onTop = {
+                            scope.launch { feedScreenState.onTop() }
+                            scope.launch { feedScreenState.showSnackBar("click on top") }
+                        },
+                        onLoading = { uiState = FeedUiState.Loading },
+                        onSuccess = {
+                            uiState = FeedUiState.Success(
+                                listOf(
+                                    Feed.Sample,
+                                    Feed.Sample,
+                                    Feed.Sample,
+                                    Feed.Sample,
+                                    Feed.Sample,
+                                    Feed.Sample
+                                )
+                            )
+                        },
+                        onError = { uiState = FeedUiState.Error("error") },
+                        onEmpty = { uiState = FeedUiState.Empty },
+                        onReconnect = { uiState = FeedUiState.Reconnect },
+                        onRefresh = {
+                            when (feedScreenState.pullToRefreshLayoutState.refreshIndicatorState.value) {
+                                RefreshIndicatorState.Default -> feedScreenState.refresh(true)
+                                else -> feedScreenState.refresh(false)
+                            }
+                        }
+                    )
+                }, sheetPeekHeight = 0.dp
+            ) {
+                Scaffold(
+                    floatingActionButton = {
+                        FloatingActionButton({
+                            scope.launch { scaffoldState.bottomSheetState.expand() }
+                        }) { Icon(Icons.Default.Menu, contentDescription = null) }
+                    }
+                ) {
+                    FeedScreen(
+                        modifier = Modifier.padding(it),
+                        uiState = uiState,
+                        feedScreenState = feedScreenState,
+                        feedCallBack = FeedCallBack(
+                            onConnect = { feedScreenState.refresh(true) }
+                        )
+                    )
+                }
+            }
+        }
     }
 }
