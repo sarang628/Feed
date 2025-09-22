@@ -55,10 +55,7 @@ import kotlinx.coroutines.launch
  * 피드 화면
  * @param uiState               uiState
  * @param topAppBar             상단 앱 바
- * @param onBottom              하단 터치 이벤트
- * @param onRefresh             피드 갱신 요청
  * @param onBackToTop           back 이벤트 시 리스트를 최상단으로 올리는 이벤트
- * @param onFocusItemIndex      비디오 재생을 위해 항목이 중앙에 있을때 호출되는 콜백
  * @param scrollEnabled         리스트 스크롤 가능 여부
  * @sample FeedScreenEmptyPreview
  * @sample FeedScreenLoadingPreview
@@ -108,8 +105,6 @@ fun FeedScreen(
                         count = 1,
                         itemCompose = {Box(Modifier.height(1000.dp).fillMaxWidth()){} }
                     )
-
-                    /*is FeedUiState.Empty ->  EmptyFeed()*/
 
                     is FeedUiState.Success -> FeedSuccess(
                         modifier = modifier.padding(it),

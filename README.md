@@ -73,10 +73,3 @@ fun FeedScreenSuccessPreview() {
     )
 }
 ```
-
-## 테스트 환경
-
-Android Studio Meerkat | 2024.3.1 Patch 1<br>
-gradle-8.11.1-bin
-Gradle JDK: corretto-17.0.14
-minSdk: 26
