@@ -1,46 +1,44 @@
 # Feed Module
 
-## 피드 로딩, 오류, 성공
+# 피드 로딩, 오류, 성공
 Feed 모듈에는 항목 UI가 없음.<br>
-다른 화면들에서도 사용을 고려해 FeedItem을 제공하는 모듈이 따로 있음.<br>
-피드 리스트에서 무한 스크롤, 끌어 당겨 새로고침, 로딩, 오류, 성공 상태 등을 제공.
+다른 화면들에서 사용을 고려해 FeedItem을 제공하는 모듈이 따로 있음.<br>
+Feed Module은 무한 스크롤, 끌어 당겨 새로고침, 로딩, 오류, 성공 상태 등을 제공.
 
-## Feature
+# Feature
 - 피드 항목을 리스트로 표시
 - 스크롤 갱신, 스크롤 로딩 기능 제공
 
 <img src="../screenshots/screen.png"/>
 
+# package
 
+# Architecture
 
-## package
+## UI elements
 
-## Architecture
-
-### UI elements
-
-#### [compose 명](https://github.com/sarang628/TorangArchitecture?tab=readme-ov-file#compose-%EC%9E%91%EC%84%B1-%EB%B0%A9%EB%B2%95)
+### [compose 명](https://github.com/sarang628/TorangArchitecture?tab=readme-ov-file#compose-%EC%9E%91%EC%84%B1-%EB%B0%A9%EB%B2%95)
 
 FeedScreen
 
-### UI Layer
+## UI Layer
 
-#### UI element
+### UI element
 
 UI elements such as activities and fragments that display the data
 
-#### UI state
+### UI state
 
 The UI state is what the app says they should see.
 
 
-#### State holder(ViewModel)
+### State holder(ViewModel)
 
 Responsible for the production of UI state and contain the necessary logic for that task
 
-### Domain Layer
+## Domain Layer
 
-#### UseCase
+### UseCase
 
 |-|-|-|
 | 즐겨찾기 추가 | AddFavoriteUseCase |
