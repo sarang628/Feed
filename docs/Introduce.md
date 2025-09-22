@@ -18,7 +18,8 @@ Feed 모듈에는 항목 UI가 없음.<br>
 ## Architecture
 
 ### UI elements
-[#### compose 명] (https://github.com/sarang628/TorangArchitecture?tab=readme-ov-file#compose-%EC%9E%91%EC%84%B1-%EB%B0%A9%EB%B2%95)
+
+#### [compose 명](https://github.com/sarang628/TorangArchitecture?tab=readme-ov-file#compose-%EC%9E%91%EC%84%B1-%EB%B0%A9%EB%B2%95)
 
 FeedScreen
 
