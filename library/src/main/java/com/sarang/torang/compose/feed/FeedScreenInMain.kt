@@ -33,7 +33,12 @@ fun FeedScreenInMain(
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
     val isLogin: Boolean by feedsViewModel.isLoginState.collectAsStateWithLifecycle(false)
-    LaunchedEffect(feedsViewModel.msgState) { feedScreenState.showSnackBar(feedsViewModel.msgState) }
+    LaunchedEffect(feedsViewModel.msgState) {
+        if (feedsViewModel.msgState.isNotEmpty()) {
+            feedScreenState.showSnackBar(feedsViewModel.msgState[0])
+            feedsViewModel.removeTopErrorMessage()
+        }
+    }
     LaunchedEffect(feedsViewModel.isRefreshingState) { feedScreenState.refresh(feedsViewModel.isRefreshingState) }
 
     FeedInMain(

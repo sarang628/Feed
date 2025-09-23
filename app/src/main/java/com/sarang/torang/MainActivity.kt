@@ -3,6 +3,7 @@ package com.sarang.torang
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
@@ -91,7 +92,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    TextScreen()
+                    TextScreen(loginRepository)
                 }
             }
         }
@@ -100,14 +101,13 @@ class MainActivity : ComponentActivity() {
 
 // @formatter:off
 @Composable fun TestUserFeedByReviewIdScreen_() { TestUserFeedByReviewIdScreen() }
-@Composable fun LoginRepositoryTest_(loginRepository: LoginRepository) { LoginRepositoryTest(loginRepository = loginRepository) }
 @Composable fun ProfileRepositoryTest_(profileRepository: ProfileRepository) { ProfileRepositoryTest(profileRepository) }
 @Composable fun FeedRepositoryTest_(feedRepository: FeedRepository) { FeedRepositoryTest(feedRepository) }
 @Composable fun TestFeedScreenByRestaurantId_() { TestFeedScreenByRestaurantId(234) }
 @Composable fun TestBasic_() { TestBasic() }
 @Composable fun TestPinchZoom_() { TestPinchZoom() }
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable fun TextScreen(){
+@Composable fun TextScreen(loginRepository : LoginRepository){
     val navController = rememberNavController()
     val feedScreenState = rememberFeedScreenState()
 
@@ -120,10 +120,14 @@ class MainActivity : ComponentActivity() {
     ) {
         NavHost(
             navController = navController,
-            startDestination = "feedScreen"
+            startDestination = "Menu"
         ) {
             composable("Menu") {
-                Menu(onFeedScreen = {navController.navigate("feedScreen")})
+                Menu(
+                    onFeedScreen = { navController.navigate("feedScreen") },
+                    onLoginRepository = { navController.navigate("LoginRepositoryTest") },
+                    onFeedScreenInMain = { navController.navigate("FeedScreenInMain") },
+                )
             }
             //TestBasic()
             composable("feedScreen") {
@@ -139,7 +143,9 @@ class MainActivity : ComponentActivity() {
                 LaunchedEffect("") { feedScreenState.showSnackBar("FeedScreenInMain") }
                 FeedScreenInMain(feedScreenState = feedScreenState)
             }
-            //LoginRepositoryTest_(loginRepository)
+            composable("LoginRepositoryTest") {
+                LoginRepositoryTest(loginRepository = loginRepository)
+            }
             //ProfileRepositoryTest(profileRepository = profileRepository)
             //FeedRepositoryTest_(feedRepository = feedRepository)
             //TestFeedScreenAndSnackBar()
@@ -185,9 +191,21 @@ fun OperationButtons(
 
 @Preview()
 @Composable
-fun Menu(onFeedScreen: () -> Unit = {}) {
-    Button(onFeedScreen) {
-        Text("FeedScreen")
+fun Menu(
+    onFeedScreen: () -> Unit = {},
+    onLoginRepository: () -> Unit = {},
+    onFeedScreenInMain: () -> Unit = {},
+) {
+    Column {
+        Button(onFeedScreen) {
+            Text("FeedScreen")
+        }
+        Button(onLoginRepository) {
+            Text("LoginRepository")
+        }
+        Button(onFeedScreenInMain) {
+            Text("FeedScreenInMain")
+        }
     }
 }
 

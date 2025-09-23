@@ -31,7 +31,10 @@ fun FeedScreenByRestaurantId(
     }
 
     LaunchedEffect(feedsViewModel.msgState) {
-        feedScreenState.showSnackBar(feedsViewModel.msgState)
+        if(feedsViewModel.msgState.isEmpty()){
+            feedScreenState.showSnackBar(feedsViewModel.msgState[0])
+            feedsViewModel.removeTopErrorMessage();
+        }
     }
 
     FeedScreen(

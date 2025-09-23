@@ -53,7 +53,10 @@ fun FeedScreenByReviewId(
     }
 
     LaunchedEffect(feedsViewModel.msgState) {
-        feedScreenState.showSnackBar(feedsViewModel.msgState)
+        if (feedsViewModel.msgState.isNotEmpty()) {
+            feedScreenState.showSnackBar(feedsViewModel.msgState[0])
+            feedsViewModel.removeTopErrorMessage()
+        }
     }
 
     FeedsByReviewId(

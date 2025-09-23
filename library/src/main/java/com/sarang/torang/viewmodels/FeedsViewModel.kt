@@ -53,13 +53,13 @@ open class FeedsViewModel @Inject constructor(
     }.stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(5_000), initialValue = FeedUiState.Loading)
     val isLoginState = isLoginFlowUseCase.isLogin
 
-    var msgState : String? by mutableStateOf(null); private set
+    var msgState : List<String> by mutableStateOf(listOf()); private set
     var focusedIndexState by mutableIntStateOf(0); private set
     var isRefreshingState by mutableStateOf(false);
     var videoPlayListState : List<Int> by mutableStateOf(listOf())
 
-    private fun handleErrorMsg(e: Exception) { showError(e.message) }
-    private fun showError(msg: String?) { this.msgState = msg }
+    private fun handleErrorMsg(e: Exception) { e.message?.let{showError(it)} }
+    private fun showError(msg: String) { this.msgState = this.msgState + msg }
     fun onFocusItemIndex(index: Int) { focusedIndexState = index }
 
     init {
@@ -123,5 +123,10 @@ open class FeedsViewModel @Inject constructor(
         } else {
             videoPlayListState + reviewId // 추가
         }
+    }
+
+    fun removeTopErrorMessage() {
+        if (msgState.isNotEmpty())
+            msgState = msgState.drop(0)
     }
 }
