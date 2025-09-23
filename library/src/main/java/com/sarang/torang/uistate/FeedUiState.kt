@@ -8,8 +8,9 @@ import java.util.Objects
 
 // @formatter:off
 sealed interface FeedUiState {
-    data class  Error   (val msg: String?)                     : FeedUiState
-    data class  Success (val list: List<Feed> = listOf())    : FeedUiState
+    data class  Error   (val msg: String?)                  : FeedUiState
+    data class  Success (val list: List<Feed> = listOf(),
+                         val isLogin : Boolean = false)     : FeedUiState
     object      Loading                                     : FeedUiState
     object      Empty                                       : FeedUiState
     object      Reconnect                                   : FeedUiState

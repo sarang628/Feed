@@ -39,20 +39,7 @@ open class FeedsViewModel @Inject constructor(
     private val tag = "__FeedsViewModel"
     private var page = 0
 
-    private val initLoading : MutableStateFlow<Boolean> = MutableStateFlow(false);
-    private val showReConnect :MutableStateFlow<Boolean> = MutableStateFlow(false);
-
-    open val uiState: StateFlow<FeedUiState> = combine (getFeedFlowUseCase.invoke()
-        .map<List<Feed>, FeedUiState>(FeedUiState::Success)
-        .onStart { emit(FeedUiState.Loading) }, initLoading, showReConnect){feedUiState, initLoading, showReConnect ->
-        when {
-            initLoading == false -> FeedUiState.Loading
-            showReConnect == true -> FeedUiState.Reconnect
-            else -> feedUiState
-        }
-    }.stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(5_000), initialValue = FeedUiState.Loading)
-    val isLoginState = isLoginFlowUseCase.isLogin
-
+    open val uiState: StateFlow<FeedUiState> = getFeedFlowUseCase.invoke(viewModelScope)
     var msgState : List<String> by mutableStateOf(listOf()); private set
     var focusedIndexState by mutableIntStateOf(0); private set
     var isRefreshingState by mutableStateOf(false);
@@ -63,12 +50,9 @@ open class FeedsViewModel @Inject constructor(
     fun onFocusItemIndex(index: Int) { focusedIndexState = index }
 
     init {
-        if(initLoading.value == false){
-            viewModelScope.launch {
-                feedWithPageUseCase.invoke(0)
-                page = 1
-                initLoading.emit(true)
-            }
+        viewModelScope.launch {
+            feedWithPageUseCase.invoke(0)
+            page = 1
         }
     }
 
@@ -76,9 +60,9 @@ open class FeedsViewModel @Inject constructor(
     open fun refreshFeed() {
         viewModelScope.launch {
             isRefreshingState = true
-            try { showReConnect.emit(false); feedWithPageUseCase.invoke(0); page = 1 }
-            catch (e: ConnectException) { if(page == 0) showReConnect.emit(true); handleErrorMsg(e) }
-            catch (e: Exception) { if(page == 0) showReConnect.emit(true); handleErrorMsg(e) }
+            try { feedWithPageUseCase.invoke(0); page = 1 }
+            catch (e: ConnectException) { if(page == 0)  handleErrorMsg(e) }
+            catch (e: Exception) { if(page == 0) handleErrorMsg(e) }
             finally { isRefreshingState = false }
         }
     }
@@ -87,7 +71,7 @@ open class FeedsViewModel @Inject constructor(
     internal fun onFavorite(reviewId: Int) {
         viewModelScope.launch {
             try {
-                if (isLoginState.stateIn(viewModelScope).value) { clickFavoriteUseCase.invoke(reviewId) }
+                if (uiState.isLogin) { clickFavoriteUseCase.invoke(reviewId) }
                 else{ throw Exception("로그인을 해주세요.") }
             }
             catch (e: Exception) { handleErrorMsg(e) }
@@ -98,7 +82,7 @@ open class FeedsViewModel @Inject constructor(
     internal fun onLike(reviewId: Int) {
         viewModelScope.launch {
             try {
-                if (isLoginState.stateIn(viewModelScope).value) { clickLikeUseCase.invoke(reviewId) }
+                if (uiState.isLogin) { clickLikeUseCase.invoke(reviewId) }
                 else{ throw Exception("로그인을 해주세요.") }
             }
             catch (e: Exception) { handleErrorMsg(e) }
@@ -112,8 +96,8 @@ open class FeedsViewModel @Inject constructor(
                 feedWithPageUseCase.invoke(page)
                 page++
             }
-            catch (e: ConnectException) { if(page == 0) showReConnect.emit(true); handleErrorMsg(e) }
-            catch (e: Exception) { if(page == 0) showReConnect.emit(true); handleErrorMsg(e) }
+            catch (e: ConnectException) { handleErrorMsg(e) }
+            catch (e: Exception) { handleErrorMsg(e) }
         }
     }
 
@@ -129,4 +113,12 @@ open class FeedsViewModel @Inject constructor(
         if (msgState.isNotEmpty())
             msgState = msgState.drop(0)
     }
+}
+
+val StateFlow<FeedUiState>.isLogin : Boolean get() = when(this.value){
+    FeedUiState.Empty -> false
+    is FeedUiState.Error -> false
+    FeedUiState.Loading -> false
+    FeedUiState.Reconnect -> false
+    is FeedUiState.Success -> (this.value as FeedUiState.Success).isLogin
 }

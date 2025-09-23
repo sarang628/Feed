@@ -28,7 +28,6 @@ data class FeedTypeData(
     val feed: Feed,
     val onLike: (Int) -> Unit,
     val onFavorite: (Int) -> Unit,
-    val isLogin: Boolean,
     val onVideoClick: () -> Unit,
     val imageHeight: Int,
     val pageScrollable: Boolean

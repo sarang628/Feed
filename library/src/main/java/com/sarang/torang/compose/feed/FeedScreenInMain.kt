@@ -32,7 +32,6 @@ fun FeedScreenInMain(
     pageScrollable  : Boolean           = true
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
-    val isLogin: Boolean by feedsViewModel.isLoginState.collectAsStateWithLifecycle(false)
     LaunchedEffect(feedsViewModel.msgState) {
         if (feedsViewModel.msgState.isNotEmpty()) {
             feedScreenState.showSnackBar(feedsViewModel.msgState[0])
@@ -44,7 +43,6 @@ fun FeedScreenInMain(
     FeedInMain(
         uiState = uiState,
         feedScreenState = feedScreenState,
-        isLogin = isLogin,
         onAddReview = onAddReview,
         feedCallBack = FeedCallBack(
         onBottom = { feedsViewModel.onBottom() },
@@ -70,7 +68,6 @@ internal fun FeedInMain(
     tag              : String          = "__MainFeed",
     uiState          : FeedUiState     = FeedUiState.Loading,
     feedScreenState  : FeedScreenState = rememberFeedScreenState(),
-    isLogin          : Boolean         = false,
     pageScrollable   : Boolean         = true,
     scrollEnabled    : Boolean         = true,
     feedCallBack     : FeedCallBack    = FeedCallBack(),
@@ -86,7 +83,6 @@ internal fun FeedInMain(
         topAppBar = { FeedTopAppBar(onAddReview = onAddReview, topAppIcon = Icons.AutoMirrored.Default.Send, scrollBehavior = scrollBehavior, onAlarm = onAlarm) },
         scrollEnabled = scrollEnabled,
         pageScrollable = pageScrollable,
-        isLogin = isLogin,
     )
 }
 

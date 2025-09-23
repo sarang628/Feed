@@ -42,7 +42,6 @@ fun FeedScreenByReviewId(
     pageScrollable: Boolean = true
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
-    val isLogin by feedsViewModel.isLoginState.collectAsState(false)
     val screenHeightDp = LocalConfiguration.current.screenHeightDp
     val screenWidthDp = LocalConfiguration.current.screenWidthDp
     val density = LocalDensity.current
@@ -70,7 +69,6 @@ fun FeedScreenByReviewId(
                 feed = it,
                 onLike = { feedsViewModel.onLike(it) },
                 onFavorite = { feedsViewModel.onFavorite(it) },
-                isLogin = isLogin,
                 onVideoClick = { feedsViewModel.onVideoClick(it.reviewId) },
                 imageHeight = it.reviewImages[0].adjustHeight(density, screenWidthDp, screenHeightDp),
                 pageScrollable = pageScrollable)

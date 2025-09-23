@@ -73,12 +73,15 @@ fun FeedScreen(
     onBackToTop         :Boolean                = true,
     scrollEnabled       :Boolean                = true,
     pageScrollable      :Boolean                = true,
-    isLogin             :Boolean                = false,
     feedCallBack        :FeedCallBack           = FeedCallBack(tag = tag)
     // @formatter:on
 ) {
     HandleOnFocusIndex(feedScreenState.listState, feedCallBack.onFocusItemIndex)
     HandleBack(feedScreenState.listState, onBackToTop)
+
+    LaunchedEffect(uiState) {
+        Log.d(tag, "uiState changed : $uiState" )
+    }
 
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = feedScreenState.snackbarState) },
@@ -113,7 +116,7 @@ fun FeedScreen(
                         uiState = state,
                         feedCallBack = feedCallBack,
                         pageScrollable = pageScrollable,
-                        isLogin = isLogin
+                        isLogin = state.isLogin
                     )
 
                     FeedUiState.Reconnect ->
@@ -167,7 +170,6 @@ private fun FeedSuccess(
                 feed = uiState.list[it],
                 onLike = feedCallBack.onLike,
                 onFavorite = feedCallBack.onFavorite,
-                isLogin = isLogin,
                 onVideoClick = { feedCallBack.onVideoClick.invoke(uiState.list[it].reviewId) },
                 imageHeight = uiState.imageHeight(
                     density = LocalDensity.current,

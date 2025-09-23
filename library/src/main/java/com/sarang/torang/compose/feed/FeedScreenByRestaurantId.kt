@@ -24,7 +24,6 @@ fun FeedScreenByRestaurantId(
 ) {
     val uiState: FeedUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
     val isRefreshing: Boolean = feedsViewModel.isRefreshingState
-    val isLogin by feedsViewModel.isLoginState.collectAsState(initial = false)
 
     LaunchedEffect(key1 = restaurantId) {
         feedsViewModel.getFeedByRestaurantId(restaurantId)
@@ -46,7 +45,6 @@ fun FeedScreenByRestaurantId(
             onVideoClick = { feedsViewModel.onVideoClick(it) },
             onLike = { feedsViewModel.onLike(it) },
         ),
-        isLogin = isLogin,
         pageScrollable = pageScrollable
     )
 }
