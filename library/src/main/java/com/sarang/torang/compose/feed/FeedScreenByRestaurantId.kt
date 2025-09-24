@@ -3,13 +3,12 @@ package com.sarang.torang.compose.feed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
-import com.sarang.torang.uistate.FeedUiState
+import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.viewmodels.FeedScreenByRestaurantIdViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -22,7 +21,7 @@ fun FeedScreenByRestaurantId(
     pageScrollable : Boolean = true,
     feedScreenState: FeedScreenState = rememberFeedScreenState()
 ) {
-    val uiState: FeedUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
+    val uiState: FeedLoadingUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
     val isRefreshing: Boolean = feedsViewModel.isRefreshingState
 
     LaunchedEffect(key1 = restaurantId) {

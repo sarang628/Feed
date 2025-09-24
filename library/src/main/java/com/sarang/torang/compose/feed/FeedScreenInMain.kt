@@ -18,7 +18,7 @@ import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.component.FeedTopAppBar
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.data.feed.Feed
-import com.sarang.torang.uistate.FeedUiState
+import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.viewmodels.FeedsViewModel
 
 @Composable
@@ -31,7 +31,7 @@ fun FeedScreenInMain(
     scrollEnabled   : Boolean           = true,
     pageScrollable  : Boolean           = true
 ) {
-    val uiState: FeedUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
+    val uiState: FeedLoadingUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
     LaunchedEffect(feedsViewModel.msgState) {
         if (feedsViewModel.msgState.isNotEmpty()) {
             feedScreenState.showSnackBar(feedsViewModel.msgState[0])
@@ -66,7 +66,7 @@ fun FeedScreenInMain(
 @Composable
 internal fun FeedInMain(
     tag              : String          = "__MainFeed",
-    uiState          : FeedUiState     = FeedUiState.Loading,
+    uiState          : FeedLoadingUiState     = FeedLoadingUiState.Loading,
     feedScreenState  : FeedScreenState = rememberFeedScreenState(),
     pageScrollable   : Boolean         = true,
     scrollEnabled    : Boolean         = true,
@@ -90,6 +90,6 @@ internal fun FeedInMain(
 @Composable
 fun PreviewMainFeedScreen() {
     FeedInMain(/*Preview*/
-        uiState = FeedUiState.Success(list = listOf(Feed.Sample,Feed.Sample,Feed.Sample,Feed.Sample,Feed.Sample,Feed.Sample))
+        uiState = FeedLoadingUiState.Success
     )
 }

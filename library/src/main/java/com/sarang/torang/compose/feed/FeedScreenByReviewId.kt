@@ -10,7 +10,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
@@ -25,7 +24,7 @@ import com.sarang.torang.compose.feed.type.FeedTypeData
 import com.sarang.torang.compose.feed.type.LocalFeedCompose
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.data.feed.adjustHeight
-import com.sarang.torang.uistate.FeedUiState
+import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.viewmodels.MyFeedsViewModel
 
 // formatter : off
@@ -41,7 +40,7 @@ fun FeedScreenByReviewId(
     onBack: (() -> Unit)? = null,
     pageScrollable: Boolean = true
 ) {
-    val uiState: FeedUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
+    val uiState: FeedLoadingUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
     val screenHeightDp = LocalConfiguration.current.screenHeightDp
     val screenWidthDp = LocalConfiguration.current.screenWidthDp
     val density = LocalDensity.current
@@ -83,7 +82,7 @@ fun FeedScreenByReviewId(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun FeedsByReviewId(
-    uiState: FeedUiState,
+    uiState: FeedLoadingUiState,
     onBack: (() -> Unit)? = null,
     onRefresh: (() -> Unit),/*base feed 에서 제공*/
     onBottom: (() -> Unit),/*base feed 에서 제공*/
@@ -113,7 +112,7 @@ internal fun FeedsByReviewId(
 fun PreviewMyFeedScreen() {
     FeedsByReviewId(
         /*Preview*/
-        uiState = FeedUiState.Loading,
+        uiState = FeedLoadingUiState.Loading,
         onRefresh = {},
         onBottom = {},
         feed = { _ -> },

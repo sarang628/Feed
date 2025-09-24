@@ -1,29 +1,21 @@
 package com.sarang.torang.viewmodels
 
 import android.util.Log
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sarang.torang.data.feed.Feed
+import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.usecase.ClickFavorityUseCase
 import com.sarang.torang.usecase.ClickLikeUseCase
 import com.sarang.torang.usecase.FeedWithPageUseCase
 import com.sarang.torang.usecase.GetFeedFlowUseCase
-import com.sarang.torang.usecase.IsLoginFlowForFeedUseCase
+import com.sarang.torang.usecase.GetFeedLodingFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.net.ConnectException
 import javax.inject.Inject
@@ -33,13 +25,14 @@ open class FeedsViewModel @Inject constructor(
     val feedWithPageUseCase: FeedWithPageUseCase,
     val clickLikeUseCase: ClickLikeUseCase,
     val clickFavoriteUseCase: ClickFavorityUseCase,
+    getLoadingFeedFlowUseCase: GetFeedLodingFlowUseCase,
     getFeedFlowUseCase: GetFeedFlowUseCase,
-    isLoginFlowUseCase: IsLoginFlowForFeedUseCase,
 ) : ViewModel() {
     private val tag = "__FeedsViewModel"
     private var page = 0
 
-    open val uiState: StateFlow<FeedUiState> = getFeedFlowUseCase.invoke(viewModelScope)
+    open val uiState: StateFlow<FeedLoadingUiState> = getLoadingFeedFlowUseCase.invoke(viewModelScope)
+    open val feedUiState: StateFlow<FeedUiState> = getFeedFlowUseCase.invoke(viewModelScope)
     var msgState : List<String> by mutableStateOf(listOf()); private set
     var focusedIndexState by mutableIntStateOf(0); private set
     var isRefreshingState by mutableStateOf(false);
@@ -71,7 +64,7 @@ open class FeedsViewModel @Inject constructor(
     internal fun onFavorite(reviewId: Int) {
         viewModelScope.launch {
             try {
-                if (uiState.isLogin) { clickFavoriteUseCase.invoke(reviewId) }
+                if (feedUiState.value.isLogin) { clickFavoriteUseCase.invoke(reviewId) }
                 else{ throw Exception("로그인을 해주세요.") }
             }
             catch (e: Exception) { handleErrorMsg(e) }
@@ -82,7 +75,7 @@ open class FeedsViewModel @Inject constructor(
     internal fun onLike(reviewId: Int) {
         viewModelScope.launch {
             try {
-                if (uiState.isLogin) { clickLikeUseCase.invoke(reviewId) }
+                if (feedUiState.value.isLogin) { clickLikeUseCase.invoke(reviewId) }
                 else{ throw Exception("로그인을 해주세요.") }
             }
             catch (e: Exception) { handleErrorMsg(e) }
@@ -113,12 +106,4 @@ open class FeedsViewModel @Inject constructor(
         if (msgState.isNotEmpty())
             msgState = msgState.drop(0)
     }
-}
-
-val StateFlow<FeedUiState>.isLogin : Boolean get() = when(this.value){
-    FeedUiState.Empty -> false
-    is FeedUiState.Error -> false
-    FeedUiState.Loading -> false
-    FeedUiState.Reconnect -> false
-    is FeedUiState.Success -> (this.value as FeedUiState.Success).isLogin
 }

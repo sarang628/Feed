@@ -6,11 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.BottomSheetScaffold
@@ -32,7 +30,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
@@ -66,7 +63,7 @@ import com.sarang.torang.test.TestBasic
 import com.sarang.torang.test.TestFeedScreenByRestaurantId
 import com.sarang.torang.test.TestPinchZoom
 import com.sarang.torang.test.TestUserFeedByReviewIdScreen
-import com.sarang.torang.uistate.FeedUiState
+import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sryang.torang.ui.TorangTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -229,7 +226,7 @@ fun FeedScreenSuccessPreview1() {
 @Composable
 fun Test1(feedScreenState: FeedScreenState = rememberFeedScreenState()) {
     val scope = rememberCoroutineScope()
-    var uiState: FeedUiState by remember { mutableStateOf(FeedUiState.Loading) }
+    var uiState: FeedLoadingUiState by remember { mutableStateOf(FeedLoadingUiState.Loading) }
     val scaffoldState = rememberBottomSheetScaffoldState()
     CompositionLocalProvider(
         LocalFeedCompose provides CustomFeedCompose,
@@ -246,22 +243,13 @@ fun Test1(feedScreenState: FeedScreenState = rememberFeedScreenState()) {
                             scope.launch { feedScreenState.onTop() }
                             scope.launch { feedScreenState.showSnackBar("click on top") }
                         },
-                        onLoading = { uiState = FeedUiState.Loading },
+                        onLoading = { uiState = FeedLoadingUiState.Loading },
                         onSuccess = {
-                            uiState = FeedUiState.Success(
-                                listOf(
-                                    Feed.Sample,
-                                    Feed.Sample,
-                                    Feed.Sample,
-                                    Feed.Sample,
-                                    Feed.Sample,
-                                    Feed.Sample
-                                )
-                            )
+                            uiState = FeedLoadingUiState.Success
                         },
-                        onError = { uiState = FeedUiState.Error("error") },
-                        onEmpty = { uiState = FeedUiState.Empty },
-                        onReconnect = { uiState = FeedUiState.Reconnect },
+                        onError = { uiState = FeedLoadingUiState.Error("error") },
+                        onEmpty = { uiState = FeedLoadingUiState.Empty },
+                        onReconnect = { uiState = FeedLoadingUiState.Reconnect },
                         onRefresh = {
                             when (feedScreenState.pullToRefreshLayoutState.refreshIndicatorState.value) {
                                 RefreshIndicatorState.Default -> feedScreenState.refresh(true)

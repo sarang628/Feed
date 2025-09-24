@@ -35,6 +35,8 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarang.torang.compose.feed.component.EmptyFeed
 import com.sarang.torang.compose.feed.component.FeedShimmer
 import com.sarang.torang.compose.feed.component.FeedTopAppBar
@@ -44,8 +46,9 @@ import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.compose.feed.type.FeedTypeData
 import com.sarang.torang.compose.feed.type.LocalFeedCompose
 import com.sarang.torang.data.feed.Feed
-import com.sarang.torang.uistate.FeedUiState
+import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.uistate.imageHeight
+import com.sarang.torang.viewmodels.FeedsViewModel
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -68,7 +71,7 @@ fun FeedScreen(
     modifier            :Modifier               = Modifier,
     feedScreenState     :FeedScreenState        = rememberFeedScreenState(),
     tag                 :String                 = "__FeedScreen",
-    uiState             :FeedUiState            = FeedUiState.Loading,
+    uiState             :FeedLoadingUiState            = FeedLoadingUiState.Loading,
     topAppBar           :@Composable () -> Unit = {},
     onBackToTop         :Boolean                = true,
     scrollEnabled       :Boolean                = true,
@@ -91,15 +94,15 @@ fun FeedScreen(
             AnimatedContent(
                 targetState = uiState,
                 transitionSpec = { fadeIn(tween(800)) with fadeOut(tween(800)) }
-            ) { state ->
-                when (state) {
-                    FeedUiState.Loading -> FeedShimmer(
+            ) { uiState ->
+                when (uiState) {
+                    FeedLoadingUiState.Loading -> FeedShimmer(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(8.dp)
                     )
 
-                    is FeedUiState.Empty -> RefreshAndBottomDetectionLazyColumn(
+                    is FeedLoadingUiState.Empty -> RefreshAndBottomDetectionLazyColumn(
                         modifier = Modifier.padding(it),
                         listState = feedScreenState.listState,
                         pullToRefreshLayoutState = feedScreenState.pullToRefreshLayoutState,
@@ -109,17 +112,15 @@ fun FeedScreen(
                         itemCompose = {Box(Modifier.height(1000.dp).fillMaxWidth()){} }
                     )
 
-                    is FeedUiState.Success -> FeedSuccess(
+                    is FeedLoadingUiState.Success -> FeedSuccess(
                         modifier = modifier.padding(it),
                         feedScreenState = feedScreenState,
                         scrollEnabled = scrollEnabled,
-                        uiState = state,
                         feedCallBack = feedCallBack,
                         pageScrollable = pageScrollable,
-                        isLogin = state.isLogin
                     )
 
-                    FeedUiState.Reconnect ->
+                    FeedLoadingUiState.Reconnect ->
                         RefreshAndBottomDetectionLazyColumn(
                             listState = feedScreenState.listState,
                             pullToRefreshLayoutState = feedScreenState.pullToRefreshLayoutState,
@@ -136,7 +137,7 @@ fun FeedScreen(
                             }
                         )
 
-                    is FeedUiState.Error -> {
+                    is FeedLoadingUiState.Error -> {
 
                     }
                 }
@@ -148,14 +149,14 @@ fun FeedScreen(
 @Composable
 private fun FeedSuccess(
     modifier: Modifier = Modifier,
+    viewModel : FeedsViewModel = hiltViewModel(),
     tag: String = "__FeedSuccess",
-    uiState: FeedUiState.Success = FeedUiState.Success(listOf()),
     scrollEnabled: Boolean = true,
     feedScreenState: FeedScreenState = rememberFeedScreenState(),
     feedCallBack: FeedCallBack = FeedCallBack(tag = tag),
     pageScrollable: Boolean = true,
-    isLogin: Boolean = false
 ) {
+    val uiState by viewModel.feedUiState.collectAsStateWithLifecycle()
     RefreshAndBottomDetectionLazyColumn(
         modifier = modifier,
         count = uiState.list.size,
@@ -239,7 +240,7 @@ data class FeedCallBack(
 @Composable
 fun FeedScreenLoadingPreview() {
     FeedScreen(/*Preview*/
-        uiState = FeedUiState.Loading)
+        uiState = FeedLoadingUiState.Loading)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -247,7 +248,7 @@ fun FeedScreenLoadingPreview() {
 @Composable
 fun FeedScreenEmptyPreview() {
     FeedScreen(/*Preview*/
-        uiState = FeedUiState.Empty)
+        uiState = FeedLoadingUiState.Empty)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -255,11 +256,7 @@ fun FeedScreenEmptyPreview() {
 @Composable
 fun FeedScreenSuccessPreview() {
     FeedScreen(/*Preview*/
-        uiState = FeedUiState.Success(
-            list = listOf(
-                Feed.Sample, Feed.Sample, Feed.Sample, Feed.Sample, Feed.Sample, Feed.Sample, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty
-            )
-        ),
+        uiState = FeedLoadingUiState.Success,
         topAppBar = { FeedTopAppBar() }
     )
 }
@@ -267,11 +264,11 @@ fun FeedScreenSuccessPreview() {
 @Preview(backgroundColor = 0xFFFDFDF6, showBackground = true)
 @Composable
 fun TransitionPreview(){
-    var uiState : FeedUiState by remember { mutableStateOf(FeedUiState.Loading) }
+    var uiState : FeedLoadingUiState by remember { mutableStateOf(FeedLoadingUiState.Loading) }
 
     LaunchedEffect(uiState) {
         delay(1000)
-        uiState = FeedUiState.Success(listOf(Feed.Sample,Feed.Sample,Feed.Sample))
+        uiState = FeedLoadingUiState.Success
     }
 
     FeedScreen(/*Preview*/
@@ -282,5 +279,5 @@ fun TransitionPreview(){
 @Composable
 fun PreviewReconnect(){
     FeedScreen(/*Preview*/
-        uiState = FeedUiState.Reconnect)
+        uiState = FeedLoadingUiState.Reconnect)
 }

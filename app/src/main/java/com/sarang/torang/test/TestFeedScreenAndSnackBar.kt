@@ -13,13 +13,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.sarang.torang.compose.feed.FeedScreen
-import com.sarang.torang.uistate.FeedUiState
+import com.sarang.torang.uistate.FeedLoadingUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TestFeedScreenAndSnackBar() {
     var errorMsg: String? by remember { mutableStateOf(null) }
-    var feedUiState: FeedUiState by remember { mutableStateOf(FeedUiState.Empty) }
+    var feedUiState: FeedLoadingUiState by remember { mutableStateOf(FeedLoadingUiState.Empty) }
     val coroutine = rememberCoroutineScope()
 
     Box {
@@ -32,7 +32,7 @@ fun TestFeedScreenAndSnackBar() {
                 onValueChange = { errorMsg = it },
                 placeholder = { Text("write error message.") })
             Button(onClick = {
-                feedUiState = FeedUiState.Error(errorMsg)
+                feedUiState = FeedLoadingUiState.Error(errorMsg)
             }) { Text("set") }
         }
     }
