@@ -48,8 +48,6 @@ fun FeedScreenInMain(
         onBottom = { feedsViewModel.onBottom() },
         onRefresh = { feedsViewModel.refreshFeed(); },
         onFocusItemIndex = { feedsViewModel.onFocusItemIndex(it) },
-        onLike = { feedsViewModel.onLike(it) },
-        onFavorite = { feedsViewModel.onFavorite(it) },
         onVideoClick = { feedsViewModel.onVideoClick(it) },
         onConnect = { feedsViewModel.refreshFeed() }),
         onAlarm = onAlarm,

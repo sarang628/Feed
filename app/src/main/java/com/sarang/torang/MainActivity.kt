@@ -8,26 +8,18 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.AssistChip
-import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,19 +27,19 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.sarang.torang.compose.feed.FeedCallBack
-import com.sarang.torang.compose.feed.FeedScreen
+import com.sarang.torang.compose.feed.FeedItem
+import com.sarang.torang.compose.feed.FeedItemClickEvents
 import com.sarang.torang.compose.feed.FeedScreenInMain
 import com.sarang.torang.compose.feed.FeedScreenSuccessPreview
-import com.sarang.torang.compose.feed.type.LocalPullToRefreshLayoutType
-import com.sarang.torang.compose.feed.state.rememberFeedScreenState
+import com.sarang.torang.compose.feed.FeedListScreen
 import com.sarang.torang.compose.feed.internal.components.LocalExpandableTextType
 import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
-import com.sarang.torang.compose.feed.state.FeedScreenState
-import com.sarang.torang.compose.feed.state.RefreshIndicatorState
+import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.compose.feed.type.LocalBottomDetectingLazyColumnType
 import com.sarang.torang.compose.feed.type.LocalFeedCompose
-import com.sarang.torang.data.feed.Feed
+import com.sarang.torang.compose.feed.type.LocalPullToRefreshLayoutType
+import com.sarang.torang.data.basefeed.FeedItemUiState
+import com.sarang.torang.data.basefeed.Sample
 import com.sarang.torang.di.basefeed_di.CustomExpandableTextType
 import com.sarang.torang.di.basefeed_di.CustomFeedImageLoader
 import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
@@ -59,14 +51,13 @@ import com.sarang.torang.repository.LoginRepositoryTest
 import com.sarang.torang.repository.ProfileRepository
 import com.sarang.torang.repository.ProfileRepositoryTest
 import com.sarang.torang.repository.test.FeedRepositoryTest
+import com.sarang.torang.test.FeedScreenTest
 import com.sarang.torang.test.TestBasic
 import com.sarang.torang.test.TestFeedScreenByRestaurantId
 import com.sarang.torang.test.TestPinchZoom
 import com.sarang.torang.test.TestUserFeedByReviewIdScreen
-import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sryang.torang.ui.TorangTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -121,14 +112,22 @@ class MainActivity : ComponentActivity() {
         ) {
             composable("Menu") {
                 Menu(
-                    onFeedScreen = { navController.navigate("feedScreen") },
+                    onFeedScreen = { navController.navigate("FeedScreenTest") },
                     onLoginRepository = { navController.navigate("LoginRepositoryTest") },
                     onFeedScreenInMain = { navController.navigate("FeedScreenInMain") },
+                    onFeed = { navController.navigate("FeedTest") },
+                    onFeedSuccess = { navController.navigate("FeedSuccessTest") }
                 )
             }
             //TestBasic()
-            composable("feedScreen") {
-                Test1()
+            composable("FeedScreenTest") {
+                FeedScreenTest()
+            }
+            composable("FeedTest") {
+                FeedTest()
+            }
+            composable("FeedSuccessTest"){
+                FeedListScreen()
             }
             //TestPinchZoom()
             //FeedScreenEmptyPreview()
@@ -192,21 +191,19 @@ fun Menu(
     onFeedScreen: () -> Unit = {},
     onLoginRepository: () -> Unit = {},
     onFeedScreenInMain: () -> Unit = {},
+    onFeed: () -> Unit = {},
+    onFeedSuccess: () -> Unit = {},
 ) {
     Column {
-        Button(onFeedScreen) {
-            Text("FeedScreen")
-        }
-        Button(onLoginRepository) {
-            Text("LoginRepository")
-        }
-        Button(onFeedScreenInMain) {
-            Text("FeedScreenInMain")
-        }
+        Button(onFeedScreen) { Text("FeedScreen") }
+        Button(onLoginRepository) { Text("LoginRepository") }
+        Button(onFeedScreenInMain) { Text("FeedScreenInMain") }
+        Button(onFeed) { Text("Feed") }
+        Button(onFeedSuccess) { Text("FeedSuccess") }
     }
 }
 
-@Preview()
+@Preview
 @Composable
 fun FeedScreenSuccessPreview1() {
     CompositionLocalProvider(
@@ -221,61 +218,18 @@ fun FeedScreenSuccessPreview1() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-fun Test1(feedScreenState: FeedScreenState = rememberFeedScreenState()) {
-    val scope = rememberCoroutineScope()
-    var uiState: FeedLoadingUiState by remember { mutableStateOf(FeedLoadingUiState.Loading) }
-    val scaffoldState = rememberBottomSheetScaffoldState()
+fun FeedTest(){
+    var isLike by remember { mutableStateOf(true) }
     CompositionLocalProvider(
         LocalFeedCompose provides CustomFeedCompose,
         LocalPullToRefreshLayoutType provides customPullToRefresh,
         LocalExpandableTextType provides CustomExpandableTextType,
         LocalFeedImageLoader provides CustomFeedImageLoader
     ) {
-        TorangTheme {
-            BottomSheetScaffold(
-                scaffoldState = scaffoldState,
-                sheetContent = {
-                    OperationButtons(
-                        onTop = {
-                            scope.launch { feedScreenState.onTop() }
-                            scope.launch { feedScreenState.showSnackBar("click on top") }
-                        },
-                        onLoading = { uiState = FeedLoadingUiState.Loading },
-                        onSuccess = {
-                            uiState = FeedLoadingUiState.Success
-                        },
-                        onError = { uiState = FeedLoadingUiState.Error("error") },
-                        onEmpty = { uiState = FeedLoadingUiState.Empty },
-                        onReconnect = { uiState = FeedLoadingUiState.Reconnect },
-                        onRefresh = {
-                            when (feedScreenState.pullToRefreshLayoutState.refreshIndicatorState.value) {
-                                RefreshIndicatorState.Default -> feedScreenState.refresh(true)
-                                else -> feedScreenState.refresh(false)
-                            }
-                        }
-                    )
-                }, sheetPeekHeight = 0.dp
-            ) {
-                Scaffold(
-                    floatingActionButton = {
-                        FloatingActionButton({
-                            scope.launch { scaffoldState.bottomSheetState.expand() }
-                        }) { Icon(Icons.Default.Menu, contentDescription = null) }
-                    }
-                ) {
-                    FeedScreen(
-                        modifier = Modifier.padding(it),
-                        uiState = uiState,
-                        feedScreenState = feedScreenState,
-                        feedCallBack = FeedCallBack(
-                            onConnect = { feedScreenState.refresh(true) }
-                        )
-                    )
-                }
-            }
-        }
+        FeedItem(uiState = FeedItemUiState.Sample.copy(isLike = isLike, isLogin = true), feedItemClickEvents = FeedItemClickEvents(
+            onLike = { isLike = !isLike }
+        ))
     }
 }

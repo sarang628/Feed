@@ -45,7 +45,6 @@ import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.compose.feed.type.FeedTypeData
 import com.sarang.torang.compose.feed.type.LocalFeedCompose
-import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.uistate.imageHeight
 import com.sarang.torang.viewmodels.FeedsViewModel
@@ -109,10 +108,12 @@ fun FeedScreen(
                         onRefresh = feedCallBack.onRefresh,
                         content = { EmptyFeed() },
                         count = 1,
-                        itemCompose = {Box(Modifier.height(1000.dp).fillMaxWidth()){} }
+                        itemCompose = {Box(Modifier
+                            .height(1000.dp)
+                            .fillMaxWidth()){} }
                     )
 
-                    is FeedLoadingUiState.Success -> FeedSuccess(
+                    is FeedLoadingUiState.Success -> FeedListScreen(
                         modifier = modifier.padding(it),
                         feedScreenState = feedScreenState,
                         scrollEnabled = scrollEnabled,
@@ -147,7 +148,7 @@ fun FeedScreen(
 }
 
 @Composable
-private fun FeedSuccess(
+fun FeedListScreen(
     modifier: Modifier = Modifier,
     viewModel : FeedsViewModel = hiltViewModel(),
     tag: String = "__FeedSuccess",
@@ -169,15 +170,16 @@ private fun FeedSuccess(
         LocalFeedCompose.current.invoke(
             FeedTypeData(
                 feed = uiState.list[it],
-                onLike = feedCallBack.onLike,
-                onFavorite = feedCallBack.onFavorite,
+                onLike = { viewModel.onLike(it) },
+                onFavorite = { viewModel.onFavorite(it) },
                 onVideoClick = { feedCallBack.onVideoClick.invoke(uiState.list[it].reviewId) },
                 imageHeight = uiState.imageHeight(
                     density = LocalDensity.current,
                     screenWidthDp = LocalConfiguration.current.screenWidthDp,
                     screenHeightDp = LocalConfiguration.current.screenHeightDp
                 ),
-                pageScrollable = pageScrollable
+                pageScrollable = pageScrollable,
+                isLogin = uiState.isLogin
             )
         )
     }
@@ -227,8 +229,6 @@ private fun HandleBack(listState: LazyListState, onBackToTop: Boolean) {
 data class FeedCallBack(
     val tag: String = "",
     val onRefresh: () -> Unit = { Log.i(tag, "onRefresh is not set") },
-    val onLike: (Int) -> Unit = { Log.i(tag, "onLike is not set") },
-    val onFavorite: (Int) -> Unit = { Log.i(tag, "onFavorite is not set") },
     val onVideoClick: (Int) -> Unit = { Log.i(tag, "onVideoClick is not set") },
     val onBottom: () -> Unit = { Log.i(tag, "onBottom is not set") },
     val onFocusItemIndex: (Int) -> Unit = { Log.i(tag, "onFocusItemIndex is not set") },
