@@ -16,13 +16,10 @@ import com.sarang.torang.viewmodels.FeedScreenByRestaurantIdViewModel
 fun FeedScreenByRestaurantId(
     feedsViewModel: FeedScreenByRestaurantIdViewModel = hiltViewModel(),
     restaurantId: Int,
-    onTop: Boolean = false,
-    consumeOnTop: (() -> Unit)? = null,
     pageScrollable : Boolean = true,
     feedScreenState: FeedScreenState = rememberFeedScreenState()
 ) {
     val uiState: FeedLoadingUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
-    val isRefreshing: Boolean = feedsViewModel.isRefreshingState
 
     LaunchedEffect(key1 = restaurantId) {
         feedsViewModel.getFeedByRestaurantId(restaurantId)
