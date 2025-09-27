@@ -46,6 +46,7 @@ import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.compose.feed.type.FeedTypeData
 import com.sarang.torang.compose.feed.type.LocalFeedCompose
 import com.sarang.torang.uistate.FeedLoadingUiState
+import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.uistate.imageHeight
 import com.sarang.torang.viewmodels.FeedsViewModel
 import kotlinx.coroutines.android.awaitFrame
@@ -71,6 +72,7 @@ fun FeedScreen(
     feedScreenState     :FeedScreenState        = rememberFeedScreenState(),
     tag                 :String                 = "__FeedScreen",
     uiState             :FeedLoadingUiState     = FeedLoadingUiState.Loading,
+    feedUiState         : FeedUiState           = FeedUiState(),
     topAppBar           :@Composable () -> Unit = {},
     onBackToTop         :Boolean                = true,
     scrollEnabled       :Boolean                = true,
@@ -115,6 +117,7 @@ fun FeedScreen(
 
                     is FeedLoadingUiState.Success -> FeedListScreen(
                         modifier = modifier.padding(it),
+                        uiState = feedUiState,
                         feedScreenState = feedScreenState,
                         scrollEnabled = scrollEnabled,
                         feedCallBack = feedCallBack,
@@ -150,14 +153,13 @@ fun FeedScreen(
 @Composable
 fun FeedListScreen(
     modifier: Modifier = Modifier,
-    viewModel : FeedsViewModel = hiltViewModel(),
+    uiState: FeedUiState = FeedUiState(),
     tag: String = "__FeedSuccess",
     scrollEnabled: Boolean = true,
     feedScreenState: FeedScreenState = rememberFeedScreenState(),
     feedCallBack: FeedCallBack = FeedCallBack(tag = tag),
     pageScrollable: Boolean = true,
 ) {
-    val uiState by viewModel.feedUiState.collectAsStateWithLifecycle()
     RefreshAndBottomDetectionLazyColumn(
         modifier = modifier,
         count = uiState.list.size,
@@ -170,8 +172,8 @@ fun FeedListScreen(
         LocalFeedCompose.current.invoke(
             FeedTypeData(
                 feed = uiState.list[it],
-                onLike = { viewModel.onLike(it) },
-                onFavorite = { viewModel.onFavorite(it) },
+                onLike = feedCallBack.onLike,
+                onFavorite = feedCallBack.onFavorite,
                 onVideoClick = { feedCallBack.onVideoClick.invoke(uiState.list[it].reviewId) },
                 imageHeight = uiState.imageHeight(
                     density = LocalDensity.current,
@@ -227,12 +229,14 @@ private fun HandleBack(listState: LazyListState, onBackToTop: Boolean) {
 }
 
 data class FeedCallBack(
-    val tag: String = "",
-    val onRefresh: () -> Unit = { Log.i(tag, "onRefresh is not set") },
-    val onVideoClick: (Int) -> Unit = { Log.i(tag, "onVideoClick is not set") },
-    val onBottom: () -> Unit = { Log.i(tag, "onBottom is not set") },
-    val onFocusItemIndex: (Int) -> Unit = { Log.i(tag, "onFocusItemIndex is not set") },
-    val onConnect: () -> Unit = { Log.i(tag, "onConnect is not set") }
+    val tag                 : String        = "__FeedCallBack",
+    val onRefresh           : () -> Unit    = { Log.i(tag, "onRefresh is not set") },
+    val onVideoClick        : (Int) -> Unit = { Log.i(tag, "onVideoClick is not set") },
+    val onBottom            : () -> Unit    = { Log.i(tag, "onBottom is not set") },
+    val onFocusItemIndex    : (Int) -> Unit = { Log.i(tag, "onFocusItemIndex is not set") },
+    val onConnect           : () -> Unit    = { Log.i(tag, "onConnect is not set") },
+    val onLike              : (Int) -> Unit = { Log.i(tag, "onLike is not set") },
+    val onFavorite          : (Int) -> Unit = { Log.i(tag, "onFavorite is not set") }
 )
 
 @OptIn(ExperimentalMaterial3Api::class)

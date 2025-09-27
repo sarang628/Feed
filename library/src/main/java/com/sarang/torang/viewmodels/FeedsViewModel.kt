@@ -29,7 +29,7 @@ open class FeedsViewModel @Inject constructor(
     getFeedFlowUseCase: GetFeedFlowUseCase,
 ) : ViewModel() {
     private val tag = "__FeedsViewModel"
-    private var page = 0
+    internal var page = 0
 
     open val uiState: StateFlow<FeedLoadingUiState> = getLoadingFeedFlowUseCase.invoke(viewModelScope)
     open val feedUiState: StateFlow<FeedUiState> = getFeedFlowUseCase.invoke(viewModelScope)
@@ -41,13 +41,6 @@ open class FeedsViewModel @Inject constructor(
     private fun handleErrorMsg(e: Exception) { e.message?.let{showError(it)} }
     private fun showError(msg: String) { this.msgState = this.msgState + msg }
     fun onFocusItemIndex(index: Int) { focusedIndexState = index }
-
-    init {
-        viewModelScope.launch {
-            feedWithPageUseCase.invoke(0)
-            page = 1
-        }
-    }
 
     // 피드 리스트 갱신
     open fun refreshFeed() {

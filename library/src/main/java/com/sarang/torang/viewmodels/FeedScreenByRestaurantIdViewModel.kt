@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedLoadingUiState
+import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.usecase.ClickFavorityUseCase
 import com.sarang.torang.usecase.ClickLikeUseCase
 import com.sarang.torang.usecase.FeedWithPageUseCase
@@ -44,19 +45,31 @@ class FeedScreenByRestaurantIdViewModel @Inject constructor(
     getFeedLoadingFlowUseCase,
     getFeedFlowUseCase
 ) {
-
+    private val tag = "__FeedScreenByRestaurantIdViewModel"
     private val _restaurantIdState = MutableStateFlow<Int?>(null)
+
+    init {
+        //초기화를 안하면 부모에서 첫 페이지를 로드하며 피드를 모두 지움
+    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override val uiState: StateFlow<FeedLoadingUiState> =
     _restaurantIdState
-        .flatMapLatest{ restaurantId ->
-            getFeedByRestaurantIdFlowUseCase.invoke(restaurantId)
-        }.map { FeedLoadingUiState.Success }
+        .flatMapLatest{ restaurantId -> getFeedByRestaurantIdFlowUseCase.invoke(restaurantId) }
+        .map { FeedLoadingUiState.Success }
         .onStart { FeedLoadingUiState.Loading }
         .stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(5_000), initialValue = FeedLoadingUiState.Loading)
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val feedUiState: StateFlow<FeedUiState> =
+        _restaurantIdState
+            .flatMapLatest{ restaurantId -> getFeedByRestaurantIdFlowUseCase.invoke(restaurantId) }
+            .onStart { FeedUiState() }
+            .stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(5_000), initialValue = FeedUiState())
+
+
     fun getFeedByRestaurantId(restaurantId: Int) {
+        Log.d(tag, "getFeedByRestaurantId : $restaurantId")
         _restaurantIdState.value = restaurantId
         viewModelScope.launch {
             findFeedByRestaurantIdFlowUseCase.invoke(restaurantId)
@@ -78,6 +91,6 @@ class FeedScreenByRestaurantIdViewModel @Inject constructor(
     }
 
     override fun onBottom() {
-        Log.d("__FeedScreenByRestaurantIdViewModel", "onBottom called but nothing to do")
+        Log.d(tag, "onBottom called but nothing to do")
     }
 }

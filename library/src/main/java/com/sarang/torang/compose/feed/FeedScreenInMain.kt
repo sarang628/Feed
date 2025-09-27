@@ -19,19 +19,23 @@ import com.sarang.torang.compose.feed.component.FeedTopAppBar
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedLoadingUiState
+import com.sarang.torang.uistate.FeedUiState
+import com.sarang.torang.viewmodels.FeedScreenInMainViewModel
 import com.sarang.torang.viewmodels.FeedsViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedScreenInMain(
-    tag             : String            = "__FeedScreenForMain",
-    feedsViewModel  : FeedsViewModel    = hiltViewModel(),
-    feedScreenState : FeedScreenState   = rememberFeedScreenState(),
-    onAddReview     : () -> Unit        = { Log.w(tag, "onAddReview is not implemented") },
-    onAlarm         : () -> Unit        = { Log.w(tag, "onAlarm is not implemented") },
-    scrollEnabled   : Boolean           = true,
-    pageScrollable  : Boolean           = true
+    tag             : String                        = "__FeedScreenForMain",
+    feedsViewModel  : FeedScreenInMainViewModel     = hiltViewModel(),
+    feedScreenState : FeedScreenState               = rememberFeedScreenState(),
+    onAddReview     : () -> Unit                    = { Log.w(tag, "onAddReview is not implemented") },
+    onAlarm         : () -> Unit                    = { Log.w(tag, "onAlarm is not implemented") },
+    scrollEnabled   : Boolean                       = true,
+    pageScrollable  : Boolean                       = true
 ) {
     val uiState: FeedLoadingUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
+    val feedUiState: FeedUiState by feedsViewModel.feedUiState.collectAsStateWithLifecycle()
     LaunchedEffect(feedsViewModel.msgState) {
         if (feedsViewModel.msgState.isNotEmpty()) {
             feedScreenState.showSnackBar(feedsViewModel.msgState[0])
@@ -40,54 +44,23 @@ fun FeedScreenInMain(
     }
     LaunchedEffect(feedsViewModel.isRefreshingState) { feedScreenState.refresh(feedsViewModel.isRefreshingState) }
 
-    FeedInMain(
-        uiState = uiState,
-        feedScreenState = feedScreenState,
-        onAddReview = onAddReview,
-        feedCallBack = FeedCallBack(
-        onBottom = { feedsViewModel.onBottom() },
-        onRefresh = { feedsViewModel.refreshFeed(); },
-        onFocusItemIndex = { feedsViewModel.onFocusItemIndex(it) },
-        onVideoClick = { feedsViewModel.onVideoClick(it) },
-        onConnect = { feedsViewModel.refreshFeed() }),
-        onAlarm = onAlarm,
-        scrollEnabled = scrollEnabled,
-        pageScrollable = pageScrollable
-    )
-}
-
-/**
- * Main 용 FeedScreen
- * 상단에 TopAppBar와 스크롤 시 상호작용 하는 기능이 적용 됨.
- */
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-internal fun FeedInMain(
-    tag              : String          = "__MainFeed",
-    uiState          : FeedLoadingUiState     = FeedLoadingUiState.Loading,
-    feedScreenState  : FeedScreenState = rememberFeedScreenState(),
-    pageScrollable   : Boolean         = true,
-    scrollEnabled    : Boolean         = true,
-    feedCallBack     : FeedCallBack    = FeedCallBack(),
-    onAddReview      : () -> Unit      = { Log.i(tag, "onAddReview is not implemented") },
-    onAlarm          : () -> Unit      = { Log.i(tag, "onAlarm is not implemented") },
-) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     FeedScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         uiState = uiState,
+        feedUiState = feedUiState,
         feedScreenState = feedScreenState,
-        feedCallBack = feedCallBack,
+        feedCallBack = FeedCallBack(
+            onBottom = { feedsViewModel.onBottom() },
+            onRefresh = { feedsViewModel.refreshFeed(); },
+            onFocusItemIndex = { feedsViewModel.onFocusItemIndex(it) },
+            onVideoClick = { feedsViewModel.onVideoClick(it) },
+            onConnect = { feedsViewModel.refreshFeed() },
+            onLike = {feedsViewModel.onLike(it)},
+            onFavorite = {feedsViewModel.onFavorite(it)}
+        ),
         topAppBar = { FeedTopAppBar(onAddReview = onAddReview, topAppIcon = Icons.AutoMirrored.Default.Send, scrollBehavior = scrollBehavior, onAlarm = onAlarm) },
         scrollEnabled = scrollEnabled,
         pageScrollable = pageScrollable,
-    )
-}
-
-@Preview
-@Composable
-fun PreviewMainFeedScreen() {
-    FeedInMain(/*Preview*/
-        uiState = FeedLoadingUiState.Success
     )
 }
