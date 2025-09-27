@@ -29,11 +29,13 @@ import com.sarang.torang.compose.feed.state.RefreshIndicatorState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.compose.feed.type.LocalFeedCompose
 import com.sarang.torang.compose.feed.type.LocalPullToRefreshLayoutType
+import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.di.basefeed_di.CustomExpandableTextType
 import com.sarang.torang.di.basefeed_di.CustomFeedImageLoader
 import com.sarang.torang.di.feed_di.CustomFeedCompose
 import com.sarang.torang.di.feed_di.customPullToRefresh
 import com.sarang.torang.uistate.FeedLoadingUiState
+import com.sarang.torang.uistate.FeedUiState
 import com.sryang.torang.ui.TorangTheme
 import kotlinx.coroutines.launch
 
@@ -84,7 +86,8 @@ fun FeedScreenTest(feedScreenState: FeedScreenState = rememberFeedScreenState())
                 ) {
                     FeedScreen(
                         modifier = Modifier.padding(it),
-                        uiState = uiState,
+                        feedUiState = FeedUiState(list = listOf(Feed.Sample,Feed.Sample,Feed.Sample,Feed.Sample,Feed.Sample,Feed.Sample), false),
+                        loadingUiState = uiState,
                         feedScreenState = feedScreenState,
                         feedCallBack = FeedCallBack(
                             onConnect = { feedScreenState.refresh(true) }

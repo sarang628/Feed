@@ -11,17 +11,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.component.FeedTopAppBar
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
-import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.FeedScreenInMainViewModel
-import com.sarang.torang.viewmodels.FeedsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,7 +44,7 @@ fun FeedScreenInMain(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     FeedScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        uiState = uiState,
+        loadingUiState = uiState,
         feedUiState = feedUiState,
         feedScreenState = feedScreenState,
         feedCallBack = FeedCallBack(

@@ -33,10 +33,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarang.torang.compose.feed.component.EmptyFeed
 import com.sarang.torang.compose.feed.component.FeedShimmer
 import com.sarang.torang.compose.feed.component.FeedTopAppBar
@@ -48,7 +47,6 @@ import com.sarang.torang.compose.feed.type.LocalFeedCompose
 import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.uistate.imageHeight
-import com.sarang.torang.viewmodels.FeedsViewModel
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -56,7 +54,7 @@ import kotlinx.coroutines.launch
 
 /**
  * 피드 화면
- * @param uiState               uiState
+ * @param loadingUiState               uiState
  * @param topAppBar             상단 앱 바
  * @param onBackToTop           back 이벤트 시 리스트를 최상단으로 올리는 이벤트
  * @param scrollEnabled         리스트 스크롤 가능 여부
@@ -71,7 +69,7 @@ fun FeedScreen(
     modifier            :Modifier               = Modifier,
     feedScreenState     :FeedScreenState        = rememberFeedScreenState(),
     tag                 :String                 = "__FeedScreen",
-    uiState             :FeedLoadingUiState     = FeedLoadingUiState.Loading,
+    loadingUiState      :FeedLoadingUiState     = FeedLoadingUiState.Loading,
     feedUiState         : FeedUiState           = FeedUiState(),
     topAppBar           :@Composable () -> Unit = {},
     onBackToTop         :Boolean                = true,
@@ -83,8 +81,8 @@ fun FeedScreen(
     HandleOnFocusIndex(feedScreenState.listState, feedCallBack.onFocusItemIndex)
     HandleBack(feedScreenState.listState, onBackToTop)
 
-    LaunchedEffect(uiState) {
-        Log.d(tag, "uiState changed : $uiState" )
+    LaunchedEffect(loadingUiState) {
+        Log.d(tag, "uiState changed : $loadingUiState" )
     }
 
     Scaffold(
@@ -93,12 +91,13 @@ fun FeedScreen(
     ) {
         Box {
             AnimatedContent(
-                targetState = uiState,
+                targetState = loadingUiState,
                 transitionSpec = { fadeIn(tween(800)) with fadeOut(tween(800)) }
             ) { uiState ->
                 when (uiState) {
                     FeedLoadingUiState.Loading -> FeedShimmer(
                         modifier = Modifier
+                            .testTag("shimmer")
                             .fillMaxSize()
                             .padding(8.dp)
                     )
@@ -244,7 +243,7 @@ data class FeedCallBack(
 @Composable
 fun FeedScreenLoadingPreview() {
     FeedScreen(/*Preview*/
-        uiState = FeedLoadingUiState.Loading)
+        loadingUiState = FeedLoadingUiState.Loading)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -252,7 +251,7 @@ fun FeedScreenLoadingPreview() {
 @Composable
 fun FeedScreenEmptyPreview() {
     FeedScreen(/*Preview*/
-        uiState = FeedLoadingUiState.Empty)
+        loadingUiState = FeedLoadingUiState.Empty)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -260,7 +259,7 @@ fun FeedScreenEmptyPreview() {
 @Composable
 fun FeedScreenSuccessPreview() {
     FeedScreen(/*Preview*/
-        uiState = FeedLoadingUiState.Success,
+        loadingUiState = FeedLoadingUiState.Success,
         topAppBar = { FeedTopAppBar() }
     )
 }
@@ -276,12 +275,12 @@ fun TransitionPreview(){
     }
 
     FeedScreen(/*Preview*/
-        uiState = uiState)
+        loadingUiState = uiState)
 }
 
 @Preview(backgroundColor = 0xFFFDFDF6, showBackground = true)
 @Composable
 fun PreviewReconnect(){
     FeedScreen(/*Preview*/
-        uiState = FeedLoadingUiState.Reconnect)
+        loadingUiState = FeedLoadingUiState.Reconnect)
 }

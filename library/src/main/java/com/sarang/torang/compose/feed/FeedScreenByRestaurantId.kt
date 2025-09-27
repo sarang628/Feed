@@ -35,7 +35,7 @@ fun FeedScreenByRestaurantId(
     }
 
     FeedScreen(
-        uiState = uiState,
+        loadingUiState = uiState,
         feedUiState = feedUiState,
         feedCallBack = FeedCallBack(
             onRefresh = { feedsViewModel.refreshFeed() },

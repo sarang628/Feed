@@ -90,7 +90,7 @@ internal fun FeedsByReviewId(
     feed: @Composable ((feed: Feed) -> Unit),
 ) {
     FeedScreen(
-        uiState = uiState,
+        loadingUiState = uiState,
         feedScreenState = feedScreenState,
         topAppBar = {
             TopAppBar(
