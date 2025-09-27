@@ -24,7 +24,7 @@ fun TestFeedScreenAndSnackBar() {
 
     Box {
         FeedScreen( //Test
-            uiState = feedUiState
+            loadingUiState = feedUiState
         )
         Row {
             TextField(
