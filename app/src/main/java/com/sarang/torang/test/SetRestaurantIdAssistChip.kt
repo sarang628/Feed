@@ -9,17 +9,13 @@ import androidx.compose.ui.Modifier
 @Composable
 fun SetRestaurantIdAssistChip(
     modifier: Modifier = Modifier,
-    restaurantId: Int,
-    onRestaurantId: (Int) -> Unit
+    restaurantId: String,
+    onRestaurantId: (String) -> Unit
 ) {
     AssistChip(modifier = modifier, onClick = { }, label = {
         Text(text = "restaurantId:")
-        BasicTextField(value = restaurantId.toString(), onValueChange = {
-            try {
-                onRestaurantId.invoke(it.toInt())
-            } catch (e: Exception) {
-
-            }
+        BasicTextField(value = restaurantId, onValueChange = {
+            onRestaurantId.invoke(it)
         })
     })
 }
