@@ -20,7 +20,7 @@ import com.sarang.torang.di.pinchzoom.isZooming
 fun TestPinchZoom() {
     PinchZoomImageBox(provideImageLoader()) { imageLoader, zoomState ->
         CompositionLocalProvider(
-            LocalFeedImageLoader provides { m,url,w,h,scale,s-> imageLoader.invoke(m,url,scale,s) },
+            LocalFeedImageLoader provides { data -> imageLoader.invoke(data.modifier ,data.url ?: "", data.contentScale, data.height) },
             LocalFeedCompose provides CustomFeedCompose,
             LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType,
             LocalPullToRefreshLayoutType provides customPullToRefresh,
