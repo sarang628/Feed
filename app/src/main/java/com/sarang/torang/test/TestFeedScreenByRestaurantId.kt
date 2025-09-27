@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -19,8 +20,9 @@ import com.sarang.torang.di.feed_di.customPullToRefresh
 
 @Composable
 fun TestFeedScreenByRestaurantId(restaurantId: Int) {
-    var restaurantId by remember { mutableIntStateOf(restaurantId) }
-    CompositionLocalProvider(LocalFeedCompose provides CustomFeedCompose,
+    var restaurantId: String by remember { mutableStateOf(restaurantId.toString()) }
+    CompositionLocalProvider(
+        LocalFeedCompose provides CustomFeedCompose,
         LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType,
         LocalPullToRefreshLayoutType provides customPullToRefresh
     ) {
@@ -30,9 +32,15 @@ fun TestFeedScreenByRestaurantId(restaurantId: Int) {
                 restaurantId = restaurantId,
                 { restaurantId = it }
             )
-            FeedScreenByRestaurantId(
-                restaurantId = restaurantId,
-            )
+
+            val restaurantId =  try {
+                restaurantId.toInt()
+            } catch (e: Exception) {
+                -1
+            }
+
+            if (restaurantId > 0)
+                FeedScreenByRestaurantId(restaurantId = restaurantId)
         }
     }
 }
