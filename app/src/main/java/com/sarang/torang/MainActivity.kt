@@ -91,7 +91,6 @@ class MainActivity : ComponentActivity() {
 @Composable fun TestUserFeedByReviewIdScreen_() { TestUserFeedByReviewIdScreen() }
 @Composable fun ProfileRepositoryTest_(profileRepository: ProfileRepository) { ProfileRepositoryTest(profileRepository) }
 @Composable fun FeedRepositoryTest_(feedRepository: FeedRepository) { FeedRepositoryTest(feedRepository) }
-@Composable fun TestFeedScreenByRestaurantId_() { TestFeedScreenByRestaurantId(234) }
 @Composable fun TestBasic_() { TestBasic() }
 @Composable fun TestPinchZoom_() { TestPinchZoom() }
 @OptIn(ExperimentalMaterial3Api::class)
@@ -116,7 +115,8 @@ class MainActivity : ComponentActivity() {
                     onLoginRepository = { navController.navigate("LoginRepositoryTest") },
                     onFeedScreenInMain = { navController.navigate("FeedScreenInMain") },
                     onFeed = { navController.navigate("FeedTest") },
-                    onFeedSuccess = { navController.navigate("FeedSuccessTest") }
+                    onFeedSuccess = { navController.navigate("FeedSuccessTest") },
+                    onFeedScreenByRestaurantId = { navController.navigate("FeedScreenByRestaurantId") }
                 )
             }
             //TestBasic()
@@ -141,6 +141,9 @@ class MainActivity : ComponentActivity() {
             }
             composable("LoginRepositoryTest") {
                 LoginRepositoryTest(loginRepository = loginRepository)
+            }
+            composable("FeedScreenByRestaurantId") {
+                TestFeedScreenByRestaurantId(234)
             }
             //ProfileRepositoryTest(profileRepository = profileRepository)
             //FeedRepositoryTest_(feedRepository = feedRepository)
@@ -193,6 +196,7 @@ fun Menu(
     onFeedScreenInMain: () -> Unit = {},
     onFeed: () -> Unit = {},
     onFeedSuccess: () -> Unit = {},
+    onFeedScreenByRestaurantId: () -> Unit = {},
 ) {
     Column {
         Button(onFeedScreen) { Text("FeedScreen") }
@@ -200,6 +204,7 @@ fun Menu(
         Button(onFeedScreenInMain) { Text("FeedScreenInMain") }
         Button(onFeed) { Text("Feed") }
         Button(onFeedSuccess) { Text("FeedSuccess") }
+        Button(onFeedScreenByRestaurantId) { Text("FeedScreenByRestaurantId") }
     }
 }
 
