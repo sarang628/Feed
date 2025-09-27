@@ -70,7 +70,7 @@ fun FeedScreen(
     modifier            :Modifier               = Modifier,
     feedScreenState     :FeedScreenState        = rememberFeedScreenState(),
     tag                 :String                 = "__FeedScreen",
-    uiState             :FeedLoadingUiState            = FeedLoadingUiState.Loading,
+    uiState             :FeedLoadingUiState     = FeedLoadingUiState.Loading,
     topAppBar           :@Composable () -> Unit = {},
     onBackToTop         :Boolean                = true,
     scrollEnabled       :Boolean                = true,
