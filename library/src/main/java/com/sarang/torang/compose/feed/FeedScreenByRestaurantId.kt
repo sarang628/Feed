@@ -9,6 +9,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.uistate.FeedLoadingUiState
+import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.FeedScreenByRestaurantIdViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -20,6 +21,7 @@ fun FeedScreenByRestaurantId(
     feedScreenState: FeedScreenState = rememberFeedScreenState()
 ) {
     val uiState: FeedLoadingUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
+    val feedUiState: FeedUiState by feedsViewModel.feedUiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = restaurantId) {
         feedsViewModel.getFeedByRestaurantId(restaurantId)
@@ -34,6 +36,7 @@ fun FeedScreenByRestaurantId(
 
     FeedScreen(
         uiState = uiState,
+        feedUiState = feedUiState,
         feedCallBack = FeedCallBack(
             onRefresh = { feedsViewModel.refreshFeed() },
             onBottom = { feedsViewModel.onBottom() },
