@@ -29,9 +29,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sarang.torang.compose.feed.FeedItem
 import com.sarang.torang.compose.feed.FeedItemClickEvents
+import com.sarang.torang.compose.feed.FeedListScreen
 import com.sarang.torang.compose.feed.FeedScreenInMain
 import com.sarang.torang.compose.feed.FeedScreenSuccessPreview
-import com.sarang.torang.compose.feed.FeedListScreen
 import com.sarang.torang.compose.feed.PreviewReconnect
 import com.sarang.torang.compose.feed.internal.components.LocalExpandableTextType
 import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
@@ -108,7 +108,7 @@ class MainActivity : ComponentActivity() {
     ) {
         NavHost(
             navController = navController,
-            startDestination = "FeedReconnect"
+            startDestination = "Menu"
         ) {
             composable("Menu") {
                 Menu(

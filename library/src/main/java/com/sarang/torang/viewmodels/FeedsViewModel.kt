@@ -63,6 +63,18 @@ open class FeedsViewModel @Inject constructor(
         }
     }
 
+    // 피드 리스트 갱신
+    open fun reconnect() {
+        viewModelScope.launch {
+            uiState = FeedLoadingUiState.Loading
+            isRefreshingState = true
+            try { feedWithPageUseCase.invoke(0); page = 1 }
+            catch (e: ConnectException) { if(page == 0) { uiState = FeedLoadingUiState.Reconnect }; handleErrorMsg(e) }
+            catch (e: Exception) { if(page == 0){ uiState = FeedLoadingUiState.Reconnect }; handleErrorMsg(e) }
+            finally { isRefreshingState = false }
+        }
+    }
+
     // 즐겨찾기 클릭
     internal fun onFavorite(reviewId: Int) {
         viewModelScope.launch {
