@@ -89,8 +89,8 @@ fun FeedScreen(
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = feedScreenState.snackbarState) },
         topBar = topAppBar
-    ) {
-        Box {
+    ) { padding ->
+        Box(modifier = modifier) {
             AnimatedContent(
                 targetState = loadingUiState,
                 transitionSpec = { fadeIn(tween(800)) with fadeOut(tween(800)) }
@@ -100,11 +100,12 @@ fun FeedScreen(
                         modifier = Modifier
                             .testTag("shimmer")
                             .fillMaxSize()
-                            .padding(8.dp)
+                            .padding(padding)
+                            .padding(start = 12.dp, end = 12.dp, bottom = 12.dp)
                     )
 
                     is FeedLoadingUiState.Empty -> RefreshAndBottomDetectionLazyColumn(
-                        modifier = Modifier.padding(it),
+                        modifier = Modifier.padding(padding),
                         listState = feedScreenState.listState,
                         pullToRefreshLayoutState = feedScreenState.pullToRefreshLayoutState,
                         onRefresh = feedCallBack.onRefresh,
@@ -116,7 +117,7 @@ fun FeedScreen(
                     )
 
                     is FeedLoadingUiState.Success -> FeedListScreen(
-                        modifier = modifier.padding(it),
+                        modifier = Modifier.padding(padding),
                         uiState = feedUiState,
                         feedScreenState = feedScreenState,
                         scrollEnabled = scrollEnabled,
