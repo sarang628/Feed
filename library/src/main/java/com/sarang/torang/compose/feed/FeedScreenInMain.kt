@@ -31,7 +31,7 @@ fun FeedScreenInMain(
     scrollEnabled   : Boolean                       = true,
     pageScrollable  : Boolean                       = true
 ) {
-    val uiState: FeedLoadingUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
+    val uiState: FeedLoadingUiState = feedsViewModel.uiState
     val feedUiState: FeedUiState by feedsViewModel.feedUiState.collectAsStateWithLifecycle()
     LaunchedEffect(feedsViewModel.msgState) {
         if (feedsViewModel.msgState.isNotEmpty()) {
@@ -43,21 +43,21 @@ fun FeedScreenInMain(
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     FeedScreen(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        loadingUiState = uiState,
-        feedUiState = feedUiState,
-        feedScreenState = feedScreenState,
-        feedCallBack = FeedCallBack(
-            onBottom = { feedsViewModel.onBottom() },
-            onRefresh = { feedsViewModel.refreshFeed(); },
-            onFocusItemIndex = { feedsViewModel.onFocusItemIndex(it) },
-            onVideoClick = { feedsViewModel.onVideoClick(it) },
-            onConnect = { feedsViewModel.refreshFeed() },
-            onLike = {feedsViewModel.onLike(it)},
-            onFavorite = {feedsViewModel.onFavorite(it)}
-        ),
-        topAppBar = { FeedTopAppBar(onAddReview = onAddReview, topAppIcon = Icons.AutoMirrored.Default.Send, scrollBehavior = scrollBehavior, onAlarm = onAlarm) },
-        scrollEnabled = scrollEnabled,
-        pageScrollable = pageScrollable,
+//        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        loadingUiState = FeedLoadingUiState.Reconnect,
+//        feedUiState = feedUiState,
+//        feedScreenState = feedScreenState,
+//        feedCallBack = FeedCallBack(
+//            onBottom = { feedsViewModel.onBottom() },
+//            onRefresh = { feedsViewModel.refreshFeed(); },
+//            onFocusItemIndex = { feedsViewModel.onFocusItemIndex(it) },
+//            onVideoClick = { feedsViewModel.onVideoClick(it) },
+//            onConnect = { feedsViewModel.refreshFeed() },
+//            onLike = {feedsViewModel.onLike(it)},
+//            onFavorite = {feedsViewModel.onFavorite(it)}
+//        ),
+//        topAppBar = { FeedTopAppBar(onAddReview = onAddReview, topAppIcon = Icons.AutoMirrored.Default.Send, scrollBehavior = scrollBehavior, onAlarm = onAlarm) },
+//        scrollEnabled = scrollEnabled,
+//        pageScrollable = pageScrollable,
     )
 }

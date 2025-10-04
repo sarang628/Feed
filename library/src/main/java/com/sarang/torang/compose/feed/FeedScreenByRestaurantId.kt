@@ -20,7 +20,7 @@ fun FeedScreenByRestaurantId(
     pageScrollable : Boolean = true,
     feedScreenState: FeedScreenState = rememberFeedScreenState()
 ) {
-    val uiState: FeedLoadingUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
+    val uiState: FeedLoadingUiState = feedsViewModel.uiState
     val feedUiState: FeedUiState by feedsViewModel.feedUiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = restaurantId) {

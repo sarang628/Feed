@@ -13,6 +13,15 @@ sealed interface FeedLoadingUiState {
     object      Reconnect                   : FeedLoadingUiState
 }
 
+val FeedLoadingUiState.name : String
+get() = when(this){
+    FeedLoadingUiState.Empty -> "Empty"
+    is FeedLoadingUiState.Error -> "Error"
+    FeedLoadingUiState.Loading -> "Loading"
+    FeedLoadingUiState.Reconnect -> "Reconnect"
+    FeedLoadingUiState.Success -> "Success"}
+
+
 class FeedUiState(
     val list: List<Feed> = listOf(),
     val isLogin : Boolean = false

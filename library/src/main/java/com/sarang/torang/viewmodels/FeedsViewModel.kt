@@ -31,7 +31,7 @@ open class FeedsViewModel @Inject constructor(
     private val tag = "__FeedsViewModel"
     internal var page = 0
 
-    open val uiState: StateFlow<FeedLoadingUiState> = getLoadingFeedFlowUseCase.invoke(viewModelScope)
+    open var uiState: FeedLoadingUiState by mutableStateOf(FeedLoadingUiState.Loading); internal set
     open val feedUiState: StateFlow<FeedUiState> = getFeedFlowUseCase.invoke(viewModelScope)
     var msgState : List<String> by mutableStateOf(listOf()); private set
     var focusedIndexState by mutableIntStateOf(0); private set
@@ -39,8 +39,18 @@ open class FeedsViewModel @Inject constructor(
     var videoPlayListState : List<Int> by mutableStateOf(listOf())
 
     private fun handleErrorMsg(e: Exception) { e.message?.let{showError(it)} }
-    private fun showError(msg: String) { this.msgState = this.msgState + msg }
+    internal fun showError(msg: String) { this.msgState = this.msgState + msg }
     fun onFocusItemIndex(index: Int) { focusedIndexState = index }
+
+    init {
+        viewModelScope.launch {
+            feedUiState.collect {
+                if (it.list.isNotEmpty()) {
+                    uiState = FeedLoadingUiState.Success
+                }
+            }
+        }
+    }
 
     // 피드 리스트 갱신
     open fun refreshFeed() {

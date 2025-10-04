@@ -40,15 +40,6 @@ class MyFeedsViewModel @Inject constructor(
 
     private val _reviewIdState = MutableStateFlow<Int?>(null)
 
-    override val uiState: StateFlow<FeedLoadingUiState> =
-        _reviewIdState
-            .flatMapLatest { reviewId ->
-                getMyFeedFlowUseCase.invoke(reviewId)
-            }
-            .map { FeedLoadingUiState.Success }
-            .onStart { FeedLoadingUiState.Loading }
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), FeedLoadingUiState.Loading)
-
     fun getUserFeedByReviewId(reviewId: Int) {
         Log.d("__MyFeedsViewModel", "getUserFeedByReviewId : $reviewId")
         _reviewIdState.value = reviewId

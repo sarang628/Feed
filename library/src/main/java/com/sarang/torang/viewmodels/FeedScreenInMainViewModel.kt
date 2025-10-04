@@ -1,6 +1,7 @@
 package com.sarang.torang.viewmodels
 
 import androidx.lifecycle.viewModelScope
+import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.usecase.ClickFavorityUseCase
 import com.sarang.torang.usecase.ClickLikeUseCase
 import com.sarang.torang.usecase.FeedWithPageUseCase
@@ -35,8 +36,13 @@ class FeedScreenInMainViewModel @Inject constructor(
 ) {
     init {
         viewModelScope.launch {
-            feedWithPageUseCase.invoke(0)
-            page = 1
+            try {
+                feedWithPageUseCase.invoke(0)
+                page = 1
+            }catch (e : Exception){
+                showError(e.message ?: "")
+                uiState = FeedLoadingUiState.Reconnect
+            }
         }
     }
 }

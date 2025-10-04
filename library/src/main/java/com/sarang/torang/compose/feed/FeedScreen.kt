@@ -47,6 +47,7 @@ import com.sarang.torang.compose.feed.type.LocalFeedCompose
 import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.uistate.imageHeight
+import com.sarang.torang.uistate.name
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -82,7 +83,7 @@ fun FeedScreen(
     HandleBack(feedScreenState.listState, onBackToTop)
 
     LaunchedEffect(loadingUiState) {
-        Log.d(tag, "uiState changed : $loadingUiState" )
+        Log.d(tag, "FeedLoadingUiState : ${loadingUiState.name}")
     }
 
     Scaffold(

@@ -53,14 +53,6 @@ class FeedScreenByRestaurantIdViewModel @Inject constructor(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override val uiState: StateFlow<FeedLoadingUiState> =
-    _restaurantIdState
-        .flatMapLatest{ restaurantId -> getFeedByRestaurantIdFlowUseCase.invoke(restaurantId) }
-        .map { FeedLoadingUiState.Success }
-        .onStart { FeedLoadingUiState.Loading }
-        .stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(5_000), initialValue = FeedLoadingUiState.Loading)
-
-    @OptIn(ExperimentalCoroutinesApi::class)
     override val feedUiState: StateFlow<FeedUiState> =
         _restaurantIdState
             .flatMapLatest{ restaurantId -> getFeedByRestaurantIdFlowUseCase.invoke(restaurantId) }

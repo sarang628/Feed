@@ -32,6 +32,7 @@ import com.sarang.torang.compose.feed.FeedItemClickEvents
 import com.sarang.torang.compose.feed.FeedScreenInMain
 import com.sarang.torang.compose.feed.FeedScreenSuccessPreview
 import com.sarang.torang.compose.feed.FeedListScreen
+import com.sarang.torang.compose.feed.PreviewReconnect
 import com.sarang.torang.compose.feed.internal.components.LocalExpandableTextType
 import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
@@ -107,7 +108,7 @@ class MainActivity : ComponentActivity() {
     ) {
         NavHost(
             navController = navController,
-            startDestination = "Menu"
+            startDestination = "FeedReconnect"
         ) {
             composable("Menu") {
                 Menu(
@@ -135,6 +136,9 @@ class MainActivity : ComponentActivity() {
             //TestUserFeedByReviewIdScreen_()
             //TestFeedScreenByReviewId_()
             //TestFeedScreenByRestaurantId_()
+            composable("FeedReconnect") {
+                PreviewReconnect()
+            }
             composable("FeedScreenInMain") {
                 LaunchedEffect("") { feedScreenState.showSnackBar("FeedScreenInMain") }
                 FeedScreenInMain(feedScreenState = feedScreenState)

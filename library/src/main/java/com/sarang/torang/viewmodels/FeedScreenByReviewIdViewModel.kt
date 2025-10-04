@@ -41,15 +41,6 @@ class FeedScreenByReviewIdViewModel @Inject constructor(
 
     private val _reviewIdState = MutableStateFlow<Int?>(null)
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override val uiState: StateFlow<FeedLoadingUiState> =
-        _reviewIdState
-            .flatMapLatest { reviewId ->
-                MutableStateFlow(listOf(getFeedByReviewIdUseCase.invoke(reviewId)))
-            }.map {FeedLoadingUiState.Success}
-            .onStart { FeedLoadingUiState.Loading }
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), FeedLoadingUiState.Loading)
-
     fun getFeedByReviewId(reviewId: Int) {
         _reviewIdState.value = reviewId
     }

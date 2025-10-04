@@ -40,7 +40,7 @@ fun FeedScreenByReviewId(
     onBack: (() -> Unit)? = null,
     pageScrollable: Boolean = true
 ) {
-    val uiState: FeedLoadingUiState by feedsViewModel.uiState.collectAsStateWithLifecycle()
+    val uiState: FeedLoadingUiState = feedsViewModel.uiState
     val screenHeightDp = LocalConfiguration.current.screenHeightDp
     val screenWidthDp = LocalConfiguration.current.screenWidthDp
     val density = LocalDensity.current
