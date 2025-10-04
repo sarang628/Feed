@@ -1,9 +1,11 @@
 package com.sarang.torang.compose.feed
 
 import android.util.Log
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -23,13 +25,14 @@ import com.sarang.torang.viewmodels.FeedScreenInMainViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedScreenInMain(
-    tag             : String                        = "__FeedScreenForMain",
-    feedsViewModel  : FeedScreenInMainViewModel     = hiltViewModel(),
-    feedScreenState : FeedScreenState               = rememberFeedScreenState(),
-    onAddReview     : () -> Unit                    = { Log.w(tag, "onAddReview is not implemented") },
-    onAlarm         : () -> Unit                    = { Log.w(tag, "onAlarm is not implemented") },
-    scrollEnabled   : Boolean                       = true,
-    pageScrollable  : Boolean                       = true
+    tag                 : String                        = "__FeedScreenForMain",
+    feedsViewModel      : FeedScreenInMainViewModel     = hiltViewModel(),
+    feedScreenState     : FeedScreenState               = rememberFeedScreenState(),
+    onAddReview         : () -> Unit                    = { Log.w(tag, "onAddReview is not implemented") },
+    onAlarm             : () -> Unit                    = { Log.w(tag, "onAlarm is not implemented") },
+    scrollEnabled       : Boolean                       = true,
+    pageScrollable      : Boolean                       = true,
+    contentWindowInsets : WindowInsets                  = ScaffoldDefaults.contentWindowInsets,
 ) {
     val uiState: FeedLoadingUiState = feedsViewModel.uiState
     val feedUiState: FeedUiState by feedsViewModel.feedUiState.collectAsStateWithLifecycle()
@@ -59,5 +62,6 @@ fun FeedScreenInMain(
         topAppBar = { FeedTopAppBar(onAddReview = onAddReview, topAppIcon = Icons.AutoMirrored.Default.Send, scrollBehavior = scrollBehavior, onAlarm = onAlarm) },
         scrollEnabled = scrollEnabled,
         pageScrollable = pageScrollable,
+        contentWindowInsets = contentWindowInsets
     )
 }

@@ -10,6 +10,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.with
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -76,7 +78,8 @@ fun FeedScreen(
     onBackToTop         :Boolean                = true,
     scrollEnabled       :Boolean                = true,
     pageScrollable      :Boolean                = true,
-    feedCallBack        :FeedCallBack           = FeedCallBack(tag = tag)
+    feedCallBack        :FeedCallBack           = FeedCallBack(tag = tag),
+    contentWindowInsets : WindowInsets          = ScaffoldDefaults.contentWindowInsets,
     // @formatter:on
 ) {
     HandleOnFocusIndex(feedScreenState.listState, feedCallBack.onFocusItemIndex)
@@ -88,7 +91,8 @@ fun FeedScreen(
 
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = feedScreenState.snackbarState) },
-        topBar = topAppBar
+        topBar = topAppBar,
+        contentWindowInsets = contentWindowInsets
     ) { padding ->
         Box(modifier = modifier) {
             AnimatedContent(
