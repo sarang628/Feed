@@ -130,7 +130,7 @@ fun FeedScreen(
                             listState = feedScreenState.listState,
                             pullToRefreshLayoutState = feedScreenState.pullToRefreshLayoutState,
                             content = {
-                                Box(Modifier.fillMaxSize()){
+                                Box(Modifier.fillMaxSize().padding(padding)){
                                     Button(
                                         modifier = Modifier.align(Alignment.Center),
                                         onClick = feedCallBack.onConnect
