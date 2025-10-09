@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -27,8 +26,8 @@ import javax.inject.Inject
 @HiltViewModel
 class FeedScreenByRestaurantIdViewModel @Inject constructor(
     clickLikeUseCase: ClickLikeUseCase,
-    clickFavorityUseCase: ClickFavorityUseCase,
-    getFeedLoadingFlowUseCase: GetFeedLodingFlowUseCase,
+    clickFavoriteUseCase: ClickFavorityUseCase,
+    getLoadingFeedFlowUseCase: GetFeedLodingFlowUseCase,
     getFeedFlowUseCase: GetFeedFlowUseCase,
     feedWithPageUseCase: FeedWithPageUseCase,
     private val getFeedByRestaurantIdFlowUseCase: GetFeedByRestaurantIdFlowUseCase,
@@ -41,8 +40,8 @@ class FeedScreenByRestaurantIdViewModel @Inject constructor(
 ) : FeedsViewModel(
     feedWithPageUseCase,
     clickLikeUseCase,
-    clickFavorityUseCase,
-    getFeedLoadingFlowUseCase,
+    clickFavoriteUseCase,
+    getLoadingFeedFlowUseCase,
     getFeedFlowUseCase
 ) {
     private val tag = "__FeedScreenByRestaurantIdViewModel"
@@ -50,6 +49,18 @@ class FeedScreenByRestaurantIdViewModel @Inject constructor(
 
     init {
         //초기화를 안하면 부모에서 첫 페이지를 로드하며 피드를 모두 지움
+    }
+
+    init {
+        viewModelScope.launch {
+            try {
+                feedWithPageUseCase.invoke(0)
+                page = 1
+            }catch (e : Exception){
+                showError(e.message ?: "")
+                uiState = FeedLoadingUiState.Reconnect
+            }
+        }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
