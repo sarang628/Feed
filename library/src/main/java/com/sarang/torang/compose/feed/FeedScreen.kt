@@ -85,10 +85,6 @@ fun FeedScreen(
     HandleOnFocusIndex(feedScreenState.listState, feedCallBack.onFocusItemIndex)
     HandleBack(feedScreenState.listState, onBackToTop)
 
-    LaunchedEffect(loadingUiState) {
-        Log.d(tag, "FeedLoadingUiState : ${loadingUiState.name}")
-    }
-
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = feedScreenState.snackbarState) },
         topBar = topAppBar,
