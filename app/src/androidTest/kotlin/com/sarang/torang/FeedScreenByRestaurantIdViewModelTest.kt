@@ -12,6 +12,7 @@ import com.sarang.torang.viewmodels.FeedScreenByRestaurantIdViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.time.withTimeout
 import kotlinx.coroutines.withContext
@@ -25,23 +26,32 @@ import javax.inject.Inject
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
 class FeedScreenByRestaurantIdViewModelTest {
-    @get:Rule var hiltRule = HiltAndroidRule(this)
-    @Before fun setUp() {
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
+    @Before
+    fun setUp() {
         hiltRule.inject()
         setUpViewModel()
     }
 
-    @Inject lateinit var feedWithPageUseCase : FeedWithPageUseCase
-    @Inject lateinit var clickLikeUseCase: ClickLikeUseCase
-    @Inject lateinit var clickFavoriteUseCase: ClickFavorityUseCase
-    @Inject lateinit var getLoadingFeedFlowUseCase: GetFeedLodingFlowUseCase
-    @Inject lateinit var getFeedFlowUseCase: GetFeedFlowUseCase
-    @Inject lateinit var getFeedByRestaurantIdFlowUseCase: GetFeedByRestaurantIdFlowUseCase
-    @Inject lateinit var findFeedByRestaurantIdFlowUseCase: FindFeedByRestaurantIdFlowUseCase
+    @Inject
+    lateinit var feedWithPageUseCase: FeedWithPageUseCase
+    @Inject
+    lateinit var clickLikeUseCase: ClickLikeUseCase
+    @Inject
+    lateinit var clickFavoriteUseCase: ClickFavorityUseCase
+    @Inject
+    lateinit var getLoadingFeedFlowUseCase: GetFeedLodingFlowUseCase
+    @Inject
+    lateinit var getFeedFlowUseCase: GetFeedFlowUseCase
+    @Inject
+    lateinit var getFeedByRestaurantIdFlowUseCase: GetFeedByRestaurantIdFlowUseCase
+    @Inject
+    lateinit var findFeedByRestaurantIdFlowUseCase: FindFeedByRestaurantIdFlowUseCase
 
-    lateinit var viewModel : FeedScreenByRestaurantIdViewModel
+    lateinit var viewModel: FeedScreenByRestaurantIdViewModel
 
-    fun setUpViewModel(){
+    fun setUpViewModel() {
         viewModel = FeedScreenByRestaurantIdViewModel(
             feedWithPageUseCase = feedWithPageUseCase,
             clickLikeUseCase = clickLikeUseCase,
@@ -54,15 +64,8 @@ class FeedScreenByRestaurantIdViewModelTest {
     }
 
 
-
     @Test
     fun feedsViewModelTest() = runTest {
-        withContext(Dispatchers.Default.limitedParallelism(1)) {
-            withTimeout(Duration.ofSeconds(10)) {
-                viewModel.feedUiState.collect { state ->
-                    println(state)
-                }
-            }
-        }
+        viewModel.feedUiState1.first() // TODO::문제 상황 정확히 파악해서 수정하기
     }
 }

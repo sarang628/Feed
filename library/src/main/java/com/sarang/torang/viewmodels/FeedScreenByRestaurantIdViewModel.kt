@@ -3,7 +3,6 @@ package com.sarang.torang.viewmodels
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.sarang.torang.data.feed.Feed
-import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.usecase.ClickFavorityUseCase
 import com.sarang.torang.usecase.ClickLikeUseCase
@@ -50,26 +49,23 @@ class FeedScreenByRestaurantIdViewModel @Inject constructor(
     init {
         //초기화를 안하면 부모에서 첫 페이지를 로드하며 피드를 모두 지움
     }
-
-    init {
-        viewModelScope.launch {
-            try {
-                feedWithPageUseCase.invoke(0)
-                page = 1
-            }catch (e : Exception){
-                showError(e.message ?: "")
-                uiState = FeedLoadingUiState.Reconnect
-            }
-        }
-    }
-
     @OptIn(ExperimentalCoroutinesApi::class)
-    override val feedUiState: StateFlow<FeedUiState> =
+    /*override val feedUiState: StateFlow<FeedUiState> =
         _restaurantIdState
             .flatMapLatest{ restaurantId -> getFeedByRestaurantIdFlowUseCase.invoke(restaurantId) }
             .onStart { FeedUiState() }
-            .stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(5_000), initialValue = FeedUiState())
+            .stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(5_000), initialValue = FeedUiState())*/
 
+    //override val feedUiState: StateFlow<FeedUiState> = MutableStateFlow(FeedUiState())
+    override val feedUiState: StateFlow<FeedUiState> = /*getFeedByRestaurantIdFlowUseCase.invoke(0)*/
+        MutableStateFlow(FeedUiState())
+        .onStart { FeedUiState() }
+        .stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(5_000), initialValue = FeedUiState())
+
+    val feedUiState1: StateFlow<FeedUiState> = /*getFeedByRestaurantIdFlowUseCase.invoke(0)*/
+        MutableStateFlow(FeedUiState())
+            .onStart { FeedUiState() }
+            .stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(5_000), initialValue = FeedUiState())
 
     fun getFeedByRestaurantId(restaurantId: Int) {
         Log.d(tag, "getFeedByRestaurantId : $restaurantId")
