@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.usecase.ClickFavorityUseCase
@@ -15,6 +16,8 @@ import com.sarang.torang.usecase.FeedWithPageUseCase
 import com.sarang.torang.usecase.GetFeedFlowUseCase
 import com.sarang.torang.usecase.GetFeedLodingFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.net.ConnectException
@@ -27,33 +30,40 @@ open class FeedsViewModel @Inject constructor(
     val clickFavoriteUseCase: ClickFavorityUseCase,
     getLoadingFeedFlowUseCase: GetFeedLodingFlowUseCase,
     getFeedFlowUseCase: GetFeedFlowUseCase,
-) : ViewModel() {
+) : ViewModel(),
+    InfiniteScrollable,
+    FeedRefreshable,
+    FocusByIndex,
+    VideoSupport,
+    Likeable,
+    Favoritable,
+    ISnackBarMessage{
     private val tag = "__FeedsViewModel"
     internal var page = 0
 
-    open var uiState: FeedLoadingUiState by mutableStateOf(FeedLoadingUiState.Loading); internal set
-    open val feedUiState: StateFlow<FeedUiState> = getFeedFlowUseCase.invoke(viewModelScope)
-    var msgState : List<String> by mutableStateOf(listOf()); private set
-    var focusedIndexState by mutableIntStateOf(0); private set
+    var uiState: FeedLoadingUiState by mutableStateOf(FeedLoadingUiState.Loading); internal set
+    var feedUiState by mutableStateOf(FeedUiState()); private set
+    override var msgState : List<String> by mutableStateOf(listOf());
+    override var focusedIndexState by mutableIntStateOf(0);
     var isRefreshingState by mutableStateOf(false);
-    var videoPlayListState : List<Int> by mutableStateOf(listOf())
+    override var videoPlayListState : List<Int> by mutableStateOf(listOf())
 
     private fun handleErrorMsg(e: Exception) { e.message?.let{showError(it)} }
     internal fun showError(msg: String) { this.msgState = this.msgState + msg }
-    fun onFocusItemIndex(index: Int) { focusedIndexState = index }
 
     init {
         viewModelScope.launch {
-            feedUiState.collect {
-                if (it.list.isNotEmpty()) {
+            getFeedFlowUseCase.invoke(viewModelScope).collect {
+                feedUiState = it
+                if (it.list.isNotEmpty())
                     uiState = FeedLoadingUiState.Success
-                }
             }
         }
+        refreshFeed()
     }
 
     // 피드 리스트 갱신
-    open fun refreshFeed() {
+    override fun refreshFeed() {
         viewModelScope.launch {
             isRefreshingState = true
             try { feedWithPageUseCase.invoke(0); page = 1 }
@@ -64,7 +74,7 @@ open class FeedsViewModel @Inject constructor(
     }
 
     // 피드 리스트 갱신
-    open fun reconnect() {
+    override fun reconnect() {
         viewModelScope.launch {
             uiState = FeedLoadingUiState.Loading
             isRefreshingState = true
@@ -76,10 +86,10 @@ open class FeedsViewModel @Inject constructor(
     }
 
     // 즐겨찾기 클릭
-    internal fun onFavorite(reviewId: Int) {
+    override fun onFavorite(reviewId: Int) {
         viewModelScope.launch {
             try {
-                if (feedUiState.value.isLogin) { clickFavoriteUseCase.invoke(reviewId) }
+                if (feedUiState.isLogin) { clickFavoriteUseCase.invoke(reviewId) }
                 else{ throw Exception("로그인을 해주세요.") }
             }
             catch (e: Exception) { handleErrorMsg(e) }
@@ -87,17 +97,17 @@ open class FeedsViewModel @Inject constructor(
     }
 
     // 좋아여 클릭
-    internal fun onLike(reviewId: Int) {
+    override fun onLike(reviewId: Int) {
         viewModelScope.launch {
             try {
-                if (feedUiState.value.isLogin) { clickLikeUseCase.invoke(reviewId) }
+                if (feedUiState.isLogin) { clickLikeUseCase.invoke(reviewId) }
                 else{ throw Exception("로그인을 해주세요.") }
             }
             catch (e: Exception) { handleErrorMsg(e) }
         }
     }
 
-    open fun onBottom() {
+    override fun onBottom() {
         viewModelScope.launch {
             try {
                 Log.d(tag, "called onBottom. request $page pages.")
@@ -107,18 +117,5 @@ open class FeedsViewModel @Inject constructor(
             catch (e: ConnectException) { handleErrorMsg(e) }
             catch (e: Exception) { handleErrorMsg(e) }
         }
-    }
-
-    fun onVideoClick(reviewId: Int) {
-        videoPlayListState = if (videoPlayListState.contains(reviewId)) {
-            videoPlayListState - reviewId // 제거
-        } else {
-            videoPlayListState + reviewId // 추가
-        }
-    }
-
-    fun removeTopErrorMessage() {
-        if (msgState.isNotEmpty())
-            msgState = msgState.drop(0)
     }
 }

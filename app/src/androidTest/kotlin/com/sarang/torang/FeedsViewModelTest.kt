@@ -1,6 +1,7 @@
 package com.sarang.torang
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.usecase.ClickFavorityUseCase
 import com.sarang.torang.usecase.ClickLikeUseCase
 import com.sarang.torang.usecase.FeedWithPageUseCase
@@ -9,7 +10,13 @@ import com.sarang.torang.usecase.GetFeedLodingFlowUseCase
 import com.sarang.torang.viewmodels.FeedsViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.time.withTimeout
 import kotlinx.coroutines.withContext
@@ -48,13 +55,8 @@ class FeedsViewModelTest {
 
 
     @Test
-    fun feedsViewModelTest() = runTest {
-        withContext(Dispatchers.Default.limitedParallelism(1)) {
-            withTimeout(Duration.ofSeconds(10)) {
-                viewModel.feedUiState.collect { state ->
-                    println(state)
-                }
-            }
-        }
+    fun feedsViewModelTest() = runBlocking {
+        delay(5000)
+        assertTrue(viewModel.feedUiState.list.isNotEmpty())
     }
 }

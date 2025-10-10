@@ -22,7 +22,7 @@ get() = when(this){
     FeedLoadingUiState.Success -> "Success"}
 
 
-class FeedUiState(
+data class FeedUiState(
     val list: List<Feed> = listOf(),
     val isLogin : Boolean = false
 )

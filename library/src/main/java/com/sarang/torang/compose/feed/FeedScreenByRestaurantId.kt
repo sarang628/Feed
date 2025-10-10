@@ -21,7 +21,7 @@ fun FeedScreenByRestaurantId(
     feedScreenState: FeedScreenState = rememberFeedScreenState()
 ) {
     val uiState: FeedLoadingUiState = feedsViewModel.uiState
-    val feedUiState: FeedUiState by feedsViewModel.feedUiState.collectAsStateWithLifecycle()
+    val feedUiState: FeedUiState = feedsViewModel.feedUiState
 
     LaunchedEffect(key1 = restaurantId) {
         feedsViewModel.getFeedByRestaurantId(restaurantId)

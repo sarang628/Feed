@@ -35,7 +35,7 @@ fun FeedScreenInMain(
     contentWindowInsets : WindowInsets                  = ScaffoldDefaults.contentWindowInsets,
 ) {
     val uiState: FeedLoadingUiState = feedsViewModel.uiState
-    val feedUiState: FeedUiState by feedsViewModel.feedUiState.collectAsStateWithLifecycle()
+    val feedUiState: FeedUiState = feedsViewModel.feedUiState
     LaunchedEffect(feedsViewModel.msgState) {
         if (feedsViewModel.msgState.isNotEmpty()) {
             feedScreenState.showSnackBar(feedsViewModel.msgState[0])

@@ -1,6 +1,7 @@
 package com.sarang.torang.viewmodels
 
 import android.util.Log
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedLoadingUiState
@@ -30,13 +31,7 @@ class FeedScreenByReviewIdViewModel @Inject constructor(
     feedWithPageUseCase: FeedWithPageUseCase,
     getFeedFlowUseCase: GetFeedFlowUseCase,
     private val getFeedByReviewIdUseCase: GetFeedByReviewIdUseCase,
-) : FeedsViewModel(
-    feedWithPageUseCase,
-    clickLikeUseCase,
-    clickFavorityUseCase,
-    getFeedLoadingFlowUseCase,
-    getFeedFlowUseCase
-) {
+) : ViewModel() {
     val tag: String = "__FeedScreenByReviewIdViewModel"
 
     private val _reviewIdState = MutableStateFlow<Int?>(null)
@@ -47,13 +42,5 @@ class FeedScreenByReviewIdViewModel @Inject constructor(
 
     fun findIndexByReviewId(list: List<Feed>, reviewId: Int): Int {
         return list.indexOf(list.find { it.reviewId == reviewId })
-    }
-
-    override fun refreshFeed() {
-        Log.d("__FeedScreenByReviewIdViewModel", "refreshFeed called but nothing to do")
-    }
-
-    override fun onBottom() {
-        Log.d("__FeedScreenByReviewIdViewModel", "onBottom called but nothing to do")
     }
 }

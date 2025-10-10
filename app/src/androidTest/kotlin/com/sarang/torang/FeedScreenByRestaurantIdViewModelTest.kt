@@ -11,8 +11,11 @@ import com.sarang.torang.usecase.GetFeedLodingFlowUseCase
 import com.sarang.torang.viewmodels.FeedScreenByRestaurantIdViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.time.withTimeout
 import kotlinx.coroutines.withContext
@@ -65,7 +68,10 @@ class FeedScreenByRestaurantIdViewModelTest {
 
 
     @Test
-    fun feedsViewModelTest() = runTest {
-        viewModel.feedUiState1.first() // TODO::문제 상황 정확히 파악해서 수정하기
+    fun feedsViewModelTest() = runBlocking {
+        assertTrue(viewModel.feedUiState.list.isEmpty())
+        viewModel.getFeedByRestaurantId(234)
+        delay(3000)
+        assertTrue(viewModel.feedUiState.list.isNotEmpty())
     }
 }
