@@ -49,6 +49,34 @@ fun defaultShimmerBrush(targetValue: Float = 1700f): Brush {
 
 }
 
+@Composable
+fun rememberShimmerBrush(targetValue: Float = 1700f): Brush {
+    val shimmerColors = listOf(
+        Color.LightGray.copy(alpha = 0.5f),
+        Color.LightGray.copy(alpha = 0.1f),
+        Color.LightGray.copy(alpha = 0.5f),
+    )
+
+    // 🌈 transition은 한 번만 생성됨
+    val transition = rememberInfiniteTransition(label = "shimmerTransition")
+    val translateAnim = transition.animateFloat(
+        initialValue = 0f,
+        targetValue = targetValue,
+        animationSpec = infiniteRepeatable(
+            animation = tween(2000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "shimmerOffset"
+    )
+
+    // ✨ 매 프레임 브러시 재생성 대신 translateAnim 값만 바뀜
+    return Brush.linearGradient(
+        colors = shimmerColors,
+        start = Offset(x = 0f, y = translateAnim.value - 200),
+        end = Offset(x = 0f, y = translateAnim.value)
+    )
+}
+
 @Preview
 @Composable
 fun ShimmerBrushPreview() {

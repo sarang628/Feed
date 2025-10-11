@@ -52,6 +52,7 @@ import com.sarang.torang.repository.LoginRepositoryTest
 import com.sarang.torang.repository.ProfileRepository
 import com.sarang.torang.repository.ProfileRepositoryTest
 import com.sarang.torang.repository.test.FeedRepositoryTest
+import com.sarang.torang.test.FeedScreenInMainTest
 import com.sarang.torang.test.FeedScreenTest
 import com.sarang.torang.test.TestBasic
 import com.sarang.torang.test.TestFeedScreenByRestaurantId
@@ -108,7 +109,7 @@ class MainActivity : ComponentActivity() {
     ) {
         NavHost(
             navController = navController,
-            startDestination = "Menu"
+            startDestination = "FeedScreenInMain"
         ) {
             composable("Menu") {
                 Menu(
@@ -141,7 +142,7 @@ class MainActivity : ComponentActivity() {
             }
             composable("FeedScreenInMain") {
                 LaunchedEffect("") { feedScreenState.showSnackBar("FeedScreenInMain") }
-                FeedScreenInMain(feedScreenState = feedScreenState)
+                FeedScreenInMainTest()
             }
             composable("LoginRepositoryTest") {
                 LoginRepositoryTest(loginRepository = loginRepository)

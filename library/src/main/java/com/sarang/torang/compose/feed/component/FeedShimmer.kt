@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,27 +21,30 @@ import com.sarang.torang.compose.feed.type.LocalShimmerBrush
 
 @Composable
 internal fun FeedShimmer(modifier: Modifier = Modifier) {
-    Column(modifier = modifier) {
-        Box(modifier = Modifier.fillMaxWidth().height(50.dp).clip(RoundedCornerShape(8.dp))
-            .background(LocalShimmerBrush.current.invoke()))
-        Spacer(modifier = Modifier.height(10.dp))
-        Box(modifier = Modifier.fillMaxWidth().height(250.dp).clip(RoundedCornerShape(8.dp))
-            .background(LocalShimmerBrush.current.invoke()))
-        Spacer(modifier = Modifier.height(10.dp))
-        Box(modifier = Modifier.fillMaxWidth().height(50.dp).clip(RoundedCornerShape(8.dp))
-            .background(LocalShimmerBrush.current.invoke()))
-        Spacer(modifier = Modifier.height(10.dp))
-        Box(modifier = Modifier.fillMaxWidth().height(50.dp).clip(RoundedCornerShape(8.dp))
-            .background(LocalShimmerBrush.current.invoke()))
-        Spacer(modifier = Modifier.height(10.dp))
-        Box(modifier = Modifier.fillMaxWidth().height(250.dp).clip(RoundedCornerShape(8.dp))
-            .background(LocalShimmerBrush.current.invoke()))
-        Spacer(modifier = Modifier.height(10.dp))
-        Box(modifier = Modifier.fillMaxWidth().height(50.dp).clip(RoundedCornerShape(8.dp))
-            .background(LocalShimmerBrush.current.invoke()))
-        Spacer(modifier = Modifier.height(10.dp))
-        Box(modifier = Modifier.fillMaxWidth().height(250.dp).clip(RoundedCornerShape(8.dp))
-            .background(LocalShimmerBrush.current.invoke()))
+    val shimmerBrush = rememberShimmerBrush() // ✅ 한 번만 생성
+    Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)){
+        Column(modifier = modifier) {
+            Box(modifier = Modifier.fillMaxWidth().height(50.dp).clip(RoundedCornerShape(8.dp))
+                .background(shimmerBrush))
+            Spacer(modifier = Modifier.height(10.dp))
+            Box(modifier = Modifier.fillMaxWidth().height(250.dp).clip(RoundedCornerShape(8.dp))
+                .background(shimmerBrush))
+            Spacer(modifier = Modifier.height(10.dp))
+            Box(modifier = Modifier.fillMaxWidth().height(50.dp).clip(RoundedCornerShape(8.dp))
+                .background(shimmerBrush))
+            Spacer(modifier = Modifier.height(10.dp))
+            Box(modifier = Modifier.fillMaxWidth().height(50.dp).clip(RoundedCornerShape(8.dp))
+                .background(shimmerBrush))
+            Spacer(modifier = Modifier.height(10.dp))
+            Box(modifier = Modifier.fillMaxWidth().height(250.dp).clip(RoundedCornerShape(8.dp))
+                .background(shimmerBrush))
+            Spacer(modifier = Modifier.height(10.dp))
+            Box(modifier = Modifier.fillMaxWidth().height(50.dp).clip(RoundedCornerShape(8.dp))
+                .background(shimmerBrush))
+            Spacer(modifier = Modifier.height(10.dp))
+            Box(modifier = Modifier.fillMaxWidth().height(250.dp).clip(RoundedCornerShape(8.dp))
+                .background(shimmerBrush))
+        }
     }
 }
 

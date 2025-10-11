@@ -5,6 +5,7 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -49,7 +50,6 @@ import com.sarang.torang.compose.feed.type.LocalFeedCompose
 import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.uistate.imageHeight
-import com.sarang.torang.uistate.name
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -91,9 +91,19 @@ fun FeedScreen(
         contentWindowInsets = contentWindowInsets
     ) { padding ->
         Box(modifier = modifier) {
+
+            FeedListScreen(
+                modifier = Modifier.padding(padding),
+                uiState = feedUiState,
+                feedScreenState = feedScreenState,
+                scrollEnabled = scrollEnabled,
+                feedCallBack = feedCallBack,
+                pageScrollable = pageScrollable,
+            )
+
             AnimatedContent(
                 targetState = loadingUiState,
-                transitionSpec = { fadeIn(tween(800)) with fadeOut(tween(800)) }
+                transitionSpec = { fadeIn(tween(800)) with fadeOut(tween(800)) using SizeTransform(clip = false) }
             ) { uiState ->
                 when (uiState) {
                     FeedLoadingUiState.Loading -> FeedShimmer(
@@ -101,7 +111,6 @@ fun FeedScreen(
                             .testTag("shimmer")
                             .fillMaxSize()
                             .padding(padding)
-                            .padding(start = 12.dp, end = 12.dp, bottom = 12.dp)
                     )
 
                     is FeedLoadingUiState.Empty -> RefreshAndBottomDetectionLazyColumn(
@@ -116,14 +125,7 @@ fun FeedScreen(
                             .fillMaxWidth()){} }
                     )
 
-                    is FeedLoadingUiState.Success -> FeedListScreen(
-                        modifier = Modifier.padding(padding),
-                        uiState = feedUiState,
-                        feedScreenState = feedScreenState,
-                        scrollEnabled = scrollEnabled,
-                        feedCallBack = feedCallBack,
-                        pageScrollable = pageScrollable,
-                    )
+                    is FeedLoadingUiState.Success -> {}
 
                     FeedLoadingUiState.Reconnect ->
                         RefreshAndBottomDetectionLazyColumn(

@@ -11,30 +11,22 @@ import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.usecase.ClickFavorityUseCase
 import com.sarang.torang.usecase.ClickLikeUseCase
+import com.sarang.torang.usecase.DeleteAllFeedUseCase
 import com.sarang.torang.usecase.FeedWithPageUseCase
-import com.sarang.torang.usecase.FindFeedByRestaurantIdFlowUseCase
-import com.sarang.torang.usecase.GetFeedByRestaurantIdFlowUseCase
 import com.sarang.torang.usecase.GetFeedFlowUseCase
-import com.sarang.torang.usecase.GetFeedLodingFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.net.ConnectException
 import javax.inject.Inject
 
 @HiltViewModel
 class FeedScreenInMainViewModel @Inject constructor(
-    val feedWithPageUseCase: FeedWithPageUseCase,
-    val clickLikeUseCase: ClickLikeUseCase,
-    val clickFavoriteUseCase: ClickFavorityUseCase,
-    getFeedLoadingFlowUseCase: GetFeedLodingFlowUseCase,
-    val getFeedFlowUseCase: GetFeedFlowUseCase,
-    private val getFeedByRestaurantIdFlowUseCase: GetFeedByRestaurantIdFlowUseCase,
-    /**
-     * 기존 GetFeedByRestaurantIdFlowUseCase 만 있어서
-     * 로컬 DB에서만 피드를 불러와 리뷰를 제대로 못 가져옴.
-     * 서버에서 불러오는 로직 추가
-     */
-    private val findFeedByRestaurantIdFlowUseCase: FindFeedByRestaurantIdFlowUseCase
+    private val feedWithPageUseCase: FeedWithPageUseCase,
+    private val clickLikeUseCase: ClickLikeUseCase,
+    private val clickFavoriteUseCase: ClickFavorityUseCase,
+    private val deleteAllFeed: DeleteAllFeedUseCase,
+    private val getFeedFlowUseCase: GetFeedFlowUseCase,
 ) : ViewModel(),
     InfiniteScrollable,
     FeedRefreshable,
@@ -44,7 +36,7 @@ class FeedScreenInMainViewModel @Inject constructor(
     Favoritable
 {
     private val tag = "__FeedScreenInMainViewModel"
-    internal var page = 0
+    private var page = 0
 
     var uiState: FeedLoadingUiState by mutableStateOf(FeedLoadingUiState.Loading); internal set
     var feedUiState by mutableStateOf(FeedUiState()); private set
@@ -55,6 +47,14 @@ class FeedScreenInMainViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            loadPage()
+            delay(1000)
+            subScribeFeed()
+        }
+    }
+
+    fun loadPage(){
+        viewModelScope.launch {
             try {
                 feedWithPageUseCase.invoke(0)
                 page = 1
@@ -63,12 +63,21 @@ class FeedScreenInMainViewModel @Inject constructor(
                 uiState = FeedLoadingUiState.Reconnect
             }
         }
+    }
 
+    fun deleteAllFeed(){
+        viewModelScope.launch {
+            deleteAllFeed.invoke()
+        }
+    }
+
+    fun subScribeFeed(){
         viewModelScope.launch {
             getFeedFlowUseCase.invoke(viewModelScope).collect {
                 feedUiState = it
 
                 if(it.list.isNotEmpty()){
+                    delay(1000)
                     uiState = FeedLoadingUiState.Success
                 }
             }
@@ -81,7 +90,7 @@ class FeedScreenInMainViewModel @Inject constructor(
     }
 
     private fun handleErrorMsg(e: Exception) { e.message?.let{showError(it)} }
-    internal fun showError(msg: String) { this.msgState = this.msgState + msg }
+    private fun showError(msg: String) { this.msgState += msg }
 
     override fun onBottom() {
         viewModelScope.launch {
