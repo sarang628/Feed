@@ -83,7 +83,7 @@ fun FeedScreen(
     // @formatter:on
 ) {
     HandleOnFocusIndex(feedScreenState.listState, feedCallBack.onFocusItemIndex)
-    HandleBack(feedScreenState.listState, onBackToTop)
+    if(onBackToTop) HandleBack(feedScreenState.listState)
 
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = feedScreenState.snackbarState) },
@@ -132,7 +132,9 @@ fun FeedScreen(
                             listState = feedScreenState.listState,
                             pullToRefreshLayoutState = feedScreenState.pullToRefreshLayoutState,
                             content = {
-                                Box(Modifier.fillMaxSize().padding(padding)){
+                                Box(Modifier
+                                    .fillMaxSize()
+                                    .padding(padding)){
                                     Button(
                                         modifier = Modifier.align(Alignment.Center),
                                         onClick = feedCallBack.onConnect
@@ -208,23 +210,19 @@ private fun HandleOnFocusIndex(listState: LazyListState, onFocusItemIndex: (Int)
 }
 
 @Composable
-private fun HandleBack(listState: LazyListState, onBackToTop: Boolean) {
-    var backPressHandled by remember { mutableStateOf(false) }
+private fun HandleBack(listState: LazyListState) {
+    var interceptBackPressHandle by remember { mutableStateOf(true) }
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val coroutineScope = rememberCoroutineScope()
-    if (onBackToTop) {
-        BackHandler(enabled = !backPressHandled) {
-            if (listState.firstVisibleItemIndex != 0) {
-                coroutineScope.launch {
-                    listState.animateScrollToItem(0)
-                }
-            } else {
-                backPressHandled = true
-                coroutineScope.launch {
-                    awaitFrame()
-                    onBackPressedDispatcher?.onBackPressed()
-                    backPressHandled = false
-                }
+    BackHandler(enabled = interceptBackPressHandle) {
+        if (listState.firstVisibleItemIndex != 0) {
+            coroutineScope.launch { listState.animateScrollToItem(0) }
+        } else {
+            interceptBackPressHandle = false // BackHandler 막아야 상위로 뒤로가기 이벤트를 올릴 수 있음.
+            coroutineScope.launch {
+                awaitFrame()
+                onBackPressedDispatcher?.onBackPressed()
+                interceptBackPressHandle = true // 상위로 Back 이벤트 올린 후 다시 내부 BackHandler 이벤트 감지 활성
             }
         }
     }
