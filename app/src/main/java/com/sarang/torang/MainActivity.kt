@@ -30,6 +30,7 @@ import androidx.navigation.compose.rememberNavController
 import com.sarang.torang.compose.feed.FeedItem
 import com.sarang.torang.compose.feed.FeedItemClickEvents
 import com.sarang.torang.compose.feed.FeedListScreen
+import com.sarang.torang.compose.feed.FeedScreenByPictureId
 import com.sarang.torang.compose.feed.FeedScreenInMain
 import com.sarang.torang.compose.feed.FeedScreenSuccessPreview
 import com.sarang.torang.compose.feed.PreviewReconnect
@@ -104,12 +105,12 @@ class MainActivity : ComponentActivity() {
         LocalFeedCompose provides CustomFeedCompose,
         LocalPullToRefreshLayoutType provides customPullToRefresh,
         LocalExpandableTextType provides CustomExpandableTextType,
-        LocalFeedImageLoader provides CustomFeedImageLoader,
+        LocalFeedImageLoader provides {CustomFeedImageLoader().invoke(it)},
         LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType
     ) {
         NavHost(
             navController = navController,
-            startDestination = "FeedScreenInMain"
+            startDestination = "FeedScreenByPictureId"
         ) {
             composable("Menu") {
                 Menu(
@@ -153,6 +154,9 @@ class MainActivity : ComponentActivity() {
             //ProfileRepositoryTest(profileRepository = profileRepository)
             //FeedRepositoryTest_(feedRepository = feedRepository)
             //TestFeedScreenAndSnackBar()
+            composable ("FeedScreenByPictureId") {
+                FeedScreenByPictureId(pictureId = 555)
+            }
         }
     }
 }
@@ -220,7 +224,7 @@ fun FeedScreenSuccessPreview1() {
         LocalFeedCompose provides CustomFeedCompose,
         LocalPullToRefreshLayoutType provides customPullToRefresh,
         LocalExpandableTextType provides CustomExpandableTextType,
-        LocalFeedImageLoader provides CustomFeedImageLoader
+        LocalFeedImageLoader provides { CustomFeedImageLoader().invoke(it) }
     ) {
         TorangTheme {
             FeedScreenSuccessPreview()
@@ -236,7 +240,7 @@ fun FeedTest(){
         LocalFeedCompose provides CustomFeedCompose,
         LocalPullToRefreshLayoutType provides customPullToRefresh,
         LocalExpandableTextType provides CustomExpandableTextType,
-        LocalFeedImageLoader provides CustomFeedImageLoader
+        LocalFeedImageLoader provides { CustomFeedImageLoader().invoke(it) }
     ) {
         FeedItem(uiState = FeedItemUiState.Sample.copy(isLike = isLike, isLogin = true), feedItemClickEvents = FeedItemClickEvents(
             onLike = { isLike = !isLike }

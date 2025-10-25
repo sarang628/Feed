@@ -46,7 +46,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.6"
+        kotlinCompilerExtensionVersion = "1.5.0"
     }
 
     compileOptions {
@@ -142,4 +142,5 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer-hls:1.4.0")
 
     implementation(libs.bottomdetectlazycolunm)
+    implementation("io.coil-kt:coil-compose:2.6.0")
 }

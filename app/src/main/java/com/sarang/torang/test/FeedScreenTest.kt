@@ -50,7 +50,7 @@ fun FeedScreenTest(feedScreenState: FeedScreenState = rememberFeedScreenState())
         LocalFeedCompose provides CustomFeedCompose,
         LocalPullToRefreshLayoutType provides customPullToRefresh,
         LocalExpandableTextType provides CustomExpandableTextType,
-        LocalFeedImageLoader provides CustomFeedImageLoader
+        LocalFeedImageLoader provides { CustomFeedImageLoader().invoke(it) }
     ) {
         TorangTheme {
             BottomSheetScaffold(

@@ -37,20 +37,20 @@ class MyFeedsViewModel @Inject constructor(
     getFeedLoadingFlowUseCase,
     getFeedFlowUseCase
 ) {
-
+    private val tag = "__MyFeedsViewModel"
     private val _reviewIdState = MutableStateFlow<Int?>(null)
 
     fun getUserFeedByReviewId(reviewId: Int) {
-        Log.d("__MyFeedsViewModel", "getUserFeedByReviewId : $reviewId")
+        Log.d(tag, "getUserFeedByReviewId : $reviewId")
         _reviewIdState.value = reviewId
     }
 
     override fun refreshFeed() {
-        Log.d("__MyFeedsViewModel", "refreshFeed called but nothing to do")
+        Log.d(tag, "refreshFeed called but nothing to do")
     }
 
     override fun onBottom() {
-        Log.d("__MyFeedsViewModel", "onBottom called but nothing to do")
+        Log.d(tag, "onBottom called but nothing to do")
     }
 
     fun findIndexByReviewId(list: List<Feed>, reviewId: Int): Int {

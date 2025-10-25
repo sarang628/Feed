@@ -10,13 +10,11 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.component.FeedTopAppBar
+import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.uistate.FeedUiState
@@ -46,22 +44,21 @@ fun FeedScreenInMain(
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     FeedScreen(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        loadingUiState = uiState,
-        feedUiState = feedUiState,
-        feedScreenState = feedScreenState,
-        feedCallBack = FeedCallBack(
-            onBottom = { feedsViewModel.onBottom() },
-            onRefresh = { feedsViewModel.refreshFeed(); },
-            onFocusItemIndex = { feedsViewModel.onFocusItemIndex(it) },
-            onVideoClick = { feedsViewModel.onVideoClick(it) },
-            onConnect = { feedsViewModel.reconnect() },
-            onLike = {feedsViewModel.onLike(it)},
-            onFavorite = {feedsViewModel.onFavorite(it)}
-        ),
-        topAppBar = { FeedTopAppBar(onAddReview = onAddReview, topAppIcon = Icons.AutoMirrored.Default.Send, scrollBehavior = scrollBehavior, onAlarm = onAlarm) },
-        scrollEnabled = scrollEnabled,
-        pageScrollable = pageScrollable,
+        modifier            = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        loadingUiState      = uiState,
+        feedUiState         = feedUiState,
+        feedScreenState     = feedScreenState,
+        feedCallBack        = FeedCallBack(
+        onBottom            = { feedsViewModel.onBottom() },
+        onRefresh           = { feedsViewModel.refreshFeed(); },
+        onFocusItemIndex    = { feedsViewModel.onFocusItemIndex(it) },
+        onVideoClick        = { feedsViewModel.onVideoClick(it) },
+        onConnect           = { feedsViewModel.reconnect() },
+        onLike              = { feedsViewModel.onLike(it) },
+        onFavorite          = { feedsViewModel.onFavorite(it) } ),
+        topAppBar           = { FeedTopAppBar(onAddReview = onAddReview, topAppIcon = Icons.AutoMirrored.Default.Send, scrollBehavior = scrollBehavior, onAlarm = onAlarm) },
+        scrollEnabled       = scrollEnabled,
+        pageScrollable      = pageScrollable,
         contentWindowInsets = contentWindowInsets
     )
 }

@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -34,16 +35,16 @@ import com.sarang.torang.viewmodels.MyFeedsViewModel
  */
 @Composable
 fun FeedScreenByReviewId(
-    feedsViewModel: MyFeedsViewModel = hiltViewModel(),
-    feedScreenState: FeedScreenState = rememberFeedScreenState(),
-    reviewId: Int,
-    onBack: (() -> Unit)? = null,
-    pageScrollable: Boolean = true
+    feedsViewModel  : MyFeedsViewModel  = hiltViewModel(),
+    feedScreenState : FeedScreenState   = rememberFeedScreenState(),
+    reviewId        : Int,
+    onBack          : (() -> Unit)?     = null,
+    pageScrollable  : Boolean           = true
 ) {
-    val uiState: FeedLoadingUiState = feedsViewModel.uiState
-    val screenHeightDp = LocalConfiguration.current.screenHeightDp
-    val screenWidthDp = LocalConfiguration.current.screenWidthDp
-    val density = LocalDensity.current
+    val uiState         : FeedLoadingUiState    = feedsViewModel.uiState
+    val screenHeightDp  : Int                   = LocalConfiguration.current.screenHeightDp
+    val screenWidthDp   : Int                   = LocalConfiguration.current.screenWidthDp
+    val density         : Density               = LocalDensity.current
 
     LaunchedEffect(key1 = reviewId) { // reviewID가 변경되면 피드 로드 요청
         Log.d("__UserFeedByReviewIdScreen", "load review : ${reviewId}");
@@ -58,22 +59,23 @@ fun FeedScreenByReviewId(
     }
 
     FeedsByReviewId(
-        uiState = uiState,
-        onBack = onBack,
-        onRefresh = { feedsViewModel.refreshFeed() },
-        onBottom = { feedsViewModel.onBottom() },
-        feed = { it ->
+        uiState             = uiState,
+        onBack              = onBack,
+        onRefresh           = { feedsViewModel.refreshFeed() },
+        onBottom            = { feedsViewModel.onBottom() },
+        feedScreenState     = feedScreenState,
+        feed                = { it ->
             LocalFeedCompose.current.invoke(
                 FeedTypeData(
-                feed = it,
-                onLike = { feedsViewModel.onLike(it) },
-                onFavorite = { feedsViewModel.onFavorite(it) },
-                onVideoClick = { feedsViewModel.onVideoClick(it.reviewId) },
-                imageHeight = it.reviewImages[0].adjustHeight(density, screenWidthDp, screenHeightDp),
-                pageScrollable = pageScrollable)
+                    feed            = it,
+                    onLike          = { feedsViewModel.onLike(it) },
+                    onFavorite      = { feedsViewModel.onFavorite(it) },
+                    onVideoClick    = { feedsViewModel.onVideoClick(it.reviewId) },
+                    imageHeight     = it.reviewImages[0].adjustHeight(density, screenWidthDp, screenHeightDp),
+                    pageScrollable  = pageScrollable
+                )
             )
         },
-        feedScreenState = feedScreenState,
     )
 }
 

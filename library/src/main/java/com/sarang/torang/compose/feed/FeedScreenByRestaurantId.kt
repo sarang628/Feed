@@ -15,13 +15,13 @@ import com.sarang.torang.viewmodels.FeedScreenByRestaurantIdViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedScreenByRestaurantId(
-    feedsViewModel: FeedScreenByRestaurantIdViewModel = hiltViewModel(),
-    restaurantId: Int,
-    pageScrollable : Boolean = true,
-    feedScreenState: FeedScreenState = rememberFeedScreenState()
+    feedsViewModel  : FeedScreenByRestaurantIdViewModel = hiltViewModel(),
+    restaurantId    : Int,
+    pageScrollable  : Boolean = true,
+    feedScreenState : FeedScreenState = rememberFeedScreenState()
 ) {
-    val uiState: FeedLoadingUiState = feedsViewModel.uiState
-    val feedUiState: FeedUiState = feedsViewModel.feedUiState
+    val uiState     : FeedLoadingUiState    = feedsViewModel.uiState
+    val feedUiState : FeedUiState           = feedsViewModel.feedUiState
 
     LaunchedEffect(key1 = restaurantId) {
         feedsViewModel.getFeedByRestaurantId(restaurantId)
@@ -35,13 +35,12 @@ fun FeedScreenByRestaurantId(
     }
 
     FeedScreen(
-        loadingUiState = uiState,
-        feedUiState = feedUiState,
-        feedCallBack = FeedCallBack(
-            onRefresh = { feedsViewModel.refreshFeed() },
-            onBottom = { feedsViewModel.onBottom() },
-            onVideoClick = { feedsViewModel.onVideoClick(it) },
-        ),
-        pageScrollable = pageScrollable
+        loadingUiState  = uiState,
+        feedUiState     = feedUiState,
+        feedCallBack    = FeedCallBack(
+        onRefresh       = { feedsViewModel.refreshFeed() },
+        onBottom        = { feedsViewModel.onBottom() },
+        onVideoClick    = { feedsViewModel.onVideoClick(it) },),
+        pageScrollable  = pageScrollable
     )
 }
