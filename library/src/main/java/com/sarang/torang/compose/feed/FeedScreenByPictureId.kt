@@ -23,6 +23,7 @@ import com.sarang.torang.compose.feed.type.LocalFeedCompose
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.data.feed.adjustHeight
 import com.sarang.torang.uistate.FeedLoadingUiState
+import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.FeedScreenByPictureIdViewModel
 
 // formatter : off
@@ -57,6 +58,7 @@ fun FeedScreenByPictureId(
 
     FeedByPictureId(
         uiState         = uiState,
+        feedUiState     = feedsViewModel.feedUiState,
         onBack          = onBack,
         onRefresh       = { feedsViewModel.refreshFeed() },
         onBottom        = { feedsViewModel.onBottom() },
@@ -82,6 +84,7 @@ fun FeedScreenByPictureId(
 @Composable
 internal fun FeedByPictureId(
     uiState         : FeedLoadingUiState,
+    feedUiState     : FeedUiState = FeedUiState(),
     onBack          : (() -> Unit)? = null,
     onRefresh       : (() -> Unit),/*base feed 에서 제공*/
     onBottom        : (() -> Unit),/*base feed 에서 제공*/
@@ -90,6 +93,7 @@ internal fun FeedByPictureId(
 ) {
     FeedScreen(
         loadingUiState  = uiState,
+        feedUiState     = feedUiState,
         feedScreenState = feedScreenState,
         feedCallBack    = FeedCallBack(
         onRefresh       = onRefresh,

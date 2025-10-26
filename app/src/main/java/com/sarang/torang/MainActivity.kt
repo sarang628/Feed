@@ -110,7 +110,7 @@ class MainActivity : ComponentActivity() {
     ) {
         NavHost(
             navController = navController,
-            startDestination = "FeedScreenByPictureId"
+            startDestination = "Menu"
         ) {
             composable("Menu") {
                 Menu(
@@ -119,7 +119,8 @@ class MainActivity : ComponentActivity() {
                     onFeedScreenInMain = { navController.navigate("FeedScreenInMain") },
                     onFeed = { navController.navigate("FeedTest") },
                     onFeedSuccess = { navController.navigate("FeedSuccessTest") },
-                    onFeedScreenByRestaurantId = { navController.navigate("FeedScreenByRestaurantId") }
+                    onFeedScreenByRestaurantId = { navController.navigate("FeedScreenByRestaurantId") },
+                    onFeedScreenByPictureId = { navController.navigate("FeedScreenByPictureId") }
                 )
             }
             //TestBasic()
@@ -155,7 +156,9 @@ class MainActivity : ComponentActivity() {
             //FeedRepositoryTest_(feedRepository = feedRepository)
             //TestFeedScreenAndSnackBar()
             composable ("FeedScreenByPictureId") {
-                FeedScreenByPictureId(pictureId = 555)
+                FeedScreenByPictureId(
+                    pictureId = 1272
+                )
             }
         }
     }
@@ -206,6 +209,7 @@ fun Menu(
     onFeed: () -> Unit = {},
     onFeedSuccess: () -> Unit = {},
     onFeedScreenByRestaurantId: () -> Unit = {},
+    onFeedScreenByPictureId: () -> Unit = {},
 ) {
     Column {
         Button(onFeedScreen) { Text("FeedScreen") }
@@ -214,6 +218,7 @@ fun Menu(
         Button(onFeed) { Text("Feed") }
         Button(onFeedSuccess) { Text("FeedSuccess") }
         Button(onFeedScreenByRestaurantId) { Text("FeedScreenByRestaurantId") }
+        Button(onFeedScreenByPictureId) { Text("FeedScreenByPictureId") }
     }
 }
 
