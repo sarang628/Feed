@@ -39,7 +39,7 @@ class FeedScreenByPictureIdViewModel @Inject constructor(
     InfiniteScrollable,
     ISnackBarMessage,
     VideoSupport{
-    private     val tag                 : String                = "__FeedScreenByRestaurantIdViewModel"
+    private     val tag                 : String                = "__FeedScreenByPictureIdViewModel"
                 var uiState             : FeedLoadingUiState    by mutableStateOf(FeedLoadingUiState.Loading); internal set
     private     var pictureId           : Int?                  by mutableStateOf(null)
                 var isRefreshingState   : Boolean               by mutableStateOf(false);
