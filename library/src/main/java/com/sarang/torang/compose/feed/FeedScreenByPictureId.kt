@@ -1,5 +1,6 @@
 package com.sarang.torang.compose.feed
 
+import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -9,19 +10,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
-import com.sarang.torang.compose.feed.type.FeedTypeData
-import com.sarang.torang.compose.feed.type.LocalFeedCompose
-import com.sarang.torang.data.feed.Feed
-import com.sarang.torang.data.feed.adjustHeight
 import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.FeedScreenByPictureIdViewModel
@@ -33,17 +27,14 @@ import com.sarang.torang.viewmodels.FeedScreenByPictureIdViewModel
  */
 @Composable
 fun FeedScreenByPictureId(
-    pictureId        : Int,
+    pictureId       : Int,
+    showLog         : Boolean                           = false,
     tag             : String                            = "__FeedScreenByPictureId",
     feedsViewModel  : FeedScreenByPictureIdViewModel    = hiltViewModel(),
     feedScreenState : FeedScreenState                   = rememberFeedScreenState(),
-    onBack          : (() -> Unit)?                     = null,
-    pageScrollable  : Boolean                           = true
+    onBack          : (() -> Unit)                      = { Log.i(tag, "onBack isn't set") },
 ) {
     val uiState         : FeedLoadingUiState    = feedsViewModel.uiState
-    val screenHeightDp  : Int                   = LocalConfiguration.current.screenHeightDp
-    val screenWidthDp   : Int                   = LocalConfiguration.current.screenWidthDp
-    val density         : Density               = LocalDensity.current
 
     LaunchedEffect(key1 = pictureId) {
         feedsViewModel.getFeedByPictureId(pictureId)
@@ -58,46 +49,39 @@ fun FeedScreenByPictureId(
 
     FeedByPictureId(
         uiState         = uiState,
+        showLog         = showLog,
         feedUiState     = feedsViewModel.feedUiState,
         onBack          = onBack,
-        onRefresh       = { feedsViewModel.refreshFeed() },
-        onBottom        = { feedsViewModel.onBottom() },
-        feedScreenState = feedScreenState,
-        feed            = { it ->
-            LocalFeedCompose.current.invoke(
-                FeedTypeData(
-                    feed           = it,
-                    onLike         = { feedsViewModel.onLike(it) },
-                    onFavorite     = { feedsViewModel.onFavorite(it) },
-                    onVideoClick   = { feedsViewModel.onVideoClick(it.reviewId) },
-                    imageHeight    = it.reviewImages[0].adjustHeight(density, screenWidthDp, screenHeightDp),
-                    pageScrollable = pageScrollable
-                )
-            )
-        },
+        onRefresh       = feedsViewModel::refreshFeed ,
+        onBottom        = feedsViewModel::onBottom ,
+        feedScreenState = feedScreenState
     )
 }
 
 // formatter : on
-
+@Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun FeedByPictureId(
-    uiState         : FeedLoadingUiState,
-    feedUiState     : FeedUiState = FeedUiState(),
-    onBack          : (() -> Unit)? = null,
-    onRefresh       : (() -> Unit),/*base feed 에서 제공*/
-    onBottom        : (() -> Unit),/*base feed 에서 제공*/
-    feedScreenState : FeedScreenState = rememberFeedScreenState(),
-    feed            : @Composable ((feed: Feed) -> Unit),
+    tag             : String                = "__FeedByPictureId",
+    showLog         : Boolean               = false,
+    uiState         : FeedLoadingUiState    = FeedLoadingUiState.Loading,
+    feedUiState     : FeedUiState           = FeedUiState(),
+    onBack          : () -> Unit            = { Log.i(tag, "onBack isn't set") },
+    onRefresh       : (() -> Unit)          = { Log.i(tag, "onRefresh isn't set") },/*base feed 에서 제공*/
+    onBottom        : (() -> Unit)          = { Log.i(tag, "onBottom isn't set") },/*base feed 에서 제공*/
+    feedScreenState : FeedScreenState       = rememberFeedScreenState()
 ) {
+    LaunchedEffect(feedUiState) {
+        showLog.d(tag, feedUiState.toString())
+    }
     FeedScreen(
         loadingUiState  = uiState,
         feedUiState     = feedUiState,
         feedScreenState = feedScreenState,
         feedCallBack    = FeedCallBack(
         onRefresh       = onRefresh,
-        onBottom        = onBottom,),
+        onBottom        = onBottom),
         topAppBar       = {
             TopAppBar(
                 title           = {
@@ -106,7 +90,7 @@ internal fun FeedByPictureId(
                                          fontWeight = FontWeight.Bold)
                                   },
                 navigationIcon  = {
-                                    IconButton(onClick = { onBack?.invoke() }) {
+                                    IconButton(onClick = onBack) {
                                         Icon(imageVector        = Icons.AutoMirrored.Default.ArrowBack,
                                              contentDescription = "") }
                                    }
@@ -115,14 +99,6 @@ internal fun FeedByPictureId(
     )
 }
 
-@Preview
-@Composable
-fun PreviewFeedByPictureId() {
-    FeedByPictureId(
-        /*Preview*/
-        uiState = FeedLoadingUiState.Loading,
-        onRefresh = {},
-        onBottom = {},
-        feed = { _ -> },
-    )
+private fun Boolean.d(tag: String, msg: String) {
+    if(this)Log.d(tag, msg)
 }

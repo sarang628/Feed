@@ -157,7 +157,8 @@ class MainActivity : ComponentActivity() {
             //TestFeedScreenAndSnackBar()
             composable ("FeedScreenByPictureId") {
                 FeedScreenByPictureId(
-                    pictureId = 1272
+                    pictureId = 1272,
+                    showLog = true
                 )
             }
         }

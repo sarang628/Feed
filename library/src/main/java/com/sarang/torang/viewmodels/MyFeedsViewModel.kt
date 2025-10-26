@@ -50,7 +50,6 @@ class MyFeedsViewModel @Inject constructor(
     }
 
     override fun onBottom() {
-        Log.d(tag, "onBottom called but nothing to do")
     }
 
     fun findIndexByReviewId(list: List<Feed>, reviewId: Int): Int {

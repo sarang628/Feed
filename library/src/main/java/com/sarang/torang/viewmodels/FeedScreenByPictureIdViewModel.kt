@@ -57,8 +57,8 @@ class FeedScreenByPictureIdViewModel @Inject constructor(
         //TODO:: hot flow로 이해하고 바꾸기
         viewModelScope.launch {
             getFeed.invoke(pictureId).collect {
+                Log.d(tag, "feed received : $it")
                 feedUiState = it
-
                 if(it.list.isNotEmpty())
                     uiState = FeedLoadingUiState.Success
             }
@@ -87,7 +87,6 @@ class FeedScreenByPictureIdViewModel @Inject constructor(
     }
 
     override fun onBottom() {
-        Log.d(tag, "onBottom called but nothing to do")
     }
 
     fun onLike(i: Int) {}

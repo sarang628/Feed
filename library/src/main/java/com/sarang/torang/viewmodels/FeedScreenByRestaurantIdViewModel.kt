@@ -88,6 +88,6 @@ class FeedScreenByRestaurantIdViewModel @Inject constructor(
     }
 
     override fun onBottom() {
-        Log.d(tag, "onBottom called but nothing to do")
+
     }
 }
