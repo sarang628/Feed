@@ -1,6 +1,5 @@
 package com.sarang.torang.compose.feed
 
-import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -10,7 +9,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -18,15 +16,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
-import com.sarang.torang.compose.feed.type.FeedTypeData
-import com.sarang.torang.compose.feed.type.LocalFeedCompose
-import com.sarang.torang.data.feed.Feed
-import com.sarang.torang.data.feed.adjustHeight
 import com.sarang.torang.uistate.FeedLoadingUiState
-import com.sarang.torang.viewmodels.MyFeedsViewModel
+import com.sarang.torang.uistate.FeedUiState
+import com.sarang.torang.viewmodels.FeedScreenByReviewIdViewModel
 
 // formatter : off
 /**
@@ -35,47 +29,36 @@ import com.sarang.torang.viewmodels.MyFeedsViewModel
  */
 @Composable
 fun FeedScreenByReviewId(
-    feedsViewModel  : MyFeedsViewModel  = hiltViewModel(),
-    feedScreenState : FeedScreenState   = rememberFeedScreenState(),
     reviewId        : Int,
-    onBack          : (() -> Unit)?     = null,
-    pageScrollable  : Boolean           = true
+    tag             : String                            = "__FeedScreenByReviewId",
+    showLog         : Boolean                           = false,
+    feedsViewModel  : FeedScreenByReviewIdViewModel     = hiltViewModel(),
+    feedScreenState : FeedScreenState                   = rememberFeedScreenState(),
+    onBack          : () -> Unit                        = { },
+    pageScrollable  : Boolean                           = true,
 ) {
-    val uiState         : FeedLoadingUiState    = feedsViewModel.uiState
     val screenHeightDp  : Int                   = LocalConfiguration.current.screenHeightDp
     val screenWidthDp   : Int                   = LocalConfiguration.current.screenWidthDp
     val density         : Density               = LocalDensity.current
 
     LaunchedEffect(key1 = reviewId) { // reviewID가 변경되면 피드 로드 요청
-        Log.d("__UserFeedByReviewIdScreen", "load review : ${reviewId}");
         feedsViewModel.getUserFeedByReviewId(reviewId)
     }
 
-    LaunchedEffect(feedsViewModel.msgState) {
+    /*LaunchedEffect(feedsViewModel.msgState) {
         if (feedsViewModel.msgState.isNotEmpty()) {
             feedScreenState.showSnackBar(feedsViewModel.msgState[0])
             feedsViewModel.removeTopErrorMessage()
         }
-    }
+    }*/
 
     FeedsByReviewId(
-        uiState             = uiState,
+        feedUiState         = feedsViewModel.feedUiState,
+        feedLoadUiState     = feedsViewModel.feedLoadUiState,
         onBack              = onBack,
         onRefresh           = { feedsViewModel.refreshFeed() },
         onBottom            = { feedsViewModel.onBottom() },
         feedScreenState     = feedScreenState,
-        feed                = { it ->
-            LocalFeedCompose.current.invoke(
-                FeedTypeData(
-                    feed            = it,
-                    onLike          = { feedsViewModel.onLike(it) },
-                    onFavorite      = { feedsViewModel.onFavorite(it) },
-                    onVideoClick    = { feedsViewModel.onVideoClick(it.reviewId) },
-                    imageHeight     = it.reviewImages[0].adjustHeight(density, screenWidthDp, screenHeightDp),
-                    pageScrollable  = pageScrollable
-                )
-            )
-        },
     )
 }
 
@@ -84,16 +67,17 @@ fun FeedScreenByReviewId(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun FeedsByReviewId(
-    uiState: FeedLoadingUiState,
+    feedLoadUiState: FeedLoadingUiState,
+    feedUiState         : FeedUiState           = FeedUiState(),
     onBack: (() -> Unit)? = null,
     onRefresh: (() -> Unit),/*base feed 에서 제공*/
     onBottom: (() -> Unit),/*base feed 에서 제공*/
     feedScreenState: FeedScreenState = rememberFeedScreenState(),
-    feed: @Composable ((feed: Feed) -> Unit),
 ) {
     FeedScreen(
-        loadingUiState = uiState,
+        loadingUiState = feedLoadUiState,
         feedScreenState = feedScreenState,
+        feedUiState = feedUiState,
         topAppBar = {
             TopAppBar(
                 title = { Text(text = "Post", fontSize = 21.sp, fontWeight = FontWeight.Bold) },
@@ -114,9 +98,8 @@ internal fun FeedsByReviewId(
 fun PreviewMyFeedScreen() {
     FeedsByReviewId(
         /*Preview*/
-        uiState = FeedLoadingUiState.Loading,
+        feedLoadUiState = FeedLoadingUiState.Loading,
         onRefresh = {},
         onBottom = {},
-        feed = { _ -> },
     )
 }

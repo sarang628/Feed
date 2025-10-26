@@ -31,6 +31,7 @@ import com.sarang.torang.compose.feed.FeedItem
 import com.sarang.torang.compose.feed.FeedItemClickEvents
 import com.sarang.torang.compose.feed.FeedListScreen
 import com.sarang.torang.compose.feed.FeedScreenByPictureId
+import com.sarang.torang.compose.feed.FeedScreenByReviewId
 import com.sarang.torang.compose.feed.FeedScreenInMain
 import com.sarang.torang.compose.feed.FeedScreenSuccessPreview
 import com.sarang.torang.compose.feed.PreviewReconnect
@@ -120,7 +121,8 @@ class MainActivity : ComponentActivity() {
                     onFeed = { navController.navigate("FeedTest") },
                     onFeedSuccess = { navController.navigate("FeedSuccessTest") },
                     onFeedScreenByRestaurantId = { navController.navigate("FeedScreenByRestaurantId") },
-                    onFeedScreenByPictureId = { navController.navigate("FeedScreenByPictureId") }
+                    onFeedScreenByPictureId = { navController.navigate("FeedScreenByPictureId") },
+                    onFeedScreenByReviewId = { navController.navigate("FeedScreenByReviewId") }
                 )
             }
             //TestBasic()
@@ -158,6 +160,19 @@ class MainActivity : ComponentActivity() {
             composable ("FeedScreenByPictureId") {
                 FeedScreenByPictureId(
                     pictureId = 1272,
+                    showLog = true,
+                    onBack = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
+            composable("FeedScreenByReviewId") {
+                FeedScreenByReviewId(
+                    reviewId = 585,
+                    onBack = {
+                        navController.popBackStack()
+                    },
                     showLog = true
                 )
             }
@@ -211,6 +226,7 @@ fun Menu(
     onFeedSuccess: () -> Unit = {},
     onFeedScreenByRestaurantId: () -> Unit = {},
     onFeedScreenByPictureId: () -> Unit = {},
+    onFeedScreenByReviewId: () -> Unit = {},
 ) {
     Column {
         Button(onFeedScreen) { Text("FeedScreen") }
@@ -220,6 +236,7 @@ fun Menu(
         Button(onFeedSuccess) { Text("FeedSuccess") }
         Button(onFeedScreenByRestaurantId) { Text("FeedScreenByRestaurantId") }
         Button(onFeedScreenByPictureId) { Text("FeedScreenByPictureId") }
+        Button(onFeedScreenByReviewId) { Text("FeedScreenByReviewId") }
     }
 }
 

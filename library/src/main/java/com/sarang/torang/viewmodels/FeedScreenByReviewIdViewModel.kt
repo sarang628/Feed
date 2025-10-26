@@ -1,46 +1,71 @@
 package com.sarang.torang.viewmodels
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedLoadingUiState
-import com.sarang.torang.usecase.ClickFavorityUseCase
-import com.sarang.torang.usecase.ClickLikeUseCase
-import com.sarang.torang.usecase.FeedWithPageUseCase
+import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.usecase.GetFeedByReviewIdUseCase
-import com.sarang.torang.usecase.GetFeedFlowUseCase
-import com.sarang.torang.usecase.GetFeedLodingFlowUseCase
+import com.sarang.torang.usecase.IsLoginFlowForFeedUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.collections.indexOf
 
 @HiltViewModel
 class FeedScreenByReviewIdViewModel @Inject constructor(
-    clickLikeUseCase: ClickLikeUseCase,
-    clickFavorityUseCase: ClickFavorityUseCase,
-    getFeedLoadingFlowUseCase: GetFeedLodingFlowUseCase,
-    feedWithPageUseCase: FeedWithPageUseCase,
-    getFeedFlowUseCase: GetFeedFlowUseCase,
-    private val getFeedByReviewIdUseCase: GetFeedByReviewIdUseCase,
+    val getFeedByReviewIdUseCase: GetFeedByReviewIdUseCase,
+    val loginFlowForFeedUseCase: IsLoginFlowForFeedUseCase
 ) : ViewModel() {
-    val tag: String = "__FeedScreenByReviewIdViewModel"
+    private val tag = "__MyFeedsViewModel"
+    var feedUiState : FeedUiState by mutableStateOf(FeedUiState()); private set
+    var feedLoadUiState : FeedLoadingUiState by mutableStateOf(FeedLoadingUiState.Loading); private set
 
-    private val _reviewIdState = MutableStateFlow<Int?>(null)
+    init {
+        viewModelScope.launch {
+            loginFlowForFeedUseCase.isLogin.collect {
+                feedUiState.copy(isLogin = it)
+            }
+        }
+    }
 
-    fun getFeedByReviewId(reviewId: Int) {
-        _reviewIdState.value = reviewId
+    fun getUserFeedByReviewId(reviewId: Int) {
+        viewModelScope.launch {
+            try {
+                feedLoadUiState = FeedLoadingUiState.Success
+                feedUiState = feedUiState.copy(
+                    list = listOf(getFeedByReviewIdUseCase.invoke(reviewId)),
+                    isLogin = false
+                )
+            }catch (e : Exception){
+                Log.e(tag, e.toString())
+            }
+        }
+    }
+
+    fun refreshFeed() {
+
+    }
+
+    fun onBottom() {
     }
 
     fun findIndexByReviewId(list: List<Feed>, reviewId: Int): Int {
         return list.indexOf(list.find { it.reviewId == reviewId })
+    }
+
+    fun onLike(it: Int) {
+
+    }
+
+    fun onVideoClick(reviewId: Int) {
+
+    }
+
+    fun onFavorite(it: Int) {
+
     }
 }

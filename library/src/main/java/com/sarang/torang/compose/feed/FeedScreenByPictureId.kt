@@ -99,6 +99,6 @@ internal fun FeedByPictureId(
     )
 }
 
-private fun Boolean.d(tag: String, msg: String) {
+fun Boolean.d(tag: String, msg: String) {
     if(this)Log.d(tag, msg)
 }
