@@ -32,7 +32,6 @@ import com.sarang.torang.compose.feed.FeedItemClickEvents
 import com.sarang.torang.compose.feed.FeedListScreen
 import com.sarang.torang.compose.feed.FeedScreenByPictureId
 import com.sarang.torang.compose.feed.FeedScreenByReviewId
-import com.sarang.torang.compose.feed.FeedScreenInMain
 import com.sarang.torang.compose.feed.FeedScreenSuccessPreview
 import com.sarang.torang.compose.feed.PreviewReconnect
 import com.sarang.torang.compose.feed.internal.components.LocalExpandableTextType
@@ -50,10 +49,10 @@ import com.sarang.torang.di.feed_di.CustomFeedCompose
 import com.sarang.torang.di.feed_di.customPullToRefresh
 import com.sarang.torang.repository.FeedRepository
 import com.sarang.torang.repository.LoginRepository
-import com.sarang.torang.repository.LoginRepositoryTest
 import com.sarang.torang.repository.ProfileRepository
 import com.sarang.torang.repository.ProfileRepositoryTest
 import com.sarang.torang.repository.test.FeedRepositoryTest
+import com.sarang.torang.repository.test.LoginRepositoryTest
 import com.sarang.torang.test.FeedScreenInMainTest
 import com.sarang.torang.test.FeedScreenTest
 import com.sarang.torang.test.TestBasic
@@ -66,15 +65,10 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject lateinit var loginRepository: LoginRepository
+    @Inject lateinit var profileRepository: ProfileRepository
 
-    @Inject
-    lateinit var loginRepository: LoginRepository
-
-    @Inject
-    lateinit var profileRepository: ProfileRepository
-
-    @Inject
-    lateinit var feedRepository: FeedRepository
+    @Inject lateinit var feedRepository: FeedRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +78,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    TextScreen(loginRepository)
+                    TestFeed(loginRepository)
                 }
             }
         }
@@ -98,7 +92,7 @@ class MainActivity : ComponentActivity() {
 @Composable fun TestBasic_() { TestBasic() }
 @Composable fun TestPinchZoom_() { TestPinchZoom() }
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable fun TextScreen(loginRepository : LoginRepository){
+@Composable fun TestFeed(loginRepository : LoginRepository){
     val navController = rememberNavController()
     val feedScreenState = rememberFeedScreenState()
 
@@ -145,7 +139,7 @@ class MainActivity : ComponentActivity() {
                 PreviewReconnect()
             }
             composable("FeedScreenInMain") {
-                LaunchedEffect("") { feedScreenState.showSnackBar("FeedScreenInMain") }
+                LaunchedEffect(Unit) { feedScreenState.showSnackBar("FeedScreenInMain") }
                 FeedScreenInMainTest()
             }
             composable("LoginRepositoryTest") {
