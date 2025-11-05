@@ -48,7 +48,6 @@ class FeedScreenInMainViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             loadPage()
-            delay(1000)
             subScribeFeed()
         }
     }

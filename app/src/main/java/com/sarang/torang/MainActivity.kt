@@ -1,5 +1,6 @@
 package com.sarang.torang
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -34,6 +35,7 @@ import com.sarang.torang.compose.feed.FeedScreenByPictureId
 import com.sarang.torang.compose.feed.FeedScreenByReviewId
 import com.sarang.torang.compose.feed.FeedScreenSuccessPreview
 import com.sarang.torang.compose.feed.PreviewReconnect
+import com.sarang.torang.compose.feed.component.FeedShimmer
 import com.sarang.torang.compose.feed.internal.components.LocalExpandableTextType
 import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
@@ -50,15 +52,11 @@ import com.sarang.torang.di.feed_di.customPullToRefresh
 import com.sarang.torang.repository.FeedRepository
 import com.sarang.torang.repository.LoginRepository
 import com.sarang.torang.repository.ProfileRepository
-import com.sarang.torang.repository.ProfileRepositoryTest
-import com.sarang.torang.repository.test.FeedRepositoryTest
 import com.sarang.torang.repository.test.LoginRepositoryTest
 import com.sarang.torang.test.FeedScreenInMainTest
 import com.sarang.torang.test.FeedScreenTest
-import com.sarang.torang.test.TestBasic
 import com.sarang.torang.test.TestFeedScreenByRestaurantId
 import com.sarang.torang.test.TestPinchZoom
-import com.sarang.torang.test.TestUserFeedByReviewIdScreen
 import com.sryang.torang.ui.TorangTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -86,11 +84,6 @@ class MainActivity : ComponentActivity() {
 }
 
 // @formatter:off
-@Composable fun TestUserFeedByReviewIdScreen_() { TestUserFeedByReviewIdScreen() }
-@Composable fun ProfileRepositoryTest_(profileRepository: ProfileRepository) { ProfileRepositoryTest(profileRepository) }
-@Composable fun FeedRepositoryTest_(feedRepository: FeedRepository) { FeedRepositoryTest(feedRepository) }
-@Composable fun TestBasic_() { TestBasic() }
-@Composable fun TestPinchZoom_() { TestPinchZoom() }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable fun TestFeed(loginRepository : LoginRepository){
     val navController = rememberNavController()
@@ -109,14 +102,13 @@ class MainActivity : ComponentActivity() {
         ) {
             composable("Menu") {
                 Menu(
-                    onFeedScreen = { navController.navigate("FeedScreenTest") },
-                    onLoginRepository = { navController.navigate("LoginRepositoryTest") },
-                    onFeedScreenInMain = { navController.navigate("FeedScreenInMain") },
-                    onFeed = { navController.navigate("FeedTest") },
-                    onFeedSuccess = { navController.navigate("FeedSuccessTest") },
-                    onFeedScreenByRestaurantId = { navController.navigate("FeedScreenByRestaurantId") },
-                    onFeedScreenByPictureId = { navController.navigate("FeedScreenByPictureId") },
-                    onFeedScreenByReviewId = { navController.navigate("FeedScreenByReviewId") }
+                    onFeedScreen                = { navController.navigate("FeedScreenTest") },
+                    onLoginRepository           = { navController.navigate("LoginRepositoryTest") },
+                    onFeedScreenInMain          = { navController.navigate("FeedScreenInMain") },
+                    onFeed                      = { navController.navigate("FeedTest") },
+                    onFeedScreenByRestaurantId  = { navController.navigate("FeedScreenByRestaurantId") },
+                    onFeedScreenByPictureId     = { navController.navigate("FeedScreenByPictureId") },
+                    onFeedScreenByReviewId      = { navController.navigate("FeedScreenByReviewId") }
                 )
             }
             //TestBasic()
@@ -126,15 +118,9 @@ class MainActivity : ComponentActivity() {
             composable("FeedTest") {
                 FeedTest()
             }
-            composable("FeedSuccessTest"){
-                FeedListScreen()
+            composable("TestPinchZoom") {
+                TestPinchZoom()
             }
-            //TestPinchZoom()
-            //FeedScreenEmptyPreview()
-            //FeedScreenLoadingPreview()
-            //TestUserFeedByReviewIdScreen_()
-            //TestFeedScreenByReviewId_()
-            //TestFeedScreenByRestaurantId_()
             composable("FeedReconnect") {
                 PreviewReconnect()
             }
@@ -148,9 +134,6 @@ class MainActivity : ComponentActivity() {
             composable("FeedScreenByRestaurantId") {
                 TestFeedScreenByRestaurantId(234)
             }
-            //ProfileRepositoryTest(profileRepository = profileRepository)
-            //FeedRepositoryTest_(feedRepository = feedRepository)
-            //TestFeedScreenAndSnackBar()
             composable ("FeedScreenByPictureId") {
                 FeedScreenByPictureId(
                     pictureId = 1272,
@@ -217,7 +200,6 @@ fun Menu(
     onLoginRepository: () -> Unit = {},
     onFeedScreenInMain: () -> Unit = {},
     onFeed: () -> Unit = {},
-    onFeedSuccess: () -> Unit = {},
     onFeedScreenByRestaurantId: () -> Unit = {},
     onFeedScreenByPictureId: () -> Unit = {},
     onFeedScreenByReviewId: () -> Unit = {},
@@ -227,7 +209,6 @@ fun Menu(
         Button(onLoginRepository) { Text("LoginRepository") }
         Button(onFeedScreenInMain) { Text("FeedScreenInMain") }
         Button(onFeed) { Text("Feed") }
-        Button(onFeedSuccess) { Text("FeedSuccess") }
         Button(onFeedScreenByRestaurantId) { Text("FeedScreenByRestaurantId") }
         Button(onFeedScreenByPictureId) { Text("FeedScreenByPictureId") }
         Button(onFeedScreenByReviewId) { Text("FeedScreenByReviewId") }
@@ -262,5 +243,20 @@ fun FeedTest(){
         FeedItem(uiState = FeedItemUiState.Sample.copy(isLike = isLike, isLogin = true), feedItemClickEvents = FeedItemClickEvents(
             onLike = { isLike = !isLike }
         ))
+    }
+}
+
+@Preview(
+    name = "Light Mode",
+    uiMode = Configuration.UI_MODE_NIGHT_NO
+)
+@Preview(
+    name = "Dark Mode",
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+fun PreviewFeedShimmer() {
+    TorangTheme() {
+        FeedShimmer(modifier = Modifier.fillMaxSize())
     }
 }
