@@ -20,6 +20,17 @@ import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.FeedScreenInMainViewModel
 
+/**
+ * FeedScreen for Main
+ *
+ * ### Click Event Handling
+ * Each item-level click event (e.g., like, share, comment, favorite, etc.)
+ * is delegated through [com.sarang.torang.compose.feed.type.LocalFeedCompose].
+ * [FeedScreen] handles the like and favorite events directly.
+ * For comment and share events, refer to what [com.sarang.torang.compose.feed.type.LocalFeedCompose] provides
+ * within the CompositionLocalProvider to understand how they should be handled.
+ *
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedScreenInMain(

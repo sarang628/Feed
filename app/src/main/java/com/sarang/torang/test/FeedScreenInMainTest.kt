@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.EmptyTestActivity
 import com.sarang.torang.compose.feed.FeedScreenInMain
+import com.sarang.torang.di.feed_di.provideFeedScreenInMain
 import com.sarang.torang.viewmodels.FeedScreenInMainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -50,6 +51,6 @@ fun FeedScreenInMainTest() {
             }
         } }
     ) {
-        FeedScreenInMain(feedsViewModel = feedsViewModel)
+        provideFeedScreenInMain(feedsViewModel)
     }
 }
