@@ -51,7 +51,6 @@ import com.sarang.torang.di.feed_di.CustomFeedCompose
 import com.sarang.torang.di.feed_di.customPullToRefresh
 import com.sarang.torang.repository.FeedRepository
 import com.sarang.torang.repository.LoginRepository
-import com.sarang.torang.repository.ProfileRepository
 import com.sarang.torang.repository.test.LoginRepositoryTest
 import com.sarang.torang.test.FeedScreenInMainTest
 import com.sarang.torang.test.FeedScreenTest
@@ -64,7 +63,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @Inject lateinit var loginRepository: LoginRepository
-    @Inject lateinit var profileRepository: ProfileRepository
 
     @Inject lateinit var feedRepository: FeedRepository
 
@@ -98,7 +96,7 @@ class MainActivity : ComponentActivity() {
     ) {
         NavHost(
             navController = navController,
-            startDestination = "Menu"
+            startDestination = "FeedScreenInMain"
         ) {
             composable("Menu") {
                 Menu(

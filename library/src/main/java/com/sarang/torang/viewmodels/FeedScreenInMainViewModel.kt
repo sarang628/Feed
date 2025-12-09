@@ -139,7 +139,10 @@ class FeedScreenInMainViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 if (feedUiState.isLogin) { clickLikeUseCase.invoke(reviewId) }
-                else{ throw Exception("로그인을 해주세요.") }
+                else{
+                    Log.e(tag, "로그인을 해주세요.")
+                    throw Exception("로그인을 해주세요.")
+                }
             }
             catch (e: Exception) { handleErrorMsg(e) }
         }
@@ -150,7 +153,10 @@ class FeedScreenInMainViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 if (feedUiState.isLogin) { clickFavoriteUseCase.invoke(reviewId) }
-                else{ throw Exception("로그인을 해주세요.") }
+                else{
+                    Log.e(tag, "로그인을 해주세요.")
+                    throw Exception("로그인을 해주세요.")
+                }
             }
             catch (e: Exception) { handleErrorMsg(e) }
         }
