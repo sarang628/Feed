@@ -68,42 +68,40 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun FeedScreen(
-    // @formatter:off
-    modifier            :Modifier               = Modifier,
-    feedScreenState     :FeedScreenState        = rememberFeedScreenState(),
-    tag                 :String                 = "__FeedScreen",
-    loadingUiState      :FeedLoadingUiState     = FeedLoadingUiState.Loading,
-    feedUiState         : FeedUiState           = FeedUiState(),
-    topAppBar           :@Composable () -> Unit = {},
-    onBackToTop         :Boolean                = true,
-    scrollEnabled       :Boolean                = true,
-    pageScrollable      :Boolean                = true,
-    feedCallBack        :FeedCallBack           = FeedCallBack(tag = tag),
-    contentWindowInsets : WindowInsets          = ScaffoldDefaults.contentWindowInsets,
-    // @formatter:on
+    modifier            : Modifier               = Modifier,
+    feedScreenState     : FeedScreenState        = rememberFeedScreenState(),
+    tag                 : String                 = "__FeedScreen",
+    loadingUiState      : FeedLoadingUiState     = FeedLoadingUiState.Loading,
+    feedUiState         : FeedUiState            = FeedUiState(),
+    topAppBar           : @Composable () -> Unit = {},
+    onBackToTop         : Boolean                = true,
+    scrollEnabled       : Boolean                = true,
+    pageScrollable      : Boolean                = true,
+    feedCallBack        : FeedCallBack           = FeedCallBack(tag = tag),
+    contentWindowInsets : WindowInsets           = ScaffoldDefaults.contentWindowInsets,
 ) {
     HandleOnFocusIndex(feedScreenState.listState, feedCallBack.onFocusItemIndex)
     if(onBackToTop) HandleBack(feedScreenState.listState)
 
     Scaffold(
-        snackbarHost = { SnackbarHost(hostState = feedScreenState.snackbarState) },
-        topBar = topAppBar,
+        snackbarHost        = { SnackbarHost(hostState = feedScreenState.snackbarState) },
+        topBar              = topAppBar,
         contentWindowInsets = contentWindowInsets
     ) { padding ->
         Box(modifier = modifier) {
 
             FeedListScreen(
-                modifier = Modifier.padding(padding),
-                uiState = feedUiState,
+                modifier        = Modifier.padding(padding),
+                uiState         = feedUiState,
                 feedScreenState = feedScreenState,
-                scrollEnabled = scrollEnabled,
-                feedCallBack = feedCallBack,
-                pageScrollable = pageScrollable,
+                scrollEnabled   = scrollEnabled,
+                feedCallBack    = feedCallBack,
+                pageScrollable  = pageScrollable,
             )
 
             AnimatedContent(
-                targetState = loadingUiState,
-                transitionSpec = { fadeIn(tween(800)) with fadeOut(tween(800)) using SizeTransform(clip = false) }
+                targetState     = loadingUiState,
+                transitionSpec  = { fadeIn(tween(800)) with fadeOut(tween(800)) using SizeTransform(clip = false) }
             ) { uiState ->
                 when (uiState) {
                     FeedLoadingUiState.Loading -> FeedShimmer(
@@ -114,15 +112,14 @@ fun FeedScreen(
                     )
 
                     is FeedLoadingUiState.Empty -> RefreshAndBottomDetectionLazyColumn(
-                        modifier = Modifier.padding(padding),
-                        listState = feedScreenState.listState,
-                        pullToRefreshLayoutState = feedScreenState.pullToRefreshLayoutState,
-                        onRefresh = feedCallBack.onRefresh,
-                        content = { EmptyFeed() },
-                        count = 1,
-                        itemCompose = {Box(Modifier
-                            .height(1000.dp)
-                            .fillMaxWidth()){} }
+                        modifier                    = Modifier.padding(padding),
+                        listState                   = feedScreenState.listState,
+                        pullToRefreshLayoutState    = feedScreenState.pullToRefreshLayoutState,
+                        onRefresh                   = feedCallBack.onRefresh,
+                        content                     = { EmptyFeed() },
+                        count                       = 1,
+                        itemCompose                 = {Box(Modifier.height(1000.dp)
+                                                                   .fillMaxWidth()){} }
                     )
 
                     is FeedLoadingUiState.Success -> {}
@@ -132,17 +129,14 @@ fun FeedScreen(
                             listState = feedScreenState.listState,
                             pullToRefreshLayoutState = feedScreenState.pullToRefreshLayoutState,
                             content = {
-                                Box(Modifier
-                                    .fillMaxSize()
-                                    .padding(padding)){
-                                    Button(
-                                        modifier = Modifier.align(Alignment.Center),
-                                        onClick = feedCallBack.onConnect
-                                    ) {
-                                        Text("connect")
-                                    }
-                                }
-                            }
+                                        Box(Modifier.fillMaxSize()
+                                                    .padding(padding)){
+                                            Button(modifier = Modifier.align(Alignment.Center),
+                                                   onClick  = feedCallBack.onConnect) {
+                                                Text("connect")
+                                            }
+                                        }
+                                     }
                         )
 
                     is FeedLoadingUiState.Error -> {
@@ -165,13 +159,13 @@ fun FeedListScreen(
     pageScrollable: Boolean = true,
 ) {
     RefreshAndBottomDetectionLazyColumn(
-        modifier = modifier,
-        count = uiState.list.size,
-        onBottom = feedCallBack.onBottom,
-        userScrollEnabled = scrollEnabled,
+        modifier                 = modifier,
+        count                    = uiState.list.size,
+        onBottom                 = feedCallBack.onBottom,
+        userScrollEnabled        = scrollEnabled,
         pullToRefreshLayoutState = feedScreenState.pullToRefreshLayoutState,
-        listState = feedScreenState.listState,
-        onRefresh = feedCallBack.onRefresh
+        listState                = feedScreenState.listState,
+        onRefresh                = feedCallBack.onRefresh
     ) {
         LocalFeedCompose.current.invoke(
             FeedTypeData(

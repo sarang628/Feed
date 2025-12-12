@@ -25,32 +25,19 @@ fun FeedScreenInMainTest() {
     BottomSheetScaffold(
         sheetContent = { Box{
             FlowRow {
-                AssistChip(
-                    onClick = {feedsViewModel.subScribeFeed()},
-                    label = { Text("subScribeFeed") }
-                )
-                AssistChip(
-                    onClick = {feedsViewModel.loadPage()},
-                    label = { Text("loadPage") }
-                )
-                AssistChip(
-                    onClick = {feedsViewModel.deleteAllFeed()},
-                    label = { Text("deleteAllFeed") }
-                )
-                AssistChip(
-                    onClick = {
+                AssistChip(onClick = {feedsViewModel.subScribeFeed()},
+                           label = { Text("subScribeFeed") })
+                AssistChip(onClick = {feedsViewModel.loadPage()},
+                           label = { Text("loadPage") })
+                AssistChip(onClick = {feedsViewModel.deleteAllFeed()},
+                           label = { Text("deleteAllFeed") })
+                AssistChip(onClick = {
                         context.startActivity(
-                            Intent(
-                                context,
-                                EmptyTestActivity::class.java
-                            )
-                        )
-                    },
+                            Intent(context,
+                                EmptyTestActivity::class.java)) },
                     label = { Text("newActivity") }
                 )
-            }
-        } }
-    ) {
+                    } } } ) {
         provideFeedScreenInMain(feedsViewModel)
     }
 }

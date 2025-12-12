@@ -10,6 +10,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -54,6 +55,15 @@ fun FeedScreenInMain(
     LaunchedEffect(feedsViewModel.isRefreshingState) { feedScreenState.refresh(feedsViewModel.isRefreshingState) }
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+
+    LaunchedEffect(Unit) {
+        snapshotFlow {
+            feedScreenState.pullToRefreshLayoutState.refreshIndicatorState
+        }.collect { state ->
+            Log.d(tag, "$state")
+        }
+    }
+
     FeedScreen(
         modifier            = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         loadingUiState      = uiState,
@@ -67,9 +77,12 @@ fun FeedScreenInMain(
         onConnect           = { feedsViewModel.reconnect() },
         onLike              = { feedsViewModel.onLike(it) },
         onFavorite          = { feedsViewModel.onFavorite(it) } ),
-        topAppBar           = { FeedTopAppBar(onAddReview = onAddReview, topAppIcon = Icons.AutoMirrored.Default.Send, scrollBehavior = scrollBehavior, onAlarm = onAlarm) },
         scrollEnabled       = scrollEnabled,
         pageScrollable      = pageScrollable,
-        contentWindowInsets = contentWindowInsets
+        contentWindowInsets = contentWindowInsets,
+        topAppBar           = { FeedTopAppBar(onAddReview    = onAddReview,
+                                              topAppIcon     = Icons.AutoMirrored.Default.Send,
+                                              scrollBehavior = scrollBehavior,
+                                              onAlarm        = onAlarm) },
     )
 }

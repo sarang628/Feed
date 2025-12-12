@@ -40,7 +40,7 @@ class FeedScreenInMainViewModel @Inject constructor(
 
     var uiState: FeedLoadingUiState by mutableStateOf(FeedLoadingUiState.Loading); internal set
     var feedUiState by mutableStateOf(FeedUiState()); private set
-    var isRefreshingState by mutableStateOf(false);
+    var isRefreshingState by mutableStateOf(false); private set
     override var focusedIndexState by mutableIntStateOf(0)
     override var videoPlayListState : List<Int> by mutableStateOf(listOf())
     var msgState : List<String> by mutableStateOf(listOf()); private set

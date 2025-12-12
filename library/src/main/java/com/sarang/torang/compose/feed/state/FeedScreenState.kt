@@ -16,7 +16,9 @@ fun rememberFeedScreenState(): FeedScreenState {
     return remember { FeedScreenState(listState, snackbarState, pullToRefreshState) }
 }
 
-class FeedScreenState(val listState: LazyListState, val snackbarState: SnackbarHostState, val pullToRefreshLayoutState: PullToRefreshLayoutState) {
+class FeedScreenState(val listState                 : LazyListState,
+                      val snackbarState             : SnackbarHostState,
+                      val pullToRefreshLayoutState  : PullToRefreshLayoutState) {
     suspend fun onTop() {
         listState.animateScrollToItem(0)
     }
