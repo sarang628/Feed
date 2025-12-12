@@ -1,6 +1,5 @@
 package com.sarang.torang
 
-import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -18,32 +17,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.sarang.torang.compose.feed.FeedItem
-import com.sarang.torang.compose.feed.FeedItemClickEvents
-import com.sarang.torang.compose.feed.FeedListScreen
 import com.sarang.torang.compose.feed.FeedScreenByPictureId
 import com.sarang.torang.compose.feed.FeedScreenByReviewId
-import com.sarang.torang.compose.feed.FeedScreenSuccessPreview
 import com.sarang.torang.compose.feed.PreviewReconnect
-import com.sarang.torang.compose.feed.component.FeedShimmer
 import com.sarang.torang.compose.feed.internal.components.LocalExpandableTextType
 import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.compose.feed.type.LocalBottomDetectingLazyColumnType
 import com.sarang.torang.compose.feed.type.LocalFeedCompose
 import com.sarang.torang.compose.feed.type.LocalPullToRefreshLayoutType
-import com.sarang.torang.data.basefeed.FeedItemUiState
-import com.sarang.torang.data.basefeed.Sample
 import com.sarang.torang.di.basefeed_di.CustomExpandableTextType
 import com.sarang.torang.di.basefeed_di.CustomFeedImageLoader
 import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
@@ -109,12 +97,8 @@ class MainActivity : ComponentActivity() {
                     onFeedScreenByReviewId      = { navController.navigate("FeedScreenByReviewId") }
                 )
             }
-            //TestBasic()
             composable("FeedScreenTest") {
                 FeedScreenTest()
-            }
-            composable("FeedTest") {
-                FeedTest()
             }
             composable("TestPinchZoom") {
                 TestPinchZoom()
@@ -210,51 +194,5 @@ fun Menu(
         Button(onFeedScreenByRestaurantId) { Text("FeedScreenByRestaurantId") }
         Button(onFeedScreenByPictureId) { Text("FeedScreenByPictureId") }
         Button(onFeedScreenByReviewId) { Text("FeedScreenByReviewId") }
-    }
-}
-
-@Preview
-@Composable
-fun FeedScreenSuccessPreview1() {
-    CompositionLocalProvider(
-        LocalFeedCompose provides CustomFeedCompose,
-        LocalPullToRefreshLayoutType provides customPullToRefresh,
-        LocalExpandableTextType provides CustomExpandableTextType,
-        LocalFeedImageLoader provides { CustomFeedImageLoader().invoke(it) }
-    ) {
-        TorangTheme {
-            FeedScreenSuccessPreview()
-        }
-    }
-}
-
-@Preview
-@Composable
-fun FeedTest(){
-    var isLike by remember { mutableStateOf(true) }
-    CompositionLocalProvider(
-        LocalFeedCompose provides CustomFeedCompose,
-        LocalPullToRefreshLayoutType provides customPullToRefresh,
-        LocalExpandableTextType provides CustomExpandableTextType,
-        LocalFeedImageLoader provides { CustomFeedImageLoader().invoke(it) }
-    ) {
-        FeedItem(uiState = FeedItemUiState.Sample.copy(isLike = isLike, isLogin = true), feedItemClickEvents = FeedItemClickEvents(
-            onLike = { isLike = !isLike }
-        ))
-    }
-}
-
-@Preview(
-    name = "Light Mode",
-    uiMode = Configuration.UI_MODE_NIGHT_NO
-)
-@Preview(
-    name = "Dark Mode",
-    uiMode = Configuration.UI_MODE_NIGHT_YES
-)
-@Composable
-fun PreviewFeedShimmer() {
-    TorangTheme() {
-        FeedShimmer(modifier = Modifier.fillMaxSize())
     }
 }
