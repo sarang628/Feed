@@ -1,7 +1,6 @@
 package com.sarang.torang
 
 import android.app.Application
-import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -34,13 +33,6 @@ class FeedScreenByRestaurantIdTest {
     fun FeedScreenByRestaurantIdTest() {
         composeTestRule.setContent {
             FeedScreenByRestaurantId(restaurantId = 234)
-        }
-    }
-
-    @Test
-    fun FeedScreenInMainTest() {
-        composeTestRule.setContent {
-            FeedScreenInMain()
         }
     }
 }

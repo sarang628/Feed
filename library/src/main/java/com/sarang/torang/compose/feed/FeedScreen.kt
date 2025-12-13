@@ -56,10 +56,6 @@ import kotlinx.coroutines.launch
 
 
 /**
- * @param loadingUiState
- * @param topAppBar
- * @param onBackToTop
- * @param scrollEnabled
  * @sample FeedScreenEmptyPreview
  * @sample FeedScreenLoadingPreview
  * @sample FeedScreenSuccessPreview
@@ -99,14 +95,15 @@ fun FeedScreen(
 
             AnimatedContent(
                 targetState     = loadingUiState,
-                transitionSpec  = { fadeIn(tween(800)) with fadeOut(tween(800)) using SizeTransform(clip = false) }
+                transitionSpec  = { fadeIn(tween(800)) with
+                                    fadeOut(tween(800)) using
+                                    SizeTransform(clip = false) }
             ) { uiState ->
                 when (uiState) {
                     FeedLoadingUiState.Loading -> FeedShimmer(
-                        modifier = Modifier
-                            .testTag("shimmer")
-                            .fillMaxSize()
-                            .padding(padding)
+                        modifier = Modifier.testTag("shimmer")
+                                           .fillMaxSize()
+                                           .padding(padding)
                     )
 
                     is FeedLoadingUiState.Empty -> RefreshAndBottomDetectionLazyColumn(
@@ -148,13 +145,13 @@ fun FeedScreen(
 
 @Composable
 fun FeedListScreen(
-    modifier: Modifier = Modifier,
-    uiState: FeedUiState = FeedUiState(),
-    tag: String = "__FeedSuccess",
-    scrollEnabled: Boolean = true,
-    feedScreenState: FeedScreenState = rememberFeedScreenState(),
-    feedCallBack: FeedCallBack = FeedCallBack(tag = tag),
-    pageScrollable: Boolean = true,
+    modifier        : Modifier          = Modifier,
+    uiState         : FeedUiState       = FeedUiState(),
+    tag             : String            = "__FeedSuccess",
+    scrollEnabled   : Boolean           = true,
+    feedScreenState : FeedScreenState   = rememberFeedScreenState(),
+    feedCallBack    : FeedCallBack      = FeedCallBack(tag = tag),
+    pageScrollable  : Boolean           = true,
 ) {
     RefreshAndBottomDetectionLazyColumn(
         modifier                 = modifier,
@@ -167,17 +164,17 @@ fun FeedListScreen(
     ) {
         LocalFeedCompose.current.invoke(
             FeedTypeData(
-                feed = uiState.list[it],
-                onLike = feedCallBack.onLike,
-                onFavorite = feedCallBack.onFavorite,
-                onVideoClick = { feedCallBack.onVideoClick.invoke(uiState.list[it].reviewId) },
-                imageHeight = uiState.imageHeight(
+                feed            = uiState.list[it],
+                onLike          = feedCallBack.onLike,
+                onFavorite      = feedCallBack.onFavorite,
+                onVideoClick    = { feedCallBack.onVideoClick.invoke(uiState.list[it].reviewId) },
+                pageScrollable  = pageScrollable,
+                isLogin         = uiState.isLogin,
+                imageHeight     = uiState.imageHeight(
                     density = LocalDensity.current,
                     screenWidthDp = LocalConfiguration.current.screenWidthDp,
                     screenHeightDp = LocalConfiguration.current.screenHeightDp
-                ),
-                pageScrollable = pageScrollable,
-                isLogin = uiState.isLogin
+                )
             )
         )
     }
