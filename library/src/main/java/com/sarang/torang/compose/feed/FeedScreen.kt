@@ -56,11 +56,10 @@ import kotlinx.coroutines.launch
 
 
 /**
- * 피드 화면
- * @param loadingUiState               uiState
- * @param topAppBar             상단 앱 바
- * @param onBackToTop           back 이벤트 시 리스트를 최상단으로 올리는 이벤트
- * @param scrollEnabled         리스트 스크롤 가능 여부
+ * @param loadingUiState
+ * @param topAppBar
+ * @param onBackToTop
+ * @param scrollEnabled
  * @sample FeedScreenEmptyPreview
  * @sample FeedScreenLoadingPreview
  * @sample FeedScreenSuccessPreview
@@ -83,13 +82,12 @@ fun FeedScreen(
     HandleOnFocusIndex(feedScreenState.listState, feedCallBack.onFocusItemIndex)
     if(onBackToTop) HandleBack(feedScreenState.listState)
 
-    Scaffold(
+    Scaffold(modifier       = modifier,
         snackbarHost        = { SnackbarHost(hostState = feedScreenState.snackbarState) },
         topBar              = topAppBar,
         contentWindowInsets = contentWindowInsets
     ) { padding ->
-        Box(modifier = modifier) {
-
+        Box {
             FeedListScreen(
                 modifier        = Modifier.padding(padding),
                 uiState         = feedUiState,

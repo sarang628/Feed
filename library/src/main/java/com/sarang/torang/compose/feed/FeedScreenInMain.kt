@@ -10,12 +10,17 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.compose.feed.component.FeedTopAppBar
 import com.sarang.torang.compose.feed.state.FeedScreenState
+import com.sarang.torang.compose.feed.state.RefreshIndicatorState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.uistate.FeedUiState
@@ -46,20 +51,31 @@ fun FeedScreenInMain(
 ) {
     val uiState: FeedLoadingUiState = feedsViewModel.uiState
     val feedUiState: FeedUiState = feedsViewModel.feedUiState
+    val appBarState = rememberTopAppBarState()
+    var isRefreshing by remember { mutableStateOf(false) }
+    val scrollBehavior =
+        if (isRefreshing) {
+            TopAppBarDefaults.pinnedScrollBehavior(appBarState)
+        } else {
+            TopAppBarDefaults.enterAlwaysScrollBehavior(appBarState)
+        }
+
     LaunchedEffect(feedsViewModel.msgState) {
         if (feedsViewModel.msgState.isNotEmpty()) {
             feedScreenState.showSnackBar(feedsViewModel.msgState[0])
             feedsViewModel.removeTopErrorMessage()
         }
     }
-    LaunchedEffect(feedsViewModel.isRefreshingState) { feedScreenState.refresh(feedsViewModel.isRefreshingState) }
+    LaunchedEffect(feedsViewModel.isRefreshingState) {
+        feedScreenState.refresh(feedsViewModel.isRefreshingState)
+    }
 
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
     LaunchedEffect(Unit) {
         snapshotFlow {
-            feedScreenState.pullToRefreshLayoutState.refreshIndicatorState
+            feedScreenState.pullToRefreshLayoutState.refreshIndicatorState.value
         }.collect { state ->
+            isRefreshing = state != RefreshIndicatorState.Default
             Log.d(tag, "$state")
         }
     }

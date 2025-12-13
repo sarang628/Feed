@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.EmptyTestActivity
-import com.sarang.torang.compose.feed.FeedScreenInMain
 import com.sarang.torang.di.feed_di.provideFeedScreenInMain
 import com.sarang.torang.viewmodels.FeedScreenInMainViewModel
 

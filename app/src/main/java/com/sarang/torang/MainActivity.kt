@@ -175,7 +175,7 @@ fun OperationButtons(
     }
 }
 
-@Preview()
+@Preview
 @Composable
 fun Menu(
     onFeedScreen: () -> Unit = {},

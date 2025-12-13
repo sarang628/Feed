@@ -31,7 +31,6 @@ internal fun RefreshAndBottomDetectionLazyColumn(
     LocalPullToRefreshLayoutType.current.invoke(modifier, pullToRefreshLayoutState, onRefresh) {
         LocalBottomDetectingLazyColumnType.current.invoke(
             BottomDetectingLazyColumnData(
-                modifier = Modifier,
                 count = count,
                 onBottom = onBottom,
                 itemCompose = itemCompose,
