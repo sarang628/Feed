@@ -76,7 +76,6 @@ fun FeedScreenInMain(
             feedScreenState.pullToRefreshLayoutState.refreshIndicatorState.value
         }.collect { state ->
             isRefreshing = state != RefreshIndicatorState.Default
-            Log.d(tag, "$state")
         }
     }
 
