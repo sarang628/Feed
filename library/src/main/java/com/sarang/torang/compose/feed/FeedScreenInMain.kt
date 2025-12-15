@@ -60,14 +60,16 @@ fun FeedScreenInMain(
             TopAppBarDefaults.enterAlwaysScrollBehavior(appBarState)
         }
 
-    LaunchedEffect(feedsViewModel.msgState) {
+    LaunchedEffect(Unit) {
         if (feedsViewModel.msgState.isNotEmpty()) {
             feedScreenState.showSnackBar(feedsViewModel.msgState[0])
             feedsViewModel.removeTopErrorMessage()
         }
     }
-    LaunchedEffect(feedsViewModel.isRefreshingState) {
-        feedScreenState.refresh(feedsViewModel.isRefreshingState)
+    LaunchedEffect(Unit) {
+        snapshotFlow { feedsViewModel.isRefreshingState }.collect {
+            feedScreenState.refresh(it)
+        }
     }
 
 

@@ -107,6 +107,7 @@ class FeedScreenInMainViewModel @Inject constructor(
     override fun refreshFeed() {
         viewModelScope.launch {
             isRefreshingState = true
+            delay(500)
             try { feedWithPageUseCase.invoke(0); page = 1 }
             catch (e: ConnectException) { if(page == 0)  handleErrorMsg(e) }
             catch (e: Exception) { if(page == 0) handleErrorMsg(e) }
