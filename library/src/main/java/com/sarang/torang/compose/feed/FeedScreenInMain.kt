@@ -97,6 +97,7 @@ fun FeedScreenInMain(
         scrollEnabled       = scrollEnabled,
         pageScrollable      = pageScrollable,
         contentWindowInsets = contentWindowInsets,
+        showBottomProgress  = true,
         topAppBar           = { FeedTopAppBar(onAddReview    = onAddReview,
                                               topAppIcon     = Icons.AutoMirrored.Default.Send,
                                               scrollBehavior = scrollBehavior,

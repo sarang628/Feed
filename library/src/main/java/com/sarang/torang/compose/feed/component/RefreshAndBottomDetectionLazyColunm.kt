@@ -3,6 +3,7 @@ package com.sarang.torang.compose.feed.component
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
@@ -25,19 +26,21 @@ internal fun RefreshAndBottomDetectionLazyColumn(
     onBottom                 : () -> Unit = {},
     userScrollEnabled        : Boolean = true,
     listState                : LazyListState = rememberLazyListState(),
+    listContent              : LazyListScope.() -> Unit  = {},
     content                  : @Composable () -> Unit = {},
     itemCompose              : @Composable (Int) -> Unit = {},
 ) {
     LocalPullToRefreshLayoutType.current.invoke(modifier, pullToRefreshLayoutState, onRefresh) {
         LocalBottomDetectingLazyColumnType.current.invoke(
             BottomDetectingLazyColumnData(
-                count = count,
-                onBottom = onBottom,
-                itemCompose = itemCompose,
-                userScrollEnabled = userScrollEnabled,
-                arrangement = Arrangement.spacedBy(10.dp),
-                listState = listState,
-                content = content))
+                count               = count,
+                onBottom            = onBottom,
+                itemCompose         = itemCompose,
+                userScrollEnabled   = userScrollEnabled,
+                arrangement         = Arrangement.spacedBy(10.dp),
+                listState           = listState,
+                listContent         = listContent,
+                content             = content))
     }
 }
 

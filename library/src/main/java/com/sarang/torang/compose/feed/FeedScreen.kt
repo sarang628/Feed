@@ -16,8 +16,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
@@ -74,6 +77,7 @@ fun FeedScreen(
     pageScrollable      : Boolean                = true,
     feedCallBack        : FeedCallBack           = FeedCallBack(tag = tag),
     contentWindowInsets : WindowInsets           = ScaffoldDefaults.contentWindowInsets,
+    showBottomProgress  : Boolean                = false
 ) {
     HandleOnFocusIndex(feedScreenState.listState, feedCallBack.onFocusItemIndex)
     if(onBackToTop) HandleBack(feedScreenState.listState)
@@ -91,6 +95,15 @@ fun FeedScreen(
                 scrollEnabled   = scrollEnabled,
                 feedCallBack    = feedCallBack,
                 pageScrollable  = pageScrollable,
+                listContent     = {
+                    if(showBottomProgress){
+                        items(1){
+                            Box(Modifier.fillMaxWidth()){
+                                CircularProgressIndicator(modifier = Modifier.size(30.dp).align(Alignment.Center), strokeWidth = 2.dp)
+                            }
+                        }
+                    }
+                }
             )
 
             AnimatedContent(
@@ -152,6 +165,7 @@ fun FeedListScreen(
     feedScreenState : FeedScreenState   = rememberFeedScreenState(),
     feedCallBack    : FeedCallBack      = FeedCallBack(tag = tag),
     pageScrollable  : Boolean           = true,
+    listContent     : LazyListScope.() -> Unit  = {},
 ) {
     RefreshAndBottomDetectionLazyColumn(
         modifier                 = modifier,
@@ -160,7 +174,8 @@ fun FeedListScreen(
         userScrollEnabled        = scrollEnabled,
         pullToRefreshLayoutState = feedScreenState.pullToRefreshLayoutState,
         listState                = feedScreenState.listState,
-        onRefresh                = feedCallBack.onRefresh
+        onRefresh                = feedCallBack.onRefresh,
+        listContent              = listContent
     ) {
         LocalFeedCompose.current.invoke(
             FeedTypeData(

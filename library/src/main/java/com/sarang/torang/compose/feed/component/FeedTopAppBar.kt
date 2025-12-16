@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -24,10 +25,10 @@ import androidx.compose.ui.unit.sp
 @Preview
 @Composable
 fun FeedTopAppBar(
-    onAddReview: () -> Unit = { Log.w("__FeedTopAppBar", "onAddReview is not implemented") },
-    onAlarm: () -> Unit = { Log.w("__FeedTopAppBar", "onAlarm is not implemented") },
-    topAppIcon: ImageVector = Icons.AutoMirrored.Default.Send,
-    scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    onAddReview     : () -> Unit = { Log.w("__FeedTopAppBar", "onAddReview is not implemented") },
+    onAlarm         : () -> Unit = { Log.w("__FeedTopAppBar", "onAlarm is not implemented") },
+    topAppIcon      : ImageVector = Icons.AutoMirrored.Default.Send,
+    scrollBehavior  : TopAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 ) {
     TopAppBar(
         title = { Text(text = "Torang", fontSize = 21.sp, fontWeight = FontWeight.Bold) },
@@ -47,6 +48,10 @@ fun FeedTopAppBar(
                 )
             }
         },
-        scrollBehavior = scrollBehavior
+        scrollBehavior = scrollBehavior,
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.background,
+            scrolledContainerColor = MaterialTheme.colorScheme.background
+        )
     )
 }
