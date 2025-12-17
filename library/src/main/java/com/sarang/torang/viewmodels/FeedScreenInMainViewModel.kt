@@ -135,27 +135,16 @@ class FeedScreenInMainViewModel @Inject constructor(
         }
     }
 
-    // 좋아여 클릭
-    override fun onLike(reviewId: Int) {
-        viewModelScope.launch {
-            try {
-                clickLikeUseCase.invoke(reviewId)
-            }
-            catch (e: Exception) { handleErrorMsg(e) }
-        }
+    fun onLike(reviewId: Int) {
+        onLike(viewModelScope   = viewModelScope,
+               clickLikeUseCase = clickLikeUseCase,
+               reviewId         = reviewId)
     }
 
-    // 즐겨찾기 클릭
-    override fun onFavorite(reviewId: Int) {
-        viewModelScope.launch {
-            try {
-                if (feedUiState.isLogin) { clickFavoriteUseCase.invoke(reviewId) }
-                else{
-                    Log.e(tag, "로그인을 해주세요.")
-                    throw Exception("로그인을 해주세요.")
-                }
-            }
-            catch (e: Exception) { handleErrorMsg(e) }
-        }
+    fun onFavorite(reviewId: Int) {
+        onFavorite(viewModelScope       = viewModelScope,
+                   reviewId             = reviewId,
+                   clickFavoriteUseCase = clickFavoriteUseCase,
+                   handleErrorMsg       = { handleErrorMsg(it) })
     }
 }

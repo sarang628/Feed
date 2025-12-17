@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.usecase.ClickFavorityUseCase
@@ -16,18 +15,15 @@ import com.sarang.torang.usecase.FeedWithPageUseCase
 import com.sarang.torang.usecase.GetFeedFlowUseCase
 import com.sarang.torang.usecase.GetFeedLodingFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.net.ConnectException
 import javax.inject.Inject
 
 @HiltViewModel
 open class FeedsViewModel @Inject constructor(
-    val feedWithPageUseCase: FeedWithPageUseCase,
-    val clickLikeUseCase: ClickLikeUseCase,
-    val clickFavoriteUseCase: ClickFavorityUseCase,
+    private val feedWithPageUseCase: FeedWithPageUseCase,
+    private val clickLikeUseCase: ClickLikeUseCase,
+    private val clickFavoriteUseCase: ClickFavorityUseCase,
     getLoadingFeedFlowUseCase: GetFeedLodingFlowUseCase,
     getFeedFlowUseCase: GetFeedFlowUseCase,
 ) : ViewModel(),
@@ -85,26 +81,17 @@ open class FeedsViewModel @Inject constructor(
         }
     }
 
-    // 즐겨찾기 클릭
-    override fun onFavorite(reviewId: Int) {
-        viewModelScope.launch {
-            try {
-                if (feedUiState.isLogin) { clickFavoriteUseCase.invoke(reviewId) }
-                else{ throw Exception("로그인을 해주세요.") }
-            }
-            catch (e: Exception) { handleErrorMsg(e) }
-        }
+    fun onFavorite(reviewId: Int) {
+        onFavorite(viewModelScope       = viewModelScope,
+                   reviewId             = reviewId,
+                   clickFavoriteUseCase = clickFavoriteUseCase,
+                   handleErrorMsg       = { handleErrorMsg(it) })
     }
 
-    // 좋아여 클릭
-    override fun onLike(reviewId: Int) {
-        viewModelScope.launch {
-            try {
-                if (feedUiState.isLogin) { clickLikeUseCase.invoke(reviewId) }
-                else{ throw Exception("로그인을 해주세요.") }
-            }
-            catch (e: Exception) { handleErrorMsg(e) }
-        }
+    fun onLike(reviewId: Int) {
+        onLike(viewModelScope   = viewModelScope,
+            clickLikeUseCase = clickLikeUseCase,
+            reviewId         = reviewId)
     }
 
     override fun onBottom() {

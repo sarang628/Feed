@@ -37,27 +37,27 @@ fun FeedScreenByReviewId(
     onBack          : () -> Unit                        = { },
     pageScrollable  : Boolean                           = true,
 ) {
-    val screenHeightDp  : Int                   = LocalConfiguration.current.screenHeightDp
-    val screenWidthDp   : Int                   = LocalConfiguration.current.screenWidthDp
-    val density         : Density               = LocalDensity.current
-
     LaunchedEffect(key1 = reviewId) { // reviewID가 변경되면 피드 로드 요청
         feedsViewModel.getUserFeedByReviewId(reviewId)
     }
 
-    /*LaunchedEffect(feedsViewModel.msgState) {
+    LaunchedEffect(feedsViewModel.msgState) {
         if (feedsViewModel.msgState.isNotEmpty()) {
             feedScreenState.showSnackBar(feedsViewModel.msgState[0])
             feedsViewModel.removeTopErrorMessage()
         }
-    }*/
+    }
 
     FeedsByReviewId(
         feedUiState         = feedsViewModel.feedUiState,
         feedLoadUiState     = feedsViewModel.feedLoadUiState,
         onBack              = onBack,
-        onRefresh           = { feedsViewModel.refreshFeed() },
-        onBottom            = { feedsViewModel.onBottom() },
+        feedCallBack        = FeedCallBack (
+            onRefresh   = feedsViewModel::refreshFeed,
+            onBottom    = feedsViewModel::onBottom,
+            onLike      = feedsViewModel::onLike,
+            onFavorite  = feedsViewModel::onFavorite
+        ),
         feedScreenState     = feedScreenState,
     )
 }
@@ -67,39 +67,33 @@ fun FeedScreenByReviewId(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun FeedsByReviewId(
-    feedLoadUiState: FeedLoadingUiState,
+    feedLoadUiState     : FeedLoadingUiState    = FeedLoadingUiState.Loading,
+    feedScreenState     : FeedScreenState       = rememberFeedScreenState(),
     feedUiState         : FeedUiState           = FeedUiState(),
-    onBack: (() -> Unit)? = null,
-    onRefresh: (() -> Unit),/*base feed 에서 제공*/
-    onBottom: (() -> Unit),/*base feed 에서 제공*/
-    feedScreenState: FeedScreenState = rememberFeedScreenState(),
+    feedCallBack        : FeedCallBack          = FeedCallBack(),
+    onBack              : () -> Unit            = {}
 ) {
     FeedScreen(
         loadingUiState = feedLoadUiState,
         feedScreenState = feedScreenState,
         feedUiState = feedUiState,
+        feedCallBack = feedCallBack,
         topAppBar = {
             TopAppBar(
                 title = { Text(text = "Post", fontSize = 21.sp, fontWeight = FontWeight.Bold) },
                 navigationIcon = {
-                    IconButton(onClick = { onBack?.invoke() }) {
-                        Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack, contentDescription = "") }
+                    IconButton(onClick = onBack) {
+                        Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            contentDescription = null) }
                 })
-        },
-        feedCallBack = FeedCallBack(
-            onRefresh = onRefresh,
-            onBottom = onBottom,
-        ),
+        }
     )
 }
 
 @Preview
 @Composable
 fun PreviewMyFeedScreen() {
-    FeedsByReviewId(
-        /*Preview*/
-        feedLoadUiState = FeedLoadingUiState.Loading,
-        onRefresh = {},
-        onBottom = {},
+    FeedsByReviewId(/*Preview*/
+        feedLoadUiState = FeedLoadingUiState.Loading
     )
 }

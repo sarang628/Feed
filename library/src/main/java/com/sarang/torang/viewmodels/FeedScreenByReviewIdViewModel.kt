@@ -6,23 +6,35 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.uistate.FeedUiState
+import com.sarang.torang.usecase.ClickFavorityUseCase
+import com.sarang.torang.usecase.ClickLikeUseCase
 import com.sarang.torang.usecase.GetFeedByReviewIdUseCase
 import com.sarang.torang.usecase.IsLoginFlowForFeedUseCase
+import com.sarang.torang.usecase.LoadFeedByReviewIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class FeedScreenByReviewIdViewModel @Inject constructor(
-    val getFeedByReviewIdUseCase: GetFeedByReviewIdUseCase,
-    val loginFlowForFeedUseCase: IsLoginFlowForFeedUseCase
-) : ViewModel() {
+    private val getFeedByReviewIdUseCase: GetFeedByReviewIdUseCase,
+    private val loginFlowForFeedUseCase: IsLoginFlowForFeedUseCase,
+    private val clickFavoriteUseCase: ClickFavorityUseCase,
+    private val clickLikeUseCase: ClickLikeUseCase,
+    private val loadByReviewIdUseCase: LoadFeedByReviewIdUseCase
+) : ViewModel(),
+    Likeable,
+    Favoritable,
+    ISnackBarMessage{
     private val tag = "__MyFeedsViewModel"
     var feedUiState : FeedUiState by mutableStateOf(FeedUiState()); private set
     var feedLoadUiState : FeedLoadingUiState by mutableStateOf(FeedLoadingUiState.Loading); private set
+    override var msgState : List<String> by mutableStateOf(listOf());
 
     init {
         viewModelScope.launch {
@@ -32,16 +44,29 @@ class FeedScreenByReviewIdViewModel @Inject constructor(
         }
     }
 
+    private fun handleErrorMsg(e: Exception) { e.message?.let{showError(it)} }
+
+    internal fun showError(msg: String) { this.msgState = this.msgState + msg }
+
     fun getUserFeedByReviewId(reviewId: Int) {
         viewModelScope.launch {
             try {
-                feedLoadUiState = FeedLoadingUiState.Success
-                feedUiState = feedUiState.copy(
-                    list = listOf(getFeedByReviewIdUseCase.invoke(reviewId)),
-                    isLogin = false
-                )
+                loadByReviewIdUseCase.invoke(reviewId = reviewId)
             }catch (e : Exception){
-                Log.e(tag, e.toString())
+                handleErrorMsg(e)
+            }
+        }
+        viewModelScope.launch {
+            try {
+                combine(getFeedByReviewIdUseCase.invoke(reviewId), loginFlowForFeedUseCase.isLogin){
+                    feed, isLogin ->
+                    FeedUiState(if(feed == null) listOf() else listOf(feed), isLogin)
+                }.collect {
+                    feedLoadUiState = FeedLoadingUiState.Success
+                    feedUiState = it
+                }
+            }catch (e : Exception){
+                handleErrorMsg(e)
             }
         }
     }
@@ -57,15 +82,22 @@ class FeedScreenByReviewIdViewModel @Inject constructor(
         return list.indexOf(list.find { it.reviewId == reviewId })
     }
 
-    fun onLike(it: Int) {
-
+    // 좋아여 클릭
+    fun onLike(reviewId: Int) {
+        onLike(viewModelScope   = viewModelScope,
+               clickLikeUseCase = clickLikeUseCase,
+               reviewId         = reviewId,
+               handleErrorMsg   = { handleErrorMsg(it) } )
     }
 
     fun onVideoClick(reviewId: Int) {
 
     }
 
-    fun onFavorite(it: Int) {
-
+    fun onFavorite(reviewId: Int) {
+        onFavorite(viewModelScope       = viewModelScope,
+                   reviewId             = reviewId,
+                   clickFavoriteUseCase = clickFavoriteUseCase,
+                   handleErrorMsg       = { handleErrorMsg(it) })
     }
 }
