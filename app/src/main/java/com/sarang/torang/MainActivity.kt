@@ -84,7 +84,7 @@ class MainActivity : ComponentActivity() {
     ) {
         NavHost(
             navController = navController,
-            startDestination = "FeedScreenInMain"
+            startDestination = "Menu"
         ) {
             composable("Menu") {
                 Menu(

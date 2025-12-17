@@ -139,11 +139,7 @@ class FeedScreenInMainViewModel @Inject constructor(
     override fun onLike(reviewId: Int) {
         viewModelScope.launch {
             try {
-                if (feedUiState.isLogin) { clickLikeUseCase.invoke(reviewId) }
-                else{
-                    Log.e(tag, "로그인을 해주세요.")
-                    throw Exception("로그인을 해주세요.")
-                }
+                clickLikeUseCase.invoke(reviewId)
             }
             catch (e: Exception) { handleErrorMsg(e) }
         }

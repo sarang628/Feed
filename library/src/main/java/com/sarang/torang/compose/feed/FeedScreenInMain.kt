@@ -61,9 +61,11 @@ fun FeedScreenInMain(
         }
 
     LaunchedEffect(Unit) {
-        if (feedsViewModel.msgState.isNotEmpty()) {
-            feedScreenState.showSnackBar(feedsViewModel.msgState[0])
-            feedsViewModel.removeTopErrorMessage()
+        snapshotFlow { feedsViewModel.msgState }.collect {
+            if(!it.isEmpty()){
+                feedScreenState.showSnackBar(feedsViewModel.msgState[0])
+                feedsViewModel.removeTopErrorMessage()
+            }
         }
     }
     LaunchedEffect(Unit) {
