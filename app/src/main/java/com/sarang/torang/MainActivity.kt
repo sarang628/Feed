@@ -82,10 +82,8 @@ class MainActivity : ComponentActivity() {
         LocalFeedImageLoader provides {CustomFeedImageLoader().invoke(it)},
         LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType
     ) {
-        NavHost(
-            navController = navController,
-            startDestination = "Menu"
-        ) {
+        NavHost(navController = navController,
+                startDestination = "Menu") {
             composable("Menu") {
                 Menu(
                     onFeedScreen                = { navController.navigate("FeedScreenTest") },
@@ -97,25 +95,12 @@ class MainActivity : ComponentActivity() {
                     onFeedScreenByReviewId      = { navController.navigate("FeedScreenByReviewId") }
                 )
             }
-            composable("FeedScreenTest") {
-                FeedScreenTest()
-            }
-            composable("TestPinchZoom") {
-                TestPinchZoom()
-            }
-            composable("FeedReconnect") {
-                PreviewReconnect()
-            }
-            composable("FeedScreenInMain") {
-                LaunchedEffect(Unit) { feedScreenState.showSnackBar("FeedScreenInMain") }
-                FeedScreenInMainTest()
-            }
-            composable("LoginRepositoryTest") {
-                LoginRepositoryTest(loginRepository = loginRepository)
-            }
-            composable("FeedScreenByRestaurantId") {
-                TestFeedScreenByRestaurantId(234)
-            }
+            composable("FeedScreenTest") { FeedScreenTest() }
+            composable("TestPinchZoom") { TestPinchZoom() }
+            composable("FeedReconnect") { PreviewReconnect() }
+            composable("LoginRepositoryTest") { LoginRepositoryTest(loginRepository = loginRepository) }
+            composable("FeedScreenByRestaurantId") { TestFeedScreenByRestaurantId(234) }
+            composable("FeedScreenInMain") { FeedScreenInMainTest() }
             composable ("FeedScreenByPictureId") {
                 FeedScreenByPictureId(
                     pictureId = 1272,
@@ -139,60 +124,3 @@ class MainActivity : ComponentActivity() {
     }
 }
 // @formatter:on
-
-@OptIn(ExperimentalLayoutApi::class)
-@Preview(backgroundColor = 0xFFFDFDF6, showBackground = true)
-@Composable
-fun OperationButtons(
-    onTop: () -> Unit = {},
-    onLoading: () -> Unit = {},
-    onSuccess: () -> Unit = {},
-    onEmpty: () -> Unit = {},
-    onError: () -> Unit = {},
-    onReconnect: () -> Unit = {},
-    onRefresh: () -> Unit = {},
-) {
-    FlowRow {
-        AssistChip(modifier = Modifier.padding(4.dp), onClick = onTop, label = { Text("top") })
-        AssistChip(
-            modifier = Modifier.padding(4.dp),
-            onClick = onLoading,
-            label = { Text("loading") })
-        AssistChip(
-            modifier = Modifier.padding(4.dp),
-            onClick = onSuccess,
-            label = { Text("success") })
-        AssistChip(modifier = Modifier.padding(4.dp), onClick = onEmpty, label = { Text("empty") })
-        AssistChip(modifier = Modifier.padding(4.dp), onClick = onError, label = { Text("error") })
-        AssistChip(
-            modifier = Modifier.padding(4.dp),
-            onClick = onReconnect,
-            label = { Text("reconnect") })
-        AssistChip(
-            modifier = Modifier.padding(4.dp),
-            onClick = onRefresh,
-            label = { Text("refresh") })
-    }
-}
-
-@Preview
-@Composable
-fun Menu(
-    onFeedScreen: () -> Unit = {},
-    onLoginRepository: () -> Unit = {},
-    onFeedScreenInMain: () -> Unit = {},
-    onFeed: () -> Unit = {},
-    onFeedScreenByRestaurantId: () -> Unit = {},
-    onFeedScreenByPictureId: () -> Unit = {},
-    onFeedScreenByReviewId: () -> Unit = {},
-) {
-    Column {
-        Button(onFeedScreen) { Text("FeedScreen") }
-        Button(onLoginRepository) { Text("LoginRepository") }
-        Button(onFeedScreenInMain) { Text("FeedScreenInMain") }
-        Button(onFeed) { Text("Feed") }
-        Button(onFeedScreenByRestaurantId) { Text("FeedScreenByRestaurantId") }
-        Button(onFeedScreenByPictureId) { Text("FeedScreenByPictureId") }
-        Button(onFeedScreenByReviewId) { Text("FeedScreenByReviewId") }
-    }
-}

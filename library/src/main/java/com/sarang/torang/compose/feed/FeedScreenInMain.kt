@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import com.sarang.torang.data.feed.FeedCallBack
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -22,6 +23,7 @@ import com.sarang.torang.compose.feed.component.FeedTopAppBar
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.RefreshIndicatorState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
+import com.sarang.torang.data.feed.FeedScreenConfig
 import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.FeedScreenInMainViewModel
@@ -96,10 +98,12 @@ fun FeedScreenInMain(
             onConnect           = feedsViewModel::reconnect,
             onLike              = feedsViewModel::onLike,
             onFavorite          = feedsViewModel::onFavorite),
-        scrollEnabled       = scrollEnabled,
-        pageScrollable      = pageScrollable,
+        feedScreenConfig    = FeedScreenConfig(
+            scrollEnabled       = scrollEnabled,
+            pageScrollable      = pageScrollable,
+            showBottomProgress  = true
+        ),
         contentWindowInsets = contentWindowInsets,
-        showBottomProgress  = true,
         topAppBar           = { FeedTopAppBar(onAddReview    = onAddReview,
                                               topAppIcon     = Icons.AutoMirrored.Default.Send,
                                               scrollBehavior = scrollBehavior,

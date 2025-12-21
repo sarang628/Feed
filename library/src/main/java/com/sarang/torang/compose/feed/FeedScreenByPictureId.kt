@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
+import com.sarang.torang.data.feed.FeedCallBack
 import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.FeedScreenByPictureIdViewModel
@@ -80,8 +81,9 @@ internal fun FeedByPictureId(
         feedUiState     = feedUiState,
         feedScreenState = feedScreenState,
         feedCallBack    = FeedCallBack(
-        onRefresh       = onRefresh,
-        onBottom        = onBottom),
+            onRefresh = onRefresh,
+            onBottom = onBottom
+        ),
         topAppBar       = {
             TopAppBar(
                 title           = {

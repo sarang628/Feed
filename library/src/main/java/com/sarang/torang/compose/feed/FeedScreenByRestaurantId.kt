@@ -8,6 +8,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
+import com.sarang.torang.data.feed.FeedCallBack
+import com.sarang.torang.data.feed.FeedScreenConfig
 import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.FeedScreenByRestaurantIdViewModel
@@ -17,7 +19,7 @@ import com.sarang.torang.viewmodels.FeedScreenByRestaurantIdViewModel
 fun FeedScreenByRestaurantId(
     feedsViewModel  : FeedScreenByRestaurantIdViewModel = hiltViewModel(),
     restaurantId    : Int,
-    pageScrollable  : Boolean = true,
+    feedScreenConfig: FeedScreenConfig = FeedScreenConfig(),
     feedScreenState : FeedScreenState = rememberFeedScreenState()
 ) {
     val uiState     : FeedLoadingUiState    = feedsViewModel.uiState
@@ -38,9 +40,10 @@ fun FeedScreenByRestaurantId(
         loadingUiState  = uiState,
         feedUiState     = feedUiState,
         feedCallBack    = FeedCallBack(
-        onRefresh       = { feedsViewModel.refreshFeed() },
-        onBottom        = { feedsViewModel.onBottom() },
-        onVideoClick    = { feedsViewModel.onVideoClick(it) },),
-        pageScrollable  = pageScrollable
+            onRefresh = { feedsViewModel.refreshFeed() },
+            onBottom = { feedsViewModel.onBottom() },
+            onVideoClick = { feedsViewModel.onVideoClick(it) },
+        ),
+        feedScreenConfig = feedScreenConfig
     )
 }
