@@ -12,7 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import com.sarang.torang.compose.feed.FeedScreen
+import com.sarang.torang.compose.feed.component.FeedScreen
 import com.sarang.torang.uistate.FeedLoadingUiState
 
 @OptIn(ExperimentalMaterial3Api::class)

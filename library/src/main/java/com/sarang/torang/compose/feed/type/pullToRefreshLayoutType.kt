@@ -7,13 +7,20 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import com.sarang.torang.compose.feed.state.PullToRefreshLayoutState
 
-typealias pullToRefreshLayoutType = @Composable (modifier : Modifier, pullToRefreshLayoutState: PullToRefreshLayoutState, onRefresh: (() -> Unit), contents: @Composable (() -> Unit)) -> Unit
+typealias pullToRefreshLayoutType = @Composable (PullToRefreshLayoutData) -> Unit
 
+data class PullToRefreshLayoutData(
+    val modifier                : Modifier = Modifier,
+    val pullToRefreshLayoutState: PullToRefreshLayoutState,
+    val onRefresh               : () -> Unit = {},
+    val contents                : @Composable () -> Unit = {}
+)
 
 val LocalPullToRefreshLayoutType = compositionLocalOf<pullToRefreshLayoutType> {
-    @Composable {modifier,_,_,contents-> Log.w("__LocalPullToRefreshLayoutType", "pullToRefreshLayout is not set");
-        Box(modifier = modifier) {
-            contents.invoke()
+    @Composable { it ->
+        Log.w("__LocalPullToRefreshLayoutType", "pullToRefreshLayout is not set");
+        Box(modifier = it.modifier) {
+            it.contents.invoke()
         }
     }
 }

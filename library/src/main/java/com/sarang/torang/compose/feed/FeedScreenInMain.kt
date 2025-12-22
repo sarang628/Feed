@@ -2,10 +2,13 @@ package com.sarang.torang.compose.feed
 
 import android.util.Log
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -19,6 +22,7 @@ import com.sarang.torang.data.feed.FeedCallBack
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.sarang.torang.compose.feed.component.FeedScreen
 import com.sarang.torang.compose.feed.component.FeedTopAppBar
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.RefreshIndicatorState
@@ -34,7 +38,7 @@ import com.sarang.torang.viewmodels.FeedScreenInMainViewModel
  * ### Click Event Handling
  * Each item-level click event (e.g., like, share, comment, favorite, etc.)
  * is delegated through [com.sarang.torang.compose.feed.type.LocalFeedCompose].
- * [FeedScreen] handles the like and favorite events directly.
+ * [com.sarang.torang.compose.feed.component.FeedScreen] handles the like and favorite events directly.
  * For comment and share events, refer to what [com.sarang.torang.compose.feed.type.LocalFeedCompose] provides
  * within the CompositionLocalProvider to understand how they should be handled.
  *
@@ -85,28 +89,33 @@ fun FeedScreenInMain(
         }
     }
 
-    FeedScreen(
-        modifier            = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        loadingUiState      = uiState,
-        feedUiState         = feedUiState,
-        feedScreenState     = feedScreenState,
-        feedCallBack        = FeedCallBack(
-            onBottom            = feedsViewModel::onBottom,
-            onRefresh           = feedsViewModel::refreshFeed,
-            onFocusItemIndex    = feedsViewModel::onFocusItemIndex,
-            onVideoClick        = feedsViewModel::onVideoClick,
-            onConnect           = feedsViewModel::reconnect,
-            onLike              = feedsViewModel::onLike,
-            onFavorite          = feedsViewModel::onFavorite),
-        feedScreenConfig    = FeedScreenConfig(
-            scrollEnabled       = scrollEnabled,
-            pageScrollable      = pageScrollable,
-            showBottomProgress  = true
-        ),
-        contentWindowInsets = contentWindowInsets,
-        topAppBar           = { FeedTopAppBar(onAddReview    = onAddReview,
-                                              topAppIcon     = Icons.AutoMirrored.Default.Send,
-                                              scrollBehavior = scrollBehavior,
-                                              onAlarm        = onAlarm) },
-    )
+    Scaffold(
+        snackbarHost        = { SnackbarHost(hostState = feedScreenState.snackBarState) },
+        topBar           = { FeedTopAppBar(onAddReview    = onAddReview,
+            topAppIcon     = Icons.AutoMirrored.Default.Send,
+            scrollBehavior = scrollBehavior,
+            onAlarm        = onAlarm) },
+        contentWindowInsets = contentWindowInsets
+    ) {
+        FeedScreen(
+            modifier = Modifier.padding(it).nestedScroll(scrollBehavior.nestedScrollConnection),
+            loadingUiState = uiState,
+            feedUiState = feedUiState,
+            feedScreenState = feedScreenState,
+            feedCallBack = FeedCallBack(
+                onBottom = feedsViewModel::onBottom,
+                onRefresh = feedsViewModel::refreshFeed,
+                onFocusItemIndex = feedsViewModel::onFocusItemIndex,
+                onVideoClick = feedsViewModel::onVideoClick,
+                onConnect = feedsViewModel::reconnect,
+                onLike = feedsViewModel::onLike,
+                onFavorite = feedsViewModel::onFavorite
+            ),
+            feedScreenConfig = FeedScreenConfig(
+                scrollEnabled = scrollEnabled,
+                pageScrollable = pageScrollable,
+                showBottomProgress = true
+            )
+        )
+    }
 }

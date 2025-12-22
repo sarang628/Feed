@@ -21,7 +21,6 @@ fun Menu(
         Button(onFeedScreen) { Text("FeedScreen") }
         Button(onLoginRepository) { Text("LoginRepository") }
         Button(onFeedScreenInMain) { Text("FeedScreenInMain") }
-        Button(onFeed) { Text("Feed") }
         Button(onFeedScreenByRestaurantId) { Text("FeedScreenByRestaurantId") }
         Button(onFeedScreenByPictureId) { Text("FeedScreenByPictureId") }
         Button(onFeedScreenByReviewId) { Text("FeedScreenByReviewId") }

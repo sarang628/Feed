@@ -47,19 +47,20 @@ class FeedScreenInMainViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            loadPage()
+            loadPage(true)
             subScribeFeed()
         }
     }
 
-    fun loadPage(){
+    fun loadPage(initialize : Boolean = false){
         viewModelScope.launch {
             try {
                 feedWithPageUseCase.invoke(0)
                 page = 1
             }catch (e : Exception){
                 showError(e.message ?: "")
-                uiState = FeedLoadingUiState.Reconnect
+                if(initialize) // 최초 로딩 실패 시 Reconnect 상태 변경
+                    uiState = FeedLoadingUiState.Reconnect
             }
         }
     }

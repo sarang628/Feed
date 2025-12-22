@@ -5,9 +5,8 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.isNotDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.sarang.torang.compose.feed.FeedScreen
+import com.sarang.torang.compose.feed.component.FeedScreen
 import com.sarang.torang.uistate.FeedLoadingUiState
 import org.junit.Rule
 import org.junit.Test

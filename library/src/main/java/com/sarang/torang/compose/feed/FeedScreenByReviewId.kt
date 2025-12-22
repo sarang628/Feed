@@ -1,18 +1,23 @@
 package com.sarang.torang.compose.feed
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.sarang.torang.compose.feed.component.FeedScreen
 import com.sarang.torang.data.feed.FeedCallBack
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
@@ -71,21 +76,25 @@ internal fun FeedsByReviewId(
     feedCallBack        : FeedCallBack          = FeedCallBack(),
     onBack              : () -> Unit            = {}
 ) {
-    FeedScreen(
-        loadingUiState = feedLoadUiState,
-        feedScreenState = feedScreenState,
-        feedUiState = feedUiState,
-        feedCallBack = feedCallBack,
-        topAppBar = {
-            TopAppBar(
-                title = { Text(text = "Post", fontSize = 21.sp, fontWeight = FontWeight.Bold) },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = null) }
-                })
-        }
-    )
+    Scaffold(
+        snackbarHost        = { SnackbarHost(hostState = feedScreenState.snackBarState) },
+        topBar              = {
+                                TopAppBar(title = { Text(text = "Post", fontSize = 21.sp, fontWeight = FontWeight.Bold) },
+                                          navigationIcon = {
+                                              IconButton(onClick = onBack) {
+                                                  Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                                      contentDescription = null) }
+                                          })
+                              }
+    ){
+        FeedScreen(
+            modifier = Modifier.padding(it),
+            loadingUiState = feedLoadUiState,
+            feedScreenState = feedScreenState,
+            feedUiState = feedUiState,
+            feedCallBack = feedCallBack,
+        )
+    }
 }
 
 @Preview

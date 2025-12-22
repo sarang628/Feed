@@ -1,19 +1,24 @@
 package com.sarang.torang.compose.feed
 
 import android.util.Log
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.sarang.torang.compose.feed.component.FeedScreen
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.data.feed.FeedCallBack
@@ -76,29 +81,32 @@ internal fun FeedByPictureId(
     LaunchedEffect(feedUiState) {
         showLog.d(tag, feedUiState.toString())
     }
-    FeedScreen(
-        loadingUiState  = uiState,
-        feedUiState     = feedUiState,
-        feedScreenState = feedScreenState,
-        feedCallBack    = FeedCallBack(
-            onRefresh = onRefresh,
-            onBottom = onBottom
-        ),
-        topAppBar       = {
-            TopAppBar(
-                title           = {
-                                    Text(text = "Post",
-                                         fontSize = 21.sp,
-                                         fontWeight = FontWeight.Bold)
-                                  },
-                navigationIcon  = {
-                                    IconButton(onClick = onBack) {
-                                        Icon(imageVector        = Icons.AutoMirrored.Default.ArrowBack,
-                                             contentDescription = "") }
-                                   }
-                    )
-        },
-    )
+    Scaffold(
+        snackbarHost        = { SnackbarHost(hostState = feedScreenState.snackBarState) },
+        topBar              = { TopAppBar(
+            title           = {
+                Text(text = "Post",
+                    fontSize = 21.sp,
+                    fontWeight = FontWeight.Bold)
+            },
+            navigationIcon  = {
+                IconButton(onClick = onBack) {
+                    Icon(imageVector        = Icons.AutoMirrored.Default.ArrowBack,
+                        contentDescription = "") }
+            }
+        ) },
+    ) { padding ->
+        FeedScreen(
+            modifier = Modifier.padding(padding),
+            loadingUiState = uiState,
+            feedUiState = feedUiState,
+            feedScreenState = feedScreenState,
+            feedCallBack = FeedCallBack(
+                onRefresh = onRefresh,
+                onBottom = onBottom
+            )
+        )
+    }
 }
 
 fun Boolean.d(tag: String, msg: String) {

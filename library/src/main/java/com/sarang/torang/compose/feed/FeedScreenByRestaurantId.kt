@@ -3,9 +3,8 @@ package com.sarang.torang.compose.feed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.sarang.torang.compose.feed.component.FeedScreen
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.data.feed.FeedCallBack
@@ -37,9 +36,9 @@ fun FeedScreenByRestaurantId(
     }
 
     FeedScreen(
-        loadingUiState  = uiState,
-        feedUiState     = feedUiState,
-        feedCallBack    = FeedCallBack(
+        loadingUiState = uiState,
+        feedUiState = feedUiState,
+        feedCallBack = FeedCallBack(
             onRefresh = { feedsViewModel.refreshFeed() },
             onBottom = { feedsViewModel.onBottom() },
             onVideoClick = { feedsViewModel.onVideoClick(it) },

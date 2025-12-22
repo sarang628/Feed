@@ -16,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sarang.torang.compose.feed.type.LocalShimmerBrush
@@ -33,7 +34,7 @@ import com.sarang.torang.compose.feed.type.LocalShimmerBrush
 @Composable
 fun FeedShimmer(modifier: Modifier = Modifier) {
     val shimmerBrush = rememberShimmerBrush() // ✅ 한 번만 생성
-    Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)){
+    Box(Modifier.testTag("shimmer").fillMaxSize().background(MaterialTheme.colorScheme.background)){
         Column(modifier = modifier) {
             Box(modifier = Modifier.fillMaxWidth().height(400.dp).clip(RoundedCornerShape(8.dp))
                 .background(shimmerBrush))

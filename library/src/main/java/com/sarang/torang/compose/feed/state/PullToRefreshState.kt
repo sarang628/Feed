@@ -3,7 +3,6 @@ package com.sarang.torang.compose.feed.state
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import com.sarang.torang.compose.feed.state.RefreshIndicatorState
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class PullToRefreshLayoutState {

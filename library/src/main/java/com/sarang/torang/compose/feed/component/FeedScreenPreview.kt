@@ -1,4 +1,4 @@
-package com.sarang.torang.compose.feed
+package com.sarang.torang.compose.feed.component
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -8,7 +8,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
-import com.sarang.torang.compose.feed.component.FeedTopAppBar
 import com.sarang.torang.uistate.FeedLoadingUiState
 import kotlinx.coroutines.delay
 
@@ -17,7 +16,8 @@ import kotlinx.coroutines.delay
 @Composable
 fun FeedScreenLoadingPreview() {
     FeedScreen(/*Preview*/
-        loadingUiState = FeedLoadingUiState.Loading)
+        loadingUiState = FeedLoadingUiState.Loading
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -25,7 +25,8 @@ fun FeedScreenLoadingPreview() {
 @Composable
 fun FeedScreenEmptyPreview() {
     FeedScreen(/*Preview*/
-        loadingUiState = FeedLoadingUiState.Empty)
+        loadingUiState = FeedLoadingUiState.Empty
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,8 +34,7 @@ fun FeedScreenEmptyPreview() {
 @Composable
 fun FeedScreenSuccessPreview() {
     FeedScreen(/*Preview*/
-        loadingUiState = FeedLoadingUiState.Success,
-        topAppBar = { FeedTopAppBar() }
+        loadingUiState = FeedLoadingUiState.Success
     )
 }
 
@@ -49,12 +49,14 @@ fun TransitionPreview(){
     }
 
     FeedScreen(/*Preview*/
-        loadingUiState = uiState)
+        loadingUiState = uiState
+    )
 }
 
 @Preview(backgroundColor = 0xFFFDFDF6, showBackground = true)
 @Composable
 fun PreviewReconnect(){
     FeedScreen(/*Preview*/
-        loadingUiState = FeedLoadingUiState.Reconnect)
+        loadingUiState = FeedLoadingUiState.Reconnect
+    )
 }

@@ -9,24 +9,27 @@ import androidx.compose.runtime.remember
 
 @Composable
 fun rememberFeedScreenState(): FeedScreenState {
-    val listState: LazyListState = rememberLazyListState()
-    val snackbarState: SnackbarHostState = SnackbarHostState()
-    val pullToRefreshState = rememberPullToRefreshState()
-    return remember { FeedScreenState(listState, snackbarState, pullToRefreshState) }
+    val listState           : LazyListState             = rememberLazyListState()
+    val snackHostBarState   : SnackbarHostState         = SnackbarHostState()
+    val pullToRefreshState  : PullToRefreshLayoutState  = rememberPullToRefreshState()
+    return remember { FeedScreenState(listState                = listState,
+                                      snackBarState            = snackHostBarState,
+                                      pullToRefreshLayoutState = pullToRefreshState) }
 }
 
 class FeedScreenState(val listState                 : LazyListState,
-                      val snackbarState             : SnackbarHostState,
+                      val snackBarState             : SnackbarHostState,
                       val pullToRefreshLayoutState  : PullToRefreshLayoutState) {
     suspend fun onTop() {
         listState.animateScrollToItem(0)
     }
 
     suspend fun showSnackBar(message : String?) {
-        message?.let { snackbarState.showSnackbar(it) }
+        message?.let { snackBarState.showSnackbar(it) }
     }
 
     fun refresh(refresh : Boolean){
-        pullToRefreshLayoutState.updateState(if(!refresh) RefreshIndicatorState.Default else RefreshIndicatorState.Refreshing)
+        pullToRefreshLayoutState.updateState(refreshState = if(!refresh) RefreshIndicatorState.Default
+                                                            else RefreshIndicatorState.Refreshing)
     }
 }
