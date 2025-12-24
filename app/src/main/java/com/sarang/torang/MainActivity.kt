@@ -26,8 +26,8 @@ import com.sarang.torang.di.basefeed_di.CustomFeedImageLoader
 import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
 import com.sarang.torang.di.feed_di.CustomFeedCompose
 import com.sarang.torang.di.feed_di.customPullToRefresh
-import com.sarang.torang.repository.FeedRepository
 import com.sarang.torang.repository.LoginRepository
+import com.sarang.torang.repository.feed.FeedRepository
 import com.sarang.torang.repository.test.LoginRepositoryTest
 import com.sarang.torang.test.FeedListTest
 import com.sarang.torang.test.FeedScreenInMainTest

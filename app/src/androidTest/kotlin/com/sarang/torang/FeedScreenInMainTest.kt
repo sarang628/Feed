@@ -5,8 +5,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.sarang.torang.compose.feed.FeedScreenInMain
 import com.sarang.torang.core.database.dao.FeedDao
 import com.sarang.torang.core.database.dao.MainFeedDao
-import com.sarang.torang.core.database.dao.MyFeedDao
-import com.sarang.torang.repository.FeedRepository
+import com.sarang.torang.repository.feed.FeedLoadRepository
+import com.sarang.torang.repository.feed.FeedRepository
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import junit.framework.TestCase.assertEquals
@@ -23,6 +23,7 @@ import javax.inject.Inject
 class FeedScreenInMainTest {
 
     @Inject lateinit var feedRepository: FeedRepository
+    @Inject lateinit var feedLoadRepository: FeedLoadRepository
     @Inject lateinit var feedDao: FeedDao
     @Inject lateinit var mainFeedDao: MainFeedDao
 
@@ -39,7 +40,7 @@ class FeedScreenInMainTest {
 
     @Test
     fun loadTest() = runTest{
-        feedRepository.loadByPage(0)
+        feedLoadRepository.loadByPage(0)
         assertEquals(false, mainFeedDao.findAllFlow().first().isEmpty())
 //        assertEquals(false, feedDao.findAllFlow().first().isEmpty())
     }
