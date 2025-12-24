@@ -27,7 +27,9 @@ fun FeedListTest(){
     ) {
         FeedList(
             uiState = FeedUiState(
-                list = listOf(Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty)
+                list = listOf(Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty,
+                              Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty,
+                              Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty, Feed.Empty)
             )
         )
     }
