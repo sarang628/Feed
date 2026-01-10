@@ -6,7 +6,7 @@ git submodule sync
 
 git submodule foreach '
     echo "==> 처리 중: $name"
-    git fetch origin
+    git fetch origin∫
     if git rev-parse --verify origin/main > /dev/null 2>&1; then
         git checkout main || git checkout -b main origin/main
         git reset --hard origin/main

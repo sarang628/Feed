@@ -16,9 +16,14 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -36,6 +41,7 @@ fun FeedScreenInMainTest() {
     val context : Context = LocalContext.current
     val state = rememberBottomSheetScaffoldState()
     val coroutine = rememberCoroutineScope()
+    var testText by remember { mutableStateOf("") }
     BottomSheetScaffold(
         scaffoldState = state,
         sheetPeekHeight = 0.dp,
@@ -53,6 +59,7 @@ fun FeedScreenInMainTest() {
                                 EmptyTestActivity::class.java)) },
                     label = { Text("newActivity") }
                 )
+                TextField(value = testText, onValueChange = { testText = it })
                     } } } ) {
         Box(modifier = Modifier.fillMaxSize()){
             provideFeedScreenInMain(feedsViewModel)

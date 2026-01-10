@@ -16,8 +16,8 @@ import androidx.navigation.compose.rememberNavController
 import com.sarang.torang.compose.feed.FeedScreenByPictureId
 import com.sarang.torang.compose.feed.FeedScreenByReviewId
 import com.sarang.torang.compose.feed.component.PreviewReconnect
-import com.sarang.torang.compose.feed.internal.components.LocalExpandableTextType
-import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
+import com.sarang.torang.compose.feed.internal.components.type.LocalExpandableTextType
+import com.sarang.torang.compose.feed.internal.components.type.LocalFeedImageLoader
 import com.sarang.torang.compose.feed.type.LocalBottomDetectingLazyColumnType
 import com.sarang.torang.compose.feed.type.LocalFeedCompose
 import com.sarang.torang.compose.feed.type.LocalPullToRefreshLayoutType

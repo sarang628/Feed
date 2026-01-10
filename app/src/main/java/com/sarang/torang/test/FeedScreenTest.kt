@@ -10,6 +10,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -22,8 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sarang.torang.compose.feed.component.FeedScreen
-import com.sarang.torang.compose.feed.internal.components.LocalExpandableTextType
-import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
+import com.sarang.torang.compose.feed.internal.components.type.LocalExpandableTextType
+import com.sarang.torang.compose.feed.internal.components.type.LocalFeedImageLoader
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.RefreshIndicatorState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
@@ -49,6 +50,7 @@ fun FeedScreenTest(feedScreenState: FeedScreenState = rememberFeedScreenState())
     val scope = rememberCoroutineScope()
     var uiState: FeedLoadingUiState by remember { mutableStateOf(FeedLoadingUiState.Loading) }
     val scaffoldState = rememberBottomSheetScaffoldState()
+    var testText by remember { mutableStateOf("") }
     CompositionLocalProvider(
         LocalFeedCompose provides CustomFeedCompose,
         LocalPullToRefreshLayoutType provides customPullToRefresh,
@@ -100,6 +102,7 @@ fun FeedScreenTest(feedScreenState: FeedScreenState = rememberFeedScreenState())
                 Scaffold(floatingActionButton = floatActionButton) {
                     Box(Modifier.padding(it)){
                         feedScreen.invoke()
+                        TextField(value = testText, onValueChange = {testText = it})
                     }
                 }
             }
