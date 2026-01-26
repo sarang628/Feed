@@ -150,5 +150,6 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer-hls:1.4.0")
 
     implementation(libs.bottomdetectlazycolunm)
+    implementation(libs.shortForm)
     implementation("io.coil-kt:coil-compose:2.6.0")
 }
