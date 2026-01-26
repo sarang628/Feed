@@ -2,13 +2,10 @@
 
 피드(feed): 스크롤해서 볼 수 있는 콘텐츠 스트림
 
-피드는 여러화면에서 사용되기 때문에 공통 모듈로 구현.
-하지만 화면마다 피드 리스트를 직접 구현하기 어려움.</br>
-(피드, 하단 감지 리스트, pull to refresh 등 외부 라이브러리 적용 필요.)</br>
-공통 피드 모듈과 필요로 하는 화면들 사이에 모듈을 하나 더 생성.</br>
-피드 모듈에서 각 화면에서 필요로하는 피드 리스트 기능을 적용하여 제공</br>
-ex) 메인 화면용 피드, 음식점 상세 화면용 피드, 상세 피드 등.
-
+- 여러화면에서 사용되는 피드항목(FeedItem)은 공통 모듈로 구현
+- 피드 리스트를 피드항목에 함께 구현을 고민하다 분리하기로 결정 
+  - 무한 스크롤, 당겨서 새로고침 등의 기능 구현
+  - 화면마다 조금씩 기능이 다른 피드 리스트가 필요
 
 [Introduce.md](./docs/Introduce.md)
 
@@ -81,3 +78,9 @@ fun FeedScreenSuccessPreview() {
     )
 }
 ```
+
+# Tech Stack
+- JetpackCompose
+- Android App Architecture
+  - UILayer
+  - DomainLayer

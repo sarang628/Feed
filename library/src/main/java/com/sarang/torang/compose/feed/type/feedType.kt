@@ -25,13 +25,14 @@ import com.sarang.torang.data.feed.Feed
 typealias feedType = @Composable (feedTypeData : FeedTypeData) -> Unit
 
 data class FeedTypeData(
-    val feed: Feed = Feed.Empty,
-    val onLike: (Int) -> Unit = {},
-    val onFavorite: (Int) -> Unit = {},
-    val onVideoClick: () -> Unit = {},
-    val imageHeight: Int = 0,
-    val pageScrollable: Boolean = false,
-    val isLogin : Boolean = false
+    val feed            : Feed          = Feed.Empty,
+    val onLike          : (Int) -> Unit = {},
+    val onFavorite      : (Int) -> Unit = {},
+    val onVideoClick    : () -> Unit    = {},
+    val imageHeight     : Int           = 0,
+    val pageScrollable  : Boolean       = false,
+    val isLogin         : Boolean       = false,
+    val isPlaying       : Boolean       = false
 )
 
 val LocalFeedCompose = compositionLocalOf<feedType> {
