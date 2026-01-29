@@ -65,16 +65,7 @@ class MainActivity : ComponentActivity() {
     val navController = rememberNavController()
         NavHost(navController = navController,
                 startDestination = "Menu") {
-            composable("Menu")                      {
-                Menu(
-                    onFeedScreen                = { navController.navigate("FeedScreenTest") },
-                    onLoginRepository           = { navController.navigate("LoginRepositoryTest") },
-                    onFeedScreenInMain          = { navController.navigate("FeedScreenInMain") },
-                    onFeedScreenByRestaurantId  = { navController.navigate("FeedScreenByRestaurantId") },
-                    onFeedScreenByPictureId     = { navController.navigate("FeedScreenByPictureId") },
-                    onFeedScreenByReviewId      = { navController.navigate("FeedScreenByReviewId") }
-                )
-            }
+            composable("Menu")                      { Menu(navController = navController) }
             composable("FeedScreenTest")            { FeedScreenTest() }
             composable("TestPinchZoom")             { TestPinchZoom() }
             composable("FeedReconnect")             { PreviewReconnect() }

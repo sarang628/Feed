@@ -5,24 +5,18 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 @Preview
 @Composable
-fun Menu(
-    onFeedScreen: () -> Unit = {},
-    onLoginRepository: () -> Unit = {},
-    onFeedScreenInMain: () -> Unit = {},
-    onFeed: () -> Unit = {},
-    onFeedScreenByRestaurantId: () -> Unit = {},
-    onFeedScreenByPictureId: () -> Unit = {},
-    onFeedScreenByReviewId: () -> Unit = {},
-) {
+fun Menu(navController: NavController = rememberNavController()) {
     Column {
-        Button(onFeedScreen) { Text("FeedScreen") }
-        Button(onLoginRepository) { Text("LoginRepository") }
-        Button(onFeedScreenInMain) { Text("FeedScreenInMain") }
-        Button(onFeedScreenByRestaurantId) { Text("FeedScreenByRestaurantId") }
-        Button(onFeedScreenByPictureId) { Text("FeedScreenByPictureId") }
-        Button(onFeedScreenByReviewId) { Text("FeedScreenByReviewId") }
+        Button({ navController.navigate("FeedScreenTest") }) { Text("FeedScreen") }
+        Button({ navController.navigate("LoginRepositoryTest") }) { Text("LoginRepository") }
+        Button({ navController.navigate("FeedScreenInMain") }) { Text("FeedScreenInMain") }
+        Button({ navController.navigate("FeedScreenByRestaurantId") }) { Text("FeedScreenByRestaurantId") }
+        Button({ navController.navigate("FeedScreenByPictureId") }) { Text("FeedScreenByPictureId") }
+        Button({ navController.navigate("FeedScreenByReviewId") }) { Text("FeedScreenByReviewId") }
     }
 }
