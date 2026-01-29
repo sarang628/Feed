@@ -54,6 +54,8 @@ fun FeedList(
         }
     }
 
+    val isScrollStopped = !feedScreenState.listState.isScrollInProgress
+
     RefreshAndBottomDetectionLazyColumn(
         modifier                 = modifier,
         count                    = uiState.list.size,
@@ -62,23 +64,27 @@ fun FeedList(
         pullToRefreshLayoutState = feedScreenState.pullToRefreshLayoutState,
         listState                = feedScreenState.listState,
         onRefresh                = feedCallBack.onRefresh,
-        listContent              = listContent
     ) {
-        LocalFeedCompose.current.invoke(
-            FeedTypeData(
-                feed            = uiState.list[it],
-                onLike          = feedCallBack.onLike,
-                onFavorite      = feedCallBack.onFavorite,
-                onVideoClick    = { feedCallBack.onVideoClick.invoke(uiState.list[it].reviewId) },
-                pageScrollable  = feedScreenConfig.pageScrollable,
-                isLogin         = uiState.isLogin,
-                imageHeight     = uiState.imageHeight(
-                    density = LocalDensity.current,
-                    screenWidthDp = LocalConfiguration.current.screenWidthDp,
-                    screenHeightDp = LocalConfiguration.current.screenHeightDp
-                ),
-                isPlaying = playingIndex == it
+        items(count = uiState.list.size,
+              key = { uiState.list[it].reviewId }){
+            LocalFeedCompose.current.invoke(
+                FeedTypeData(
+                    feed            = uiState.list[it],
+                    onLike          = feedCallBack.onLike,
+                    onFavorite      = feedCallBack.onFavorite,
+                    onVideoClick    = { feedCallBack.onVideoClick.invoke(uiState.list[it].reviewId) },
+                    pageScrollable  = feedScreenConfig.pageScrollable,
+                    isLogin         = uiState.isLogin,
+                    imageHeight     = uiState.imageHeight(
+                        density = LocalDensity.current,
+                        screenWidthDp = LocalConfiguration.current.screenWidthDp,
+                        screenHeightDp = LocalConfiguration.current.screenHeightDp
+                    ),
+                    isPlaying = (playingIndex == it) && isScrollStopped
+                )
             )
-        )
+        }
+
+        listContent.invoke(this)
     }
 }

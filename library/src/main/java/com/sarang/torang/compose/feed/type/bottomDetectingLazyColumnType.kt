@@ -17,12 +17,10 @@ data class BottomDetectingLazyColumnData(
     val modifier            : Modifier                  = Modifier,
     val count               : Int                       = 0,
     val onBottom            : () -> Unit                = {},
-    val itemCompose         : @Composable (Int) -> Unit = {},
     val userScrollEnabled   : Boolean                   = false,
     val arrangement         : Arrangement.Vertical,
     val listState           : LazyListState,
-    val listContent         : LazyListScope.() -> Unit  = {},
-    val content             : @Composable () -> Unit    = {}
+    val listContent         : LazyListScope.() -> Unit  = {}
 )
 
 val LocalBottomDetectingLazyColumnType = compositionLocalOf<bottomDetectingLazyColumnType> {
@@ -30,7 +28,9 @@ val LocalBottomDetectingLazyColumnType = compositionLocalOf<bottomDetectingLazyC
         Log.e(
             "__LocalBottomDetectingLazyColumnType",
             "bottomDetectingLazyColumn is not set"
-        ); LazyColumn { items(data.count) { data.itemCompose.invoke(it) } }
-        data.content.invoke()
+        );
+        LazyColumn {
+            data.listContent.invoke(this)
+        }
     }
 }
