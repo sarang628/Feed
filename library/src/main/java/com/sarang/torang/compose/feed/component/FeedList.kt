@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
@@ -21,6 +22,8 @@ import com.sarang.torang.data.feed.FeedCallBack
 import com.sarang.torang.data.feed.FeedScreenConfig
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.uistate.imageHeight
+import kotlin.math.absoluteValue
+
 private const val tag = "__FeedList"
 @Composable
 fun FeedList(
@@ -54,7 +57,24 @@ fun FeedList(
         }
     }
 
+    val previousOffset = remember { mutableStateOf(0) } // 초기값 설정
+
+    val scrollVelocity by derivedStateOf {
+        (feedScreenState.listState.firstVisibleItemScrollOffset - previousOffset.value).absoluteValue
+    }
+
+    LaunchedEffect(Unit) {
+        snapshotFlow { feedScreenState.listState.firstVisibleItemScrollOffset }
+            .collect { currentOffset ->
+                val velocity = (currentOffset - previousOffset.value).absoluteValue
+                previousOffset.value = currentOffset // ✅ 여기서 안전하게 업데이트
+            }
+    }
+    val isScrollSlow = scrollVelocity < 50
+
     val isScrollStopped = !feedScreenState.listState.isScrollInProgress
+
+    val shouldPlay = isScrollStopped || isScrollSlow
 
     RefreshAndBottomDetectionLazyColumn(
         modifier                 = modifier,
@@ -80,7 +100,7 @@ fun FeedList(
                         screenWidthDp = LocalConfiguration.current.screenWidthDp,
                         screenHeightDp = LocalConfiguration.current.screenHeightDp
                     ),
-                    isPlaying = (playingIndex == it) && isScrollStopped
+                    isPlaying = (playingIndex == it) && shouldPlay
                 )
             )
         }

@@ -19,7 +19,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
-import com.sarang.torang.data.feed.FeedCallBack
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -34,11 +33,11 @@ import com.sarang.torang.compose.feed.type.LocalPullToRefreshLayoutType
 import com.sarang.torang.compose.feed.type.bottomDetectingLazyColumnType
 import com.sarang.torang.compose.feed.type.feedType
 import com.sarang.torang.compose.feed.type.pullToRefreshLayoutType
+import com.sarang.torang.data.feed.FeedCallBack
 import com.sarang.torang.data.feed.FeedScreenConfig
 import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.FeedScreenInMainViewModel
-import com.sarang.torang.viewmodels.FeedsViewModel
 
 private const val tag = "__FeedScreenForMain"
 
