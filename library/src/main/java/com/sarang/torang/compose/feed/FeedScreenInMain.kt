@@ -12,6 +12,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,10 +28,17 @@ import com.sarang.torang.compose.feed.component.FeedTopAppBar
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.RefreshIndicatorState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
+import com.sarang.torang.compose.feed.type.LocalBottomDetectingLazyColumnType
+import com.sarang.torang.compose.feed.type.LocalFeedCompose
+import com.sarang.torang.compose.feed.type.LocalPullToRefreshLayoutType
+import com.sarang.torang.compose.feed.type.bottomDetectingLazyColumnType
+import com.sarang.torang.compose.feed.type.feedType
+import com.sarang.torang.compose.feed.type.pullToRefreshLayoutType
 import com.sarang.torang.data.feed.FeedScreenConfig
 import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.FeedScreenInMainViewModel
+import com.sarang.torang.viewmodels.FeedsViewModel
 
 private const val tag = "__FeedScreenForMain"
 
@@ -45,6 +53,32 @@ private const val tag = "__FeedScreenForMain"
  * within the CompositionLocalProvider to understand how they should be handled.
  *
  */
+
+@Composable fun MainFeedScreen(feed                 : feedType,
+                               pullToRefresh        : pullToRefreshLayoutType,
+                               bottomDetectColumn   : bottomDetectingLazyColumnType,
+                               feedsViewModel       : FeedScreenInMainViewModel     = hiltViewModel(),
+                               feedScreenState      : FeedScreenState               = rememberFeedScreenState(),
+                               onAddReview          : () -> Unit                    = { Log.w(tag, "onAddReview is not implemented") },
+                               onAlarm              : () -> Unit                    = { Log.w(tag, "onAlarm is not implemented") },
+                               scrollEnabled        : Boolean                       = true,
+                               pageScrollable       : Boolean                       = true,
+                               contentWindowInsets  : WindowInsets                  = ScaffoldDefaults.contentWindowInsets,){
+    CompositionLocalProvider(
+        LocalFeedCompose provides feed,
+        LocalPullToRefreshLayoutType provides pullToRefresh,
+        LocalBottomDetectingLazyColumnType provides bottomDetectColumn
+    ) {
+        FeedScreenInMain(feedsViewModel         = feedsViewModel,
+                         feedScreenState        = feedScreenState,
+                         onAddReview            = onAddReview,
+                         onAlarm                = onAlarm,
+                         scrollEnabled          = scrollEnabled,
+                         pageScrollable         = pageScrollable,
+                         contentWindowInsets    = contentWindowInsets)
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedScreenInMain(
