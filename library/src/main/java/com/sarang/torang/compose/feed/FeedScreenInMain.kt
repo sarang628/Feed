@@ -32,6 +32,8 @@ import com.sarang.torang.uistate.FeedLoadingUiState
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.viewmodels.FeedScreenInMainViewModel
 
+private const val tag = "__FeedScreenForMain"
+
 /**
  * FeedScreen for Main
  *
@@ -46,7 +48,6 @@ import com.sarang.torang.viewmodels.FeedScreenInMainViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedScreenInMain(
-    tag                 : String                        = "__FeedScreenForMain",
     feedsViewModel      : FeedScreenInMainViewModel     = hiltViewModel(),
     feedScreenState     : FeedScreenState               = rememberFeedScreenState(),
     onAddReview         : () -> Unit                    = { Log.w(tag, "onAddReview is not implemented") },

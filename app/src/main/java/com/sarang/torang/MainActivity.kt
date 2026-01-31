@@ -67,11 +67,11 @@ class MainActivity : ComponentActivity() {
                 startDestination = "Menu") {
             composable("Menu")                      { Menu(navController = navController) }
             composable("FeedScreenTest")            { FeedScreenTest() }
+            composable("FeedScreenInMain")          { FeedScreenInMainTest() }
             composable("TestPinchZoom")             { TestPinchZoom() }
             composable("FeedReconnect")             { PreviewReconnect() }
-            composable("LoginRepositoryTest")       { LoginRepositoryTest(loginRepository = loginRepository) }
             composable("FeedScreenByRestaurantId")  { TestFeedScreenByRestaurantId(234) }
-            composable("FeedScreenInMain")          { FeedScreenInMainTest() }
+            composable("FeedListTest")              { FeedListTest() }
             composable ("FeedScreenByPictureId")    {
                 CompositionLocalProvider(
                     LocalFeedCompose provides CustomFeedCompose,
@@ -106,7 +106,7 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
-            composable("FeedListTest")              { FeedListTest() }
+            composable("LoginRepositoryTest")       { LoginRepositoryTest(loginRepository = loginRepository) }
     }
 }
 // @formatter:on

@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.material3.BottomSheetScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -32,16 +33,22 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.EmptyTestActivity
 import com.sarang.torang.di.feed_di.provideFeedScreenInMain
 import com.sarang.torang.viewmodels.FeedScreenInMainViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.w3c.dom.Text
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun FeedScreenInMainTest() {
-    val feedsViewModel: FeedScreenInMainViewModel = hiltViewModel()
-    val context : Context = LocalContext.current
-    val state = rememberBottomSheetScaffoldState()
-    val coroutine = rememberCoroutineScope()
-    var testText by remember { mutableStateOf("") }
+    val feedsViewModel  : FeedScreenInMainViewModel = hiltViewModel()
+    val context         : Context                   = LocalContext.current
+    val state           : BottomSheetScaffoldState  = rememberBottomSheetScaffoldState()
+    val coroutine       : CoroutineScope            = rememberCoroutineScope()
+    var testText        : String                    by remember { mutableStateOf("") }
+
+    // FeedMainScreen composable
+    val mainCompose     : @Composable ()->Unit      = { provideFeedScreenInMain(feedsViewModel) }
+
     BottomSheetScaffold(
         scaffoldState = state,
         sheetPeekHeight = 0.dp,
@@ -62,9 +69,10 @@ fun FeedScreenInMainTest() {
                 TextField(value = testText, onValueChange = { testText = it })
                     } } } ) {
         Box(modifier = Modifier.fillMaxSize()){
-            provideFeedScreenInMain(feedsViewModel)
-            FloatingActionButton(modifier = Modifier.align(Alignment.BottomEnd)
-                                                    .padding(end = 20.dp, bottom = 20.dp),
+            mainCompose()
+            FloatingActionButton(modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(end = 20.dp, bottom = 20.dp),
                                  onClick = { coroutine.launch { state.bottomSheetState.expand() } }){
                 Icon(Icons.AutoMirrored.Default.List, null)
             }

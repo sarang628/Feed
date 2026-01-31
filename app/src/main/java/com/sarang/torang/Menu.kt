@@ -13,10 +13,10 @@ import androidx.navigation.compose.rememberNavController
 fun Menu(navController: NavController = rememberNavController()) {
     Column {
         Button({ navController.navigate("FeedScreenTest") }) { Text("FeedScreen") }
-        Button({ navController.navigate("LoginRepositoryTest") }) { Text("LoginRepository") }
         Button({ navController.navigate("FeedScreenInMain") }) { Text("FeedScreenInMain") }
         Button({ navController.navigate("FeedScreenByRestaurantId") }) { Text("FeedScreenByRestaurantId") }
         Button({ navController.navigate("FeedScreenByPictureId") }) { Text("FeedScreenByPictureId") }
         Button({ navController.navigate("FeedScreenByReviewId") }) { Text("FeedScreenByReviewId") }
+        Button({ navController.navigate("LoginRepositoryTest") }) { Text("LoginRepository") }
     }
 }
