@@ -32,7 +32,8 @@ fun FeedList(
     feedScreenState   : FeedScreenState             = rememberFeedScreenState(),
     feedCallBack      : FeedCallBack                = FeedCallBack(tag = tag),
     listContent       : LazyListScope.() -> Unit    = {},
-    feedScreenConfig  : FeedScreenConfig            = FeedScreenConfig()
+    feedScreenConfig  : FeedScreenConfig            = FeedScreenConfig(),
+    videoPlayScrollvelocity     : Int               = 100
 ) {
     HandleOnFocusIndex(feedScreenState.listState, feedCallBack.onFocusItemIndex)
     if(feedScreenConfig.onBackToTop) BackToTopOnBackPress(feedScreenState.listState)
@@ -70,7 +71,7 @@ fun FeedList(
                 previousOffset.value = currentOffset // ✅ 여기서 안전하게 업데이트
             }
     }
-    val isScrollSlow = scrollVelocity < 50
+    val isScrollSlow = scrollVelocity < videoPlayScrollvelocity
 
     val isScrollStopped = !feedScreenState.listState.isScrollInProgress
 
