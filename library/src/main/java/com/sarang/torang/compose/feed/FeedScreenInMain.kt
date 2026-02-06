@@ -53,16 +53,17 @@ private const val tag = "__FeedScreenForMain"
  *
  */
 
-@Composable fun MainFeedScreen(feed                 : feedType,
-                               pullToRefresh        : pullToRefreshLayoutType,
-                               bottomDetectColumn   : bottomDetectingLazyColumnType,
-                               feedsViewModel       : FeedScreenInMainViewModel     = hiltViewModel(),
-                               feedScreenState      : FeedScreenState               = rememberFeedScreenState(),
-                               onAddReview          : () -> Unit                    = { Log.w(tag, "onAddReview is not implemented") },
-                               onAlarm              : () -> Unit                    = { Log.w(tag, "onAlarm is not implemented") },
-                               scrollEnabled        : Boolean                       = true,
-                               pageScrollable       : Boolean                       = true,
-                               contentWindowInsets  : WindowInsets                  = ScaffoldDefaults.contentWindowInsets,){
+@Composable fun MainFeedScreen(feed                         : feedType,
+                               pullToRefresh                : pullToRefreshLayoutType,
+                               bottomDetectColumn           : bottomDetectingLazyColumnType,
+                               feedsViewModel               : FeedScreenInMainViewModel     = hiltViewModel(),
+                               feedScreenState              : FeedScreenState               = rememberFeedScreenState(),
+                               onAddReview                  : () -> Unit                    = { Log.w(tag, "onAddReview is not implemented") },
+                               onAlarm                      : () -> Unit                    = { Log.w(tag, "onAlarm is not implemented") },
+                               scrollEnabled                : Boolean                       = true,
+                               pageScrollable               : Boolean                       = true,
+                               contentWindowInsets          : WindowInsets                  = ScaffoldDefaults.contentWindowInsets,
+                               videoPlayScrollVelocity      : Int                           = 100){
     CompositionLocalProvider(
         LocalFeedCompose provides feed,
         LocalPullToRefreshLayoutType provides pullToRefresh,
@@ -74,20 +75,22 @@ private const val tag = "__FeedScreenForMain"
                          onAlarm                = onAlarm,
                          scrollEnabled          = scrollEnabled,
                          pageScrollable         = pageScrollable,
-                         contentWindowInsets    = contentWindowInsets)
+                         contentWindowInsets    = contentWindowInsets,
+                         videoPlayScrollVelocity = videoPlayScrollVelocity)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedScreenInMain(
-    feedsViewModel      : FeedScreenInMainViewModel     = hiltViewModel(),
-    feedScreenState     : FeedScreenState               = rememberFeedScreenState(),
-    onAddReview         : () -> Unit                    = { Log.w(tag, "onAddReview is not implemented") },
-    onAlarm             : () -> Unit                    = { Log.w(tag, "onAlarm is not implemented") },
-    scrollEnabled       : Boolean                       = true,
-    pageScrollable      : Boolean                       = true,
-    contentWindowInsets : WindowInsets                  = ScaffoldDefaults.contentWindowInsets,
+    feedsViewModel              : FeedScreenInMainViewModel     = hiltViewModel(),
+    feedScreenState             : FeedScreenState               = rememberFeedScreenState(),
+    onAddReview                 : () -> Unit                    = { Log.w(tag, "onAddReview is not implemented") },
+    onAlarm                     : () -> Unit                    = { Log.w(tag, "onAlarm is not implemented") },
+    scrollEnabled               : Boolean                       = true,
+    pageScrollable              : Boolean                       = true,
+    contentWindowInsets         : WindowInsets                  = ScaffoldDefaults.contentWindowInsets,
+    videoPlayScrollVelocity     : Int                           = 100
 ) {
     val uiState: FeedLoadingUiState = feedsViewModel.uiState
     val feedUiState: FeedUiState = feedsViewModel.feedUiState
@@ -149,7 +152,8 @@ fun FeedScreenInMain(
                 scrollEnabled = scrollEnabled,
                 pageScrollable = pageScrollable,
                 showBottomProgress = true
-            )
+            ),
+            videoPlayScrollVelocity = videoPlayScrollVelocity
         )
     }
 }

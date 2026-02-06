@@ -33,12 +33,13 @@ private const val tag : String = "__FeedScreen"
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun FeedScreen(
-    modifier            : Modifier               = Modifier,
-    feedScreenState     : FeedScreenState        = rememberFeedScreenState(),
-    loadingUiState      : FeedLoadingUiState     = FeedLoadingUiState.Loading,
-    feedUiState         : FeedUiState            = FeedUiState(),
-    feedCallBack        : FeedCallBack           = FeedCallBack(tag = tag),
-    feedScreenConfig    : FeedScreenConfig       = FeedScreenConfig()
+    modifier                    : Modifier               = Modifier,
+    feedScreenState             : FeedScreenState        = rememberFeedScreenState(),
+    loadingUiState              : FeedLoadingUiState     = FeedLoadingUiState.Loading,
+    feedUiState                 : FeedUiState            = FeedUiState(),
+    feedCallBack                : FeedCallBack           = FeedCallBack(tag = tag),
+    feedScreenConfig            : FeedScreenConfig       = FeedScreenConfig(),
+    videoPlayScrollVelocity     : Int                    = 100
 ) {
     AnimatedContent(
         modifier        = modifier,
@@ -63,11 +64,12 @@ fun FeedScreen(
             )
 
             FeedLoadingUiState.Success -> FeedList(
-                uiState          = feedUiState,
-                feedScreenState  = feedScreenState,
-                feedCallBack     = feedCallBack,
-                feedScreenConfig = feedScreenConfig,
-                listContent      = {
+                uiState                 = feedUiState,
+                videoPlayScrollVelocity = videoPlayScrollVelocity,
+                feedScreenState         = feedScreenState,
+                feedCallBack            = feedCallBack,
+                feedScreenConfig        = feedScreenConfig,
+                listContent             = {
                     if(feedScreenConfig.showBottomProgress){
                         items(1){
                             Box(Modifier.fillMaxWidth()){

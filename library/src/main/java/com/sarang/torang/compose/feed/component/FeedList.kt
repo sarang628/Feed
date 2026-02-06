@@ -1,6 +1,5 @@
 package com.sarang.torang.compose.feed.component
 
-import android.util.Log
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -12,7 +11,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.tooling.preview.Preview
 
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
@@ -27,13 +25,13 @@ import kotlin.math.absoluteValue
 private const val tag = "__FeedList"
 @Composable
 fun FeedList(
-    modifier          : Modifier                    = Modifier,
-    uiState           : FeedUiState                 = FeedUiState(),
-    feedScreenState   : FeedScreenState             = rememberFeedScreenState(),
-    feedCallBack      : FeedCallBack                = FeedCallBack(tag = tag),
-    listContent       : LazyListScope.() -> Unit    = {},
-    feedScreenConfig  : FeedScreenConfig            = FeedScreenConfig(),
-    videoPlayScrollvelocity     : Int               = 100
+    modifier                    : Modifier                    = Modifier,
+    uiState                     : FeedUiState                 = FeedUiState(),
+    feedScreenState             : FeedScreenState             = rememberFeedScreenState(),
+    feedCallBack                : FeedCallBack                = FeedCallBack(tag = tag),
+    listContent                 : LazyListScope.() -> Unit    = {},
+    feedScreenConfig            : FeedScreenConfig            = FeedScreenConfig(),
+    videoPlayScrollVelocity     : Int                         = 100
 ) {
     HandleOnFocusIndex(feedScreenState.listState, feedCallBack.onFocusItemIndex)
     if(feedScreenConfig.onBackToTop) BackToTopOnBackPress(feedScreenState.listState)
@@ -71,7 +69,7 @@ fun FeedList(
                 previousOffset.value = currentOffset // ✅ 여기서 안전하게 업데이트
             }
     }
-    val isScrollSlow = scrollVelocity < videoPlayScrollvelocity
+    val isScrollSlow = scrollVelocity < videoPlayScrollVelocity
 
     val isScrollStopped = !feedScreenState.listState.isScrollInProgress
 
