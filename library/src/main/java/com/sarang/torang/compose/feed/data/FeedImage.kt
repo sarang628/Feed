@@ -3,6 +3,7 @@ package com.sarang.torang.compose.feed.data
 import androidx.compose.ui.unit.Density
 
 data class FeedImage(
+    val id : Int,
     val url: String,
     val width: Int,
     val height: Int,
@@ -10,7 +11,7 @@ data class FeedImage(
     companion object
 }
 
-val FeedImage.Companion.Sample : FeedImage get() =  FeedImage("http://sarang628.iptime.org:89/review_images/1/214/2024-08-18/01_46_46_801.jpg", 1200, 1200)
+val FeedImage.Companion.Sample : FeedImage get() =  FeedImage(0,"http://sarang628.iptime.org:89/review_images/1/214/2024-08-18/01_46_46_801.jpg", 1200, 1200)
 
 fun FeedImage.adjustHeight(density: Density, screenWidthDp: Int, screenHeightDp: Int): Int {
     var newHeight = 0
