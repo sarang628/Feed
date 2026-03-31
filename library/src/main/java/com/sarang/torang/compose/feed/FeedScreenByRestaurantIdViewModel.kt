@@ -7,9 +7,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sarang.torang.compose.feed.data.Feed
+import com.sarang.torang.compose.feed.viewmodel.Favoritable
 import com.sarang.torang.compose.feed.viewmodel.FeedRefreshable
 import com.sarang.torang.compose.feed.viewmodel.ISnackBarMessage
 import com.sarang.torang.compose.feed.viewmodel.InfiniteScrollable
+import com.sarang.torang.compose.feed.viewmodel.Likeable
 import com.sarang.torang.compose.feed.viewmodel.VideoSupport
 import com.sarang.torang.usecase.ClickFavorityUseCase
 import com.sarang.torang.usecase.ClickLikeUseCase
@@ -24,11 +26,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FeedScreenByRestaurantIdViewModel @Inject constructor(
-    clickLikeUseCase: ClickLikeUseCase,
-    clickFavoriteUseCase: ClickFavorityUseCase,
-    getLoadingFeedFlowUseCase: GetFeedLodingFlowUseCase,
-    getFeedFlowUseCase: GetFeedFlowUseCase,
-    feedWithPageUseCase: FeedWithPageUseCase,
+    val clickLikeUseCase: ClickLikeUseCase,
+    val clickFavoriteUseCase: ClickFavorityUseCase,
+    val getLoadingFeedFlowUseCase: GetFeedLodingFlowUseCase,
+    val getFeedFlowUseCase: GetFeedFlowUseCase,
+    val feedWithPageUseCase: FeedWithPageUseCase,
     private val getFeedByRestaurantIdFlowUseCase: GetFeedByRestaurantIdFlowUseCase,
     /**
      * 기존 GetFeedByRestaurantIdFlowUseCase 만 있어서
@@ -40,7 +42,10 @@ class FeedScreenByRestaurantIdViewModel @Inject constructor(
     FeedRefreshable,
     InfiniteScrollable,
     ISnackBarMessage,
-    VideoSupport {
+    VideoSupport,
+    Likeable,
+    Favoritable
+    {
     private val tag = "__FeedScreenByRestaurantIdViewModel"
     var uiState: FeedLoadingUiState by mutableStateOf(FeedLoadingUiState.Loading); internal set
     private var restaurantId : Int? by mutableStateOf(null)
@@ -90,5 +95,17 @@ class FeedScreenByRestaurantIdViewModel @Inject constructor(
 
     override fun onBottom() {
 
+    }
+
+    fun onLike(reviewId : Int){
+        onLike(reviewId = reviewId,
+               viewModelScope = viewModelScope,
+               clickLikeUseCase = clickLikeUseCase)
+    }
+
+    fun onFavorite(reviewId: Int) {
+        onFavorite(viewModelScope       = viewModelScope,
+            reviewId             = reviewId,
+            clickFavoriteUseCase = clickFavoriteUseCase)
     }
 }
