@@ -24,6 +24,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.compose.feed.component.FeedScreen
 import com.sarang.torang.compose.feed.component.FeedTopAppBar
+import com.sarang.torang.compose.feed.data.FeedCallBack
+import com.sarang.torang.compose.feed.data.FeedScreenConfig
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.RefreshIndicatorState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
@@ -33,11 +35,7 @@ import com.sarang.torang.compose.feed.type.LocalPullToRefreshLayoutType
 import com.sarang.torang.compose.feed.type.bottomDetectingLazyColumnType
 import com.sarang.torang.compose.feed.type.feedType
 import com.sarang.torang.compose.feed.type.pullToRefreshLayoutType
-import com.sarang.torang.data.feed.FeedCallBack
-import com.sarang.torang.data.feed.FeedScreenConfig
-import com.sarang.torang.uistate.FeedLoadingUiState
-import com.sarang.torang.uistate.FeedUiState
-import com.sarang.torang.viewmodels.FeedScreenInMainViewModel
+import kotlinx.coroutines.flow.collect
 
 private const val tag = "__FeedScreenForMain"
 

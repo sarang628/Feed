@@ -1,4 +1,4 @@
-package com.sarang.torang.data.feed
+package com.sarang.torang.compose.feed.data
 
 data class Feed(
     val reviewId: Int,
@@ -48,7 +48,7 @@ data class Feed(
             isFavorite = false,
             contents = "contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents contents",
             createDate = "2025-09-20 20:20:00",
-            reviewImages = listOf(FeedImage.Sample)
+            reviewImages = listOf(FeedImage.Companion.Sample)
         )
     }
 }

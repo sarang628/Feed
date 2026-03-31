@@ -1,4 +1,4 @@
-package com.sarang.torang.viewmodels
+package com.sarang.torang.compose.feed
 
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -7,8 +7,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sarang.torang.uistate.FeedLoadingUiState
-import com.sarang.torang.uistate.FeedUiState
+import com.sarang.torang.compose.feed.viewmodel.Favoritable
+import com.sarang.torang.compose.feed.viewmodel.FeedRefreshable
+import com.sarang.torang.compose.feed.viewmodel.FocusByIndex
+import com.sarang.torang.compose.feed.viewmodel.ISnackBarMessage
+import com.sarang.torang.compose.feed.viewmodel.InfiniteScrollable
+import com.sarang.torang.compose.feed.viewmodel.Likeable
+import com.sarang.torang.compose.feed.viewmodel.VideoSupport
 import com.sarang.torang.usecase.ClickFavorityUseCase
 import com.sarang.torang.usecase.ClickLikeUseCase
 import com.sarang.torang.usecase.FeedWithPageUseCase
@@ -33,7 +38,7 @@ open class FeedsViewModel @Inject constructor(
     VideoSupport,
     Likeable,
     Favoritable,
-    ISnackBarMessage{
+    ISnackBarMessage {
     private val tag = "__FeedsViewModel"
     internal var page = 0
 

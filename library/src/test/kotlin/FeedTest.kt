@@ -1,12 +1,7 @@
-import com.sarang.torang.data.feed.Feed
-import com.sarang.torang.data.feed.visibleLike
+import com.sarang.torang.compose.feed.data.Feed
+import com.sarang.torang.compose.feed.data.visibleLike
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.util.Calendar
-import java.util.Calendar.DAY_OF_MONTH
-import java.util.Calendar.MONTH
-import java.util.Calendar.SEPTEMBER
-import java.util.Calendar.YEAR
 
 class FeedTest {
 

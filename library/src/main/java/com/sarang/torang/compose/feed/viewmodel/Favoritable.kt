@@ -1,4 +1,4 @@
-package com.sarang.torang.viewmodels
+package com.sarang.torang.compose.feed.viewmodel
 
 import com.sarang.torang.usecase.ClickFavorityUseCase
 import kotlinx.coroutines.CoroutineScope

@@ -1,4 +1,4 @@
-package com.sarang.torang.viewmodels
+package com.sarang.torang.compose.feed.viewmodel
 
 interface ISnackBarMessage {
     var msgState : List<String>

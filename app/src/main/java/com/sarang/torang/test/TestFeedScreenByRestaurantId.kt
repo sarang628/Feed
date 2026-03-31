@@ -17,12 +17,13 @@ import com.sarang.torang.compose.feed.type.LocalFeedCompose
 import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
 import com.sarang.torang.di.feed_di.CustomFeedCompose
 import com.sarang.torang.di.feed_di.customPullToRefresh
+import com.sarang.torang.di.feed_di.provideFeedGridPicture
 
 @Composable
 fun TestFeedScreenByRestaurantId(restaurantId: Int) {
     var restaurantId: String by remember { mutableStateOf(restaurantId.toString()) }
     CompositionLocalProvider(
-        LocalFeedCompose provides CustomFeedCompose,
+        LocalFeedCompose provides provideFeedGridPicture(),
         LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType,
         LocalPullToRefreshLayoutType provides customPullToRefresh
     ) {

@@ -1,4 +1,4 @@
-package com.sarang.torang.viewmodels
+package com.sarang.torang.compose.feed
 
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -6,9 +6,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sarang.torang.data.feed.Feed
-import com.sarang.torang.uistate.FeedLoadingUiState
-import com.sarang.torang.uistate.FeedUiState
+import com.sarang.torang.compose.feed.data.Feed
+import com.sarang.torang.compose.feed.viewmodel.FeedRefreshable
+import com.sarang.torang.compose.feed.viewmodel.ISnackBarMessage
+import com.sarang.torang.compose.feed.viewmodel.InfiniteScrollable
+import com.sarang.torang.compose.feed.viewmodel.VideoSupport
 import com.sarang.torang.usecase.ClickFavorityUseCase
 import com.sarang.torang.usecase.ClickLikeUseCase
 import com.sarang.torang.usecase.FeedWithPageUseCase
@@ -18,7 +20,6 @@ import com.sarang.torang.usecase.GetFeedFlowUseCase
 import com.sarang.torang.usecase.GetFeedLodingFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.net.ConnectException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,12 +40,12 @@ class FeedScreenByRestaurantIdViewModel @Inject constructor(
     FeedRefreshable,
     InfiniteScrollable,
     ISnackBarMessage,
-    VideoSupport{
+    VideoSupport {
     private val tag = "__FeedScreenByRestaurantIdViewModel"
     var uiState: FeedLoadingUiState by mutableStateOf(FeedLoadingUiState.Loading); internal set
     private var restaurantId : Int? by mutableStateOf(null)
     var isRefreshingState by mutableStateOf(false);
-    var feedUiState: FeedUiState by mutableStateOf(FeedUiState()) ; private set
+    var feedUiState: FeedUiState by mutableStateOf(FeedUiState()); private set
     override var msgState : List<String> by mutableStateOf(listOf())
     override var videoPlayListState : List<Int> by mutableStateOf(listOf())
 

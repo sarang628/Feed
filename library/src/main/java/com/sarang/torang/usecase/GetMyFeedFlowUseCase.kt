@@ -1,6 +1,6 @@
 package com.sarang.torang.usecase
 
-import com.sarang.torang.data.feed.Feed
+import com.sarang.torang.compose.feed.data.Feed
 import kotlinx.coroutines.flow.Flow
 
 interface GetMyFeedFlowUseCase {

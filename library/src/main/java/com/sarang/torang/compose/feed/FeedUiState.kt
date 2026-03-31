@@ -1,8 +1,8 @@
-package com.sarang.torang.uistate
+package com.sarang.torang.compose.feed
 
 import androidx.compose.ui.unit.Density
-import com.sarang.torang.data.feed.Feed
-import com.sarang.torang.data.feed.adjustHeight
+import com.sarang.torang.compose.feed.data.Feed
+import com.sarang.torang.compose.feed.data.adjustHeight
 
 data class FeedUiState(
     val list: List<Feed> = listOf(),

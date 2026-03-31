@@ -18,12 +18,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.compose.feed.component.FeedScreen
-import com.sarang.torang.data.feed.FeedCallBack
+import com.sarang.torang.compose.feed.data.FeedCallBack
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
-import com.sarang.torang.uistate.FeedLoadingUiState
-import com.sarang.torang.uistate.FeedUiState
-import com.sarang.torang.viewmodels.FeedScreenByReviewIdViewModel
+import com.sarang.torang.compose.feed.FeedScreenByReviewIdViewModel
 
 // formatter : off
 /**

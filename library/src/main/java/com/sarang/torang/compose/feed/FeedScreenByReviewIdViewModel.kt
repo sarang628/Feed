@@ -1,15 +1,14 @@
-package com.sarang.torang.viewmodels
+package com.sarang.torang.compose.feed
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.sarang.torang.data.feed.Feed
-import com.sarang.torang.uistate.FeedLoadingUiState
-import com.sarang.torang.uistate.FeedUiState
+import com.sarang.torang.compose.feed.data.Feed
+import com.sarang.torang.compose.feed.viewmodel.Favoritable
+import com.sarang.torang.compose.feed.viewmodel.ISnackBarMessage
+import com.sarang.torang.compose.feed.viewmodel.Likeable
 import com.sarang.torang.usecase.ClickFavorityUseCase
 import com.sarang.torang.usecase.ClickLikeUseCase
 import com.sarang.torang.usecase.GetFeedByReviewIdUseCase
@@ -30,7 +29,7 @@ class FeedScreenByReviewIdViewModel @Inject constructor(
 ) : ViewModel(),
     Likeable,
     Favoritable,
-    ISnackBarMessage{
+    ISnackBarMessage {
     private val tag = "__MyFeedsViewModel"
     var feedUiState : FeedUiState by mutableStateOf(FeedUiState()); private set
     var feedLoadUiState : FeedLoadingUiState by mutableStateOf(FeedLoadingUiState.Loading); private set
@@ -58,9 +57,11 @@ class FeedScreenByReviewIdViewModel @Inject constructor(
         }
         viewModelScope.launch {
             try {
-                combine(getFeedByReviewIdUseCase.invoke(reviewId), loginFlowForFeedUseCase.isLogin){
-                    feed, isLogin ->
-                    FeedUiState(if(feed == null) listOf() else listOf(feed), isLogin)
+                combine(
+                    getFeedByReviewIdUseCase.invoke(reviewId),
+                    loginFlowForFeedUseCase.isLogin
+                ) { feed, isLogin ->
+                    FeedUiState(if (feed == null) listOf() else listOf(feed), isLogin)
                 }.collect {
                     feedLoadUiState = FeedLoadingUiState.Success
                     feedUiState = it

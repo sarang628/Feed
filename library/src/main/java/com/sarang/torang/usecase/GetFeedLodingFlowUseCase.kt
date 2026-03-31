@@ -1,6 +1,6 @@
 package com.sarang.torang.usecase
 
-import com.sarang.torang.uistate.FeedLoadingUiState
+import com.sarang.torang.compose.feed.FeedLoadingUiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 

@@ -7,7 +7,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.sarang.torang.compose.feed.component.FeedScreen
-import com.sarang.torang.uistate.FeedLoadingUiState
+import com.sarang.torang.compose.feed.FeedLoadingUiState
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

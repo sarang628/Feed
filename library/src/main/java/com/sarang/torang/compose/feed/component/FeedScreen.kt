@@ -18,10 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
-import com.sarang.torang.data.feed.FeedCallBack
-import com.sarang.torang.data.feed.FeedScreenConfig
-import com.sarang.torang.uistate.FeedLoadingUiState
-import com.sarang.torang.uistate.FeedUiState
+import com.sarang.torang.compose.feed.data.FeedCallBack
+import com.sarang.torang.compose.feed.data.FeedScreenConfig
+import com.sarang.torang.compose.feed.FeedLoadingUiState
+import com.sarang.torang.compose.feed.FeedUiState
 
 private const val tag : String = "__FeedScreen"
 /**

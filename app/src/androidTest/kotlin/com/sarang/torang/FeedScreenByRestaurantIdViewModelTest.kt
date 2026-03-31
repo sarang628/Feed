@@ -8,7 +8,7 @@ import com.sarang.torang.usecase.FindFeedByRestaurantIdFlowUseCase
 import com.sarang.torang.usecase.GetFeedByRestaurantIdFlowUseCase
 import com.sarang.torang.usecase.GetFeedFlowUseCase
 import com.sarang.torang.usecase.GetFeedLodingFlowUseCase
-import com.sarang.torang.viewmodels.FeedScreenByRestaurantIdViewModel
+import com.sarang.torang.compose.feed.FeedScreenByRestaurantIdViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import junit.framework.TestCase.assertTrue

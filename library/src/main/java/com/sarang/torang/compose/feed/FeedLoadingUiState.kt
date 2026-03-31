@@ -1,4 +1,4 @@
-package com.sarang.torang.uistate
+package com.sarang.torang.compose.feed
 
 sealed interface FeedLoadingUiState {
     data class  Error   (val msg: String?)  : FeedLoadingUiState

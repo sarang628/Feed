@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.EmptyTestActivity
 import com.sarang.torang.di.feed_di.provideFeedScreenInMain
-import com.sarang.torang.viewmodels.FeedScreenInMainViewModel
+import com.sarang.torang.compose.feed.FeedScreenInMainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.w3c.dom.Text

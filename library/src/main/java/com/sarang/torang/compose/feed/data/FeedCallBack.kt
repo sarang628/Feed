@@ -1,4 +1,4 @@
-package com.sarang.torang.data.feed
+package com.sarang.torang.compose.feed.data
 
 import android.util.Log
 

@@ -1,4 +1,4 @@
-package com.sarang.torang.data.feed
+package com.sarang.torang.compose.feed.data
 
 data class FeedScreenConfig(
     val onBackToTop: Boolean = true,

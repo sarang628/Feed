@@ -20,7 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sarang.torang.R
-import com.sarang.torang.data.feed.Feed
+import com.sarang.torang.compose.feed.data.Feed
 
 typealias feedType = @Composable (feedTypeData : FeedTypeData) -> Unit
 

@@ -1,4 +1,4 @@
-package com.sarang.torang.viewmodels
+package com.sarang.torang.compose.feed.viewmodel
 
 interface FocusByIndex {
     var focusedIndexState: Int

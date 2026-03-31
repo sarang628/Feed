@@ -16,10 +16,10 @@ import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.compose.feed.type.FeedTypeData
 import com.sarang.torang.compose.feed.type.LocalFeedCompose
-import com.sarang.torang.data.feed.FeedCallBack
-import com.sarang.torang.data.feed.FeedScreenConfig
-import com.sarang.torang.uistate.FeedUiState
-import com.sarang.torang.uistate.imageHeight
+import com.sarang.torang.compose.feed.data.FeedCallBack
+import com.sarang.torang.compose.feed.data.FeedScreenConfig
+import com.sarang.torang.compose.feed.FeedUiState
+import com.sarang.torang.compose.feed.imageHeight
 import kotlin.math.absoluteValue
 
 private const val tag = "__FeedList"
